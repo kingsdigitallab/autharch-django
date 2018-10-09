@@ -73,17 +73,19 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.gis',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',
-    'compressor',
-]
 
-INSTALLED_APPS += [    # your project apps here
-    'django.contrib.gis',
+    'compressor',
+    'django_extensions',
     'kdl_ldap',
+    'modelcluster',
     'rest_framework',
+    'reversion',
+    'taggit',
+
     'wagtail.core',
     'wagtail.admin',
     'wagtail.documents',
@@ -95,9 +97,11 @@ INSTALLED_APPS += [    # your project apps here
     'wagtail.contrib.forms',
     'wagtail.sites',
     'wagtail.contrib.routable_page',
-    'wagtail.contrib.table_block',
-    'taggit',
-    'modelcluster',
+    'wagtail.contrib.table_block'
+]
+
+INSTALLED_APPS += [
+    'archival.apps.ArchivalConfig'
 ]
 
 INTERNAL_IPS = ['127.0.0.1']
