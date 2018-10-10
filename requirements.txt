@@ -1,5 +1,6 @@
 wagtail
 django-compressor
+django-ckeditor
 django-extensions
 django-kdl-ldap
 django-libsass

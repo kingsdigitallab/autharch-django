@@ -83,7 +83,6 @@ INSTALLED_APPS = [
     'kdl_ldap',
     'modelcluster',
     'rest_framework',
-    'reversion',
     'taggit',
 
     'wagtail.core',
@@ -101,7 +100,9 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [
-    'archival.apps.ArchivalConfig'
+    'archival.apps.ArchivalConfig',
+    'ckeditor',
+    'reversion'
 ]
 
 INTERNAL_IPS = ['127.0.0.1']
@@ -281,6 +282,9 @@ FABRIC_USER = getpass.getuser()
 # Google Analytics ID
 GA_ID = ''
 
+CKEDITOR_BASEPATH = STATIC_URL + 'ckeditor/ckeditor/'
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
 # -----------------------------------------------------------------------------
 # Automatically generated settings
 # -----------------------------------------------------------------------------
@@ -297,5 +301,6 @@ AUTH_LDAP_REQUIRE_GROUP = (
         LDAPGroupQuery('cn=georgian,' + LDAP_BASE_OU)
     )
 )
+
 WAGTAIL_SITE_NAME = PROJECT_TITLE
 ITEMS_PER_PAGE = 10
