@@ -9,14 +9,10 @@ from .models import (Collection, EditorType, File, Item, Organisation, Person,
 
 
 class BaseAdmin(VersionAdmin):
-    formfield_overrides = {
-        models.TextField: {'widget': CKEditorWidget}
-    }
+    autocomplete_fields = ['references', 'languages', 'publication_status',
+                           'subjects', 'persons', 'organisations', 'places']
 
-
-@admin.register(Collection)
-class CollectionAdmin(BaseAdmin):
-    fieldsets = [
+    base_fieldsets = [
         [None, {
             'fields': ['repository', 'repository_code']
         }],
@@ -35,8 +31,7 @@ class CollectionAdmin(BaseAdmin):
             'fields': ['subjects', 'persons', 'organisations', 'places']
         }],
         [None, {
-            'fields': ['administrative_history', 'arrangement',
-                       'related_materials']
+            'fields': ['related_materials']
         }],
         [None, {
             'fields': ['cataloguer', 'description_date']
@@ -46,13 +41,40 @@ class CollectionAdmin(BaseAdmin):
         }]
     ]
 
-    autocomplete_fields = ['references', 'languages', 'publication_status',
-                           'subjects', 'persons', 'organisations', 'places']
+    base_file_fieldsets = [
+    ]
+
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget}
+    }
+
+    search_fields = ['title']
+
+
+@admin.register(Collection)
+class CollectionAdmin(BaseAdmin):
+    fieldsets = BaseAdmin.base_fieldsets + [
+        [None, {
+            'fields': ['administrative_history', 'arrangement']
+        }]
+    ]
 
 
 @admin.register(Series)
 class SeriesAdmin(BaseAdmin):
-    pass
+    autocomplete_fields = BaseAdmin.autocomplete_fields + [
+        'collection', 'parent'
+    ]
+
+    fieldsets = [
+        [None, {
+            'fields': ['collection', 'parent']
+        }]
+    ] + BaseAdmin.base_fieldsets + [
+        [None, {
+            'fields': ['arrangement']
+        }]
+    ]
 
 
 @admin.register(File)
