@@ -33,31 +33,49 @@ class Reference(models.Model):
 
 class Language(models.Model):
     """TODO: ISO639-2b"""
-    pass
+    title = models.CharField(max_length=128, unique=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Subject(models.Model):
     """TODO: UKAT"""
-    pass
+    title = models.CharField(max_length=128, unique=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Person(models.Model):
     """TODO: Person"""
-    pass
+    title = models.CharField(max_length=128, unique=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Organisation(models.Model):
     """TODO: Organisation"""
-    pass
+    title = models.CharField(max_length=128, unique=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Place(models.Model):
     """TODO: Place"""
-    pass
+    title = models.CharField(max_length=128, unique=True)
+
+    def __str__(self):
+        return self.title
 
 
 class PublicationStatus(models.Model):
     title = models.CharField(max_length=32, unique=True)
+
+    class Meta:
+        verbose_name_plural = 'Publication status'
 
     def __str__(self):
         return self.title
@@ -78,7 +96,7 @@ class CollectionBase(models.Model):
 
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-    language = models.ManyToManyField(Language)
+    languages = models.ManyToManyField(Language)
     extent = models.TextField()
 
     subjects = models.ManyToManyField(Subject)
@@ -130,6 +148,9 @@ class Series(CollectionBase, SeriesBase):
         'self', blank=True, null=True, on_delete=models.CASCADE)
 
     arrangement = models.TextField()
+
+    class Meta:
+        verbose_name_plural = 'Series'
 
     def __str__(self):
         return self.title
