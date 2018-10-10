@@ -3,10 +3,9 @@ from django.contrib import admin
 from django.db import models
 from reversion.admin import VersionAdmin
 
-from .models import (Collection, EditorType, File, Item, Language,
-                     Organisation, Person, Place, Publication,
-                     PublicationStatus, RecordType, Reference, RevisionEvent,
-                     Series, Subject)
+from .models import (Collection, EditorType, File, Item, Organisation, Person,
+                     Place, Publication, PublicationStatus, RecordType,
+                     Reference, RevisionEvent, Series, Subject)
 
 
 class BaseAdmin(VersionAdmin):
@@ -69,11 +68,6 @@ class ItemAdmin(BaseAdmin):
 @admin.register(EditorType)
 class EditorTypeAdmin(admin.ModelAdmin):
     pass
-
-
-@admin.register(Language)
-class LanguageAdmin(admin.ModelAdmin):
-    search_fields = ['title']
 
 
 @admin.register(Organisation)

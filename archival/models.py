@@ -1,5 +1,6 @@
 import reversion
 from django.db import models
+from languages_plus.models import Language
 from reversion.models import Revision
 
 
@@ -26,14 +27,6 @@ class RevisionMetadata(models.Model):
 class Reference(models.Model):
     title = models.CharField(max_length=128)
     unitid = models.CharField(max_length=128)
-
-    def __str__(self):
-        return self.title
-
-
-class Language(models.Model):
-    """TODO: ISO639-2b"""
-    title = models.CharField(max_length=128, unique=True)
 
     def __str__(self):
         return self.title

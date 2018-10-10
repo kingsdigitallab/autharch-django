@@ -102,6 +102,8 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'archival.apps.ArchivalConfig',
     'ckeditor',
+    'countries_plus',
+    'languages_plus',
     'reversion'
 ]
 
