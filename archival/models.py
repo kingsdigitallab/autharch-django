@@ -1,5 +1,4 @@
 import reversion
-from django.contrib.auth.models import Group
 from django.db import models
 from reversion.models import Revision
 
@@ -11,10 +10,17 @@ class RevisionEvent(models.Model):
         return self.title
 
 
+class EditorType(models.Model):
+    title = models.CharField(max_length=128, unique=True)
+
+    def __str__(self):
+        return self.title
+
+
 class RevisionMetadata(models.Model):
     revision = models.OneToOneField(Revision, on_delete=models.CASCADE)
     event_type = models.ForeignKey(RevisionEvent, on_delete=models.PROTECT)
-    editor_type = models.ForeignKey(Group, on_delete=models.PROTECT)
+    editor_type = models.ForeignKey(EditorType, on_delete=models.PROTECT)
 
 
 class Reference(models.Model):
@@ -82,6 +88,9 @@ class CollectionBase(models.Model):
 
     related_materials = models.TextField(blank=True, null=True)
 
+    cataloguer = models.CharField(max_length=512)
+    description_date = models.DateField()
+
     rights_declaration = models.TextField()
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
@@ -115,7 +124,11 @@ class SeriesBase(models.Model):
 
 @reversion.register()
 class Series(CollectionBase, SeriesBase):
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    collection = models.ForeignKey(
+        Collection, blank=True, null=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        'self', blank=True, null=True, on_delete=models.CASCADE)
+
     arrangement = models.TextField()
 
     def __str__(self):
@@ -149,7 +162,12 @@ class FileBase(models.Model):
 
 @reversion.register()
 class File(CollectionBase, SeriesBase, FileBase):
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    series = models.ForeignKey(
+        Series, blank=True, null=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        'self', blank=True, null=True, on_delete=models.CASCADE)
+
+    creators = models.ManyToManyField(Person, related_name='files_created')
 
     def __str__(self):
         return self.title
@@ -157,6 +175,13 @@ class File(CollectionBase, SeriesBase, FileBase):
 
 @reversion.register()
 class Item(CollectionBase, SeriesBase, FileBase):
+    f = models.ForeignKey(
+        File, blank=True, null=True, on_delete=models.CASCADE,
+        verbose_name='File')
+
+    creators = models.ManyToManyField(Person, related_name='items_created')
+    creation_places = models.ManyToManyField(
+        Place, related_name='items_created')
 
     def __str__(self):
         return self.title
