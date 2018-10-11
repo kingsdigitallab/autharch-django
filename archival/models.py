@@ -83,21 +83,21 @@ class CollectionBase(models.Model):
 
     title = models.CharField(max_length=1024)
     provenance = models.TextField(blank=True, null=True)
-    creation_dates = models.TextField(blank=True, null=True)
+    creation_dates = models.CharField(max_length=256, blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     languages = models.ManyToManyField(Language)
-    extent = models.TextField()
+    extent = models.CharField(max_length=256)
 
     subjects = models.ManyToManyField(Subject)
     persons_as_subjects = models.ManyToManyField(Person)
     organisations_as_subjects = models.ManyToManyField(Organisation)
     places_as_subjects = models.ManyToManyField(Place)
 
-    related_materials = models.TextField(blank=True, null=True)
+    related_materials = models.CharField(max_length=256, blank=True, null=True)
 
     cataloguer = models.CharField(max_length=512)
     description_date = models.DateField()
@@ -161,9 +161,9 @@ class FileBase(models.Model):
 
     physical_description = models.TextField(blank=True, null=True)
 
-    copyright_status = models.TextField()
+    copyright_status = models.CharField(max_length=256)
     publication_permission = models.TextField(blank=True, null=True)
-    whithheld = models.TextField(blank=True, null=True)
+    whithheld = models.CharField(max_length=256, blank=True, null=True)
 
     url = models.URLField(blank=True, null=True)
 
