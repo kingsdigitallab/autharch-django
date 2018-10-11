@@ -10,7 +10,8 @@ from .models import (Collection, EditorType, File, Item, Organisation, Person,
 
 class BaseAdmin(VersionAdmin):
     autocomplete_fields = ['references', 'languages', 'publication_status',
-                           'subjects', 'persons', 'organisations', 'places']
+                           'subjects', 'persons_as_subjects',
+                           'organisations_as_subjects', 'places_as_subjects']
 
     base_fieldsets = [
         [None, {
@@ -28,7 +29,8 @@ class BaseAdmin(VersionAdmin):
             'fields': ['languages', 'description', 'notes', 'extent']
         }],
         ['Subjects', {
-            'fields': ['subjects', 'persons', 'organisations', 'places']
+            'fields': ['subjects', 'persons_as_subjects',
+                       'organisations_as_subjects', 'places_as_subjects']
         }],
         [None, {
             'fields': ['related_materials']
@@ -39,9 +41,6 @@ class BaseAdmin(VersionAdmin):
         [None, {
             'fields': ['publication_status', 'rights_declaration']
         }]
-    ]
-
-    base_file_fieldsets = [
     ]
 
     formfield_overrides = {
@@ -79,12 +78,42 @@ class SeriesAdmin(BaseAdmin):
 
 @admin.register(File)
 class FileAdmin(BaseAdmin):
-    pass
+    autocomplete_fields = BaseAdmin.autocomplete_fields + [
+        'series', 'parent', 'creators', 'record_type', 'persons_as_relations',
+        'places_as_relations'
+    ]
+
+    base_fieldsets = BaseAdmin.base_fieldsets + [
+        [None, {
+            'fields': ['record_type', 'url', 'physical_description']
+        }],
+        [None, {
+            'fields': ['copyright_status', 'publication_permission',
+                       'whithheld']
+        }]
+    ]
+
+    fieldsets = [
+        [None, {
+            'fields': ['series', 'parent', 'creators', 'persons_as_relations',
+                       'places_as_relations']
+        }]
+    ] + base_fieldsets
 
 
 @admin.register(Item)
 class ItemAdmin(BaseAdmin):
-    pass
+    autocomplete_fields = BaseAdmin.autocomplete_fields + [
+        'f', 'creators', 'record_type', 'creation_places',
+        'persons_as_relations', 'places_as_relations'
+    ]
+
+    fieldsets = [
+        [None, {
+            'fields': ['f', 'creators', 'creation_places',
+                       'persons_as_relations', 'places_as_relations']
+        }]
+    ] + FileAdmin.base_fieldsets
 
 
 @admin.register(EditorType)
@@ -119,7 +148,7 @@ class PublicationStatusAdmin(admin.ModelAdmin):
 
 @admin.register(RecordType)
 class RecordTypeAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['title']
 
 
 @admin.register(Reference)

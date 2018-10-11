@@ -93,9 +93,9 @@ class CollectionBase(models.Model):
     extent = models.TextField()
 
     subjects = models.ManyToManyField(Subject)
-    persons = models.ManyToManyField(Person)
-    organisations = models.ManyToManyField(Organisation)
-    places = models.ManyToManyField(Place)
+    persons_as_subjects = models.ManyToManyField(Person)
+    organisations_as_subjects = models.ManyToManyField(Organisation)
+    places_as_subjects = models.ManyToManyField(Place)
 
     related_materials = models.TextField(blank=True, null=True)
 
@@ -182,6 +182,10 @@ class File(CollectionBase, SeriesBase, FileBase):
         'self', blank=True, null=True, on_delete=models.CASCADE)
 
     creators = models.ManyToManyField(Person, related_name='files_created')
+    persons_as_relations = models.ManyToManyField(
+        Person, related_name='files_as_relations')
+    places_as_relations = models.ManyToManyField(
+        Place, related_name='files_as_relations')
 
     def __str__(self):
         return self.title
@@ -196,6 +200,10 @@ class Item(CollectionBase, SeriesBase, FileBase):
     creators = models.ManyToManyField(Person, related_name='items_created')
     creation_places = models.ManyToManyField(
         Place, related_name='items_created')
+    persons_as_relations = models.ManyToManyField(
+        Person, related_name='items_as_relations')
+    places_as_relations = models.ManyToManyField(
+        Place, related_name='items_as_relations')
 
     def __str__(self):
         return self.title
