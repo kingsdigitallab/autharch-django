@@ -7,5 +7,6 @@ django-libsass
 django-model-utils
 django-redis
 django-reversion
+django-script-codes
 psycopg2-binary
 redis

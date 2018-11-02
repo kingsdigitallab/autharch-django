@@ -101,10 +101,12 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS += [
     'archival.apps.ArchivalConfig',
+    'authority.apps.AuthorityConfig',
     'ckeditor',
     'countries_plus',
     'languages_plus',
-    'reversion'
+    'reversion',
+    'script_codes.apps.ScriptCodesConfig'
 ]
 
 INTERNAL_IPS = ['127.0.0.1']
