@@ -1,11 +1,11 @@
+from archival.models import (Collection, EditorType, File, Item, Organisation,
+                             Person, Place, Publication, PublicationStatus,
+                             RecordType, Reference, RevisionEvent, Series,
+                             Subject)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
 from reversion.admin import VersionAdmin
-
-from .models import (Collection, EditorType, File, Item, Organisation, Person,
-                     Place, Publication, PublicationStatus, RecordType,
-                     Reference, RevisionEvent, Series, Subject)
 
 
 class BaseAdmin(VersionAdmin):
