@@ -105,6 +105,7 @@ INSTALLED_APPS += [
     'ckeditor',
     'countries_plus',
     'languages_plus',
+    'nested_admin',
     'reversion',
     'script_codes.apps.ScriptCodesConfig'
 ]

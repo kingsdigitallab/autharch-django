@@ -5,6 +5,7 @@ django-extensions
 django-kdl-ldap
 django-libsass
 django-model-utils
+django-nested-admin
 django-redis
 django-reversion
 django-script-codes

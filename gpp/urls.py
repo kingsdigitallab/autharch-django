@@ -11,6 +11,7 @@ admin.autodiscover()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('_nested_admin/', include('nested_admin.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
     path('wagtail/', include('wagtail.admin.urls')),
