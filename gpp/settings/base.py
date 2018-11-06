@@ -107,7 +107,8 @@ INSTALLED_APPS += [
     'languages_plus',
     'nested_admin',
     'reversion',
-    'script_codes.apps.ScriptCodesConfig'
+    'script_codes.apps.ScriptCodesConfig',
+    'scm.apps.ScmConfig'
 ]
 
 INTERNAL_IPS = ['127.0.0.1']

@@ -1,7 +1,6 @@
-from archival.models import (Collection, EditorType, File, Item, Organisation,
-                             Person, Place, Publication, PublicationStatus,
-                             RecordType, Reference, RevisionEvent, Series,
-                             Subject)
+from archival.models import (Collection, File, Item, Organisation, Person,
+                             Place, Publication, PublicationStatus, RecordType,
+                             Reference, Series, Subject)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -116,11 +115,6 @@ class ItemAdmin(BaseAdmin):
     ] + FileAdmin.base_fieldsets
 
 
-@admin.register(EditorType)
-class EditorTypeAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(Organisation)
 class OrganisationAdmin(admin.ModelAdmin):
     search_fields = ['title']
@@ -154,11 +148,6 @@ class RecordTypeAdmin(admin.ModelAdmin):
 @admin.register(Reference)
 class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ['title', 'unitid']
-
-
-@admin.register(RevisionEvent)
-class RevisionEventAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(Subject)
