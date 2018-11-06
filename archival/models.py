@@ -1,5 +1,6 @@
 import reversion
 from django.db import models
+from jargon.models import PublicationStatus
 from languages_plus.models import Language
 
 
@@ -38,16 +39,6 @@ class Organisation(models.Model):
 class Place(models.Model):
     """TODO: Place"""
     title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
-
-
-class PublicationStatus(models.Model):
-    title = models.CharField(max_length=32, unique=True)
-
-    class Meta:
-        verbose_name_plural = 'Publication status'
 
     def __str__(self):
         return self.title
