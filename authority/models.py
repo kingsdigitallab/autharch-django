@@ -1,5 +1,6 @@
 import reversion
 from django.db import models
+from jargon.models import MaintenanceStatus, PublicationStatus
 from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
 from script_codes.models import Script
@@ -216,5 +217,29 @@ class Resource(TimeStampedModel):
         Entity, on_delete=models.CASCADE, related_name='resources')
 
     resource_type = models.ForeignKey(ResourceType, on_delete=models.PROTECT)
+    url = models.URLField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+
+
+@reversion.register()
+class Control(LanguageScriptMixin, TimeStampedModel):
+    entity = models.OneToOneField(Entity, on_delete=models.CASCADE)
+
+    maintenance_status = models.ForeignKey(
+        MaintenanceStatus, on_delete=models.PROTECT)
+    publication_status = models.ForeignKey(
+        PublicationStatus, on_delete=models.PROTECT)
+
+    rights_declaration = models.TextField()
+
+    class Meta:
+        verbose_name_plural = 'Control'
+
+
+@reversion.register()
+class Source(TimeStampedModel):
+    control = models.ForeignKey(Control, on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=256)
     url = models.URLField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)

@@ -1,11 +1,11 @@
 import nested_admin
-from authority.models import (BiographyHistory, Description, Entity,
+from authority.models import (BiographyHistory, Control, Description, Entity,
                               EntityRelationType, EntityType, Event,
                               FamilyTreeLevel, Function, Identity,
                               LanguageScript, LegalStatus, LocalDescription,
                               Mandate, NameEntry, NamePart, NamePartType,
                               Place, Relation, Resource, ResourceType,
-                              Structure)
+                              Structure, Source)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -149,6 +149,27 @@ class IdentityAdmin(nested_admin.NestedModelAdmin, VersionAdmin):
 #     list_display = ['name_entry', 'name_part_type', 'part']
 
 
+class SourceInline(nested_admin.NestedStackedInline):
+    model = Source
+
+    extra = 1
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget}
+    }
+
+
+class ControlInline(nested_admin.NestedStackedInline):
+    model = Control
+
+    autocomplete_fields = ['language', 'script',
+                           'maintenance_status', 'publication_status']
+    extra = 1
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget}
+    }
+    inlines = [SourceInline]
+
+
 class DescriptionInline(nested_admin.NestedTabularInline):
     model = Description
 
@@ -191,7 +212,7 @@ class ResourceInline(nested_admin.NestedStackedInline):
 class Entity(nested_admin.NestedModelAdmin, VersionAdmin):
     autocomplete_fields = ['entity_type']
     inlines = [IdentityInline, DescriptionInline,
-               RelationInline, ResourceInline]
+               RelationInline, ResourceInline, ControlInline]
     list_display = ['entity_type']
 
 
