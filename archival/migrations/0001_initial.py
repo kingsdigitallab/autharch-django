@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('reversion', '0001_squashed_0004_auto_20160611_1202'),
         ('auth', '0009_alter_user_last_name_max_length'),
+        ('jargon', '0003_publication'),
     ]
 
     operations = [
@@ -185,7 +186,7 @@ class Migration(migrations.Migration):
                 ('persons', models.ManyToManyField(to='archival.Person')),
                 ('places', models.ManyToManyField(to='archival.Place')),
                 ('publication_status', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='archival.PublicationStatus')),
-                ('publications', models.ManyToManyField(to='archival.Publication')),
+                ('publications', models.ManyToManyField(to='jargon.Publication')),
                 ('references', models.ManyToManyField(to='archival.Reference')),
             ],
             options={
@@ -231,7 +232,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='publications',
-            field=models.ManyToManyField(to='archival.Publication'),
+            field=models.ManyToManyField(to='jargon.Publication'),
         ),
         migrations.AddField(
             model_name='item',
@@ -281,7 +282,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='file',
             name='publications',
-            field=models.ManyToManyField(to='archival.Publication'),
+            field=models.ManyToManyField(to='jargon.Publication'),
         ),
         migrations.AddField(
             model_name='file',

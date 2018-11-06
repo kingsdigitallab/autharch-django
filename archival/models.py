@@ -1,6 +1,6 @@
 import reversion
 from django.db import models
-from jargon.models import PublicationStatus
+from jargon.models import Publication, PublicationStatus
 from languages_plus.models import Language
 
 
@@ -84,13 +84,6 @@ class CollectionBase(models.Model):
 class Collection(CollectionBase):
     administrative_history = models.TextField()
     arrangement = models.TextField()
-
-    def __str__(self):
-        return self.title
-
-
-class Publication(models.Model):
-    title = models.TextField(unique=True)
 
     def __str__(self):
         return self.title

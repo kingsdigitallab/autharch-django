@@ -8,7 +8,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('archival', '0017_delete_version_models'),
-        ('jargon', '0002_publicationstatus'),
     ]
 
     operations = [

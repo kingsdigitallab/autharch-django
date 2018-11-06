@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('languages_plus', '0004_auto_20171214_0004'),
         ('jargon', '0002_publicationstatus'),
-        ('script_codes', '0003_auto_20181103_1130'),
+        ('script_codes', '0003_change_meta_options_on_script'),
         ('authority', '0022_control'),
     ]
 

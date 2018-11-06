@@ -18,6 +18,13 @@ class MaintenanceStatus(BaseJargonModel):
         verbose_name_plural = 'Name authority file statuses'
 
 
+class Publication(TimeStampedModel):
+    title = models.TextField(unique=True)
+
+    def __str__(self):
+        return self.title
+
+
 class PublicationStatus(BaseJargonModel):
     class Meta:
         verbose_name_plural = 'Publication status'
