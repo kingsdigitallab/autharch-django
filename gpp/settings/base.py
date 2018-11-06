@@ -104,6 +104,7 @@ INSTALLED_APPS += [
     'authority.apps.AuthorityConfig',
     'ckeditor',
     'countries_plus',
+    'jargon.apps.JargonConfig',
     'languages_plus',
     'nested_admin',
     'reversion',
