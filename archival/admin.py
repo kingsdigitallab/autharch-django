@@ -1,5 +1,5 @@
 from archival.models import (Collection, File, Item, Organisation, Person,
-                             Place, RecordType, Reference, Series, Subject)
+                             Place, Reference, Series, Subject)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -126,11 +126,6 @@ class PersonAdmin(admin.ModelAdmin):
 
 @admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
-    search_fields = ['title']
-
-
-@admin.register(RecordType)
-class RecordTypeAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 

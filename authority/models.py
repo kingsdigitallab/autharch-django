@@ -1,6 +1,8 @@
 import reversion
 from django.db import models
-from jargon.models import MaintenanceStatus, PublicationStatus
+from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
+                           Function, MaintenanceStatus, NamePartType,
+                           PublicationStatus, ResourceType)
 from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
 from script_codes.models import Script
@@ -20,13 +22,6 @@ class LanguageScriptMixin(models.Model):
 
     class Meta:
         abstract = True
-
-
-class EntityType(TimeStampedModel):
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
 
 
 @reversion.register()
@@ -65,13 +60,6 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
             p.name_part_type, p.part) for p in self.parts])
 
 
-class NamePartType(TimeStampedModel):
-    title = models.CharField(max_length=32, unique=True)
-
-    def __str__(self):
-        return self.title
-
-
 @reversion.register()
 class NamePart(TimeStampedModel):
     name_entry = models.ForeignKey(
@@ -81,13 +69,6 @@ class NamePart(TimeStampedModel):
 
     def __str__(self):
         return '{}: {}'.format(self.name_part_type, self.part)
-
-
-class Function(TimeStampedModel):
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
 
 
 @reversion.register()
@@ -169,13 +150,6 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
     citation = models.TextField(blank=True, null=True)
 
 
-class FamilyTreeLevel(TimeStampedModel):
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
-
-
 @reversion.register()
 class Structure(TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
@@ -184,13 +158,6 @@ class Structure(TimeStampedModel):
     level = models.ForeignKey(FamilyTreeLevel, on_delete=models.PROTECT)
     entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     citation = models.TextField(blank=True, null=True)
-
-
-class EntityRelationType(TimeStampedModel):
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
 
 
 @reversion.register()
@@ -202,13 +169,6 @@ class Relation(DateRangeMixin, TimeStampedModel):
         EntityRelationType, on_delete=models.PROTECT)
     place = models.CharField(max_length=256, blank=True, null=True)
     notes = models.TextField()
-
-
-class ResourceType(TimeStampedModel):
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
 
 
 @reversion.register()

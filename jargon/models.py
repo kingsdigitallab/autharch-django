@@ -12,10 +12,30 @@ class BaseJargonModel(TimeStampedModel):
         return self.title
 
 
+class EntityRelationType(BaseJargonModel):
+    pass
+
+
+class EntityType(BaseJargonModel):
+    pass
+
+
+class FamilyTreeLevel(BaseJargonModel):
+    pass
+
+
+class Function(BaseJargonModel):
+    pass
+
+
 class MaintenanceStatus(BaseJargonModel):
     class Meta:
         verbose_name = 'Name authority file status'
         verbose_name_plural = 'Name authority file statuses'
+
+
+class NamePartType(BaseJargonModel):
+    pass
 
 
 class Publication(TimeStampedModel):
@@ -28,3 +48,11 @@ class Publication(TimeStampedModel):
 class PublicationStatus(BaseJargonModel):
     class Meta:
         verbose_name_plural = 'Publication status'
+
+
+class RecordType(BaseJargonModel):
+    pass
+
+
+class ResourceType(BaseJargonModel):
+    pass

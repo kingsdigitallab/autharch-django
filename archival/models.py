@@ -1,6 +1,6 @@
 import reversion
 from django.db import models
-from jargon.models import Publication, PublicationStatus
+from jargon.models import Publication, PublicationStatus, RecordType
 from languages_plus.models import Language
 
 
@@ -107,13 +107,6 @@ class Series(CollectionBase, SeriesBase):
 
     class Meta:
         verbose_name_plural = 'Series'
-
-    def __str__(self):
-        return self.title
-
-
-class RecordType(models.Model):
-    title = models.CharField(max_length=128, unique=True)
 
     def __str__(self):
         return self.title

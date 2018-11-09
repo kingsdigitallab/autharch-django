@@ -1,11 +1,8 @@
 import nested_admin
 from authority.models import (BiographyHistory, Control, Description, Entity,
-                              EntityRelationType, EntityType, Event,
-                              FamilyTreeLevel, Function, Identity,
-                              LanguageScript, LegalStatus, LocalDescription,
-                              Mandate, NameEntry, NamePart, NamePartType,
-                              Place, Relation, Resource, ResourceType,
-                              Structure, Source)
+                              Event, Identity, LanguageScript, LegalStatus,
+                              LocalDescription, Mandate, NameEntry, NamePart,
+                              Place, Relation, Resource, Source, Structure)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -96,26 +93,6 @@ class DescriptionAdmin(nested_admin.NestedModelAdmin, VersionAdmin):
     list_display = ['entity', 'date_from', 'date_to']
 
 
-@admin.register(EntityRelationType)
-class EntityRelationType(admin.ModelAdmin):
-    search_fields = ['title']
-
-
-@admin.register(EntityType)
-class EntityTypeAdmin(admin.ModelAdmin):
-    search_fields = ['title']
-
-
-@admin.register(FamilyTreeLevel)
-class FamilyTreeLevelAdmin(admin.ModelAdmin):
-    search_fields = ['title']
-
-
-@admin.register(Function)
-class FunctionAdmin(admin.ModelAdmin):
-    search_fields = ['title']
-
-
 class NamePartInline(nested_admin.NestedTabularInline):
     model = NamePart
 
@@ -136,17 +113,6 @@ class IdentityAdmin(nested_admin.NestedModelAdmin, VersionAdmin):
     # autocomplete_fields = ['entity']
     inlines = [NameEntryInline]
     list_display = ['entity', 'authorised_form', 'date_from', 'date_to']
-
-
-# @admin.register(NameEntry)
-# class NameEntryAdmin(VersionAdmin):
-#     inlines = [NamePartInline]
-#     list_display = ['identity', 'authorised_form', 'language', 'script']
-
-
-# @admin.register(NamePart)
-# class NamePartAdmin(VersionAdmin):
-#     list_display = ['name_entry', 'name_part_type', 'part']
 
 
 class SourceInline(nested_admin.NestedStackedInline):
@@ -214,13 +180,3 @@ class Entity(nested_admin.NestedModelAdmin, VersionAdmin):
     inlines = [IdentityInline, DescriptionInline,
                RelationInline, ResourceInline, ControlInline]
     list_display = ['entity_type']
-
-
-@admin.register(NamePartType)
-class NamePartTypeAdmin(admin.ModelAdmin):
-    search_fields = ['title']
-
-
-@admin.register(ResourceType)
-class ResourceTypeAdmin(admin.ModelAdmin):
-    search_fields = ['title']
