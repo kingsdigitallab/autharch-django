@@ -37,6 +37,8 @@ class Identity(DateRangeMixin, TimeStampedModel):
     entity = models.ForeignKey(
         Entity, on_delete=models.CASCADE, related_name='identities')
 
+    preferred_identity = models.BooleanField()
+
     class Meta:
         verbose_name_plural = 'Identities'
 
@@ -50,6 +52,7 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='name_entries')
 
+    display_name = models.CharField(max_length=512)
     authorised_form = models.BooleanField()
 
     class Meta:
