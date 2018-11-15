@@ -12,6 +12,7 @@ from reversion.admin import VersionAdmin
 class EventInline(nested_admin.NestedTabularInline):
     model = Event
 
+    autocomplete_fields = ['place']
     extra = 1
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
@@ -65,6 +66,7 @@ class MandateInline(nested_admin.NestedStackedInline):
 class PlaceInline(nested_admin.NestedStackedInline):
     model = Place
 
+    autocomplete_fields = ['place']
     extra = 1
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
@@ -157,7 +159,7 @@ class IdentityInline(nested_admin.NestedTabularInline):
 class RelationInline(nested_admin.NestedStackedInline):
     model = Relation
 
-    autocomplete_fields = ['relation_type']
+    autocomplete_fields = ['place', 'relation_type']
     extra = 1
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}

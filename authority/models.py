@@ -1,5 +1,6 @@
 import reversion
 from django.db import models
+from geonames_place.models import Place as GeoPlace
 from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
                            Function, MaintenanceStatus, NamePartType,
                            PublicationStatus, ResourceType)
@@ -89,7 +90,7 @@ class Place(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(
         Description, on_delete=models.CASCADE, related_name='places')
 
-    name = models.CharField(max_length=256)
+    place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)
     address = models.TextField(blank=True, null=True)
     role = models.TextField(blank=True, null=True)
 
@@ -120,7 +121,7 @@ class Event(DateRangeMixin, TimeStampedModel):
         BiographyHistory, on_delete=models.CASCADE)
 
     event = models.TextField()
-    place = models.CharField(max_length=256)
+    place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)
 
 
 @reversion.register()
@@ -170,7 +171,8 @@ class Relation(DateRangeMixin, TimeStampedModel):
 
     relation_type = models.ForeignKey(
         EntityRelationType, on_delete=models.PROTECT)
-    place = models.CharField(max_length=256, blank=True, null=True)
+    place = models.ForeignKey(
+        GeoPlace, blank=True, null=True, on_delete=models.CASCADE)
     notes = models.TextField()
 
 

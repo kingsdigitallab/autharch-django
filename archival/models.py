@@ -1,5 +1,6 @@
 import reversion
 from django.db import models
+from geonames_place.models import Place
 from jargon.models import Publication, PublicationStatus, RecordType
 from languages_plus.models import Language
 
@@ -30,14 +31,6 @@ class Person(models.Model):
 
 class Organisation(models.Model):
     """TODO: Organisation"""
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
-
-
-class Place(models.Model):
-    """TODO: Place"""
     title = models.CharField(max_length=128, unique=True)
 
     def __str__(self):
