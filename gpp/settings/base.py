@@ -105,6 +105,7 @@ INSTALLED_APPS += [
     'ckeditor',
     'countries_plus',
     'jargon.apps.JargonConfig',
+    'geonames_place.apps.GeonamesPlaceConfig',
     'languages_plus',
     'nested_admin',
     'reversion',
