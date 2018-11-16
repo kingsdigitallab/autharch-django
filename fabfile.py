@@ -26,6 +26,7 @@ sys.path.append(project_root)
 # The name of the Django app for this project
 # Folder that contains wsgi.py
 PROJECT_NAME = 'gpp'
+SERVER_NAME = 'autharch'
 # Git repository pointer
 REPOSITORY = 'https://github.com/kingsdigitallab/{}-django.git'.format(
     PROJECT_NAME)
@@ -33,11 +34,11 @@ REPOSITORY = 'https://github.com/kingsdigitallab/{}-django.git'.format(
 
 env.gateway = 'ssh.kdl.kcl.ac.uk'
 # Host names used as deployment targets
-env.hosts = ['{}.kdl.kcl.ac.uk'.format(PROJECT_NAME)]
+env.hosts = ['{}.kdl.kcl.ac.uk'.format(SERVER_NAME)]
 # Absolute filesystem path to project 'webroot'
-env.root_path = '/vol/{}/webroot/'.format(PROJECT_NAME)
+env.root_path = '/vol/{}/webroot/'.format(SERVER_NAME)
 # Absolute filesystem path to project Django root
-env.django_root_path = '/vol/{}/webroot/'.format(PROJECT_NAME)
+env.django_root_path = '/vol/{}/webroot/'.format(SERVER_NAME)
 # Absolute filesystem path to Python virtualenv for this project
 env.envs_path = os.path.join(env.root_path, 'envs')
 # -------------------------------
@@ -176,6 +177,7 @@ def deploy(version=None):
     own_django_log()
     fix_permissions()
     migrate()
+    load_data()
     collect_static()
     # update_index()
     # clear_cache()
@@ -286,6 +288,14 @@ def migrate(app=None):
 
     with cd(env.path), prefix(env.within_virtualenv):
         run('./manage.py migrate {}'.format(app if app else ''))
+
+
+@task
+def load_data(app=None):
+    require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
+
+    with cd(env.path), prefix(env.within_virtualenv):
+        run('./manage.py loaddata languages_data.json.gz')
 
 
 @task
