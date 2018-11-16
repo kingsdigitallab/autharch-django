@@ -70,7 +70,6 @@ EMAIL_USE_TLS = False
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.gis',
@@ -105,12 +104,16 @@ INSTALLED_APPS += [
     'ckeditor',
     'countries_plus',
     'geonames_place.apps.GeonamesPlaceConfig',
+    'gpp.apps.GppAdminConfig',
     'jargon.apps.JargonConfig',
     'languages_plus',
     'nested_admin',
     'reversion',
     'script_codes.apps.ScriptCodesConfig',
-    'scm.apps.ScmConfig'
+    'scm.apps.ScmConfig',
+
+    # keep this as the last app
+    'hal.apps.HalConfig'
 ]
 
 INTERNAL_IPS = ['127.0.0.1']
