@@ -87,7 +87,7 @@ class FileAdmin(BaseAdmin):
         }],
         [None, {
             'fields': ['copyright_status', 'publication_permission',
-                       'whithheld']
+                       'withheld']
         }]
     ]
 
