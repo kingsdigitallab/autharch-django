@@ -13,46 +13,59 @@ class BaseJargonModel(TimeStampedModel):
 
 
 class EntityRelationType(BaseJargonModel):
-    pass
+    class Meta:
+        verbose_name = 'EAC: Entity relation type'
 
 
 class EntityType(BaseJargonModel):
-    pass
+    class Meta:
+        verbose_name = 'EAC: Entity type'
 
 
 class FamilyTreeLevel(BaseJargonModel):
-    pass
+    class Meta:
+        verbose_name = 'EAC: Family tree level'
 
 
 class Function(BaseJargonModel):
-    pass
+    class Meta:
+        verbose_name = 'EAC: Function'
 
 
 class MaintenanceStatus(BaseJargonModel):
     class Meta:
-        verbose_name = 'Name authority file status'
-        verbose_name_plural = 'Name authority file statuses'
+        verbose_name = 'EAC: Name authority file status'
+        verbose_name_plural = 'EAC: Name authority file statuses'
 
 
 class NamePartType(BaseJargonModel):
-    pass
+    class Meta:
+        verbose_name = 'EAC: Name part type'
 
 
 class Publication(TimeStampedModel):
     title = models.TextField(unique=True)
+
+    class Meta:
+        verbose_name = 'EAD: Publication'
 
     def __str__(self):
         return self.title
 
 
 class PublicationStatus(BaseJargonModel):
+    is_archival = models.BooleanField(default=True)
+    is_authority = models.BooleanField(default=True)
+
     class Meta:
-        verbose_name_plural = 'Publication status'
+        verbose_name_plural = 'EAC/EAD: Publication status'
 
 
 class RecordType(BaseJargonModel):
-    pass
+    class Meta:
+        verbose_name_plural = 'EAD: Record type'
 
 
 class ResourceType(BaseJargonModel):
-    pass
+    class Meta:
+        verbose_name_plural = 'EAD: Resource type'

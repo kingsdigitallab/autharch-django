@@ -13,8 +13,8 @@ admin.site.unregister(Language)
 @admin.register(CultureCode)
 class ThirdPartyModelsAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
-        if request.user.is_superuser:
-            return super().get_model_perms(request)
+        # if request.user.is_superuser:
+        #     return super().get_model_perms(request)
 
         return {}
 
