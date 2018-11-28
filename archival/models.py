@@ -112,7 +112,7 @@ class FileBase(models.Model):
 
     copyright_status = models.CharField(max_length=256)
     publication_permission = models.TextField(blank=True, null=True)
-    whithheld = models.CharField(max_length=256, blank=True, null=True)
+    withheld = models.CharField(max_length=256, blank=True, null=True)
 
     url = models.URLField(blank=True, null=True)
 
