@@ -1,4 +1,4 @@
-from archival.models import (Collection, File, Item, Organisation, Person,
+from archival.models import (Collection, File, Item, Organisation,
                              Reference, Series, Subject)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
@@ -116,11 +116,6 @@ class ItemAdmin(BaseAdmin):
 
 @admin.register(Organisation)
 class OrganisationAdmin(admin.ModelAdmin):
-    search_fields = ['title']
-
-
-@admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 

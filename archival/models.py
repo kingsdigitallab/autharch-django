@@ -1,4 +1,5 @@
 import reversion
+from authority.models import Entity
 from django.db import models
 from geonames_place.models import Place
 from jargon.models import Publication, PublicationStatus, RecordType
@@ -15,14 +16,6 @@ class Reference(models.Model):
 
 class Subject(models.Model):
     """TODO: UKAT"""
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
-
-
-class Person(models.Model):
-    """TODO: Person"""
     title = models.CharField(max_length=128, unique=True)
 
     def __str__(self):
@@ -56,7 +49,7 @@ class CollectionBase(models.Model):
     extent = models.CharField(max_length=256)
 
     subjects = models.ManyToManyField(Subject)
-    persons_as_subjects = models.ManyToManyField(Person)
+    persons_as_subjects = models.ManyToManyField(Entity)
     organisations_as_subjects = models.ManyToManyField(Organisation)
     places_as_subjects = models.ManyToManyField(Place)
 
@@ -130,9 +123,9 @@ class File(CollectionBase, SeriesBase, FileBase):
     parent = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.CASCADE)
 
-    creators = models.ManyToManyField(Person, related_name='files_created')
+    creators = models.ManyToManyField(Entity, related_name='files_created')
     persons_as_relations = models.ManyToManyField(
-        Person, related_name='files_as_relations')
+        Entity, related_name='files_as_relations')
     places_as_relations = models.ManyToManyField(
         Place, related_name='files_as_relations')
 
@@ -146,11 +139,11 @@ class Item(CollectionBase, SeriesBase, FileBase):
         File, blank=True, null=True, on_delete=models.CASCADE,
         verbose_name='File')
 
-    creators = models.ManyToManyField(Person, related_name='items_created')
+    creators = models.ManyToManyField(Entity, related_name='items_created')
     creation_places = models.ManyToManyField(
         Place, related_name='items_created')
     persons_as_relations = models.ManyToManyField(
-        Person, related_name='items_as_relations')
+        Entity, related_name='items_as_relations')
     places_as_relations = models.ManyToManyField(
         Place, related_name='items_as_relations')
 
