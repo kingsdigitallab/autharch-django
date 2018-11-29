@@ -158,8 +158,9 @@ class IdentityInline(nested_admin.NestedTabularInline):
 
 class RelationInline(nested_admin.NestedStackedInline):
     model = Relation
+    fk_name = 'entity'
 
-    autocomplete_fields = ['place', 'relation_type']
+    autocomplete_fields = ['place', 'relation_type', 'related_entity']
     extra = 1
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
@@ -182,3 +183,4 @@ class Entity(nested_admin.NestedModelAdmin, VersionAdmin):
     inlines = [IdentityInline, DescriptionInline,
                RelationInline, ResourceInline, ControlInline]
     list_display = ['entity_type']
+    search_fields = ['identities__name_entries__display_name']

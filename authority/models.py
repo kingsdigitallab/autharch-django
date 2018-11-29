@@ -171,6 +171,8 @@ class Relation(DateRangeMixin, TimeStampedModel):
 
     relation_type = models.ForeignKey(
         EntityRelationType, on_delete=models.PROTECT)
+    related_entity = models.ForeignKey(
+        Entity, on_delete=models.CASCADE, related_name='related_to_relations')
     place = models.ForeignKey(
         GeoPlace, blank=True, null=True, on_delete=models.CASCADE)
     notes = models.TextField()
