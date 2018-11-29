@@ -66,6 +66,6 @@ class RecordType(BaseJargonModel):
         verbose_name_plural = 'EAD: Record type'
 
 
-class ResourceType(BaseJargonModel):
+class ResourceRelationType(BaseJargonModel):
     class Meta:
-        verbose_name_plural = 'EAD: Resource type'
+        verbose_name_plural = 'EAC: Resource relation type'

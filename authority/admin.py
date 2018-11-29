@@ -169,7 +169,7 @@ class RelationInline(nested_admin.NestedStackedInline):
 class ResourceInline(nested_admin.NestedStackedInline):
     model = Resource
 
-    autocomplete_fields = ['resource_type']
+    autocomplete_fields = ['relation_type']
     extra = 1
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}

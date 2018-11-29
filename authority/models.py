@@ -3,7 +3,7 @@ from django.db import models
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
                            Function, MaintenanceStatus, NamePartType,
-                           PublicationStatus, ResourceType)
+                           PublicationStatus, ResourceRelationType)
 from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
 from script_codes.models import Script
@@ -181,7 +181,8 @@ class Resource(TimeStampedModel):
     entity = models.ForeignKey(
         Entity, on_delete=models.CASCADE, related_name='resources')
 
-    resource_type = models.ForeignKey(ResourceType, on_delete=models.PROTECT)
+    relation_type = models.ForeignKey(
+        ResourceRelationType, on_delete=models.PROTECT)
     url = models.URLField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
