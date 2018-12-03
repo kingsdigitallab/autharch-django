@@ -70,6 +70,7 @@ class Repository(BaseJargonModel):
     code = models.PositiveIntegerField()
 
     class Meta:
+        unique_together = ['code', 'title']
         verbose_name = 'EAD: Repository'
 
 
