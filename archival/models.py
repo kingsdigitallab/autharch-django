@@ -35,7 +35,6 @@ class CollectionBase(models.Model):
     uuid = models.CharField(max_length=64, unique=True)
 
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
-    archival_level = models.CharField(max_length=32, editable=False)
 
     references = models.ManyToManyField(Reference)
 
@@ -66,6 +65,10 @@ class CollectionBase(models.Model):
 
     class Meta:
         abstract = True
+
+    @property
+    def archival_level(self):
+        return self.__class__.__name__
 
 
 @reversion.register()
