@@ -72,6 +72,7 @@ class Repository(BaseJargonModel):
     class Meta:
         unique_together = ['code', 'title']
         verbose_name = 'EAD: Repository'
+        verbose_name_plural = 'EAD: Repositories'
 
 
 class ResourceRelationType(BaseJargonModel):
