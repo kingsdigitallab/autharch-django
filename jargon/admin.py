@@ -4,14 +4,14 @@ from django.db import models
 from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
                            Function, MaintenanceStatus, NamePartType,
                            Publication, PublicationStatus, RecordType,
-                           ResourceRelationType)
+                           Repository, ResourceRelationType)
 
 
 class BaseJargonAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
-    list_diplay = ['title']
+    list_display = ['title']
     search_fields = ['title']
 
 
@@ -25,3 +25,9 @@ admin.site.register(Publication, BaseJargonAdmin)
 admin.site.register(PublicationStatus, BaseJargonAdmin)
 admin.site.register(RecordType, BaseJargonAdmin)
 admin.site.register(ResourceRelationType, BaseJargonAdmin)
+
+
+@admin.register(Repository)
+class RepositoryAdmin(BaseJargonAdmin):
+    list_display = ['code'] + BaseJargonAdmin.list_display
+    search_fields = ['code'] + BaseJargonAdmin.search_fields

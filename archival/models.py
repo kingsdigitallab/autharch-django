@@ -2,7 +2,8 @@ import reversion
 from authority.models import Entity
 from django.db import models
 from geonames_place.models import Place
-from jargon.models import Publication, PublicationStatus, RecordType
+from jargon.models import (Publication, PublicationStatus, RecordType,
+                           Repository)
 from languages_plus.models import Language
 
 
@@ -31,8 +32,9 @@ class Organisation(models.Model):
 
 
 class CollectionBase(models.Model):
-    repository = models.CharField(max_length=512)
-    repository_code = models.PositiveIntegerField()
+    uuid = models.CharField(max_length=64, unique=True)
+
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
     archival_level = models.CharField(max_length=32, editable=False)
 
     references = models.ManyToManyField(Reference)

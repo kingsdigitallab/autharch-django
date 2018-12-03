@@ -12,8 +12,8 @@ class BaseAdmin(VersionAdmin):
                            'organisations_as_subjects', 'places_as_subjects']
 
     base_fieldsets = [
-        [None, {
-            'fields': ['repository', 'repository_code']
+        ['Repository', {
+            'fields': ['repository']
         }],
         [None, {
             'fields': ['references']

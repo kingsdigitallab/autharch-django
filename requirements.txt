@@ -11,5 +11,7 @@ django-nested-admin
 django-redis
 django-reversion
 django-script-codes
+pandas
 psycopg2-binary
 redis
+xlrd
