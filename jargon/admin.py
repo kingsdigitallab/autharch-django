@@ -4,7 +4,7 @@ from django.db import models
 from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
                            Function, MaintenanceStatus, NamePartType,
                            Publication, PublicationStatus, RecordType,
-                           Repository, ResourceRelationType)
+                           ReferenceSource, Repository, ResourceRelationType)
 
 
 class BaseJargonAdmin(admin.ModelAdmin):
@@ -24,6 +24,7 @@ admin.site.register(NamePartType, BaseJargonAdmin)
 admin.site.register(Publication, BaseJargonAdmin)
 admin.site.register(PublicationStatus, BaseJargonAdmin)
 admin.site.register(RecordType, BaseJargonAdmin)
+admin.site.register(ReferenceSource, BaseJargonAdmin)
 admin.site.register(ResourceRelationType, BaseJargonAdmin)
 
 

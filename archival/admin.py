@@ -7,9 +7,10 @@ from reversion.admin import VersionAdmin
 
 
 class BaseAdmin(VersionAdmin):
-    autocomplete_fields = ['references', 'languages', 'publication_status',
-                           'subjects', 'persons_as_subjects',
-                           'organisations_as_subjects', 'places_as_subjects']
+    autocomplete_fields = ['repository', 'references', 'languages',
+                           'publication_status', 'subjects',
+                           'persons_as_subjects', 'organisations_as_subjects',
+                           'places_as_subjects']
 
     base_fieldsets = [
         ['Repository', {
@@ -121,7 +122,8 @@ class OrganisationAdmin(admin.ModelAdmin):
 
 @admin.register(Reference)
 class ReferenceAdmin(admin.ModelAdmin):
-    search_fields = ['title', 'unitid']
+    autocomplete_fields = ['source']
+    search_fields = ['source__title', 'unitid']
 
 
 @admin.register(Subject)

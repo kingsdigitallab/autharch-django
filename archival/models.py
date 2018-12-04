@@ -3,12 +3,12 @@ from authority.models import Entity
 from django.db import models
 from geonames_place.models import Place
 from jargon.models import (Publication, PublicationStatus, RecordType,
-                           Repository)
+                           ReferenceSource, Repository)
 from languages_plus.models import Language
 
 
 class Reference(models.Model):
-    title = models.CharField(max_length=128)
+    source = models.ForeignKey(ReferenceSource, on_delete=models.CASCADE)
     unitid = models.CharField(max_length=128)
 
     def __str__(self):

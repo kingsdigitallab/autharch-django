@@ -66,6 +66,11 @@ class RecordType(BaseJargonModel):
         verbose_name_plural = 'EAD: Record type'
 
 
+class ReferenceSource(BaseJargonModel):
+    class Meta:
+        verbose_name = 'EAD: Reference source'
+
+
 class Repository(BaseJargonModel):
     code = models.PositiveIntegerField()
 
