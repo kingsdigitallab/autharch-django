@@ -4,6 +4,7 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    atomic = False
 
     dependencies = [
         ('authority', '0042_rename_field_resource_type_on_resource_to_relation_type'),
