@@ -1,5 +1,6 @@
 import reversion
 from django.db import models
+from django.utils import timezone
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
                            Function, MaintenanceStatus, NamePartType,
@@ -31,6 +32,48 @@ class Entity(TimeStampedModel):
 
     class Meta:
         verbose_name_plural = 'Entities'
+
+    def __str__(self):
+        return self.identities.filter(
+            preferred_identity=True).first().authorised_form.display_name
+
+    @staticmethod
+    def get_or_create_by_display_name(
+            name, language=Language.objects.get(name_en='English'),
+            script=Script.objects.get(name='Latin')):
+
+        if not name:
+            return None
+
+        name_entries = NameEntry.objects.filter(display_name=name)
+
+        # too many entities match the display name, we can't accurately return
+        # one
+        if name_entries and name_entries.count() > 1:
+            return None
+
+        if name_entries and name_entries.count() == 1:
+            return name_entries[0].identity.entity
+
+        et, _ = EntityType.objects.get_or_create(title='Person')
+
+        entity = Entity(entity_type=et)
+        entity.save()
+
+        identity = Identity(entity=entity)
+        identity.date_from = timezone.now()
+        identity.preferred_identity = True
+        identity.save()
+
+        name_entry = NameEntry(identity=identity)
+        name_entry.display_name = name
+        name_entry.authorised_form = True
+        name_entry.date_from = identity.date_from
+        name_entry.language = language
+        name_entry.script = script
+        name_entry.save()
+
+        return entity
 
 
 @reversion.register()

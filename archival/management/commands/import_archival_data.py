@@ -1,7 +1,8 @@
 import logging
 
 import pandas as pd
-from archival.models import Collection, Reference, Series
+from archival.models import Collection, File, Item, Reference, Series
+from authority.models import Entity
 from django.core.management.base import BaseCommand
 from jargon.models import (Publication, PublicationStatus, ReferenceSource,
                            Repository)
@@ -38,6 +39,20 @@ class Command(BaseCommand):
             series = self._add_base_series_data(series, row)
             series = self._add_series_data(series, row)
             series.save()
+        elif 'file' in level:
+            f = self._create_or_get_object(File, uuid)
+            f = self._add_base_collection_data(f, row)
+            f = self._add_base_series_data(f, row)
+            f = self._add_base_file_data(f, row)
+            f = self._add_file_data(f, row)
+            f.save()
+        elif level == 'item':
+            item = self._create_or_get_object(Item, uuid)
+            item = self._add_base_collection_data(item, row)
+            item = self._add_base_series_data(item, row)
+            item = self._add_base_file_data(item, row)
+            item = self._add_item_data(item, row)
+            item.save()
 
     def _create_or_get_object(self, model, uuid):
         try:
@@ -121,23 +136,95 @@ class Command(BaseCommand):
 
         return obj
 
-    def _add_series_data(self, series, row):
+    def _add_series_data(self, obj, row):
+        if not pd.isnull(row['Arrangement']):
+            obj.arrangement = row['Arrangement']
+
+        reference = self._get_parent_reference(row)
+        if not reference:
+            return obj
+
+        series = Series.objects.filter(references=reference)
+        if series:
+            obj.parent = series[0]
+            return obj
+
+        collections = Collection.objects.filter(references=reference)
+        if collections:
+            obj.collection = collections[0]
+
+        return obj
+
+    def _get_parent_reference(self, row):
         source = ReferenceSource.objects.get(title='CALM')
         unitid = '/'.join(row['CALM_reference'].split('/')[:-1])
 
         try:
             reference = Reference.objects.get(source=source, unitid=unitid)
             self.logger.debug('Found reference: {}: {}'.format(source, unitid))
+            return reference
         except Reference.DoesNotExist:
             self.logger.debug('Reference {}: {} not found'.format(
                 source, unitid))
-            return series
+            return None
 
-        collections = Collection.objects.filter(references=reference)
-        if collections:
-            series.collection = collections[0]
+    def _add_base_file_data(self, obj, row):
+        if not pd.isnull(row['Physical Description']):
+            obj.physical_description = row['Physical Description']
 
-        if not pd.isnull(row['Arrangement']):
-            series.arrangement = row['Arrangement']
+        if not pd.isnull(row['Withheld']):
+            obj.withheld = row['Withheld']
 
-        return series
+        return obj
+
+    def _add_file_data(self, f, row):
+        if not pd.isnull(row['Writer']):
+            entity = Entity.get_or_create_by_display_name(row['Writer'])
+            if entity:
+                f.creators.add(entity)
+
+        if not pd.isnull(row['Addressee']):
+            entity = Entity.get_or_create_by_display_name(row['Addressee'])
+            if entity:
+                f.persons_as_relations.add(entity)
+
+        reference = self._get_parent_reference(row)
+        if not reference:
+            return f
+
+        files = File.objects.filter(references=reference)
+        if files:
+            f.parent = files[0]
+            return f
+
+        series = Series.objects.filter(references=reference)
+        if series:
+            f.series = series[0]
+
+        return f
+
+    def _add_item_data(self, obj, row):
+        if not pd.isnull(row['Writer']):
+            entity = Entity.get_or_create_by_display_name(row['Writer'])
+            if entity:
+                obj.creators.add(entity)
+
+        if not pd.isnull(row['Addressee']):
+            entity = Entity.get_or_create_by_display_name(row['Addressee'])
+            if entity:
+                obj.persons_as_relations.add(entity)
+
+        reference = self._get_parent_reference(row)
+        if not reference:
+            return obj
+
+        files = File.objects.filter(references=reference)
+        if files:
+            obj.f = files[0]
+            return obj
+
+        series = Series.objects.filter(references=reference)
+        if series:
+            obj.series = series[0]
+
+        return obj
