@@ -192,14 +192,12 @@ class Command(BaseCommand):
 
     def _add_file_data(self, f, row):
         if not pd.isnull(row['Writer']):
-            entity = Entity.get_or_create_by_display_name(
-                row['Writer'], self.language, self.script)
+            entity = self._get_entity(row['Writer'])
             if entity:
                 f.creators.add(entity)
 
         if not pd.isnull(row['Addressee']):
-            entity = Entity.get_or_create_by_display_name(
-                row['Addressee'], self.language, self.script)
+            entity = self._get_entity(row['Addressee'])
             if entity:
                 f.persons_as_relations.add(entity)
 
@@ -218,16 +216,23 @@ class Command(BaseCommand):
 
         return f
 
+    def _get_entity_by_name(self, name):
+        if not name:
+            return None
+
+        entity, _ = Entity.get_or_create_by_display_name(
+            name, self.language, self.script)
+
+        return entity
+
     def _add_item_data(self, obj, row):
         if not pd.isnull(row['Writer']):
-            entity = Entity.get_or_create_by_display_name(
-                row['Writer'], self.language, self.script)
+            entity = self._get_entity(row['Writer'])
             if entity:
                 obj.creators.add(entity)
 
         if not pd.isnull(row['Addressee']):
-            entity = Entity.get_or_create_by_display_name(
-                row['Addressee'], self.language, self.script)
+            entity = self._get_entity(row['Addressee'])
             if entity:
                 obj.persons_as_relations.add(entity)
 
