@@ -192,12 +192,12 @@ class Command(BaseCommand):
 
     def _add_file_data(self, f, row):
         if not pd.isnull(row['Writer']):
-            entity = self._get_entity(row['Writer'])
+            entity = self._get_entity_by_name(row['Writer'])
             if entity:
                 f.creators.add(entity)
 
         if not pd.isnull(row['Addressee']):
-            entity = self._get_entity(row['Addressee'])
+            entity = self._get_entity_by_name(row['Addressee'])
             if entity:
                 f.persons_as_relations.add(entity)
 
@@ -227,12 +227,12 @@ class Command(BaseCommand):
 
     def _add_item_data(self, obj, row):
         if not pd.isnull(row['Writer']):
-            entity = self._get_entity(row['Writer'])
+            entity = self._get_entity_by_name(row['Writer'])
             if entity:
                 obj.creators.add(entity)
 
         if not pd.isnull(row['Addressee']):
-            entity = self._get_entity(row['Addressee'])
+            entity = self._get_entity_by_name(row['Addressee'])
             if entity:
                 obj.persons_as_relations.add(entity)
 
