@@ -104,7 +104,7 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
 
     def __str__(self):
         return ', '.join(['{}: {}'.format(
-            p.name_part_type, p.part) for p in self.parts])
+            p.name_part_type, p.part) for p in self.parts.all()])
 
 
 @reversion.register()
