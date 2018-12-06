@@ -7,12 +7,16 @@ from django.core.management.base import BaseCommand
 from jargon.models import (Publication, PublicationStatus, ReferenceSource,
                            Repository)
 from languages_plus.models import Language
+from script_codes.models import Script
 
 
 class Command(BaseCommand):
     args = '<spreadsheet_path>'
     help = 'Imports archival data from a spreadsheet'
     logger = logging.getLogger(__name__)
+
+    language = Language.objects.get(name_en='English')
+    script = Script.objects.get(name='Latin')
 
     def add_arguments(self, parser):
         parser.add_argument('spreadsheet_path', nargs=1, type=str)
@@ -179,12 +183,14 @@ class Command(BaseCommand):
 
     def _add_file_data(self, f, row):
         if not pd.isnull(row['Writer']):
-            entity = Entity.get_or_create_by_display_name(row['Writer'])
+            entity = Entity.get_or_create_by_display_name(
+                row['Writer'], self.language, self.script)
             if entity:
                 f.creators.add(entity)
 
         if not pd.isnull(row['Addressee']):
-            entity = Entity.get_or_create_by_display_name(row['Addressee'])
+            entity = Entity.get_or_create_by_display_name(
+                row['Addressee'], self.language, self.script)
             if entity:
                 f.persons_as_relations.add(entity)
 
@@ -205,12 +211,14 @@ class Command(BaseCommand):
 
     def _add_item_data(self, obj, row):
         if not pd.isnull(row['Writer']):
-            entity = Entity.get_or_create_by_display_name(row['Writer'])
+            entity = Entity.get_or_create_by_display_name(
+                row['Writer'], self.language, self.script)
             if entity:
                 obj.creators.add(entity)
 
         if not pd.isnull(row['Addressee']):
-            entity = Entity.get_or_create_by_display_name(row['Addressee'])
+            entity = Entity.get_or_create_by_display_name(
+                row['Addressee'], self.language, self.script)
             if entity:
                 obj.persons_as_relations.add(entity)
 

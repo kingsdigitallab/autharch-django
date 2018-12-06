@@ -34,15 +34,16 @@ class Entity(TimeStampedModel):
         verbose_name_plural = 'Entities'
 
     def __str__(self):
-        return self.identities.filter(
-            preferred_identity=True).first().authorised_form.display_name
+        return self.display_name
+
+    @property
+    def display_name(self):
+        return self.identities.order_by(
+            'preferred_identity').first().authorised_form.display_name
 
     @staticmethod
-    def get_or_create_by_display_name(
-            name, language=Language.objects.get(name_en='English'),
-            script=Script.objects.get(name='Latin')):
-
-        if not name:
+    def get_or_create_by_display_name(name, language, script):
+        if not name or not language or not script:
             return None
 
         name_entries = NameEntry.objects.filter(display_name=name)
@@ -88,7 +89,7 @@ class Identity(DateRangeMixin, TimeStampedModel):
 
     @property
     def authorised_form(self):
-        return self.name_entries.filter(authorised_form=True).first()
+        return self.name_entries.order_by('authorised_form').first()
 
 
 @reversion.register()
