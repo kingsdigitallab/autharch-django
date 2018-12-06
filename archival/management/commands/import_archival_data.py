@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 from archival.models import Collection, File, Item, Reference, Series
 from authority.models import Entity
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from jargon.models import (Publication, PublicationStatus, ReferenceSource,
                            Repository)
 from languages_plus.models import Language
@@ -12,7 +12,7 @@ from script_codes.models import Script
 
 class Command(BaseCommand):
     args = '<spreadsheet_path>'
-    help = 'Imports archival data from a spreadsheet'
+    help = 'Imports archival data from a spreadsheet or csv file'
     logger = logging.getLogger(__name__)
 
     language = Language.objects.get(name_en='English')
@@ -22,7 +22,16 @@ class Command(BaseCommand):
         parser.add_argument('spreadsheet_path', nargs=1, type=str)
 
     def handle(self, *args, **options):
-        df = pd.read_excel(options['spreadsheet_path'][0])
+        path = options['spreadsheet_path'][0]
+
+        if path.endswith('.csv'):
+            df = pd.read_csv(path)
+        elif path.endswith('.xlsx'):
+            df = pd.read_excel(path)
+        else:
+            raise CommandError(
+                'Invalid file type, please provide a csv or xlsx file.')
+
         df['Date of Description'] = pd.to_datetime(df['Date of Description'])
 
         for i, row in df.iterrows():
