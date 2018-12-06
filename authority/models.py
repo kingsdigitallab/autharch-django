@@ -44,17 +44,17 @@ class Entity(TimeStampedModel):
     @staticmethod
     def get_or_create_by_display_name(name, language, script):
         if not name or not language or not script:
-            return None
+            return None, False
 
         name_entries = NameEntry.objects.filter(display_name=name)
 
         # too many entities match the display name, we can't accurately return
         # one
         if name_entries and name_entries.count() > 1:
-            return None
+            return None, False
 
         if name_entries and name_entries.count() == 1:
-            return name_entries[0].identity.entity
+            return name_entries[0].identity.entity, False
 
         et, _ = EntityType.objects.get_or_create(title='Person')
 
@@ -74,7 +74,7 @@ class Entity(TimeStampedModel):
         name_entry.script = script
         name_entry.save()
 
-        return entity
+        return entity, True
 
 
 @reversion.register()
@@ -86,6 +86,9 @@ class Identity(DateRangeMixin, TimeStampedModel):
 
     class Meta:
         verbose_name_plural = 'Identities'
+
+    def __str__(self):
+        return self.authorised_form.display_name
 
     @property
     def authorised_form(self):
