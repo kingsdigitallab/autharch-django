@@ -9,7 +9,7 @@ from django.db import models
 from reversion.admin import VersionAdmin
 
 
-class EventInline(nested_admin.NestedTabularInline):
+class EventInline(nested_admin.NestedStackedInline):
     model = Event
 
     autocomplete_fields = ['place']
@@ -73,7 +73,7 @@ class PlaceInline(nested_admin.NestedStackedInline):
     }
 
 
-class StructureInline(nested_admin.NestedTabularInline):
+class StructureInline(nested_admin.NestedStackedInline):
     model = Structure
 
     autocomplete_fields = ['level']
@@ -138,7 +138,7 @@ class ControlInline(nested_admin.NestedStackedInline):
     inlines = [SourceInline]
 
 
-class DescriptionInline(nested_admin.NestedTabularInline):
+class DescriptionInline(nested_admin.NestedStackedInline):
     model = Description
 
     autocomplete_fields = DescriptionAdmin.autocomplete_fields
