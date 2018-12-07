@@ -1,17 +1,21 @@
+import adminactions.actions as actions
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin import site
 from django.urls import include, path, re_path
 from kdl_ldap.signal_handlers import \
     register_signal_handlers as kdl_ldap_register_signal_hadlers
 
-kdl_ldap_register_signal_hadlers()
-
-
 admin.autodiscover()
 
+kdl_ldap_register_signal_hadlers()
+
+site.add_action(actions.merge)
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('_nested_admin/', include('nested_admin.urls')),
+    path('admin/', admin.site.urls),
+    path('adminactions/', include('adminactions.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
     path('wagtail/', include('wagtail.admin.urls')),

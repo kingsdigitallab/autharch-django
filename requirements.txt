@@ -1,4 +1,5 @@
 wagtail
+django-adminactions
 django-compressor
 django-ckeditor
 django-extensions

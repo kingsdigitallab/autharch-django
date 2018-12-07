@@ -70,6 +70,8 @@ EMAIL_USE_TLS = False
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 INSTALLED_APPS = [
+    'adminactions',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.gis',
