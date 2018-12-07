@@ -220,6 +220,12 @@ class Command(BaseCommand):
         if not name:
             return None
 
+        if '[' in name:
+            name = name.replace('[', '')
+
+        if ']' in name:
+            name = name.replace(']', '')
+
         entity, _ = Entity.get_or_create_by_display_name(
             name, self.language, self.script)
 
