@@ -83,18 +83,6 @@ class StructureInline(nested_admin.NestedStackedInline):
     }
 
 
-@admin.register(Description)
-class DescriptionAdmin(nested_admin.NestedModelAdmin, VersionAdmin):
-    autocomplete_fields = ['function']
-    inlines = [PlaceInline, LanguageScriptInline, BiographyHistoryInline,
-               LocalDescriptionInline, MandateInline, LegalStatusInline,
-               StructureInline]
-    formfield_overrides = {
-        models.TextField: {'widget': CKEditorWidget}
-    }
-    list_display = ['entity', 'date_from', 'date_to']
-
-
 class NamePartInline(nested_admin.NestedTabularInline):
     model = NamePart
 
@@ -108,13 +96,6 @@ class NameEntryInline(nested_admin.NestedTabularInline):
     autocomplete_fields = ['language', 'script']
     extra = 1
     inlines = [NamePartInline]
-
-
-@admin.register(Identity)
-class IdentityAdmin(nested_admin.NestedModelAdmin, VersionAdmin):
-    # autocomplete_fields = ['entity']
-    inlines = [NameEntryInline]
-    list_display = ['entity', 'authorised_form', 'date_from', 'date_to']
 
 
 class SourceInline(nested_admin.NestedStackedInline):
@@ -141,12 +122,14 @@ class ControlInline(nested_admin.NestedStackedInline):
 class DescriptionInline(nested_admin.NestedStackedInline):
     model = Description
 
-    autocomplete_fields = DescriptionAdmin.autocomplete_fields
+    autocomplete_fields = ['function']
     extra = 1
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
-    inlines = DescriptionAdmin.inlines
+    inlines = [PlaceInline, LanguageScriptInline, BiographyHistoryInline,
+               LocalDescriptionInline, MandateInline, LegalStatusInline,
+               StructureInline]
 
 
 class IdentityInline(nested_admin.NestedTabularInline):
