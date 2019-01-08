@@ -201,7 +201,7 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
     citation = models.TextField(blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'Legal statuses'
+        verbose_name_plural = 'Legal status'
 
 
 @reversion.register()

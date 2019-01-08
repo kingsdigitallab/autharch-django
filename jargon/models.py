@@ -35,12 +35,13 @@ class Function(BaseJargonModel):
 class MaintenanceStatus(BaseJargonModel):
     class Meta:
         verbose_name = 'EAC: Name authority file status'
-        verbose_name_plural = 'EAC: Name authority file statuses'
+        verbose_name_plural = 'EAC: Name authority file status'
 
 
 class NamePartType(BaseJargonModel):
     class Meta:
         verbose_name = 'EAC: Name part type'
+        verbose_name_plural = 'EAC: Name part types'
 
 
 class Publication(TimeStampedModel):
@@ -64,6 +65,7 @@ class PublicationStatus(BaseJargonModel):
 class RecordType(BaseJargonModel):
     class Meta:
         verbose_name_plural = 'EAD: Record type'
+        verbose_name_plural = 'EAD: Record types'
 
 
 class ReferenceSource(BaseJargonModel):
@@ -82,4 +84,4 @@ class Repository(BaseJargonModel):
 
 class ResourceRelationType(BaseJargonModel):
     class Meta:
-        verbose_name_plural = 'EAC: Resource relation type'
+        verbose_name_plural = 'EAC: Resource relation types'
