@@ -71,6 +71,7 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 INSTALLED_APPS = [
     'adminactions',
+    'polymorphic',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',

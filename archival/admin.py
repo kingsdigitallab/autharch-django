@@ -1,12 +1,44 @@
-from archival.models import (Collection, File, Item, Organisation,
-                             Reference, Series, Subject)
+from archival.models import (ArchivalRecord, ArchivalRecordSet, Collection,
+                             File, Item, Organisation, Reference, Series,
+                             Subject)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
+from polymorphic.admin import (PolymorphicChildModelAdmin,
+                               PolymorphicChildModelFilter,
+                               PolymorphicParentModelAdmin)
 from reversion.admin import VersionAdmin
 
 
-class BaseAdmin(VersionAdmin):
+@admin.register(ArchivalRecord)
+class ArchivalRecordAdmin(PolymorphicParentModelAdmin, VersionAdmin):
+    base_model = Collection
+    child_models = [Collection, File, Item, Series]
+
+    list_display = ['archival_level', 'title']
+    list_display_links = list_display
+    list_filter = [PolymorphicChildModelFilter]
+
+    search_fields = ['title']
+
+
+@admin.register(ArchivalRecordSet)
+class ArchivalRecordSetAdmin(VersionAdmin):
+    autocomplete_fields = ['archival_records']
+    exclude = ['author']
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget}
+    }
+    list_display = ['title', 'author', 'number_of_records']
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.author = request.user
+
+        super().save_model(request, obj, form, change)
+
+
+class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
     autocomplete_fields = ['repository', 'references', 'languages',
                            'publication_status', 'subjects',
                            'persons_as_subjects', 'organisations_as_subjects',
@@ -50,8 +82,8 @@ class BaseAdmin(VersionAdmin):
 
 
 @admin.register(Collection)
-class CollectionAdmin(BaseAdmin):
-    fieldsets = BaseAdmin.base_fieldsets + [
+class CollectionAdmin(ArchivalRecordChildAdmin):
+    fieldsets = ArchivalRecordChildAdmin.base_fieldsets + [
         [None, {
             'fields': ['administrative_history', 'arrangement']
         }]
@@ -59,16 +91,16 @@ class CollectionAdmin(BaseAdmin):
 
 
 @admin.register(Series)
-class SeriesAdmin(BaseAdmin):
-    autocomplete_fields = BaseAdmin.autocomplete_fields + [
-        'collection', 'parent'
+class SeriesAdmin(ArchivalRecordChildAdmin):
+    autocomplete_fields = ArchivalRecordChildAdmin.autocomplete_fields + [
+        'parent_collection', 'parent_series'
     ]
 
     fieldsets = [
         [None, {
-            'fields': ['collection', 'parent']
+            'fields': ['parent_collection', 'parent_series']
         }]
-    ] + BaseAdmin.base_fieldsets + [
+    ] + ArchivalRecordChildAdmin.base_fieldsets + [
         [None, {
             'fields': ['arrangement']
         }]
@@ -76,13 +108,13 @@ class SeriesAdmin(BaseAdmin):
 
 
 @admin.register(File)
-class FileAdmin(BaseAdmin):
-    autocomplete_fields = BaseAdmin.autocomplete_fields + [
-        'series', 'parent', 'creators', 'record_type', 'persons_as_relations',
-        'places_as_relations'
+class FileAdmin(ArchivalRecordChildAdmin):
+    autocomplete_fields = ArchivalRecordChildAdmin.autocomplete_fields + [
+        'parent_series', 'parent_file', 'creators', 'record_type',
+        'persons_as_relations', 'places_as_relations'
     ]
 
-    base_fieldsets = BaseAdmin.base_fieldsets + [
+    base_fieldsets = ArchivalRecordChildAdmin.base_fieldsets + [
         [None, {
             'fields': ['record_type', 'url', 'physical_description']
         }],
@@ -94,23 +126,24 @@ class FileAdmin(BaseAdmin):
 
     fieldsets = [
         [None, {
-            'fields': ['series', 'parent', 'creators', 'persons_as_relations',
-                       'places_as_relations']
+            'fields': ['parent_series', 'parent_file', 'creators',
+                       'persons_as_relations', 'places_as_relations']
         }]
     ] + base_fieldsets
 
 
 @admin.register(Item)
-class ItemAdmin(BaseAdmin):
-    autocomplete_fields = BaseAdmin.autocomplete_fields + [
-        'f', 'creators', 'record_type', 'creation_places',
-        'persons_as_relations', 'places_as_relations'
+class ItemAdmin(ArchivalRecordChildAdmin):
+    autocomplete_fields = ArchivalRecordChildAdmin.autocomplete_fields + [
+        'parent_series', 'parent_file', 'creators', 'record_type',
+        'creation_places', 'persons_as_relations', 'places_as_relations'
     ]
 
     fieldsets = [
         [None, {
-            'fields': ['f', 'creators', 'creation_places',
-                       'persons_as_relations', 'places_as_relations']
+            'fields': ['parent_series', 'parent_file', 'creators',
+                       'creation_places', 'persons_as_relations',
+                       'places_as_relations']
         }]
     ] + FileAdmin.base_fieldsets
 

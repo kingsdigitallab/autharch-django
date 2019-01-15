@@ -9,6 +9,7 @@ django-languages-plus
 django-libsass
 django-model-utils
 django-nested-admin
+django-polymorphic
 django-redis
 django-reversion
 django-script-codes
