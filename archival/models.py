@@ -35,6 +35,15 @@ class Organisation(models.Model):
 
 
 @reversion.register()
+class Image(TimeStampedModel):
+    title = models.CharField(max_length=256, unique=True)
+    image = models.ImageField(upload_to='archival/')
+
+    def __str__(self):
+        return self.title
+
+
+@reversion.register()
 class ArchivalRecord(PolymorphicModel):
     uuid = models.CharField(max_length=64, unique=True)
 
@@ -47,6 +56,8 @@ class ArchivalRecord(PolymorphicModel):
     creation_dates = models.CharField(max_length=256)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
+
+    images = models.ManyToManyField(Image)
 
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)

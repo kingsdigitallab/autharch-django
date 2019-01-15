@@ -1,6 +1,6 @@
 from archival.models import (ArchivalRecord, ArchivalRecordSet, Collection,
-                             File, Item, Organisation, Reference, Series,
-                             Subject)
+                             File, Image, Item, Organisation, Reference,
+                             Series, Subject)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -42,7 +42,7 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
     autocomplete_fields = ['repository', 'references', 'languages',
                            'publication_status', 'subjects',
                            'persons_as_subjects', 'organisations_as_subjects',
-                           'places_as_subjects']
+                           'places_as_subjects', 'images']
 
     base_fieldsets = [
         ['Repository', {
@@ -54,6 +54,10 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         ['This is a sample group title', {
             'fields': ['title', ('start_date', 'end_date'), 'creation_dates',
                        'provenance']
+        }],
+        ['Images', {
+            'classes': ['collapse'],
+            'fields': ['images']
         }],
         ['An example of a collapsible group', {
             'classes': ['collapse'],
@@ -130,6 +134,11 @@ class FileAdmin(ArchivalRecordChildAdmin):
                        'persons_as_relations', 'places_as_relations']
         }]
     ] + base_fieldsets
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    search_fields = ['title', 'image']
 
 
 @admin.register(Item)
