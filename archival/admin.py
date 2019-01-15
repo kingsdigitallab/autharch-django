@@ -4,6 +4,7 @@ from archival.models import (ArchivalRecord, ArchivalRecordSet, Collection,
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
+from django.utils.html import format_html
 from polymorphic.admin import (PolymorphicChildModelAdmin,
                                PolymorphicChildModelFilter,
                                PolymorphicParentModelAdmin)
@@ -138,6 +139,14 @@ class FileAdmin(ArchivalRecordChildAdmin):
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
+    def thumbnail(self, obj):
+        return format_html('<img src="{}" width="100px" />'.format(
+            obj.image.url))
+
+    thumbnail.short_description = 'Image'
+
+    list_display = ['thumbnail', 'title', 'mime_type']
+    readonly_fields = ['thumbnail', 'mime_type']
     search_fields = ['title', 'image']
 
 
