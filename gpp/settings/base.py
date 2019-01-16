@@ -110,6 +110,7 @@ INSTALLED_APPS += [
     'gpp.apps.GppAdminConfig',
     'jargon.apps.JargonConfig',
     'languages_plus',
+    'media.apps.MediaConfig',
     'nested_admin',
     'reversion',
     'script_codes.apps.ScriptCodesConfig',

@@ -1,4 +1,3 @@
-import mimetypes
 import reversion
 from authority.models import Entity
 from django.conf import settings
@@ -7,6 +6,7 @@ from geonames_place.models import Place
 from jargon.models import (Publication, PublicationStatus, RecordType,
                            ReferenceSource, Repository)
 from languages_plus.models import Language
+from media.models import Media
 from model_utils.models import TimeStampedModel
 from polymorphic.models import PolymorphicModel
 
@@ -36,26 +36,6 @@ class Organisation(models.Model):
 
 
 @reversion.register()
-class Image(TimeStampedModel):
-    title = models.CharField(max_length=256, unique=True)
-    image = models.ImageField(upload_to='archival/')
-    mime_type = models.CharField(max_length=32, blank=True, null=True)
-
-    def __str__(self):
-        return self.title
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        mt, _ = mimetypes.guess_type(self.image.url)
-        if mt == self.mime_type:
-            return
-
-        self.mime_type = mt
-        super().save(*args, **kwargs)
-
-
-@reversion.register()
 class ArchivalRecord(PolymorphicModel):
     uuid = models.CharField(max_length=64, unique=True)
 
@@ -69,7 +49,7 @@ class ArchivalRecord(PolymorphicModel):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
 
-    images = models.ManyToManyField(Image)
+    media = models.ManyToManyField(Media)
 
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)

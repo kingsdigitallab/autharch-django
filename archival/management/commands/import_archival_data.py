@@ -58,6 +58,8 @@ class Command(BaseCommand):
             f = self._add_base_series_data(f, row)
             f = self._add_base_file_data(f, row)
             f = self._add_file_data(f, row)
+            self.logger.debug(f.creators.all())
+            self.logger.debug(f.persons_as_relations.all())
             f.save()
         elif level == 'item':
             item = self._create_or_get_object(Item, uuid)
@@ -65,6 +67,8 @@ class Command(BaseCommand):
             item = self._add_base_series_data(item, row)
             item = self._add_base_file_data(item, row)
             item = self._add_item_data(item, row)
+            self.logger.debug(item.creators.all())
+            self.logger.debug(item.persons_as_relations.all())
             item.save()
 
     def _create_or_get_object(self, model, uuid):

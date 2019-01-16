@@ -1,10 +1,9 @@
 from archival.models import (ArchivalRecord, ArchivalRecordSet, Collection,
-                             File, Image, Item, Organisation, Reference,
-                             Series, Subject)
+                             File, Item, Organisation, Reference, Series,
+                             Subject)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
-from django.utils.html import format_html
 from polymorphic.admin import (PolymorphicChildModelAdmin,
                                PolymorphicChildModelFilter,
                                PolymorphicParentModelAdmin)
@@ -15,10 +14,13 @@ from reversion.admin import VersionAdmin
 class ArchivalRecordAdmin(PolymorphicParentModelAdmin, VersionAdmin):
     base_model = Collection
     child_models = [Collection, File, Item, Series]
+    date_hierarchy = 'description_date'
 
     list_display = ['archival_level', 'title']
     list_display_links = list_display
-    list_filter = [PolymorphicChildModelFilter]
+    list_filter = [PolymorphicChildModelFilter, 'repository',
+                   'publication_status', 'description_date',
+                   ('languages', admin.RelatedOnlyFieldListFilter)]
 
     search_fields = ['title']
 
@@ -43,7 +45,7 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
     autocomplete_fields = ['repository', 'references', 'languages',
                            'publication_status', 'subjects',
                            'persons_as_subjects', 'organisations_as_subjects',
-                           'places_as_subjects', 'images']
+                           'places_as_subjects', 'media']
 
     base_fieldsets = [
         ['Repository', {
@@ -56,9 +58,9 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
             'fields': ['title', ('start_date', 'end_date'), 'creation_dates',
                        'provenance']
         }],
-        ['Images', {
+        ['Media', {
             'classes': ['collapse'],
-            'fields': ['images']
+            'fields': ['media']
         }],
         ['An example of a collapsible group', {
             'classes': ['collapse'],
@@ -84,6 +86,7 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
     }
 
     search_fields = ['title']
+    show_in_index = True
 
 
 @admin.register(Collection)
@@ -136,18 +139,7 @@ class FileAdmin(ArchivalRecordChildAdmin):
         }]
     ] + base_fieldsets
 
-
-@admin.register(Image)
-class ImageAdmin(admin.ModelAdmin):
-    def thumbnail(self, obj):
-        return format_html('<img src="{}" width="100px" />'.format(
-            obj.image.url))
-
-    thumbnail.short_description = 'Image'
-
-    list_display = ['thumbnail', 'title', 'mime_type']
-    readonly_fields = ['thumbnail', 'mime_type']
-    search_fields = ['title', 'image']
+    list_filter = [('creators', admin.RelatedOnlyFieldListFilter)]
 
 
 @admin.register(Item)
