@@ -1,0 +1,51 @@
+[
+{
+  "model": "scm.revisionevent",
+  "pk": 1,
+  "fields": {
+    "title": "cancelled"
+  }
+},
+{
+  "model": "scm.revisionevent",
+  "pk": 2,
+  "fields": {
+    "title": "created"
+  }
+},
+{
+  "model": "scm.revisionevent",
+  "pk": 3,
+  "fields": {
+    "title": "deleted"
+  }
+},
+{
+  "model": "scm.revisionevent",
+  "pk": 4,
+  "fields": {
+    "title": "derived"
+  }
+},
+{
+  "model": "scm.revisionevent",
+  "pk": 5,
+  "fields": {
+    "title": "revised"
+  }
+},
+{
+  "model": "scm.revisionevent",
+  "pk": 6,
+  "fields": {
+    "title": "unknown"
+  }
+},
+{
+  "model": "scm.revisionevent",
+  "pk": 7,
+  "fields": {
+    "title": "updated"
+  }
+}
+]

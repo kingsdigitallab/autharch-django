@@ -1,0 +1,92 @@
+[
+{
+  "model": "jargon.recordtype",
+  "pk": 1,
+  "fields": {
+    "created": "2019-01-17T14:43:01.783Z",
+    "modified": "2019-01-17T14:43:01.783Z",
+    "title": "Financial records"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 2,
+  "fields": {
+    "created": "2019-01-17T14:43:01.787Z",
+    "modified": "2019-01-17T14:43:01.787Z",
+    "title": "Correspondence"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 3,
+  "fields": {
+    "created": "2019-01-17T14:43:01.790Z",
+    "modified": "2019-01-17T14:43:01.790Z",
+    "title": "Diaries"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 4,
+  "fields": {
+    "created": "2019-01-17T14:43:01.792Z",
+    "modified": "2019-01-17T14:43:01.792Z",
+    "title": "Commonplace Books"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 5,
+  "fields": {
+    "created": "2019-01-17T14:43:01.796Z",
+    "modified": "2019-01-17T14:43:01.796Z",
+    "title": "Writings (documents)"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 6,
+  "fields": {
+    "created": "2019-01-17T14:43:01.800Z",
+    "modified": "2019-01-17T14:43:01.800Z",
+    "title": "Legal documents"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 7,
+  "fields": {
+    "created": "2019-01-17T14:43:01.804Z",
+    "modified": "2019-01-17T14:43:01.805Z",
+    "title": "Wills"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 8,
+  "fields": {
+    "created": "2019-01-17T14:43:01.809Z",
+    "modified": "2019-01-17T14:43:01.809Z",
+    "title": "Maps (documents)"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 9,
+  "fields": {
+    "created": "2019-01-17T14:43:01.812Z",
+    "modified": "2019-01-17T14:43:01.812Z",
+    "title": "Prints (visual works)"
+  }
+},
+{
+  "model": "jargon.recordtype",
+  "pk": 10,
+  "fields": {
+    "created": "2019-01-17T14:43:01.814Z",
+    "modified": "2019-01-17T14:43:01.815Z",
+    "title": "Registers (lists)"
+  }
+}
+]

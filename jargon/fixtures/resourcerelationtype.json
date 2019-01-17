@@ -1,0 +1,29 @@
+[
+{
+  "model": "jargon.resourcerelationtype",
+  "pk": 1,
+  "fields": {
+    "created": "2019-01-17T14:45:27.226Z",
+    "modified": "2019-01-17T14:45:27.227Z",
+    "title": "creatorOf"
+  }
+},
+{
+  "model": "jargon.resourcerelationtype",
+  "pk": 2,
+  "fields": {
+    "created": "2019-01-17T14:45:27.233Z",
+    "modified": "2019-01-17T14:45:27.233Z",
+    "title": "subjectOf"
+  }
+},
+{
+  "model": "jargon.resourcerelationtype",
+  "pk": 3,
+  "fields": {
+    "created": "2019-01-17T14:45:27.235Z",
+    "modified": "2019-01-17T14:45:27.236Z",
+    "title": "other"
+  }
+}
+]

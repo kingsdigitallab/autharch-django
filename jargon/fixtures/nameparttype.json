@@ -1,0 +1,101 @@
+[
+{
+  "model": "jargon.nameparttype",
+  "pk": 1,
+  "fields": {
+    "created": "2019-01-17T14:40:27.855Z",
+    "modified": "2019-01-17T14:40:27.855Z",
+    "title": "surname"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 2,
+  "fields": {
+    "created": "2019-01-17T14:40:27.862Z",
+    "modified": "2019-01-17T14:40:27.862Z",
+    "title": "preTitle"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 3,
+  "fields": {
+    "created": "2019-01-17T14:40:27.866Z",
+    "modified": "2019-01-17T14:40:27.870Z",
+    "title": "forename"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 4,
+  "fields": {
+    "created": "2019-01-17T14:40:27.877Z",
+    "modified": "2019-01-17T14:40:27.878Z",
+    "title": "title"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 5,
+  "fields": {
+    "created": "2019-01-17T14:40:27.883Z",
+    "modified": "2019-01-17T14:40:27.883Z",
+    "title": "epithet"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 6,
+  "fields": {
+    "created": "2019-01-17T14:40:27.903Z",
+    "modified": "2019-01-17T14:40:27.903Z",
+    "title": "ordinalNumber"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 7,
+  "fields": {
+    "created": "2019-01-17T14:40:27.908Z",
+    "modified": "2019-01-17T14:40:27.915Z",
+    "title": "properTitle"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 8,
+  "fields": {
+    "created": "2019-01-17T14:40:27.920Z",
+    "modified": "2019-01-17T14:40:27.921Z",
+    "title": "relationshipSovereign"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 9,
+  "fields": {
+    "created": "2019-01-17T14:40:27.928Z",
+    "modified": "2019-01-17T14:40:27.928Z",
+    "title": "body"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 10,
+  "fields": {
+    "created": "2019-01-17T14:40:27.933Z",
+    "modified": "2019-01-17T14:40:27.934Z",
+    "title": "authority"
+  }
+},
+{
+  "model": "jargon.nameparttype",
+  "pk": 11,
+  "fields": {
+    "created": "2019-01-17T14:40:27.941Z",
+    "modified": "2019-01-17T14:40:27.941Z",
+    "title": "subordBody"
+  }
+}
+]

@@ -1,0 +1,65 @@
+[
+{
+  "model": "jargon.maintenancestatus",
+  "pk": 1,
+  "fields": {
+    "created": "2019-01-17T14:38:58.746Z",
+    "modified": "2019-01-17T14:38:58.747Z",
+    "title": "cancelled"
+  }
+},
+{
+  "model": "jargon.maintenancestatus",
+  "pk": 2,
+  "fields": {
+    "created": "2019-01-17T14:38:58.775Z",
+    "modified": "2019-01-17T14:38:58.775Z",
+    "title": "deleted"
+  }
+},
+{
+  "model": "jargon.maintenancestatus",
+  "pk": 3,
+  "fields": {
+    "created": "2019-01-17T14:38:58.778Z",
+    "modified": "2019-01-17T14:38:58.778Z",
+    "title": "deletedReplaced"
+  }
+},
+{
+  "model": "jargon.maintenancestatus",
+  "pk": 4,
+  "fields": {
+    "created": "2019-01-17T14:38:58.782Z",
+    "modified": "2019-01-17T14:38:58.783Z",
+    "title": "deletedSplit"
+  }
+},
+{
+  "model": "jargon.maintenancestatus",
+  "pk": 5,
+  "fields": {
+    "created": "2019-01-17T14:38:58.786Z",
+    "modified": "2019-01-17T14:38:58.786Z",
+    "title": "derived"
+  }
+},
+{
+  "model": "jargon.maintenancestatus",
+  "pk": 6,
+  "fields": {
+    "created": "2019-01-17T14:38:58.792Z",
+    "modified": "2019-01-17T14:38:58.792Z",
+    "title": "new"
+  }
+},
+{
+  "model": "jargon.maintenancestatus",
+  "pk": 7,
+  "fields": {
+    "created": "2019-01-17T14:38:58.797Z",
+    "modified": "2019-01-17T14:38:58.797Z",
+    "title": "revised"
+  }
+}
+]

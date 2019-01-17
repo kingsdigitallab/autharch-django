@@ -1,0 +1,35 @@
+[
+{
+  "model": "jargon.publicationstatus",
+  "pk": 1,
+  "fields": {
+    "created": "2019-01-10T13:08:45.842Z",
+    "modified": "2019-01-17T11:48:29.133Z",
+    "title": "published",
+    "is_archival": true,
+    "is_authority": true
+  }
+},
+{
+  "model": "jargon.publicationstatus",
+  "pk": 2,
+  "fields": {
+    "created": "2019-01-17T11:48:55.588Z",
+    "modified": "2019-01-17T11:48:55.613Z",
+    "title": "approved",
+    "is_archival": true,
+    "is_authority": true
+  }
+},
+{
+  "model": "jargon.publicationstatus",
+  "pk": 3,
+  "fields": {
+    "created": "2019-01-17T11:49:07.404Z",
+    "modified": "2019-01-17T11:49:07.420Z",
+    "title": "inprocess",
+    "is_archival": true,
+    "is_authority": true
+  }
+}
+]

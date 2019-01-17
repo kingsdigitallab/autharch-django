@@ -1,0 +1,92 @@
+[
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 1,
+  "fields": {
+    "created": "2019-01-17T14:24:41.180Z",
+    "modified": "2019-01-17T14:24:51.227Z",
+    "title": "identity"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 2,
+  "fields": {
+    "created": "2019-01-17T14:25:00.047Z",
+    "modified": "2019-01-17T14:25:00.063Z",
+    "title": "hierarchical"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 3,
+  "fields": {
+    "created": "2019-01-17T14:25:05.675Z",
+    "modified": "2019-01-17T14:25:05.687Z",
+    "title": "hierarchical-parent"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 4,
+  "fields": {
+    "created": "2019-01-17T14:25:10.586Z",
+    "modified": "2019-01-17T14:25:10.606Z",
+    "title": "hierarchical-child"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 5,
+  "fields": {
+    "created": "2019-01-17T14:25:56.579Z",
+    "modified": "2019-01-17T14:25:56.589Z",
+    "title": "temporal"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 6,
+  "fields": {
+    "created": "2019-01-17T14:26:01.931Z",
+    "modified": "2019-01-17T14:26:01.938Z",
+    "title": "temporal-earlier"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 7,
+  "fields": {
+    "created": "2019-01-17T14:26:07.823Z",
+    "modified": "2019-01-17T14:26:07.835Z",
+    "title": "temporal-later"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 8,
+  "fields": {
+    "created": "2019-01-17T14:26:13.245Z",
+    "modified": "2019-01-17T14:26:13.260Z",
+    "title": "family"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 9,
+  "fields": {
+    "created": "2019-01-17T14:26:19.066Z",
+    "modified": "2019-01-17T14:26:19.097Z",
+    "title": "associative"
+  }
+},
+{
+  "model": "jargon.entityrelationtype",
+  "pk": 10,
+  "fields": {
+    "created": "2019-01-17T14:26:28.455Z",
+    "modified": "2019-01-17T14:26:28.472Z",
+    "title": "family-spouse"
+  }
+}
+]

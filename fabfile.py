@@ -296,6 +296,8 @@ def load_data(app=None):
 
     with cd(env.path), prefix(env.within_virtualenv):
         run('./manage.py loaddata languages_data.json.gz')
+        run('./manage.py loaddata jargon/fixtures/*')
+        run('./manage.py loaddata scm/fixtures/*')
 
 
 @task
