@@ -107,6 +107,7 @@ venv.bak/
 .DS_Store
 .babelrc
 .vagrant
+.vscode
 local.py
 logs/
 static/
