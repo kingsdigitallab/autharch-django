@@ -64,7 +64,7 @@ class PublicationStatus(BaseJargonModel):
 
 class RecordType(BaseJargonModel):
     class Meta:
-        verbose_name_plural = 'EAD: Record type'
+        verbose_name = 'EAD: Record type'
         verbose_name_plural = 'EAD: Record types'
 
 

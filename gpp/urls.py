@@ -5,6 +5,7 @@ from django.contrib.admin import site
 from django.urls import include, path, re_path
 from kdl_ldap.signal_handlers import \
     register_signal_handlers as kdl_ldap_register_signal_hadlers
+from kdl_wagtail.core.api import api_router
 
 admin.autodiscover()
 
@@ -17,11 +18,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('adminactions/', include('adminactions.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-
     path('wagtail/', include('wagtail.admin.urls')),
-    path('documents/', include('wagtail.documents.urls')),
-    path('', include('wagtail.core.urls')),
 
+    path('documents/', include('wagtail.documents.urls')),
+
+    path('api/archival/', include('archival.urls')),
+    path('api/jargon/', include('jargon.urls')),
+    path('api/wagtail/', api_router.urls),
+
+    path('', include('wagtail.core.urls'))
 ]
 
 # -----------------------------------------------------------------------------

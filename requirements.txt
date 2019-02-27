@@ -11,6 +11,7 @@ django-model-utils
 django-nested-admin
 django-polymorphic
 django-redis
+django-rest-polymorphic
 django-reversion
 django-script-codes
 pandas
