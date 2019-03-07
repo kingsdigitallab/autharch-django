@@ -1,30 +1,15 @@
-from rest_framework import generics
+from rest_framework import viewsets
 
-from .models import ArchivalRecord, Collection, Reference
-from .serializers import (ArchivalRecordSerializer, CollectionSerializer,
+from .models import ArchivalRecord, Reference
+from .serializers import (ArchivalRecordPolymorphicSerializer,
                           ReferenceSerializer)
 
 
-class ArchivalRecordList(generics.ListAPIView):
-    queryset = ArchivalRecord.objects.all()
-    serializer_class = ArchivalRecordSerializer
+class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ArchivalRecord.objects.order_by('id')
+    serializer_class = ArchivalRecordPolymorphicSerializer
 
 
-class ArchivalRecordDetail(generics.RetrieveAPIView):
-    queryset = ArchivalRecord.objects.all()
-    serializer_class = ArchivalRecordSerializer
-
-
-class CollectionList(generics.ListAPIView):
-    queryset = Collection.objects.all()
-    serializer_class = CollectionSerializer
-
-
-class CollectionDetail(generics.RetrieveAPIView):
-    queryset = Collection.objects.all()
-    serializer_class = CollectionSerializer
-
-
-class ReferenceDetail(generics.RetrieveAPIView):
+class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Reference.objects.all()
     serializer_class = ReferenceSerializer

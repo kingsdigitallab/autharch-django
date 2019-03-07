@@ -1,16 +1,14 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from .views import (PublicationStatusDetail, ReferenceSourceDetail,
-                    RepositoryDetail)
+from .views import (PublicationStatusViewSet, ReferenceSourceViewSet,
+                    RepositoryViewSet)
+
+router = DefaultRouter()
+router.register(r'publicationstatuses', PublicationStatusViewSet)
+router.register(r'referencesources', ReferenceSourceViewSet)
+router.register(r'repositories', RepositoryViewSet)
 
 urlpatterns = [
-    path('publicationstatuses/<int:pk>/', PublicationStatusDetail.as_view(),
-         name='publicationstatus-detail'),
-    path('repositories/<int:pk>/', ReferenceSourceDetail.as_view(),
-         name='referencesource-detail'),
-    path('repositories/<int:pk>/', RepositoryDetail.as_view(),
-         name='repository-detail'),
+    path('', include(router.urls))
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

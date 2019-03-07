@@ -1,21 +1,23 @@
 from rest_framework import serializers
 
-from .models import PublicationStatus, Repository, ReferenceSource
+from .models import PublicationStatus, ReferenceSource, Repository
 
 
-class PublicationStatusSerializer(serializers.HyperlinkedModelSerializer):
+class JargonSerializer(serializers.ModelSerializer):
     class Meta:
+        exclude = ['created', 'modified']
+
+
+class PublicationStatusSerializer(JargonSerializer):
+    class Meta(JargonSerializer.Meta):
         model = PublicationStatus
-        fields = '__all__'
 
 
-class ReferenceSourceSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
+class ReferenceSourceSerializer(JargonSerializer):
+    class Meta(JargonSerializer.Meta):
         model = ReferenceSource
-        fields = '__all__'
 
 
-class RepositorySerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
+class RepositorySerializer(JargonSerializer):
+    class Meta(JargonSerializer.Meta):
         model = Repository
-        fields = '__all__'

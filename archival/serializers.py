@@ -1,50 +1,57 @@
+from jargon.serializers import (PublicationStatusSerializer,
+                                ReferenceSourceSerializer,
+                                RepositorySerializer)
+from media.serializers import MediaPolymorphicSerializer
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from .models import ArchivalRecord, Collection, File, Item, Series, Reference
+from .models import ArchivalRecord, Collection, File, Item, Reference, Series
 
 
-def get_field_names(model, exclude=[]):
-    fields = list(map(lambda x: x.name, model._meta.get_fields()))
-    return list(filter(lambda x: x not in exclude, fields))
+class ReferenceSerializer(serializers.ModelSerializer):
+    source = ReferenceSourceSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Reference
+        fields = '__all__'
+        depth = 10
 
 
 class ArchivalRecordSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='archivalrecord-detail', lookup_field='pk'
+    )
+
+    media = MediaPolymorphicSerializer(many=True, read_only=True)
+    publication_status = PublicationStatusSerializer(
+        many=False, read_only=True)
+    references = ReferenceSerializer(many=True, read_only=True)
+    repository = RepositorySerializer(many=False, read_only=True)
+
     class Meta:
         model = ArchivalRecord
-        fields = ['title']
-
-
-class CollectionSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Collection
         exclude = ['polymorphic_ctype']
         depth = 10
 
 
-class FileSerializer(serializers.ModelSerializer):
-    class Meta:
+class CollectionSerializer(ArchivalRecordSerializer):
+    class Meta(ArchivalRecordSerializer.Meta):
+        model = Collection
+
+
+class FileSerializer(ArchivalRecordSerializer):
+    class Meta(ArchivalRecordSerializer.Meta):
         model = File
-        fields = '__all__'
 
 
-class ItemSerializer(serializers.ModelSerializer):
-    class Meta:
+class ItemSerializer(ArchivalRecordSerializer):
+    class Meta(ArchivalRecordSerializer.Meta):
         model = Item
-        fields = '__all__'
 
 
-class ReferenceSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Reference
-        fields = '__all__'
-        depth = 2
-
-
-class SeriesSerializer(serializers.ModelSerializer):
-    class Meta:
+class SeriesSerializer(ArchivalRecordSerializer):
+    class Meta(ArchivalRecordSerializer.Meta):
         model = Series
-        fields = '__all__'
 
 
 class ArchivalRecordPolymorphicSerializer(PolymorphicSerializer):

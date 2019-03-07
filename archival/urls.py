@@ -1,18 +1,12 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from .views import (ArchivalRecordDetail, ArchivalRecordList, CollectionDetail,
-                    CollectionList, ReferenceDetail)
+from .views import ArchivalRecordViewSet, ReferenceViewSet
+
+router = DefaultRouter()
+router.register(r'records', ArchivalRecordViewSet)
+router.register(r'references', ReferenceViewSet)
 
 urlpatterns = [
-    path('collections/', CollectionList.as_view()),
-    path('collections/<int:pk>/', CollectionDetail.as_view(),
-         name='collection-detail'),
-    path('records/', ArchivalRecordList.as_view()),
-    path('records/<int:pk>/', ArchivalRecordDetail.as_view(),
-         name='archivalrecord-detail'),
-    path('references/<int:pk>/', ReferenceDetail.as_view(),
-         name='reference-detail')
+    path('', include(router.urls))
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)
