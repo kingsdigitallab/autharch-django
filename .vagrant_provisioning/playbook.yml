@@ -303,6 +303,7 @@
       command: "{{ user_home }}/venv/bin/python manage.py import_archival_data data.xlsx"
       args:
         chdir: "{{ project_root }}"
+      ignore_errors: yes
       tags:
         - djang
 
