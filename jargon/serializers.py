@@ -1,11 +1,16 @@
 from rest_framework import serializers
 
-from .models import PublicationStatus, ReferenceSource, Repository
+from .models import EntityType, PublicationStatus, ReferenceSource, Repository
 
 
 class JargonSerializer(serializers.ModelSerializer):
     class Meta:
         exclude = ['created', 'modified']
+
+
+class EntityTypeSerializer(JargonSerializer):
+    class Meta(JargonSerializer.Meta):
+        model = EntityType
 
 
 class PublicationStatusSerializer(JargonSerializer):

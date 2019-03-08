@@ -1,6 +1,7 @@
-from jargon.serializers import (PublicationStatusSerializer,
-                                ReferenceSourceSerializer,
-                                RepositorySerializer)
+from jargon.serializers import (
+    PublicationStatusSerializer, ReferenceSourceSerializer,
+    RepositorySerializer
+)
 from media.serializers import MediaPolymorphicSerializer
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer

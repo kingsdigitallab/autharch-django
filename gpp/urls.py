@@ -22,8 +22,9 @@ urlpatterns = [
 
     path('documents/', include('wagtail.documents.urls')),
 
-    path('api/archival/', include('archival.urls')),
     path('api/jargon/', include('jargon.urls')),
+    path('api/archival/', include('archival.urls')),
+    path('api/authority/', include('authority.urls')),
     path('api/wagtail/', api_router.urls),
 
     path('', include('wagtail.core.urls'))

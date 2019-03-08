@@ -82,6 +82,7 @@ INSTALLED_APPS = [
 
     'compressor',
     'django_extensions',
+    'django_filters',
     'kdl_ldap',
     'modelcluster',
     'rest_framework',

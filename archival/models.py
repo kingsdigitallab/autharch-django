@@ -3,8 +3,9 @@ from authority.models import Entity
 from django.conf import settings
 from django.db import models
 from geonames_place.models import Place
-from jargon.models import (Publication, PublicationStatus, RecordType,
-                           ReferenceSource, Repository)
+from jargon.models import (
+    Publication, PublicationStatus, RecordType, ReferenceSource, Repository
+)
 from languages_plus.models import Language
 from media.models import Media
 from model_utils.models import TimeStampedModel
