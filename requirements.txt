@@ -3,6 +3,7 @@ django-adminactions
 django-compressor
 django-ckeditor
 django-extensions
+django-filter
 django-geonames-place
 django-kdl-ldap
 django-languages-plus
