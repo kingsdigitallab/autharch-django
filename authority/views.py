@@ -6,7 +6,7 @@ from .serializers import EntitySerializer
 
 
 class EntityViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Entity.objects.order_by('modified')
+    queryset = Entity.objects.order_by('-modified')
     serializer_class = EntitySerializer
 
     filter_backends = [DjangoFilterBackend]
