@@ -25,7 +25,7 @@ sys.path.append(project_root)
 
 # The name of the Django app for this project
 # Folder that contains wsgi.py
-PROJECT_NAME = 'gpp'
+PROJECT_NAME = 'autharch'
 SERVER_NAME = 'autharch'
 # Git repository pointer
 REPOSITORY = 'https://github.com/kingsdigitallab/{}-django.git'.format(
