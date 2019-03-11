@@ -10,7 +10,7 @@ fi
 echo # blank line
 
 
-echo "Welcome to the KDL Vagrant Virtual Environment for gpp!"
+echo "Welcome to the KDL Vagrant Virtual Environment for autharch!"
 
 echo # blank line
 

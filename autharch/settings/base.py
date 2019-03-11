@@ -1,5 +1,5 @@
 """
-Django settings for gpp project.
+Django settings for autharch project.
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
@@ -18,8 +18,8 @@ from kdl_ldap.settings import *  # noqa
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
-PROJECT_NAME = 'gpp'
-PROJECT_TITLE = 'Georgian Papers Program'
+PROJECT_NAME = 'autharch'
+PROJECT_TITLE = 'AuthArch'
 
 # -----------------------------------------------------------------------------
 # Core Settings
@@ -109,7 +109,7 @@ INSTALLED_APPS += [
     'ckeditor',
     'countries_plus',
     'geonames_place.apps.GeonamesPlaceConfig',
-    'gpp.apps.GppAdminConfig',
+    'autharch.apps.AuthArchAdminConfig',
     'jargon.apps.JargonConfig',
     'kdl_wagtail.core',
     'languages_plus',
@@ -173,7 +173,7 @@ LOGGING = {
             'level': LOGGING_LEVEL,
             'propagate': True
         },
-        'gpp': {
+        'autharch': {
             'handlers': ['file'],
             'level': LOGGING_LEVEL,
             'propagate': True

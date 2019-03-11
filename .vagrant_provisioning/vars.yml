@@ -1,5 +1,5 @@
 ansible_python_interpreter: /usr/bin/python3
-app: { name: gpp }
+app: { name: autharch }
 motd: { file: 00-kdl }
 postgresql:
   {
@@ -10,7 +10,7 @@ postgresql:
     encoding: UTF-8,
     initial_data_file: data.sql,
     locale: en_GB.UTF-8,
-    user: gpp,
+    user: autharch,
   }
 project_root: /vagrant
 python:

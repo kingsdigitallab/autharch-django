@@ -8,9 +8,9 @@ SESSION_COOKIE_SECURE = False
 DATABASES = {
     'default': {
         'ENGINE': db_engine,
-        'NAME': 'gpp',
-        'USER': 'gpp',
-        'PASSWORD': 'gpp',
+        'NAME': 'autharch',
+        'USER': 'autharch',
+        'PASSWORD': 'autharch',
         'ADMINUSER': 'postgres',
         'HOST': 'localhost'
     },
@@ -43,6 +43,6 @@ AUTHENTICATION_BACKENDS = (
 # except ImportError:
 #     pass
 
-LOGGING['loggers']['gpp'] = {}
-LOGGING['loggers']['gpp']['handlers'] = ['console']
-LOGGING['loggers']['gpp']['level'] = logging.DEBUG
+LOGGING['loggers']['autharch'] = {}
+LOGGING['loggers']['autharch']['handlers'] = ['console']
+LOGGING['loggers']['autharch']['level'] = logging.DEBUG

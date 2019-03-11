@@ -3,7 +3,7 @@ from .base import *  # noqa
 ALLOWED_HOSTS = ['127.0.0.1',
                  'localhost'
                  '[::1]',
-                 'gpp-dev.kdl.kcl.ac.uk']
+                 'autharch-dev.kdl.kcl.ac.uk']
 
 CACHE_REDIS_DATABASE = '2'
 CACHES['default']['LOCATION'] = '127.0.0.1:6379:' + CACHE_REDIS_DATABASE
@@ -15,8 +15,8 @@ INTERNAL_IPS = INTERNAL_IPS + ['']
 DATABASES = {
     'default': {
         'ENGINE': db_engine,
-        'NAME': 'app_gpp_dev',
-        'USER': 'app_gpp',
+        'NAME': 'app_autharch_dev',
+        'USER': 'app_autharch',
         'PASSWORD': '',
         'HOST': ''
     },
@@ -24,7 +24,7 @@ DATABASES = {
 
 LOGGING_LEVEL = logging.DEBUG
 
-LOGGING['loggers']['gpp']['level'] = LOGGING_LEVEL
+LOGGING['loggers']['autharch']['level'] = LOGGING_LEVEL
 
 SECRET_KEY = ''
 

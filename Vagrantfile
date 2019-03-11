@@ -6,7 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "bento/ubuntu-16.04"
 
-  config.vm.define "gpp" do |gpp|
+  config.vm.define "autharch" do |autharch|
   end
 
   config.vm.network "forwarded_port", guest: 8000, host: 8000
@@ -16,7 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider "virtualbox" do |provider|
     provider.customize ["modifyvm", :id, "--memory", "2048"]
-    provider.name = "gpp"
+    provider.name = "autharch"
   end
 
   config.vm.provision "ansible" do |ansible|
