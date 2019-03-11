@@ -1,13 +1,37 @@
+from geonames_place.serializers import \
+    PlaceSerializer as GeonamesPlaceSerializer
 from jargon.serializers import EntityTypeSerializer
 from rest_framework import serializers
 
-from .models import Description, Entity, Identity, NameEntry
+from .models import (
+    Description, Entity, Identity, LanguageScript, NameEntry, Place
+)
+
+
+class PlaceSerializer(serializers.ModelSerializer):
+    place = GeonamesPlaceSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Place
+        fields = ['place', 'address', 'role']
+        depth = 10
+
+
+class LanguageScriptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LanguageScript
+        fields = ['language', 'script']
+        depth = 10
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
+    places = PlaceSerializer(many=True, read_only=True)
+    languages_scripts = LanguageScriptSerializer(many=True, read_only=True)
+
     class Meta:
         model = Description
-        fields = ['languages_scripts']
+        fields = ['function', 'structure_or_genealogy',
+                  'places', 'languages_scripts']
         depth = 10
 
 
@@ -33,7 +57,7 @@ class EntitySerializer(serializers.ModelSerializer):
 
     entity_type = EntityTypeSerializer(many=False, read_only=True)
     identities = IdentitySerializer(many=True, read_only=True)
-    descriptions = DescriptionSerializer(many=True)
+    descriptions = DescriptionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Entity
