@@ -1,3 +1,4 @@
+from authority.serializers import EntitySerializer
 from jargon.serializers import (
     PublicationStatusSerializer, ReferenceSourceSerializer,
     RepositorySerializer
@@ -28,6 +29,7 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
         many=False, read_only=True)
     references = ReferenceSerializer(many=True, read_only=True)
     repository = RepositorySerializer(many=False, read_only=True)
+    creators = EntitySerializer(many=True, read_only=True)
 
     class Meta:
         model = ArchivalRecord
