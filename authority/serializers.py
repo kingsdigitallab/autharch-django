@@ -4,8 +4,16 @@ from jargon.serializers import EntityTypeSerializer
 from rest_framework import serializers
 
 from .models import (
-    Description, Entity, Identity, LanguageScript, NameEntry, Place
+    BiographyHistory, Description, Entity, Identity, LanguageScript,
+    NameEntry, Place
 )
+
+
+class BiographyHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BiographyHistory
+        fields = ['abstract', 'content', 'sources', 'copyright']
+        depth = 10
 
 
 class PlaceSerializer(serializers.ModelSerializer):
@@ -27,18 +35,19 @@ class LanguageScriptSerializer(serializers.ModelSerializer):
 class DescriptionSerializer(serializers.ModelSerializer):
     places = PlaceSerializer(many=True, read_only=True)
     languages_scripts = LanguageScriptSerializer(many=True, read_only=True)
+    biography_history = BiographyHistorySerializer(read_only=True)
 
     class Meta:
         model = Description
         fields = ['function', 'structure_or_genealogy',
-                  'places', 'languages_scripts']
+                  'places', 'languages_scripts', 'biography_history']
         depth = 10
 
 
 class NameEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = NameEntry
-        fields = ['display_name', 'authorised_form']
+        fields = ['display_name', 'authorised_form', 'date_from', 'date_to']
 
 
 class IdentitySerializer(serializers.ModelSerializer):
@@ -46,7 +55,7 @@ class IdentitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Identity
-        fields = ['preferred_identity', 'name_entries']
+        fields = ['preferred_identity', 'name_entries', 'date_from', 'date_to']
         depth = 10
 
 
@@ -62,5 +71,5 @@ class EntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entity
         fields = ['id', 'url', 'display_name', 'entity_type',
-                  'identities', 'descriptions']
+                  'identities', 'descriptions', ]
         depth = 10

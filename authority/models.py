@@ -150,7 +150,8 @@ class LanguageScript(LanguageScriptMixin, TimeStampedModel):
 
 @reversion.register()
 class BiographyHistory(TimeStampedModel):
-    description = models.OneToOneField(Description, on_delete=models.CASCADE)
+    description = models.OneToOneField(Description, on_delete=models.CASCADE,
+                                       related_name='biography_history')
 
     abstract = models.TextField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
