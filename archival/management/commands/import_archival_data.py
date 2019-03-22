@@ -158,17 +158,18 @@ class Command(BaseCommand):
             obj.arrangement = row['Arrangement']
 
         reference = self._get_parent_reference(row)
+        self.logger.debug('reference {}'.format(reference))
         if not reference:
             return obj
 
         series = Series.objects.filter(references=reference)
         if series:
-            obj.parent = series[0]
+            obj.parent_series = series[0]
             return obj
 
         collections = Collection.objects.filter(references=reference)
         if collections:
-            obj.collection = collections[0]
+            obj.parent_collection = collections[0]
 
         return obj
 
@@ -211,12 +212,12 @@ class Command(BaseCommand):
 
         files = File.objects.filter(references=reference)
         if files:
-            f.parent = files[0]
+            f.parent_file = files[0]
             return f
 
         series = Series.objects.filter(references=reference)
         if series:
-            f.series = series[0]
+            f.parent_series = series[0]
 
         return f
 
@@ -257,6 +258,6 @@ class Command(BaseCommand):
 
         series = Series.objects.filter(references=reference)
         if series:
-            obj.series = series[0]
+            obj.parent_series = series[0]
 
         return obj
