@@ -38,11 +38,16 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
 
 
 class CollectionSerializer(ArchivalRecordSerializer):
+    series_set = ArchivalRecordSerializer(many=True, read_only=True)
+
     class Meta(ArchivalRecordSerializer.Meta):
         model = Collection
 
 
 class FileSerializer(ArchivalRecordSerializer):
+    file_set = ArchivalRecordSerializer(many=True, read_only=True)
+    item_set = ArchivalRecordSerializer(many=True, read_only=True)
+
     class Meta(ArchivalRecordSerializer.Meta):
         model = File
 
@@ -53,6 +58,10 @@ class ItemSerializer(ArchivalRecordSerializer):
 
 
 class SeriesSerializer(ArchivalRecordSerializer):
+    series_set = ArchivalRecordSerializer(many=True, read_only=True)
+    file_set = ArchivalRecordSerializer(many=True, read_only=True)
+    item_set = ArchivalRecordSerializer(many=True, read_only=True)
+
     class Meta(ArchivalRecordSerializer.Meta):
         model = Series
 
