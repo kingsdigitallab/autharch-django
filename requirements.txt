@@ -1,3 +1,4 @@
+coreapi
 django-kdl-wagtail
 django-adminactions
 django-compressor
@@ -15,7 +16,9 @@ django-redis
 django-rest-polymorphic
 django-reversion
 django-script-codes
+markdown
 pandas
 psycopg2-binary
+pygments
 redis
 xlrd
