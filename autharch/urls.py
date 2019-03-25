@@ -6,6 +6,8 @@ from django.urls import include, path, re_path
 from kdl_ldap.signal_handlers import \
     register_signal_handlers as kdl_ldap_register_signal_hadlers
 from kdl_wagtail.core.api import api_router
+from rest_framework.documentation import include_docs_urls
+
 
 admin.autodiscover()
 
@@ -22,6 +24,7 @@ urlpatterns = [
 
     path('documents/', include('wagtail.documents.urls')),
 
+    path('api/_docs/', include_docs_urls(title='AuthArch API Documentation')),
     path('api/jargon/', include('jargon.urls')),
     path('api/archival/', include('archival.urls')),
     path('api/authority/', include('authority.urls')),
