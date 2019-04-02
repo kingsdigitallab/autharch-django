@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'compressor',
+    'corsheaders',
     'django_extensions',
     'django_filters',
     'kdl_ldap',
@@ -188,6 +189,7 @@ LOGGING = {
 }
 
 MIDDLEWARE = [
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -336,3 +338,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+
+CORS_ALLOW_METHODS = ['GET', 'OPTIONS']
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'

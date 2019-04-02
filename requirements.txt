@@ -1,12 +1,13 @@
 coreapi
-django-kdl-wagtail
 django-adminactions
-django-compressor
 django-ckeditor
+django-compressor
+django-cors-headers
 django-extensions
 django-filter
 django-geonames-place
 django-kdl-ldap
+django-kdl-wagtail
 django-languages-plus
 django-libsass
 django-model-utils
