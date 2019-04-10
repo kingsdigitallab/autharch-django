@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/_docs/', include_docs_urls(
         title='AuthArch API Documentation', permission_classes=[])),
     path('api/jargon/', include('jargon.urls')),
+    path('api/media/', include('media.urls')),
     path('api/archival/', include('archival.urls')),
     path('api/authority/', include('authority.urls')),
     path('api/wagtail/', api_router.urls),

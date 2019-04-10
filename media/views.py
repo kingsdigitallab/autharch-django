@@ -4,7 +4,7 @@ from .models import Media
 from .serializers import MediaPolymorphicSerializer
 
 
-class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
+class MediaViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint to list or view media objects.
 
