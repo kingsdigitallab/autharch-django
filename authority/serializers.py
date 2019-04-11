@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from .models import (
     BiographyHistory, Description, Entity, Identity, LanguageScript,
-    NameEntry, Place
+    NameEntry, Place, LocalDescription
 )
 
 
@@ -13,6 +13,20 @@ class BiographyHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = BiographyHistory
         fields = ['abstract', 'content', 'sources', 'copyright']
+        depth = 10
+
+
+class LanguageScriptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LanguageScript
+        fields = ['language', 'script']
+        depth = 10
+
+
+class LocalDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LocalDescription
+        fields = ['gender', 'notes', 'citation']
         depth = 10
 
 
@@ -25,22 +39,16 @@ class PlaceSerializer(serializers.ModelSerializer):
         depth = 10
 
 
-class LanguageScriptSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LanguageScript
-        fields = ['language', 'script']
-        depth = 10
-
-
 class DescriptionSerializer(serializers.ModelSerializer):
-    places = PlaceSerializer(many=True, read_only=True)
-    languages_scripts = LanguageScriptSerializer(many=True, read_only=True)
     biography_history = BiographyHistorySerializer(read_only=True)
+    languages_scripts = LanguageScriptSerializer(many=True, read_only=True)
+    local_descriptions = LocalDescriptionSerializer(many=True, read_only=True)
+    places = PlaceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Description
-        fields = ['function', 'structure_or_genealogy',
-                  'places', 'languages_scripts', 'biography_history']
+        fields = ['biography_history', 'function', 'local_descriptions',
+                  'languages_scripts', 'places', 'structure_or_genealogy']
         depth = 10
 
 
