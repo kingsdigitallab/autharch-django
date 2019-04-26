@@ -29,7 +29,8 @@ def add_rights_declaration(apps, schema_editor):
             e.control.save()
 
         if not e.control.rights_declaration:
-            e.control.rights_declaration = settings.ARCHIVAL_RIGHTS_DECLARATION
+            e.control.rights_declaration = \
+                settings.AUTHORITY_RIGHTS_DECLARATION
             e.control.save()
             e.save()
 
