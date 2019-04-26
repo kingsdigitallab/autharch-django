@@ -341,6 +341,14 @@ REST_FRAMEWORK = {
 }
 
 ARCHIVAL_RIGHTS_DECLARATION = """
+<p>
+Images: © HM Queen Elizabeth II - <a
+href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+</p>
+<p>
+Metadata: <a
+href="https://creativecommons.org/share-your-work/public-domain/cc0/">CC0</a>
+</p>
 <p xmlns:dct="http://purl.org/dc/terms/"
 xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
 <a rel="license"
@@ -360,9 +368,19 @@ This work is published from:
 content="GB" about="https://georgianpapers.com/">
 United Kingdom</span>.
 </p>
+
+Other copyright considerations: Check Public Permission field for copyright
+statements for those items that are not under Crown copyright, for example
+unpublished manuscripts by non-royals.
 """
 
 AUTHORITY_RIGHTS_DECLARATION = """
+<p>
+<a
+href="https://creativecommons.org/share-your-work/public-domain/cc0/">CC0</a>
+unless specified (in the case of biographical or administrative data drawn
+from non-GPP sources).
+</p>
 <p xmlns:dct="http://purl.org/dc/terms/"
 xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
 <a rel="license"
