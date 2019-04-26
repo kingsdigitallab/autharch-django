@@ -1,10 +1,12 @@
 import reversion
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from geonames_place.models import Place as GeoPlace
-from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
-                           Function, MaintenanceStatus, NamePartType,
-                           PublicationStatus, ResourceRelationType)
+from jargon.models import (
+    EntityRelationType, EntityType, FamilyTreeLevel, Function,
+    MaintenanceStatus, NamePartType, PublicationStatus, ResourceRelationType
+)
 from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
 from script_codes.models import Script
@@ -249,7 +251,8 @@ class Control(LanguageScriptMixin, TimeStampedModel):
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
 
-    rights_declaration = models.TextField()
+    rights_declaration = models.TextField(
+        default=settings.AUTHORITY_RIGHTS_DECLARATION)
 
     class Meta:
         verbose_name_plural = 'Control'

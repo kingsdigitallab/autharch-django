@@ -67,7 +67,8 @@ class ArchivalRecord(PolymorphicModel):
     cataloguer = models.CharField(max_length=512)
     description_date = models.DateField()
 
-    rights_declaration = models.TextField()
+    rights_declaration = models.TextField(
+        default=settings.ARCHIVAL_RIGHTS_DECLARATION)
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
 

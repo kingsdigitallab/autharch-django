@@ -340,6 +340,46 @@ REST_FRAMEWORK = {
     ),
 }
 
-# CORS_ALLOW_METHODS = ['GET', 'OPTIONS']
-CORS_ORIGIN_ALLOW_ALL = True
-# CORS_URLS_REGEX = r'^/api/.*$'
+ARCHIVAL_RIGHTS_DECLARATION = """
+<p xmlns:dct="http://purl.org/dc/terms/"
+xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+<a rel="license"
+href="http://creativecommons.org/publicdomain/zero/1.0/">
+<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+style="border-style: none;" alt="CC0" />
+</a>
+<br />
+To the extent possible under law,
+<a rel="dct:publisher"
+href="https://georgianpapers.com/">
+<span property="dct:title">the Georgian Papers Programme</span></a>
+has waived all copyright and related or neighboring rights to
+this work.
+This work is published from:
+<span property="vcard:Country" datatype="dct:ISO3166"
+content="GB" about="https://georgianpapers.com/">
+United Kingdom</span>.
+</p>
+"""
+
+AUTHORITY_RIGHTS_DECLARATION = """
+<p xmlns:dct="http://purl.org/dc/terms/"
+xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+<a rel="license"
+href="http://creativecommons.org/publicdomain/zero/1.0/">
+<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+style="border-style: none;" alt="CC0" />
+</a>
+<br />
+To the extent possible under law,
+<a rel="dct:publisher"
+href="https://georgianpapers.com/">
+<span property="dct:title">the Georgian Papers Programme</span></a>
+has waived all copyright and related or neighboring rights to
+this work.
+This work is published from:
+<span property="vcard:Country" datatype="dct:ISO3166"
+content="GB" about="https://georgianpapers.com/">
+United Kingdom</span>.
+</p>
+"""

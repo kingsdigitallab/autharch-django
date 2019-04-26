@@ -79,5 +79,5 @@ class EntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entity
         fields = ['id', 'url', 'display_name', 'entity_type',
-                  'identities', 'descriptions', ]
+                  'identities', 'descriptions', 'control']
         depth = 10
