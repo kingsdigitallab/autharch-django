@@ -30,9 +30,27 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     references = ReferenceSerializer(many=True, read_only=True)
     repository = RepositorySerializer(many=False, read_only=True)
     creators = EntitySerializer(many=True, read_only=True)
+    metadata = serializers.SerializerMethodField()
+
+    def get_metadata(self, obj):
+        metadata = {}
+        for field in self.Meta.metadata_fields:
+            if hasattr(obj, field):
+                data = getattr(obj, field)
+                if data is not None:
+                    # Note - this is not ideal but is the most efficient way
+                    if data.__class__.__name__ == 'ManyRelatedManager':
+                        metadata[field] = [str(item) for item in data.all()]
+                    else:
+                        metadata[field] = str(data)
+        return metadata
 
     class Meta:
         model = ArchivalRecord
+        metadata_fields = [
+            'archival_level', 'publication_status', 'references',
+            'repository', 'rights_declaration', 'title',
+        ]
         exclude = ['polymorphic_ctype']
         depth = 10
 
