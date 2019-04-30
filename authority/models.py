@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (
-    EntityRelationType, EntityType, FamilyTreeLevel, Function,
+    EntityRelationType, EntityType, Function,
     MaintenanceStatus, NamePartType, PublicationStatus, ResourceRelationType
 )
 from languages_plus.models import Language
@@ -13,7 +13,7 @@ from script_codes.models import Script
 
 
 class DateRangeMixin(models.Model):
-    date_from = models.DateField()
+    date_from = models.DateField(blank=True)
     date_to = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -129,7 +129,7 @@ class Description(DateRangeMixin, TimeStampedModel):
     entity = models.ForeignKey(
         Entity, on_delete=models.CASCADE, related_name='descriptions')
 
-    function = models.ManyToManyField(Function)
+    function = models.ManyToManyField(Function, blank=True)
 
     structure_or_genealogy = models.TextField(blank=True, null=True)
 
@@ -180,8 +180,8 @@ class LocalDescription(DateRangeMixin, TimeStampedModel):
                                     related_name='local_descriptions')
 
     gender = models.CharField(max_length=256)
-    notes = models.TextField()
-    citation = models.TextField()
+    notes = models.TextField(blank=True)
+    citation = models.TextField(blank=True)
 
 
 @reversion.register()
@@ -208,16 +208,6 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
 
 
 @reversion.register()
-class Structure(TimeStampedModel):
-    description = models.ForeignKey(Description, on_delete=models.CASCADE,
-                                    related_name='structures')
-
-    level = models.ForeignKey(FamilyTreeLevel, on_delete=models.PROTECT)
-    entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
-    citation = models.TextField(blank=True, null=True)
-
-
-@reversion.register()
 class Relation(DateRangeMixin, TimeStampedModel):
     entity = models.ForeignKey(
         Entity, on_delete=models.CASCADE, related_name='relations')
@@ -239,6 +229,7 @@ class Resource(TimeStampedModel):
     relation_type = models.ForeignKey(
         ResourceRelationType, on_delete=models.PROTECT)
     url = models.URLField(blank=True, null=True)
+    citation = models.TextField()
     notes = models.TextField(blank=True, null=True)
 
 

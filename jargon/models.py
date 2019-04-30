@@ -22,11 +22,6 @@ class EntityType(BaseJargonModel):
         verbose_name = 'EAC: Entity type'
 
 
-class FamilyTreeLevel(BaseJargonModel):
-    class Meta:
-        verbose_name = 'EAC: Family tree level'
-
-
 class Function(BaseJargonModel):
     class Meta:
         verbose_name = 'EAC: Function'

@@ -2,7 +2,7 @@ import nested_admin
 from authority.models import (BiographyHistory, Control, Description, Entity,
                               Event, Identity, LanguageScript, LegalStatus,
                               LocalDescription, Mandate, NameEntry, NamePart,
-                              Place, Relation, Resource, Source, Structure)
+                              Place, Relation, Resource, Source)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -13,7 +13,7 @@ class EventInline(nested_admin.NestedStackedInline):
     model = Event
 
     autocomplete_fields = ['place']
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -39,7 +39,7 @@ class LanguageScriptInline(nested_admin.NestedTabularInline):
 class LegalStatusInline(nested_admin.NestedStackedInline):
     model = LegalStatus
 
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -57,7 +57,7 @@ class LocalDescriptionInline(nested_admin.NestedStackedInline):
 class MandateInline(nested_admin.NestedStackedInline):
     model = Mandate
 
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -67,17 +67,7 @@ class PlaceInline(nested_admin.NestedStackedInline):
     model = Place
 
     autocomplete_fields = ['place']
-    extra = 1
-    formfield_overrides = {
-        models.TextField: {'widget': CKEditorWidget}
-    }
-
-
-class StructureInline(nested_admin.NestedStackedInline):
-    model = Structure
-
-    autocomplete_fields = ['level']
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -94,14 +84,14 @@ class NameEntryInline(nested_admin.NestedTabularInline):
     model = NameEntry
 
     autocomplete_fields = ['language', 'script']
-    extra = 1
+    extra = 0
     inlines = [NamePartInline]
 
 
 class SourceInline(nested_admin.NestedStackedInline):
     model = Source
 
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -128,14 +118,13 @@ class DescriptionInline(nested_admin.NestedStackedInline):
         models.TextField: {'widget': CKEditorWidget}
     }
     inlines = [PlaceInline, LanguageScriptInline, BiographyHistoryInline,
-               LocalDescriptionInline, MandateInline, LegalStatusInline,
-               StructureInline]
+               LocalDescriptionInline, MandateInline, LegalStatusInline]
 
 
 class IdentityInline(nested_admin.NestedTabularInline):
     model = Identity
 
-    extra = 1
+    extra = 0
     inlines = [NameEntryInline]
 
 
@@ -144,7 +133,7 @@ class RelationInline(nested_admin.NestedStackedInline):
     fk_name = 'entity'
 
     autocomplete_fields = ['place', 'relation_type', 'related_entity']
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -154,7 +143,7 @@ class ResourceInline(nested_admin.NestedStackedInline):
     model = Resource
 
     autocomplete_fields = ['relation_type']
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }

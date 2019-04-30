@@ -50,17 +50,18 @@ class ArchivalRecord(PolymorphicModel):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
 
-    media = models.ManyToManyField(Media)
+    media = models.ManyToManyField(Media, blank=True)
 
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     languages = models.ManyToManyField(Language)
     extent = models.CharField(max_length=256)
 
-    subjects = models.ManyToManyField(Subject)
-    persons_as_subjects = models.ManyToManyField(Entity)
-    organisations_as_subjects = models.ManyToManyField(Organisation)
-    places_as_subjects = models.ManyToManyField(Place)
+    subjects = models.ManyToManyField(Subject, blank=True)
+    persons_as_subjects = models.ManyToManyField(Entity, blank=True)
+    organisations_as_subjects = models.ManyToManyField(
+        Organisation, blank=True)
+    places_as_subjects = models.ManyToManyField(Place, blank=True)
 
     related_materials = models.CharField(max_length=256, blank=True, null=True)
 
@@ -138,7 +139,7 @@ class FileBase(models.Model):
 
     physical_description = models.TextField(blank=True, null=True)
 
-    copyright_status = models.CharField(max_length=256)
+    copyright_status = models.CharField(max_length=256, blank=True)
     publication_permission = models.TextField(blank=True, null=True)
     withheld = models.CharField(max_length=256, blank=True, null=True)
 
@@ -158,11 +159,12 @@ class File(ArchivalRecord, SeriesBase, FileBase):
     parent_file = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.CASCADE)
 
-    creators = models.ManyToManyField(Entity, related_name='files_created')
+    creators = models.ManyToManyField(
+        Entity, blank=True, related_name='files_created')
     persons_as_relations = models.ManyToManyField(
-        Entity, related_name='files_as_relations')
+        Entity, blank=True, related_name='files_as_relations')
     places_as_relations = models.ManyToManyField(
-        Place, related_name='files_as_relations')
+        Place, blank=True, related_name='files_as_relations')
 
     def __str__(self):
         return self.title
@@ -176,13 +178,14 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
         File, blank=True, null=True, on_delete=models.CASCADE,
         verbose_name='File')
 
-    creators = models.ManyToManyField(Entity, related_name='items_created')
+    creators = models.ManyToManyField(
+        Entity, blank=True, related_name='items_created')
     creation_places = models.ManyToManyField(
         Place, related_name='items_created')
     persons_as_relations = models.ManyToManyField(
-        Entity, related_name='items_as_relations')
+        Entity, blank=True, related_name='items_as_relations')
     places_as_relations = models.ManyToManyField(
-        Place, related_name='items_as_relations')
+        Place, blank=True, related_name='items_as_relations')
 
     def __str__(self):
         return self.title

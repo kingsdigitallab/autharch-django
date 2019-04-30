@@ -1,7 +1,7 @@
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
-from jargon.models import (EntityRelationType, EntityType, FamilyTreeLevel,
+from jargon.models import (EntityRelationType, EntityType,
                            Function, MaintenanceStatus, NamePartType,
                            Publication, PublicationStatus, RecordType,
                            ReferenceSource, Repository, ResourceRelationType)
@@ -17,7 +17,6 @@ class BaseJargonAdmin(admin.ModelAdmin):
 
 admin.site.register(EntityRelationType, BaseJargonAdmin)
 admin.site.register(EntityType, BaseJargonAdmin)
-admin.site.register(FamilyTreeLevel, BaseJargonAdmin)
 admin.site.register(Function, BaseJargonAdmin)
 admin.site.register(MaintenanceStatus, BaseJargonAdmin)
 admin.site.register(NamePartType, BaseJargonAdmin)
