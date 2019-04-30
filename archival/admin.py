@@ -119,12 +119,13 @@ class SeriesAdmin(ArchivalRecordChildAdmin):
 class FileAdmin(ArchivalRecordChildAdmin):
     autocomplete_fields = ArchivalRecordChildAdmin.autocomplete_fields + [
         'parent_series', 'parent_file', 'creators', 'record_type',
-        'persons_as_relations', 'places_as_relations'
+        'creation_places', 'persons_as_relations', 'places_as_relations'
     ]
 
     base_fieldsets = ArchivalRecordChildAdmin.base_fieldsets + [
         [None, {
-            'fields': ['record_type', 'url', 'physical_description']
+            'fields': ['record_type', 'url', 'physical_description',
+                       'creation_places']
         }],
         [None, {
             'fields': ['copyright_status', 'publication_permission',
@@ -152,7 +153,7 @@ class ItemAdmin(ArchivalRecordChildAdmin):
     fieldsets = [
         [None, {
             'fields': ['parent_series', 'parent_file', 'creators',
-                       'creation_places', 'persons_as_relations',
+                       'persons_as_relations',
                        'places_as_relations']
         }]
     ] + FileAdmin.base_fieldsets

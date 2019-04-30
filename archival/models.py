@@ -158,9 +158,10 @@ class File(ArchivalRecord, SeriesBase, FileBase):
         Series, blank=True, null=True, on_delete=models.CASCADE)
     parent_file = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.CASCADE)
-
     creators = models.ManyToManyField(
         Entity, blank=True, related_name='files_created')
+    creation_places = models.ManyToManyField(
+        Place, related_name='files_created', blank=True)
     persons_as_relations = models.ManyToManyField(
         Entity, blank=True, related_name='files_as_relations')
     places_as_relations = models.ManyToManyField(
@@ -177,11 +178,10 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
     parent_file = models.ForeignKey(
         File, blank=True, null=True, on_delete=models.CASCADE,
         verbose_name='File')
-
     creators = models.ManyToManyField(
         Entity, blank=True, related_name='items_created')
     creation_places = models.ManyToManyField(
-        Place, related_name='items_created')
+        Place, related_name='items_created', blank=True)
     persons_as_relations = models.ManyToManyField(
         Entity, blank=True, related_name='items_as_relations')
     places_as_relations = models.ManyToManyField(
