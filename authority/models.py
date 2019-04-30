@@ -93,7 +93,10 @@ class Identity(DateRangeMixin, TimeStampedModel):
         verbose_name_plural = 'Identities'
 
     def __str__(self):
-        return self.authorised_form.display_name
+        try:
+            return self.authorised_form.display_name
+        except AttributeError:
+            return 'Unsaved object'
 
     @property
     def authorised_form(self):
