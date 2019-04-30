@@ -33,16 +33,26 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     metadata = serializers.SerializerMethodField()
 
     def get_metadata(self, obj):
-        metadata = {}
+        metadata = []
         for field in self.Meta.metadata_fields:
             if hasattr(obj, field):
                 data = getattr(obj, field)
                 if data is not None:
                     # Note - this is not ideal but is the most efficient way
                     if data.__class__.__name__ == 'ManyRelatedManager':
-                        metadata[field] = [str(item) for item in data.all()]
+                        metadata.append(
+                            {
+                                "name": field.replace('_', ' ').title(),
+                                "content": [str(item) for item in data.all()]
+                            }
+                        )
                     else:
-                        metadata[field] = str(data)
+                        metadata.append(
+                            {
+                                "name": field.replace('_', ' ').title(),
+                                "content": str(data)
+                            }
+                        )
         return metadata
 
     class Meta:
