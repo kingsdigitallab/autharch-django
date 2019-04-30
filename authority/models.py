@@ -36,7 +36,10 @@ class Entity(TimeStampedModel):
         verbose_name_plural = 'Entities'
 
     def __str__(self):
-        return self.display_name
+        try:
+            return self.display_name
+        except AttributeError:
+            return 'Unsaved object'
 
     @property
     def display_name(self):
