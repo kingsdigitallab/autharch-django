@@ -40,26 +40,30 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
                 if data is not None:
                     # Note - this is not ideal but is the most efficient way
                     if data.__class__.__name__ == 'ManyRelatedManager':
-                        metadata.append(
-                            {
+                        if data.count() > 0:
+                            metadata.append({
                                 "name": field.replace('_', ' ').title(),
                                 "content": [str(item) for item in data.all()]
-                            }
-                        )
+                            })
                     else:
-                        metadata.append(
-                            {
+                        if not data == '':
+                            metadata.append({
                                 "name": field.replace('_', ' ').title(),
                                 "content": str(data)
-                            }
-                        )
+                            })
         return metadata
 
     class Meta:
         model = ArchivalRecord
         metadata_fields = [
-            'archival_level', 'publication_status', 'references',
-            'repository', 'rights_declaration', 'title',
+            'administrative_history', 'author', 'arrangement',
+            'archival_level', 'cataloguer', 'creation_dates',
+            'description', 'description_date', 'extent',
+            'languages', 'notes', 'organisations_as_subjects',
+            'persons_as_subjects', 'places_as_subjects',
+            'publication_status', 'provenance', 'references',
+            'related_materials', 'repository', 'rights_declaration',
+            'subjects', 'title',
         ]
         exclude = ['polymorphic_ctype']
         depth = 10
