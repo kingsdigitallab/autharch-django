@@ -22,7 +22,7 @@ class EventInline(nested_admin.NestedStackedInline):
 class BiographyHistoryInline(nested_admin.NestedStackedInline):
     model = BiographyHistory
 
-    extra = 1
+    extra = 0
     inlines = [EventInline]
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
@@ -33,7 +33,7 @@ class LanguageScriptInline(nested_admin.NestedTabularInline):
     model = LanguageScript
 
     autocomplete_fields = ['language', 'script']
-    extra = 1
+    extra = 0
 
 
 class LegalStatusInline(nested_admin.NestedStackedInline):
@@ -48,7 +48,7 @@ class LegalStatusInline(nested_admin.NestedStackedInline):
 class LocalDescriptionInline(nested_admin.NestedStackedInline):
     model = LocalDescription
 
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -102,7 +102,7 @@ class ControlInline(nested_admin.NestedStackedInline):
 
     autocomplete_fields = ['language', 'script',
                            'maintenance_status', 'publication_status']
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -113,7 +113,7 @@ class DescriptionInline(nested_admin.NestedStackedInline):
     model = Description
 
     autocomplete_fields = ['function']
-    extra = 1
+    extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
