@@ -13,7 +13,7 @@ from script_codes.models import Script
 
 
 class DateRangeMixin(models.Model):
-    date_from = models.DateField(blank=True)
+    date_from = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
 
     class Meta:
