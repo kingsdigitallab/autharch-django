@@ -44,7 +44,7 @@ class Entity(TimeStampedModel):
     @property
     def display_name(self):
         return self.identities.order_by(
-            'preferred_identity').first().authorised_form.display_name
+            '-preferred_identity').first().authorised_form.display_name
 
     @staticmethod
     def get_or_create_by_display_name(name, language, script):
@@ -100,7 +100,7 @@ class Identity(DateRangeMixin, TimeStampedModel):
 
     @property
     def authorised_form(self):
-        return self.name_entries.order_by('authorised_form').first()
+        return self.name_entries.order_by('-authorised_form').first()
 
 
 @reversion.register()
