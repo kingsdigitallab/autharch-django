@@ -64,8 +64,7 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
             'arrangement', 'subjects', 'persons_as_subjects',
             'organisations_as_subjects',
             'places_as_subjects', 'publication_permission', 'withheld',
-            'related_materials', 'publications', 'url', 'rights_declaration',
-            'uuid'
+            'related_materials', 'publications', 'url', 'rights_declaration'
         ]
         exclude = ['polymorphic_ctype']
         depth = 10
