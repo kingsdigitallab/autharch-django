@@ -56,14 +56,16 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArchivalRecord
         metadata_fields = [
-            'administrative_history', 'author', 'arrangement',
-            'archival_level', 'cataloguer', 'creation_dates',
-            'description', 'description_date', 'extent',
-            'languages', 'notes', 'organisations_as_subjects',
-            'persons_as_subjects', 'places_as_subjects',
-            'publication_status', 'provenance', 'references',
-            'related_materials', 'repository', 'rights_declaration',
-            'subjects', 'title',
+            'title', 'archival_level', 'author', 'creation_dates',
+            'references', 'persons_as_relations',
+            'places_as_relations', 'description', 'languages', 'extent',
+            'physical_description', 'record_type', 'provenance',
+            'administrative_history', 'notes',
+            'arrangement', 'subjects', 'persons_as_subjects',
+            'organisations_as_subjects',
+            'places_as_subjects', 'publication_permission', 'withheld',
+            'related_materials', 'publications', 'url', 'rights_declaration',
+            'uuid'
         ]
         exclude = ['polymorphic_ctype']
         depth = 10
