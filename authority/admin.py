@@ -121,16 +121,9 @@ class DescriptionInline(nested_admin.NestedStackedInline):
                LocalDescriptionInline, MandateInline, LegalStatusInline]
 
 
-class IdentityInline(nested_admin.NestedTabularInline):
-    model = Identity
-
-    extra = 0
-    inlines = [NameEntryInline]
-
-
 class RelationInline(nested_admin.NestedStackedInline):
     model = Relation
-    fk_name = 'entity'
+    fk_name = 'identity'
 
     autocomplete_fields = ['place', 'relation_type', 'related_entity']
     extra = 0
@@ -149,10 +142,17 @@ class ResourceInline(nested_admin.NestedStackedInline):
     }
 
 
+class IdentityInline(nested_admin.NestedTabularInline):
+    model = Identity
+
+    extra = 0
+    inlines = [NameEntryInline, DescriptionInline,
+               RelationInline, ResourceInline]
+
+
 @admin.register(Entity)
 class Entity(nested_admin.NestedModelAdmin, VersionAdmin):
     autocomplete_fields = ['entity_type']
-    inlines = [IdentityInline, DescriptionInline,
-               RelationInline, ResourceInline, ControlInline]
+    inlines = [IdentityInline, ControlInline]
     list_display = ['display_name', 'entity_type']
     search_fields = ['identities__name_entries__display_name']

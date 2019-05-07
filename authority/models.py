@@ -132,9 +132,8 @@ class NamePart(TimeStampedModel):
 
 @reversion.register()
 class Description(DateRangeMixin, TimeStampedModel):
-    entity = models.ForeignKey(
-        Entity, on_delete=models.CASCADE, related_name='descriptions')
-
+    identity = models.ForeignKey(
+        Identity, on_delete=models.CASCADE, related_name='descriptions')
     function = models.ManyToManyField(Function, blank=True)
 
     structure_or_genealogy = models.TextField(blank=True, null=True)
@@ -215,9 +214,8 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
 
 @reversion.register()
 class Relation(DateRangeMixin, TimeStampedModel):
-    entity = models.ForeignKey(
-        Entity, on_delete=models.CASCADE, related_name='relations')
-
+    identity = models.ForeignKey(
+        Identity, on_delete=models.CASCADE, related_name='relations')
     relation_type = models.ForeignKey(
         EntityRelationType, on_delete=models.PROTECT)
     related_entity = models.ForeignKey(
@@ -229,9 +227,8 @@ class Relation(DateRangeMixin, TimeStampedModel):
 
 @reversion.register()
 class Resource(TimeStampedModel):
-    entity = models.ForeignKey(
-        Entity, on_delete=models.CASCADE, related_name='resources')
-
+    identity = models.ForeignKey(
+        Identity, on_delete=models.CASCADE, related_name='resources')
     relation_type = models.ForeignKey(
         ResourceRelationType, on_delete=models.PROTECT)
     url = models.URLField(blank=True, null=True)
