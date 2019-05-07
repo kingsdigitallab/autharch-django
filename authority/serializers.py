@@ -114,8 +114,6 @@ class EntitySerializer(serializers.ModelSerializer):
                 identity_json = []
 
                 preferred_name = identity.authorised_form
-                other_names = identity.name_entries.exclude(
-                    authorised_form=True)
 
                 # Preferred Names
                 if preferred_name:
@@ -139,46 +137,11 @@ class EntitySerializer(serializers.ModelSerializer):
                         ]
                     })
 
-                # Gender
-                if identity.descriptions.count():
-                    genders_json = []
-                    for description in identity.descriptions.all():
-
-                        local_descs = description.local_descriptions
-                        if local_descs.count():
-                            for local_desc in local_descs.all():
-                                genders_json.append([{
-                                    "name": "Gender",
-                                    "content": "{} ({})".format(
-                                        local_desc.gender,
-                                        date_format(local_desc.date_from,
-                                                    local_desc.date_to)
-
-                                    )
-                                }, {
-                                    "name": "Notes",
-                                    "content": local_desc.notes
-                                }, {
-                                    "name": "Citation",
-                                    "content": local_desc.citation
-                                }])
-                    identity_json.append({
-                        "name": "Genders",
-                        "content": genders_json
-                    })
-
-                # Exist Dates
-                identity_json.append({
-                    "name": "Dates of Existence",
-                    "content": date_format(
-                        identity.date_from,
-                        identity.date_to,
-                    )
-                })
-
-                # Other Names
+                # Other Name
+                other_names = identity.name_entries.exclude(
+                    authorised_form=True)
+                other_names_json = []
                 if other_names.count():
-                    other_names_json = []
                     for name in other_names.all():
                         other_names_json.append({
                             "name": "Name",
@@ -189,40 +152,9 @@ class EntitySerializer(serializers.ModelSerializer):
                             )
                         })
 
-                    identity_json.append({
-                        "name": "Other Names",
-                        "content": other_names_json
-                    })
-
-                # Bio/History
-                if identity.descriptions.count():
-                    bios_json = []
-
-                    for description in identity.descriptions.all():
-                        bio = description.biography_history
-                        if bio:
-                            bios_json.append([{
-                                "name": "Abstract",
-                                "content": bio.abstract
-                            }, {
-                                "name": "Content",
-                                "content": bio.content
-                            }, {
-                                "name": "Sources",
-                                "content": bio.sources
-                            }, {
-                                "name": "Copyright",
-                                "content": bio.copyright
-                            }])
-
-                    identity_json.append({
-                        "name": "Biography/History",
-                        "content": bios_json
-                    })
-
                 # Relationships
+                relations_json = []
                 if identity.relations.count():
-                    relations_json = []
                     for relation in identity.relations.all():
                         relations_json.append([{
                             "name": "Type",
@@ -242,29 +174,79 @@ class EntitySerializer(serializers.ModelSerializer):
                             "content": str(relation.place)
                         }])
 
-                    identity_json.append({
-                        "name": "Relationships",
-                        "content": relations_json
-                    })
+                # Resources
+                resources_json = []
+                if identity.resources.count():
+                    for resource in identity.resources.all():
+                        resources_json.append([{
+                            "name": "Type",
+                            "content": resource.relation_type.title
+                        }, {
+                            "name": "URL",
+                            "content": resource.url
+                        }, {
+                            "name": "Citation",
+                            "content": resource.citation
+                        }, {
+                            "name": "Notes",
+                            "content": resource.notes
+                        }])
 
-                # Genealogy
+                # Descriptions
+                genders_json = []
+                bios_json = []
+                genealogies_json = []
+                langscripts_json = []
+                places_json = []
+                legal_statuses_json = []
+                mandates_json = []
                 if identity.descriptions.count():
-                    genealogies_json = []
                     for description in identity.descriptions.all():
+
+                        # Gender
+                        local_descs = description.local_descriptions
+                        if local_descs.count():
+                            for local_desc in local_descs.all():
+                                genders_json.append([{
+                                    "name": "Gender",
+                                    "content": "{} ({})".format(
+                                        local_desc.gender,
+                                        date_format(local_desc.date_from,
+                                                    local_desc.date_to)
+
+                                    )
+                                }, {
+                                    "name": "Notes",
+                                    "content": local_desc.notes
+                                }, {
+                                    "name": "Citation",
+                                    "content": local_desc.citation
+                                }])
+
+                        # Bio
+                        bio = description.biography_history
+                        if bio:
+                            bios_json.append([{
+                                "name": "Abstract",
+                                "content": bio.abstract
+                            }, {
+                                "name": "Content",
+                                "content": bio.content
+                            }, {
+                                "name": "Sources",
+                                "content": bio.sources
+                            }, {
+                                "name": "Copyright",
+                                "content": bio.copyright
+                            }])
+
+                        # Genealogy
                         genealogies_json.append({
                             "name": "Genealogy",
                             "content": description.structure_or_genealogy
                         })
-                    identity_json.append({
-                        "name": "Genealogies",
-                        "content": genealogies_json
-                    })
 
-                # LangScript
-                if identity.descriptions.count():
-                    langscripts_json = []
-                    for description in identity.descriptions.all():
-
+                        # Langscript
                         languages_scripts = description.languages_scripts
                         if languages_scripts.count():
                             for lang in languages_scripts.all():
@@ -275,16 +257,8 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "name": "Script",
                                     "content": str(lang.script)
                                 }])
-                    identity_json.append({
-                        "name": "Languages/Scripts",
-                        "content": langscripts_json
-                    })
 
-                # Places
-                if identity.descriptions.count():
-                    places_json = []
-                    for description in identity.descriptions.all():
-
+                        # Places
                         places = description.places
                         if places.count():
                             for place in places.all():
@@ -302,18 +276,8 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": date_format(place.date_from,
                                                            place.date_to)
                                 }])
-                    identity_json.append({
-                        "name": "Places",
-                        "content": places_json
-                    })
 
-                # Events TODO - check with Sam
-
-                # Legal Statuses
-                if identity.descriptions.count():
-                    legal_statuses_json = []
-                    for description in identity.descriptions.all():
-
+                        # Legal status
                         legal_statuses = description.legal_statuses
                         if legal_statuses.count():
                             for status in legal_statuses.all():
@@ -331,16 +295,8 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": date_format(status.date_from,
                                                            status.date_to)
                                 }])
-                    identity_json.append({
-                        "name": "Legal Statuses",
-                        "content": legal_statuses_json
-                    })
 
-                # Mandates
-                if identity.descriptions.count():
-                    mandates_json = []
-                    for description in identity.descriptions.all():
-
+                        # Mandates
                         mandates = description.mandates
                         if mandates.count():
                             for mandate in mandates.all():
@@ -358,34 +314,89 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": date_format(mandate.date_from,
                                                            mandate.date_to)
                                 }])
+
+                # Add stuff!
+                if len(genders_json):
+                    identity_json.append({
+                        "name": "Genders",
+                        "content": genders_json
+                    })
+
+                # Exist Dates
+                identity_json.append({
+                    "name": "Dates of Existence",
+                    "content": date_format(
+                        identity.date_from,
+                        identity.date_to,
+                    )
+                })
+
+                # Other Names
+                if len(other_names_json):
+                    identity_json.append({
+                        "name": "Other Names",
+                        "content": other_names_json
+                    })
+
+                # Bio/History
+                if len(bios_json):
+                    identity_json.append({
+                        "name": "Biography/History",
+                        "content": bios_json
+                    })
+
+                # Relations
+                if len(relations_json):
+                    identity_json.append({
+                        "name": "Relationships",
+                        "content": relations_json
+                    })
+
+                # Geneaologies
+                if len(genealogies_json):
+                    identity_json.append({
+                        "name": "Genealogies",
+                        "content": genealogies_json
+                    })
+
+                # Langscript
+                if len(langscripts_json):
+                    identity_json.append({
+                        "name": "Languages/Scripts",
+                        "content": langscripts_json
+                    })
+
+                # Places
+                if len(places_json):
+                    identity_json.append({
+                        "name": "Places",
+                        "content": places_json
+                    })
+
+                # TODO events - check with sam
+
+                # Legal status
+                if len(legal_statuses_json):
+                    identity_json.append({
+                        "name": "Legal Statuses",
+                        "content": legal_statuses_json
+                    })
+
+                # Mandates
+                if len(mandates_json):
                     identity_json.append({
                         "name": "Mandates",
                         "content": mandates_json
                     })
 
                 # Resources
-                if identity.resources.count():
-                    resources_json = []
-                    for resource in identity.resources.all():
-                        resources_json.append([{
-                            "name": "Type",
-                            "content": resource.relation_type.title
-                        }, {
-                            "name": "URL",
-                            "content": resource.url
-                        }, {
-                            "name": "Citation",
-                            "content": resource.citation
-                        }, {
-                            "name": "Notes",
-                            "content": resource.notes
-                        }])
-
+                if len(resources_json):
                     identity_json.append({
                         "name": "Resources",
                         "content": resources_json
                     })
 
+                # Add the identity
                 identities_json.append(identity_json)
 
         metadata.append({
