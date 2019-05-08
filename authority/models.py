@@ -238,7 +238,8 @@ class Resource(TimeStampedModel):
 
 @reversion.register()
 class Control(LanguageScriptMixin, TimeStampedModel):
-    entity = models.OneToOneField(Entity, on_delete=models.CASCADE)
+    entity = models.OneToOneField(Entity, on_delete=models.CASCADE,
+                                  related_name="control")
 
     maintenance_status = models.ForeignKey(
         MaintenanceStatus, on_delete=models.PROTECT)
@@ -254,7 +255,8 @@ class Control(LanguageScriptMixin, TimeStampedModel):
 
 @reversion.register()
 class Source(TimeStampedModel):
-    control = models.ForeignKey(Control, on_delete=models.CASCADE)
+    control = models.ForeignKey(Control, on_delete=models.CASCADE,
+                                related_name="sources")
 
     name = models.CharField(max_length=256)
     url = models.URLField(blank=True, null=True)

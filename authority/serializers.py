@@ -192,6 +192,58 @@ class EntitySerializer(serializers.ModelSerializer):
                             "content": resource.notes
                         }])
 
+                # Admin
+                admin_json = []
+
+                # Record ID
+                admin_json.append({
+                    "name": "Record ID",
+                    "content": obj.pk
+                })
+
+                # Control date
+                control = obj.control
+                admin_json.append({
+                    "name": "Language",
+                    "content": str(control.language)
+                })
+                admin_json.append({
+                    "name": "Script",
+                    "content": str(control.script)
+                })
+                admin_json.append({
+                    "name": "Maintenance Status",
+                    "content": control.maintenance_status.title
+                })
+                admin_json.append({
+                    "name": "Publication Status",
+                    "content": control.publication_status.title
+                })
+                admin_json.append({
+                    "name": "Rights Declaration",
+                    "content": control.rights_declaration
+                })
+
+                # Sources
+                sources = control.sources
+                if sources.count():
+                    sources_json = []
+                    for source in sources.all():
+                        sources_json.append([{
+                            "name": "Name",
+                            "content": source.name
+                        }, {
+                            "name": "URL",
+                            "content": source.url
+                        }, {
+                            "name": "Notes",
+                            "content": source.notes
+                        }])
+                    admin_json.append({
+                        "name": "Sources",
+                        "content": sources_json
+                    })
+
                 # Descriptions
                 genders_json = []
                 bios_json = []
@@ -440,6 +492,11 @@ class EntitySerializer(serializers.ModelSerializer):
         metadata.append({
             "name": "Identities",
             "content": identities_json,
+        })
+
+        metadata.append({
+            "name": "Admin",
+            "content": admin_json,
         })
 
         # Admin - TODO (check with Sam)
