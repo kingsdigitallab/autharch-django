@@ -173,7 +173,7 @@ class BiographyHistory(TimeStampedModel):
 @reversion.register()
 class Event(DateRangeMixin, TimeStampedModel):
     biography_history = models.ForeignKey(
-        BiographyHistory, on_delete=models.CASCADE)
+        BiographyHistory, on_delete=models.CASCADE, related_name='events')
 
     event = models.TextField()
     place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)

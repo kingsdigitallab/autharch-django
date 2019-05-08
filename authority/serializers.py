@@ -195,11 +195,14 @@ class EntitySerializer(serializers.ModelSerializer):
                 # Descriptions
                 genders_json = []
                 bios_json = []
+                events_json = []
                 genealogies_json = []
                 langscripts_json = []
                 places_json = []
                 legal_statuses_json = []
+                functions_json = []
                 mandates_json = []
+
                 if identity.descriptions.count():
                     for description in identity.descriptions.all():
 
@@ -239,6 +242,20 @@ class EntitySerializer(serializers.ModelSerializer):
                                 "name": "Copyright",
                                 "content": bio.copyright
                             }])
+
+                            # Events (under bio/hist)
+                            for event in bio.events.all():
+                                events_json.append([{
+                                    "name": "Event",
+                                    "content": event.event
+                                }, {
+                                    "name": "Place",
+                                    "content": str(event.place)
+                                }, {
+                                    "name": "Dates",
+                                    "content": date_format(event.date_from,
+                                                           event.date_to)
+                                }])
 
                         # Genealogy
                         genealogies_json.append({
@@ -295,6 +312,15 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": date_format(status.date_from,
                                                            status.date_to)
                                 }])
+
+                        # functions
+                        functions = description.function.all()
+                        if functions.count():
+                            for function in functions.all():
+                                functions_json.append({
+                                    "name": "Name",
+                                    "content": function.title
+                                })
 
                         # Mandates
                         mandates = description.mandates
@@ -373,13 +399,25 @@ class EntitySerializer(serializers.ModelSerializer):
                         "content": places_json
                     })
 
-                # TODO events - check with sam
+                # Events
+                if len(events_json):
+                    identity_json.append({
+                        "name": "Events",
+                        "content": events_json
+                    })
 
                 # Legal status
                 if len(legal_statuses_json):
                     identity_json.append({
                         "name": "Legal Statuses",
                         "content": legal_statuses_json
+                    })
+
+                # Functions
+                if len(functions_json):
+                    identity_json.append({
+                        "name": "Functions",
+                        "content": functions_json
                     })
 
                 # Mandates
