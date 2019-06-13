@@ -111,3 +111,6 @@ venv.bak/
 local.py
 logs/
 static/
+
+# Private
+private_data/
