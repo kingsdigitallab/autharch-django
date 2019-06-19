@@ -75,10 +75,12 @@ class NameEntrySerializer(serializers.ModelSerializer):
 
 class IdentitySerializer(serializers.ModelSerializer):
     name_entries = NameEntrySerializer(many=True, read_only=True)
+    descriptions = DescriptionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Identity
-        fields = ['preferred_identity', 'name_entries', 'date_from', 'date_to']
+        fields = ['preferred_identity', 'name_entries',
+                  'date_from', 'date_to', 'descriptions']
         depth = 10
 
 
@@ -89,7 +91,6 @@ class EntitySerializer(serializers.ModelSerializer):
 
     entity_type = EntityTypeSerializer(many=False, read_only=True)
     identities = IdentitySerializer(many=True, read_only=True)
-    descriptions = DescriptionSerializer(many=True, read_only=True)
     metadata = serializers.SerializerMethodField()
 
     def get_metadata(self, obj):
@@ -513,5 +514,5 @@ class EntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entity
         fields = ['id', 'url', 'display_name', 'entity_type',
-                  'identities', 'descriptions', 'control', 'metadata']
+                  'identities', 'control', 'metadata']
         depth = 10
