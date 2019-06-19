@@ -7,7 +7,8 @@ from media.serializers import MediaPolymorphicSerializer
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from .models import ArchivalRecord, Collection, File, Item, Reference, Series
+from .models import (ArchivalRecord, Collection, File, Item,
+                     Reference, Series)
 
 
 class ReferenceSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 from archival.models import (ArchivalRecord, ArchivalRecordSet, Collection,
                              File, Item, Organisation, Reference, Series,
-                             Subject)
+                             Subject, Project)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -42,7 +42,7 @@ class ArchivalRecordSetAdmin(VersionAdmin):
 
 
 class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
-    autocomplete_fields = ['repository', 'references', 'languages',
+    autocomplete_fields = ['project', 'repository', 'references', 'languages',
                            'publication_status', 'subjects',
                            'persons_as_subjects', 'organisations_as_subjects',
                            'places_as_subjects', 'media']
@@ -78,6 +78,9 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         }],
         [None, {
             'fields': ['publication_status', 'rights_declaration']
+        }],
+        ['Project', {
+            'fields': ['project']
         }]
     ]
 
@@ -118,7 +121,7 @@ class SeriesAdmin(ArchivalRecordChildAdmin):
 @admin.register(File)
 class FileAdmin(ArchivalRecordChildAdmin):
     autocomplete_fields = ArchivalRecordChildAdmin.autocomplete_fields + [
-        'parent_series', 'parent_file', 'creators', 'record_type',
+        'parent_file', 'creators', 'record_type',
         'creation_places', 'persons_as_relations', 'places_as_relations'
     ]
 
@@ -173,3 +176,8 @@ class ReferenceAdmin(admin.ModelAdmin):
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
     search_fields = ['title']
+
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    search_fields = ['title', 'slug']

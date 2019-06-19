@@ -152,7 +152,7 @@ class IdentityInline(nested_admin.NestedTabularInline):
 
 @admin.register(Entity)
 class Entity(nested_admin.NestedModelAdmin, VersionAdmin):
-    autocomplete_fields = ['entity_type']
+    autocomplete_fields = ['project', 'entity_type']
     inlines = [IdentityInline, ControlInline]
-    list_display = ['display_name', 'entity_type']
+    list_display = ['display_name', 'project', 'entity_type']
     search_fields = ['identities__name_entries__display_name']

@@ -31,6 +31,10 @@ class LanguageScriptMixin(models.Model):
 @reversion.register()
 class Entity(TimeStampedModel):
     entity_type = models.ForeignKey(EntityType, on_delete=models.CASCADE)
+    project = models.ForeignKey('archival.Project', on_delete=models.SET_NULL,
+                                null=True,
+                                help_text='Which project does this record\
+                                    belong to?')
 
     class Meta:
         verbose_name_plural = 'Entities'

@@ -12,6 +12,14 @@ from model_utils.models import TimeStampedModel
 from polymorphic.models import PolymorphicModel
 
 
+class Project(models.Model):
+    title = models.CharField(max_length=128, unique=True)
+    slug = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Reference(models.Model):
     source = models.ForeignKey(ReferenceSource, on_delete=models.CASCADE)
     unitid = models.CharField(max_length=128)
@@ -40,6 +48,10 @@ class Organisation(models.Model):
 class ArchivalRecord(PolymorphicModel):
     uuid = models.CharField(max_length=64, unique=True)
 
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL,
+                                null=True,
+                                help_text='Which project does this record\
+                                    belong to?')
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
     references = models.ManyToManyField(Reference)
@@ -86,6 +98,10 @@ class ArchivalRecord(PolymorphicModel):
 
 @reversion.register()
 class ArchivalRecordSet(TimeStampedModel):
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL,
+                                null=True,
+                                help_text='Which project does this set\
+                                    belong to?')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True,
         on_delete=models.SET_NULL)
