@@ -281,36 +281,39 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": local_desc.citation
                                 }])
 
-                        # Bio
-                        bio = description.biography_history
-                        if bio:
-                            bios_json.append([{
-                                "name": "Abstract",
-                                "content": bio.abstract
-                            }, {
-                                "name": "Content",
-                                "content": bio.content
-                            }, {
-                                "name": "Sources",
-                                "content": bio.sources
-                            }, {
-                                "name": "Copyright",
-                                "content": bio.copyright
-                            }])
-
-                            # Events (under bio/hist)
-                            for event in bio.events.all():
-                                events_json.append([{
-                                    "name": "Event",
-                                    "content": event.event
+                        try:
+                            # Bio
+                            bio = description.biography_history
+                            if bio:
+                                bios_json.append([{
+                                    "name": "Abstract",
+                                    "content": bio.abstract
                                 }, {
-                                    "name": "Place",
-                                    "content": str(event.place)
+                                    "name": "Content",
+                                    "content": bio.content
                                 }, {
-                                    "name": "Dates",
-                                    "content": date_format(event.date_from,
-                                                           event.date_to)
+                                    "name": "Sources",
+                                    "content": bio.sources
+                                }, {
+                                    "name": "Copyright",
+                                    "content": bio.copyright
                                 }])
+
+                                # Events (under bio/hist)
+                                for event in bio.events.all():
+                                    events_json.append([{
+                                        "name": "Event",
+                                        "content": event.event
+                                    }, {
+                                        "name": "Place",
+                                        "content": str(event.place)
+                                    }, {
+                                        "name": "Dates",
+                                        "content": date_format(event.date_from,
+                                                               event.date_to)
+                                    }])
+                        except BiographyHistory.DoesNotExist:
+                            pass
 
                         # Genealogy
                         genealogies_json.append({
