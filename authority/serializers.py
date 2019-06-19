@@ -4,8 +4,8 @@ from jargon.serializers import EntityTypeSerializer
 from rest_framework import serializers
 
 from .models import (
-    BiographyHistory, Description, Entity, Identity, LanguageScript,
-    NameEntry, Place, LocalDescription
+    BiographyHistory, Control, Description, Entity, Identity, LanguageScript,
+    LocalDescription, NameEntry, Place
 )
 
 # TODO _ Move this.
@@ -201,48 +201,51 @@ class EntitySerializer(serializers.ModelSerializer):
                     "content": obj.pk
                 })
 
-                # Control date
-                control = obj.control
-                admin_json.append({
-                    "name": "Language",
-                    "content": str(control.language)
-                })
-                admin_json.append({
-                    "name": "Script",
-                    "content": str(control.script)
-                })
-                admin_json.append({
-                    "name": "Maintenance Status",
-                    "content": control.maintenance_status.title
-                })
-                admin_json.append({
-                    "name": "Publication Status",
-                    "content": control.publication_status.title
-                })
-                admin_json.append({
-                    "name": "Rights Declaration",
-                    "content": control.rights_declaration
-                })
-
-                # Sources
-                sources = control.sources
-                if sources.count():
-                    sources_json = []
-                    for source in sources.all():
-                        sources_json.append([{
-                            "name": "Name",
-                            "content": source.name
-                        }, {
-                            "name": "URL",
-                            "content": source.url
-                        }, {
-                            "name": "Notes",
-                            "content": source.notes
-                        }])
+                try:
+                    # Control date
+                    control = obj.control
                     admin_json.append({
-                        "name": "Sources",
-                        "content": sources_json
+                        "name": "Language",
+                        "content": str(control.language)
                     })
+                    admin_json.append({
+                        "name": "Script",
+                        "content": str(control.script)
+                    })
+                    admin_json.append({
+                        "name": "Maintenance Status",
+                        "content": control.maintenance_status.title
+                    })
+                    admin_json.append({
+                        "name": "Publication Status",
+                        "content": control.publication_status.title
+                    })
+                    admin_json.append({
+                        "name": "Rights Declaration",
+                        "content": control.rights_declaration
+                    })
+
+                    # Sources
+                    sources = control.sources
+                    if sources.count():
+                        sources_json = []
+                        for source in sources.all():
+                            sources_json.append([{
+                                "name": "Name",
+                                "content": source.name
+                            }, {
+                                "name": "URL",
+                                "content": source.url
+                            }, {
+                                "name": "Notes",
+                                "content": source.notes
+                            }])
+                        admin_json.append({
+                            "name": "Sources",
+                            "content": sources_json
+                        })
+                except Control.DoesNotExist:
+                    pass
 
                 # Descriptions
                 genders_json = []
