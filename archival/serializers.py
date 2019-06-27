@@ -7,8 +7,7 @@ from media.serializers import MediaPolymorphicSerializer
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from .models import (ArchivalRecord, Collection, File, Item,
-                     Reference, Series)
+from .models import ArchivalRecord, Collection, File, Item, Reference, Series
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
@@ -31,27 +30,41 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     references = ReferenceSerializer(many=True, read_only=True)
     repository = RepositorySerializer(many=False, read_only=True)
     creators = EntitySerializer(many=True, read_only=True)
+
     metadata = serializers.SerializerMethodField()
 
     def get_metadata(self, obj):
         metadata = []
+
         for field in self.Meta.metadata_fields:
             if hasattr(obj, field):
                 data = getattr(obj, field)
-                if data is not None:
+                if data:
                     # Note - this is not ideal but is the most efficient way
                     if data.__class__.__name__ == 'ManyRelatedManager':
                         if data.count() > 0:
+                            items = data.all()
+
                             metadata.append({
-                                "name": field.replace('_', ' ').title(),
-                                "content": [str(item) for item in data.all()]
+                                'name': field.replace('_', ' '),
+                                'content': [str(item) for item in items],
+                                'items': [
+                                    {
+                                        'id': item.pk,
+                                        'type':
+                                        item.__class__.__name__.lower(),
+                                        'value': str(item)
+                                    }
+                                    for item in items
+                                ]
                             })
                     else:
-                        if not data == '':
+                        if data:
                             metadata.append({
-                                "name": field.replace('_', ' ').title(),
-                                "content": str(data)
+                                'name': field.replace('_', ' '),
+                                'content': str(data)
                             })
+
         return metadata
 
     class Meta:
@@ -68,7 +81,7 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
             'related_materials', 'publications', 'url', 'rights_declaration'
         ]
         exclude = ['polymorphic_ctype']
-        depth = 10
+        depth = 1
 
 
 class CollectionSerializer(ArchivalRecordSerializer):
