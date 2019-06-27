@@ -70,7 +70,7 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArchivalRecord
         metadata_fields = [
-            'title', 'archival_level', 'author', 'creation_dates',
+            'title', 'archival_level', 'creators', 'creation_dates',
             'references', 'persons_as_relations',
             'places_as_relations', 'description', 'languages', 'extent',
             'physical_description', 'record_type', 'provenance',
