@@ -1,4 +1,5 @@
 from authority.serializers import EntitySerializer
+from django.db.models import Manager
 from jargon.serializers import (
     PublicationStatusSerializer, ReferenceSourceSerializer,
     RepositorySerializer
@@ -37,33 +38,30 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
         metadata = []
 
         for field in self.Meta.metadata_fields:
-            if hasattr(obj, field):
-                data = getattr(obj, field)
-                if data:
-                    # Note - this is not ideal but is the most efficient way
-                    if data.__class__.__name__ == 'ManyRelatedManager':
-                        if data.count() > 0:
-                            items = data.all()
+            data = getattr(obj, field, None)
+            if data:
+                if isinstance(data, Manager):
+                    if data.count() > 0:
+                        items = data.all()
 
-                            metadata.append({
-                                'name': field.replace('_', ' '),
-                                'content': [str(item) for item in items],
-                                'items': [
-                                    {
-                                        'id': item.pk,
-                                        'type':
-                                        item.__class__.__name__.lower(),
-                                        'value': str(item)
-                                    }
-                                    for item in items
-                                ]
-                            })
-                    else:
-                        if data:
-                            metadata.append({
-                                'name': field.replace('_', ' '),
-                                'content': str(data)
-                            })
+                        metadata.append({
+                            'name': field.replace('_', ' '),
+                            'content': [str(item) for item in items],
+                            'items': [
+                                {
+                                    'id': item.pk,
+                                    'type':
+                                    item.__class__.__name__.lower(),
+                                    'value': str(item)
+                                }
+                                for item in items
+                            ]
+                        })
+                else:
+                    metadata.append({
+                        'name': field.replace('_', ' '),
+                        'content': str(data)
+                    })
 
         return metadata
 
