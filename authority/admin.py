@@ -156,3 +156,4 @@ class Entity(nested_admin.NestedModelAdmin, VersionAdmin):
     inlines = [IdentityInline, ControlInline]
     list_display = ['display_name', 'project', 'entity_type']
     search_fields = ['identities__name_entries__display_name']
+    list_filter = ['project']

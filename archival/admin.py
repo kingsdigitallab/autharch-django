@@ -19,7 +19,7 @@ class ArchivalRecordAdmin(PolymorphicParentModelAdmin, VersionAdmin):
     list_display = ['archival_level', 'title']
     list_display_links = list_display
     list_filter = [PolymorphicChildModelFilter, 'repository',
-                   'publication_status', 'description_date',
+                   'publication_status', 'description_date', 'project',
                    ('languages', admin.RelatedOnlyFieldListFilter)]
 
     search_fields = ['title']
@@ -55,16 +55,27 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
             'fields': ['references']
         }],
         ['This is a sample group title', {
-            'fields': ['title', ('start_date', 'end_date'), 'creation_dates',
+            'fields': ['title', ('start_date', 'end_date'),
                        'provenance']
         }],
         ['Media', {
             'classes': ['collapse'],
-            'fields': ['media']
+            'fields': ['media', 'caption']
         }],
         ['An example of a collapsible group', {
             'classes': ['collapse'],
-            'fields': ['languages', 'description', 'notes', 'extent']
+            'fields': ['physical_location', 'origin_location',
+                       'languages', 'description',
+                       'publication_description', 'notes', 'extent']
+        }],
+        ['Enhanced Dating', {
+            'classes': ['collapse'],
+            'fields': ['creation_dates', 'creation_dates_notes',
+                       'aquisition_dates', 'aquisition_dates_notes']
+        }],
+        ['Connection information', {
+            'classes': ['collapse'],
+            'fields': ['connection_a', 'connection_b', 'connection_c']
         }],
         ['Subjects', {
             'fields': ['subjects', 'persons_as_subjects',
@@ -77,7 +88,7 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
             'fields': ['cataloguer', 'description_date']
         }],
         [None, {
-            'fields': ['publication_status', 'rights_declaration']
+            'fields': ['publication_status', 'rights_declaration', 'sources']
         }],
         ['Project', {
             'fields': ['project']

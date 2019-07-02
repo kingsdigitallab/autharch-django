@@ -15,6 +15,7 @@ from script_codes.models import Script
 class DateRangeMixin(models.Model):
     date_from = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
+    display_date = models.CharField(max_length=1024, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -29,7 +30,7 @@ class LanguageScriptMixin(models.Model):
 
 
 @reversion.register()
-class Entity(TimeStampedModel):
+class Entity(TimeStampedModel, DateRangeMixin):
     entity_type = models.ForeignKey(EntityType, on_delete=models.CASCADE)
     project = models.ForeignKey('archival.Project', on_delete=models.SET_NULL,
                                 null=True,
@@ -223,7 +224,9 @@ class Relation(DateRangeMixin, TimeStampedModel):
     relation_type = models.ForeignKey(
         EntityRelationType, on_delete=models.PROTECT)
     related_entity = models.ForeignKey(
-        Entity, on_delete=models.CASCADE, related_name='related_to_relations')
+        Entity, on_delete=models.CASCADE, blank=True, null=True,
+        related_name='related_to_relations')
+    relation_detail = models.TextField(blank=True, null=True)
     place = models.ForeignKey(
         GeoPlace, blank=True, null=True, on_delete=models.CASCADE)
     notes = models.TextField()

@@ -54,20 +54,35 @@ class ArchivalRecord(PolymorphicModel):
                                     belong to?')
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
 
-    references = models.ManyToManyField(Reference)
+    references = models.ManyToManyField(Reference, blank=True)
 
     title = models.CharField(max_length=1024)
+
+    publication_description = models.TextField(blank=True, null=True)
     provenance = models.TextField(blank=True, null=True)
-    creation_dates = models.CharField(max_length=256)
+    creation_dates = models.CharField(max_length=1024, null=True, blank=True)
+    creation_dates_notes = models.CharField(max_length=1024, null=True,
+                                            blank=True)
+    aquisition_dates = models.CharField(max_length=1024, null=True, blank=True)
+    aquisition_dates_notes = models.CharField(max_length=1024, null=True,
+                                              blank=True)
+
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
 
+    physical_location = models.CharField(max_length=2048, blank=True,
+                                         null=True)
+
+    origin_location = models.CharField(max_length=2048, blank=True,
+                                       null=True)
+
     media = models.ManyToManyField(Media, blank=True)
+    caption = models.TextField(blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-    languages = models.ManyToManyField(Language)
-    extent = models.CharField(max_length=256)
+    languages = models.ManyToManyField(Language, blank=True)
+    extent = models.CharField(max_length=1024, null=True)
 
     subjects = models.ManyToManyField(Subject, blank=True)
     persons_as_subjects = models.ManyToManyField(Entity, blank=True)
@@ -75,15 +90,25 @@ class ArchivalRecord(PolymorphicModel):
         Organisation, blank=True)
     places_as_subjects = models.ManyToManyField(Place, blank=True)
 
-    related_materials = models.CharField(max_length=256, blank=True, null=True)
+    related_materials = models.CharField(
+        max_length=2048, blank=True, null=True)
 
-    cataloguer = models.CharField(max_length=512)
+    connection_a = models.CharField(max_length=2048, blank=True, null=True,
+                                    help_text="Generic Connection Text A")
+    connection_b = models.CharField(max_length=2048, blank=True, null=True,
+                                    help_text="Generic Connection Text B")
+    connection_c = models.CharField(max_length=2048, blank=True, null=True,
+                                    help_text="Generic Connection Text C")
+
+    cataloguer = models.CharField(max_length=512, blank=True, null=True)
     description_date = models.DateField()
 
     rights_declaration = models.TextField(
         default=settings.ARCHIVAL_RIGHTS_DECLARATION)
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
+
+    sources = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['title']
