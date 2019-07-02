@@ -1,4 +1,5 @@
 from authority.serializers import EntitySerializer
+from django.db.models import Manager
 from jargon.serializers import (
     PublicationStatusSerializer, ReferenceSourceSerializer,
     RepositorySerializer
@@ -7,8 +8,7 @@ from media.serializers import MediaPolymorphicSerializer
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from .models import (ArchivalRecord, Collection, File, Item,
-                     Reference, Series)
+from .models import ArchivalRecord, Collection, File, Item, Reference, Series
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
@@ -31,33 +31,44 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     references = ReferenceSerializer(many=True, read_only=True)
     repository = RepositorySerializer(many=False, read_only=True)
     creators = EntitySerializer(many=True, read_only=True)
+
     metadata = serializers.SerializerMethodField()
 
     def get_metadata(self, obj):
         metadata = []
+
         for field in self.Meta.metadata_fields:
-            if hasattr(obj, field):
-                data = getattr(obj, field)
-                if data is not None:
-                    # Note - this is not ideal but is the most efficient way
-                    if data.__class__.__name__ == 'ManyRelatedManager':
-                        if data.count() > 0:
-                            metadata.append({
-                                "name": field.replace('_', ' ').title(),
-                                "content": [str(item) for item in data.all()]
-                            })
-                    else:
-                        if not data == '':
-                            metadata.append({
-                                "name": field.replace('_', ' ').title(),
-                                "content": str(data)
-                            })
+            data = getattr(obj, field, None)
+            if data:
+                if isinstance(data, Manager):
+                    if data.count() > 0:
+                        items = data.all()
+
+                        metadata.append({
+                            'name': field.replace('_', ' '),
+                            'content': [str(item) for item in items],
+                            'items': [
+                                {
+                                    'id': item.pk,
+                                    'type':
+                                    item.__class__.__name__.lower(),
+                                    'value': str(item)
+                                }
+                                for item in items
+                            ]
+                        })
+                else:
+                    metadata.append({
+                        'name': field.replace('_', ' '),
+                        'content': str(data)
+                    })
+
         return metadata
 
     class Meta:
         model = ArchivalRecord
         metadata_fields = [
-            'title', 'archival_level', 'author', 'creation_dates',
+            'title', 'archival_level', 'creators', 'creation_dates',
             'references', 'persons_as_relations',
             'places_as_relations', 'description', 'languages', 'extent',
             'physical_description', 'record_type', 'provenance',
@@ -68,7 +79,7 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
             'related_materials', 'publications', 'url', 'rights_declaration'
         ]
         exclude = ['polymorphic_ctype']
-        depth = 10
+        depth = 1
 
 
 class CollectionSerializer(ArchivalRecordSerializer):

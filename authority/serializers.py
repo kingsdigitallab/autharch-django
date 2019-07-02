@@ -8,21 +8,6 @@ from .models import (
     LocalDescription, NameEntry, Place
 )
 
-# TODO _ Move this.
-
-
-def date_format(date_from, date_to):
-    if date_from is not None:
-        if date_to is not None:
-            return "{} - {}".format(date_from, date_to)
-        else:
-            return "{} - ".format(date_from)
-    else:
-        if date_to is not None:
-            return " - {}".format(date_to)
-        else:
-            return "Unknown"
-
 
 class BiographyHistorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -125,8 +110,7 @@ class EntitySerializer(serializers.ModelSerializer):
                                 "name": "Name",
                                 "content": "{} ({})".format(
                                     preferred_name.display_name,
-                                    date_format(preferred_name.date_from,
-                                                preferred_name.date_to)
+                                    preferred_name.get_date()
                                 )
                             },
                             {
@@ -147,9 +131,7 @@ class EntitySerializer(serializers.ModelSerializer):
                         other_names_json.append({
                             "name": "Name",
                             "content": "{} ({})".format(
-                                name.display_name,
-                                date_format(name.date_from,
-                                            name.date_to)
+                                name.display_name, name.get_date()
                             )
                         })
 
@@ -168,8 +150,7 @@ class EntitySerializer(serializers.ModelSerializer):
                             "content": relation.notes
                         }, {
                             "name": "Dates",
-                            "content": date_format(relation.date_from,
-                                                   relation.date_to)
+                            "content": relation.get_date()
                         }, {
                             "name": "Place",
                             "content": str(relation.place)
@@ -270,9 +251,7 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "name": "Gender",
                                     "content": "{} ({})".format(
                                         local_desc.gender,
-                                        date_format(local_desc.date_from,
-                                                    local_desc.date_to)
-
+                                        local_desc.get_date()
                                     )
                                 }, {
                                     "name": "Notes",
@@ -310,8 +289,7 @@ class EntitySerializer(serializers.ModelSerializer):
                                         "content": str(event.place)
                                     }, {
                                         "name": "Dates",
-                                        "content": date_format(event.date_from,
-                                                               event.date_to)
+                                        "content": event.get_date()
                                     }])
                         except BiographyHistory.DoesNotExist:
                             pass
@@ -349,8 +327,7 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": place.role
                                 }, {
                                     "name": "Dates",
-                                    "content": date_format(place.date_from,
-                                                           place.date_to)
+                                    "content": place.get_date()
                                 }])
 
                         # Legal status
@@ -368,8 +345,7 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": status.notes
                                 }, {
                                     "name": "Dates",
-                                    "content": date_format(status.date_from,
-                                                           status.date_to)
+                                    "content": status.get_date()
                                 }])
 
                         # functions
@@ -396,8 +372,7 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": mandate.notes
                                 }, {
                                     "name": "Dates",
-                                    "content": date_format(mandate.date_from,
-                                                           mandate.date_to)
+                                    "content": mandate.get_date()
                                 }])
 
                 # Add stuff!
@@ -410,10 +385,7 @@ class EntitySerializer(serializers.ModelSerializer):
                 # Exist Dates
                 identity_json.append({
                     "name": "Dates of Existence",
-                    "content": date_format(
-                        identity.date_from,
-                        identity.date_to,
-                    )
+                    "content": identity.get_date()
                 })
 
                 # Other Names

@@ -20,6 +20,20 @@ class DateRangeMixin(models.Model):
     class Meta:
         abstract = True
 
+    def get_date(self):
+        dates = self.__dict__
+
+        if self.date_from:
+            if self.date_to:
+                return '{date_from} - {date_to}'.format(**dates)
+
+            return '{date_from} - '.format(**dates)
+
+        if self.date_to:
+            return ' - {date_to}'.format(**dates)
+
+        return 'Unknown'
+
 
 class LanguageScriptMixin(models.Model):
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
