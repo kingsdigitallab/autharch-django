@@ -96,7 +96,7 @@ class Command(BaseCommand):
                 for rel in rel_list:
                     r = Relation()
                     r.identity = identity
-                    r.relation_detail = rel
+                    r.relation_detail = rel.strip()
                     r.relation_type = rel_type
                     r.save()
 
@@ -200,4 +200,8 @@ class Command(BaseCommand):
         if pd.isnull(row[key]):
             return None
         else:
-            return row[key]
+            data = row[key]
+            if isinstance(data, str):
+                return data.strip()
+            else:
+                return data

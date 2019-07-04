@@ -66,12 +66,15 @@ class Entity(TimeStampedModel, DateRangeMixin):
             '-preferred_identity').first().authorised_form.display_name
 
     @staticmethod
-    def get_or_create_by_display_name(name, language, script):
+    def get_or_create_by_display_name(name, language, script, project=None):
         if not name or not language or not script:
             return None, False
 
         name_entries = NameEntry.objects.filter(display_name=name)
 
+        if project:
+            name_entries = name_entries.filter(
+                identity__entity__project=project)
         # too many entities match the display name, we can't accurately return
         # one
         if name_entries and name_entries.count() > 1:

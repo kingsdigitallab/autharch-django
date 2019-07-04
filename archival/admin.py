@@ -88,7 +88,8 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
             'fields': ['cataloguer', 'description_date']
         }],
         [None, {
-            'fields': ['publication_status', 'rights_declaration', 'sources']
+            'fields': ['rcin', 'publication_status', 'rights_declaration',
+                       'sources']
         }],
         ['Project', {
             'fields': ['project']

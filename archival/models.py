@@ -47,6 +47,7 @@ class Organisation(models.Model):
 @reversion.register()
 class ArchivalRecord(PolymorphicModel):
     uuid = models.CharField(max_length=64, unique=True)
+    rcin = models.CharField(max_length=256, blank=True, null=True)
 
     project = models.ForeignKey(Project, on_delete=models.SET_NULL,
                                 null=True,

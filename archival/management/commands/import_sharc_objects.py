@@ -46,6 +46,7 @@ class Command(BaseCommand):
         # Gather and cleanse facts
         rcin = 'RCIN {}'.format(self._obj_or_none(
             row, 'Inventory Number (RCIN)'))
+        uuid = 'sharc_{}'.format(rcin)
         category = self._obj_or_none(row, 'Category')
         location = self._obj_or_none(row, 'Location')
         title = self._obj_or_none(row, 'Short Title')
@@ -77,8 +78,8 @@ class Command(BaseCommand):
         # Create an object
         obj = Item()
         obj.project = self.project
-
-        obj.uuid = rcin
+        obj.uuid = uuid
+        obj.rcin = rcin
         obj.repository = Repository.objects.get(code=262)  # Royal Archives?
         obj.title = title
         obj.provenance = provenance
@@ -110,6 +111,12 @@ class Command(BaseCommand):
         ps, _ = PublicationStatus.objects.get_or_create(
             title='Published')
         obj.publication_status = ps
+        obj.rights_declaration = """
+            <p>
+            Images: © HM Queen Elizabeth II - <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+            CC BY-NC-SA 4.0</a>
+            </p>"""
 
         obj.save()
 
@@ -128,7 +135,8 @@ class Command(BaseCommand):
         # Author(s)/ Artist(s)/ Maker(s) -> creators
         for author in authors:
             a, _ = Entity.get_or_create_by_display_name(
-                re.sub(r'\(.*\)', '', author), self.language, self.script)
+                re.sub(r'\(.*\)', '', author), self.language, self.script,
+                self.project)
             if _:
                 a.project = self.project
                 a.save()
@@ -137,7 +145,8 @@ class Command(BaseCommand):
         # Associated people -> persons as relations
         for assocpers in associated_people:
             a, _ = Entity.get_or_create_by_display_name(
-                re.sub(r'\(.*\)', '', assocpers), self.language, self.script)
+                re.sub(r'\(.*\)', '', assocpers), self.language, self.script,
+                self.project)
             if _:
                 a.project = self.project
                 a.save()
@@ -148,10 +157,14 @@ class Command(BaseCommand):
         if obj is None:
             return []
         else:
-            return str(obj).split(self.delim)
+            return [o.strip() for o in str(obj).split(self.delim)]
 
     def _obj_or_none(self, row, key):
         if pd.isnull(row[key]):
             return None
         else:
-            return row[key]
+            data = row[key]
+            if isinstance(data, str):
+                return data.strip()
+            else:
+                return data
