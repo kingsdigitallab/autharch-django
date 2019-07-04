@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     project, _ = Project.objects.get_or_create(
         title='Shakespeare in the Royal Collections',
-        slug='SHARC')
+        slug='sharc')
 
     def handle(self, *args, **options):
         Entity.objects.filter(project=self.project).delete()

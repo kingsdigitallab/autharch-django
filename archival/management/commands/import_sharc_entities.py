@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
     project, _ = Project.objects.get_or_create(
         title='Shakespeare in the Royal Collections',
-        slug='SHARC')
+        slug='sharc')
 
     def add_arguments(self, parser):
         parser.add_argument('spreadsheet_path', nargs=1, type=str)
