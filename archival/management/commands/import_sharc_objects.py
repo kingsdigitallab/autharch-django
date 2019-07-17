@@ -4,7 +4,7 @@ import pandas as pd
 from archival.models import (Item, Project)
 from authority.models import Entity
 from django.core.management.base import BaseCommand, CommandError
-from jargon.models import (PublicationStatus,
+from jargon.models import (PublicationStatus, EntityType,
                            Repository, RecordType)
 from languages_plus.models import Language
 from script_codes.models import Script
@@ -23,6 +23,10 @@ class Command(BaseCommand):
     project, _ = Project.objects.get_or_create(
         title='Shakespeare in the Royal Collections',
         slug='sharc')
+
+    et_work, _ = EntityType.objects.get_or_create(
+        title='Work'
+    )
 
     def add_arguments(self, parser):
         parser.add_argument('spreadsheet_path', nargs=1, type=str)
@@ -71,6 +75,8 @@ class Command(BaseCommand):
             row, 'Shakespeare connection: How does it relate to the relevant work? ')  # noqa
         shakespeare_connection_secondary = self._obj_or_none(
             row, 'Shakespeare connection: Secondary connection to relevant work?')  # noqa
+        shakespeare_connection_rel_work = self._obj_or_none(
+            row, 'Shakespeare connection: related work')
         related_entries = self._qqqqq(
             self._obj_or_none(row, 'Related entries'))
         references = self._qqqqq(self._obj_or_none(row, 'References'))
@@ -121,6 +127,17 @@ class Command(BaseCommand):
         obj.save()
 
         # M2M (after save)
+
+        # Related entity:
+        if shakespeare_connection_rel_work:
+            a, _ = Entity.get_or_create_by_display_name(
+                re.sub(r'\(.*\)', '', shakespeare_connection_rel_work), self.language, self.script,
+                self.project)
+            if _:
+                a.project = self.project
+                a.entity_type = self.et_work
+                a.save()
+            obj.related_entities.add(a)
 
         # - References
 

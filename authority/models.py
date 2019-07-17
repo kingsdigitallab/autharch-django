@@ -130,7 +130,7 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='name_entries')
 
-    display_name = models.CharField(max_length=512)
+    display_name = models.CharField(max_length=2048)
     authorised_form = models.BooleanField()
 
     class Meta:

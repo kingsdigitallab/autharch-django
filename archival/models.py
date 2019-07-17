@@ -87,6 +87,8 @@ class ArchivalRecord(PolymorphicModel):
 
     subjects = models.ManyToManyField(Subject, blank=True)
     persons_as_subjects = models.ManyToManyField(Entity, blank=True)
+    related_entities = models.ManyToManyField(Entity, blank=True,
+        related_name='related_entities')
     organisations_as_subjects = models.ManyToManyField(
         Organisation, blank=True)
     places_as_subjects = models.ManyToManyField(Place, blank=True)

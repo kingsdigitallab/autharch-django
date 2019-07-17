@@ -45,7 +45,7 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
     autocomplete_fields = ['project', 'repository', 'references', 'languages',
                            'publication_status', 'subjects',
                            'persons_as_subjects', 'organisations_as_subjects',
-                           'places_as_subjects', 'media']
+                           'places_as_subjects', 'media', 'related_entities']
 
     base_fieldsets = [
         ['Repository', {
@@ -75,7 +75,8 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         }],
         ['Connection information', {
             'classes': ['collapse'],
-            'fields': ['connection_a', 'connection_b', 'connection_c']
+            'fields': ['connection_a', 'connection_b', 'connection_c',
+                       'related_entities']
         }],
         ['Subjects', {
             'fields': ['subjects', 'persons_as_subjects',

@@ -31,7 +31,7 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     references = ReferenceSerializer(many=True, read_only=True)
     repository = RepositorySerializer(many=False, read_only=True)
     creators = EntitySerializer(many=True, read_only=True)
-
+    related_entities = EntitySerializer(many=True, read_only=True)
     metadata = serializers.SerializerMethodField()
 
     def get_metadata(self, obj):
