@@ -12,8 +12,8 @@ def add_rights_declaration(apps, schema_editor):
     PublicationStatus = apps.get_model('jargon', 'PublicationStatus')
     Script = apps.get_model('script_codes', 'Script')
 
-    language = Language.objects.get(name_en='English')
-    script = Script.objects.get(name='Latin')
+    language, _ = Language.objects.get_or_create(name_en='English')
+    script, _ = Script.objects.get_or_create(name='Latin')
 
     for e in Entity.objects.all():
         try:
