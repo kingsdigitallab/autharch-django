@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GPP admin</title>
+    {% block head_css %}
+    <link rel="stylesheet" href="{% static 'scss/richtext.min.css' %}">
+    <link rel="stylesheet" href="{% static 'scss/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'scss/select2.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'scss/styles.css' %}" />
+    {% endblock head_css %}
+    {% block head_js %}
+    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.richtext.min.js' %}"></script>
+    <script src="{% static 'js/select2/select2.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% endblock head_js %}
+  </head>
+  <body>
+    <header>
+      {% block header %}
+      <div id="logo">
+        <a href="{% url 'editor:home' %}"><img src="{% static 'images/GPPLogo.png' %}" alt="GPP logo" /></a>
+      </div>
+      <div id="menu-links">
+        <div class="link{% if current_section == 'home' %} active{% endif %}">
+          <a href="{% url 'editor:home' %}">
+            <i class="fal fa-home"></i>
+            <h4>HOME</h4>
+          </a>
+        </div>
+        <div class="link{% if current_section == 'entities' %} active{% endif %}">
+          <a href="{% url 'editor:entities-list' %}">
+            <i class="fal fa-users"></i>
+            <h4>ENTITIES</h4>
+          </a>
+        </div>
+        <div class="link{% if current_section == 'records' %} active{% endif %}">
+          <a href="{% url 'editor:records-list' %}">
+            <i class="fal fa-archive"></i>
+            <h4>ARCHIVAL RECORDS</h4>
+          </a>
+        </div>
+      </div>
+      <div id="menu-account">
+        <div class="link{% if current_section == 'account' %} active{% endif %}">
+          <a href="{% url 'editor:dashboard' %}">
+            <i class="fal fa-user"></i>
+            <h4>MY DASHBOARD</h4>
+          </a>
+        </div>
+        <button aria-label="logout" id="logout" onclick="logout()"></button>
+      </div>
+      {% endblock %}
+    </header>
+    <main>
+      {% block main %}
+      {% block page_header %}
+      {% endblock page_header %}
+      {% block content %}
+      {% endblock content %}
+      {% endblock main %}
+    </main>
+  </body>
+</html>

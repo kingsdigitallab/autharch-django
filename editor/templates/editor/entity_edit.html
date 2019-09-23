@@ -1,0 +1,55 @@
+{% extends "./base.html" %}
+{% load editor_form_tags %}
+
+{% block page_header %}
+<div id="page-header" class="header-fixed">
+  <div id="status-bar">
+    <ul>
+      <li>Publication status: <span class="highlight">QAZ</span></li>
+      <li>Maintenance status: <span class="highlight">QAZ</span></li>
+      <li>Last edited: <span class="highlight">QAZ</span></li>
+      <li><span class="highlight">{{ entity.modified }}</span></li>
+    </ul>
+    <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
+      <i class="far fa-clock"></i>
+      <span class="dotted-underline">History</span>
+    </a>
+  </div>
+  <div>
+    <button aria-label="delete" class="danger-clear" onclick="deleteRecord()">Delete</button>
+    <input type="submit" value="Save" form="record-form" class="save"/>
+    <a href="{% url 'editor:entity-create' %}" class="create"><i class="fas fa-plus"></i></a>
+  </div>
+</div>
+{% endblock page_header %}
+
+{% block content %}
+<div id="form-header">
+  <div id="breadcrumbs">
+    <ul>
+      <li><a href="{% url 'editor:home' %}">HOME</a></li>
+      <li><a href="{% url 'editor:entities-list' %}" class="dotted-underline">ENTITIES</a></li>
+      <li>{{ entity|truncatewords:15 }}</li>
+    </ul>
+  </div>
+
+  {% if form.errors %}
+  <div class="error-notifications">
+    Errors: QAZ
+  </div>
+  {% endif %}
+
+  <h1>{{ entity }}</h1>
+  <h2>{{ entity.entity_type }}</h2>
+</div>
+<form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
+  <div class="flex">
+    {% render_field form.date_from %}
+    {% render_field form.date_to %}
+    {% render_field form.display_date %}
+  </div>
+  <div class="form-section">
+    <h2>IDENTITIES (QAZ) <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    
+</form>
+{% endblock content %}

@@ -1,0 +1,5 @@
+{% if render %}<label>
+  <span{% if required %} class="required"{% endif %}>{{ label }}</span>
+  {% if help_text %}<span role="button" aria-label="additional info" onclick="toggleHelpText(this, '{{ help_text | safe }}')" class="icon-only additional-info-icon">&#xf059;</span>{% endif %}<br>
+  {{ widget }}
+</label>{% endif %}

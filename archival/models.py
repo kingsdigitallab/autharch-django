@@ -11,6 +11,8 @@ from media.models import Media
 from model_utils.models import TimeStampedModel
 from polymorphic.models import PolymorphicModel
 
+from . import constants
+
 
 class Project(models.Model):
     title = models.CharField(max_length=128, unique=True)
@@ -53,23 +55,28 @@ class ArchivalRecord(PolymorphicModel):
                                 null=True,
                                 help_text='Which project does this record\
                                     belong to?')
-    repository = models.ForeignKey(Repository, on_delete=models.CASCADE)
+    repository = models.ForeignKey(Repository, on_delete=models.CASCADE,
+                                   help_text=constants.REPOSITORY_HELP)
 
-    references = models.ManyToManyField(Reference, blank=True)
+    references = models.ManyToManyField(Reference, blank=True,
+                                        help_text=constants.REFERENCES_HELP)
 
-    title = models.CharField(max_length=1024)
+    title = models.CharField(max_length=1024, help_text=constants.TITLE_HELP)
 
     publication_description = models.TextField(blank=True, null=True)
     provenance = models.TextField(blank=True, null=True)
-    creation_dates = models.CharField(max_length=1024, null=True, blank=True)
+    creation_dates = models.CharField(max_length=1024, null=True, blank=True,
+                                      help_text=constants.CREATION_DATES_HELP)
     creation_dates_notes = models.CharField(max_length=1024, null=True,
                                             blank=True)
     aquisition_dates = models.CharField(max_length=1024, null=True, blank=True)
     aquisition_dates_notes = models.CharField(max_length=1024, null=True,
                                               blank=True)
 
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True,
+                                  help_text=constants.START_DATE_HELP)
+    end_date = models.DateField(blank=True, null=True,
+                                help_text=constants.END_DATE_HELP)
 
     physical_location = models.CharField(max_length=2048, blank=True,
                                          null=True)
@@ -88,7 +95,7 @@ class ArchivalRecord(PolymorphicModel):
     subjects = models.ManyToManyField(Subject, blank=True)
     persons_as_subjects = models.ManyToManyField(Entity, blank=True)
     related_entities = models.ManyToManyField(Entity, blank=True,
-        related_name='related_entities')
+                                              related_name='related_entities')
     organisations_as_subjects = models.ManyToManyField(
         Organisation, blank=True)
     places_as_subjects = models.ManyToManyField(Place, blank=True)

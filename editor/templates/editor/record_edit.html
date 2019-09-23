@@ -1,0 +1,211 @@
+{% extends "./base.html" %}
+{% load editor_form_tags %}
+
+{% block page_header %}
+<div id="page-header" class="header-fixed">
+  <div id="status-bar">
+    <ul>
+      <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
+      <li>Maintenance status: <span class="highlight">[QAZ]</span></li>
+      <li>Last edited: <span class="highlight">[QAZ]</span></li>
+      <li><span class="highlight">[QAZ]</span></li>
+    </ul>
+    <a href="{% url 'editor:record-history' record_id=record.pk %}">
+      <i class="far fa-clock"></i>
+      <span class="dotted-underline">History</span>
+    </a>
+  </div>
+  <div>
+    <button aria-label="delete" class="danger-clear" onclick="deleteRecord()">Delete</button>
+    <input type="submit" value="Save" form="record-form" class="save"/>
+  </div>
+</div>
+{% endblock page_header %}
+
+{% block content %}
+<div id="form-header">
+  <div id="breadcrumbs">
+    <ul>
+      <li><a href="{% url 'editor:home' %}">HOME</a></li>
+      <li><a href="{% url 'editor:records-list' %}" class="dotted-underline">ARCHIVAL RECORDS</a></li>
+      <li>{{ record|truncatewords:15 }}</li>
+    </ul>
+  </div>
+
+  <h1>{{ record|truncatewords:15 }}</h1>
+
+  <h2>{{ record.archival_level }}</h2>
+
+  <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
+    <div class="form-section">
+      <h2>SUMMARY</h2>
+      <fieldset id="summary">
+        <div class="fieldset-header">
+          {% csrf_token %}
+          <h3>{{ record.repository }}</h3>
+          <div>
+            <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.repository %}
+              <label>
+                <span class="required">Repository code</span>
+                <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
+              </label>
+              {% render_field form.parent_series %}
+              {% render_field form.parent_file %}
+              {% render_field form.references %}
+            </div>
+            <div>
+              <label>
+                <span class="required">Archival level</span>
+                <select name="archival-level" disabled="disabled">
+                  <option>{{ record.archival_level }}</option>
+                </select>
+              </label>
+              {% render_field form.record_type %}
+              {% render_field form.rcin %}
+              {% render_field form.url %}
+              {% render_field form.origin_location %}
+              {% render_field form.related_materials %}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="form-section">
+      <h2>DESCRIPTION</h2>
+      <fieldset id="description">
+        <div class="fieldset-header">
+          <h3>{{ record.title }}</h3>
+          <div>
+            <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.title %}
+              <div class="two-column-table date">
+                {% render_field form.start_date %}
+                {% render_field form.end_date %}
+              </div>
+              {% render_field form.creation_dates %}
+              {% render_field form.creation_dates_notes %}
+              {% render_field form.extent %}
+              {% render_field form.languages %}
+            </div>
+            <div>
+              Writer QAZ
+              Addressee QAZ
+              Place of writing QAZ
+              Receiving address QAZ
+            </div>
+          </div>
+          {% render_field form.description %}
+          {% render_field form.notes %}
+          <div class="two-column-table">
+            <div>
+              {% render_field form.physical_description %}
+            </div>
+          </div>
+          {% render_field form.administrative_history %}
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="form-section">
+      <h2>CONTEXT AREA</h2>
+
+      <fieldset>
+        <div class="fieldset-header">
+          <h3>{{ record.cataloguer }}</h3>
+
+          <div>
+            <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.cataloguer %}
+              {% render_field form.arrangement %}
+            </div>
+            <div>
+              {% render_field form.description_date %}
+              {% render_field form.provenance %}
+            </div>
+          </div>
+          <div class="two-column-table">
+            <div>
+              {% render_field form.subjects %}
+              {% render_field form.organisation_as_subjects %}
+            </div>
+            <div>
+              {% render_field form.persons_as_subjects %}
+              {% render_field form.places_as_subjects %}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="form-section">
+      <h2>ACCESS AREA</h2>
+
+      <fieldset>
+        <div class="fieldset-header">
+          <h3>{{ record.publications|truncatewords:15 }}</h3>
+
+          <div>
+            <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              Is this the right field? QAZ
+              {% render_field form.publications %}
+            </div>
+            <div>
+              {% render_field form.copyright_status %}
+              {% render_field form.withheld %}
+              Credit QAZ
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="form-section">
+      <h2>CONTROL</h2>
+
+      <fieldset>
+        <div class="fieldset-header">
+          <h3>Record ID: {{ record.pk }}</h3>
+          <div>
+            <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              Language QAZ
+              Rights citation QAZ
+            </div>
+            <div>
+              Script QAZ
+              Rights abbreviation QAZ
+            </div>
+          </div>
+          {% render_field form.rights_declaration %}
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</div>
+{% endblock content %}

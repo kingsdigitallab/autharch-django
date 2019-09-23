@@ -1,0 +1,37 @@
+{% extends "./base.html" %}
+
+{% block page_header %}
+<div id="page-header">
+  <h1>Entity {{ entity_count }}</h1>
+  <div class="filters">
+    <input id="person" type="checkbox" aria-label="person"/>
+    <label for="person" class="filter">Person ({{ person_count }})</label>
+    <input id="corporate_body" type="checkbox" aria-label="corporate body"/>
+    <label for="corporate_body" class="filter">Corporate Body ({{ corporate_body_count }})</label>
+    <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>
+  </div>
+</div>
+{% endblock page_header %}
+
+{% block content %}
+<table id="records">
+  <thead>
+    <tr>
+      <th>Name<i class="fas fa-sort"></i></th>
+      <th>Type/level<i class="fas fa-sort"></i></th>
+      <th>Publication status<i class="fas fa-sort"></i></th>
+      <th>Last edited<i class="fas fa-sort"></i></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entity in entities %}
+    <tr>
+      <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity|truncatewords:15 }}</a></td>
+      <td>{{ entity.entity_type }}</td>
+      <td></td>
+      <td>{{ entity.modified }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

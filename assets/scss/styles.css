@@ -1,0 +1,1094 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700");
+body {
+  background-color: #FCFCFC;
+  font-family: "Roboto", sans-serif;
+  line-height: 1.4em;
+  margin: 0;
+  display: flex;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.flex > *:not(:last-child) {
+  margin-right: 30px;
+  margin-bottom: 10px;
+}
+
+*:focus {
+  outline: none;
+}
+
+.required:after {
+  content: " *";
+  color: red;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.hidden {
+  visibility: hidden !important;
+}
+
+.none {
+  display: none;
+}
+
+.inline {
+  display: inline;
+}
+
+.dotted-underline {
+  border-bottom: 1px dotted #002465;
+}
+
+.border-left {
+  border-left: 9px solid #002465 !important;
+  border-left-color: #002465 !important;
+}
+
+button, a, .create, .link, input[type=submit], input[type=button], span[role=button] {
+  cursor: pointer;
+  white-space: nowrap;
+}
+button:hover, button:focus, a:hover, a:focus, .create:hover, .create:focus, .link:hover, .link:focus, input[type=submit]:hover, input[type=submit]:focus, input[type=button]:hover, input[type=button]:focus, span[role=button]:hover, span[role=button]:focus {
+  transition: 0.3s;
+}
+
+button, .create, input[type=submit] {
+  color: white;
+  border: none;
+  padding: 13px 25px;
+  font-size: 14px;
+  border-radius: 30px;
+}
+button:hover:not(.icon-only, #logout), button:focus:not(.icon-only, #logout), .create:hover:not(.icon-only, #logout), .create:focus:not(.icon-only, #logout), input[type=submit]:hover:not(.icon-only, #logout), input[type=submit]:focus:not(.icon-only, #logout) {
+  box-shadow: 0px 2px 2px #BABABA;
+}
+
+input[type=submit] {
+  max-width: max-content;
+}
+
+span[role=button] {
+  margin: auto;
+}
+
+.create {
+  background-color: #0791D5;
+}
+.create:hover:not(.button-link), .create:focus:not(.button-link) {
+  background-color: #0787c6;
+}
+.create.linked-button {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin-top: 0px;
+  margin-right: -1px;
+  max-width: max-content;
+}
+
+.save {
+  background-color: #6DA036;
+  min-width: 113px;
+}
+.save:hover:not(.button-link), .save:focus:not(.button-link) {
+  background-color: #659532;
+}
+
+.danger {
+  background-color: #b40000;
+}
+.danger:hover:not(.button-link), .danger:focus:not(.button-link) {
+  background-color: #a50000;
+}
+.danger .fas {
+  margin-right: 10px;
+}
+
+.danger-clear {
+  border: 1px solid #b40000;
+  color: #b40000;
+  background-color: transparent;
+}
+.danger-clear .fas {
+  margin-right: 10px;
+}
+
+.default {
+  border: 1px solid #002465 !important;
+  background-color: white !important;
+  color: #002465 !important;
+  padding: 13px 25px;
+  font-size: 14px;
+  border-radius: 30px;
+  max-width: max-content;
+}
+.default .fas, .default .fal {
+  margin-right: 10px;
+}
+
+.inactive {
+  background-color: #EBEBEB !important;
+  color: #BABABA !important;
+  box-shadow: none !important;
+  cursor: auto;
+}
+.inactive:hover, .inactive:focus {
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.icon-only {
+  border: none;
+  border-radius: 0px;
+  color: inherit;
+  font-family: "Font Awesome 5 Pro";
+  font-weight: 300;
+  font-size: 16px;
+  margin-left: 5px;
+  padding: 3px;
+  margin-bottom: 0px;
+  background-color: transparent;
+}
+.icon-only:hover, .icon-only:focus {
+  box-shadow: none;
+}
+.icon-only .fa-question-circle {
+  font-size: 16px;
+  margin-left: 5px;
+  font-weight: 300;
+}
+
+.button-link {
+  color: #002465;
+  background-color: transparent;
+  padding: 0;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 0px;
+  max-width: max-content;
+}
+.button-link.danger {
+  color: #b40000;
+}
+.button-link.danger:hover, .button-link.danger:focus {
+  box-shadow: none;
+}
+.button-link.create {
+  color: #0791D5;
+}
+.button-link.create:hover, .button-link.create:focus {
+  box-shadow: none !important;
+}
+.button-link .fas, .button-link .fal {
+  margin-right: 5px;
+}
+.button-link:hover, .button-link:focus {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#logout {
+  border-radius: 0px;
+  margin-bottom: 0px;
+}
+#logout:after {
+  content: "LOGOUT";
+}
+
+a {
+  color: #002465;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+h2, h3, h4 {
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 500;
+  color: #002465;
+  line-height: 1.1em;
+}
+
+h2 {
+  font-size: 18px;
+  color: #002465;
+  margin-top: 0px;
+  margin-bottom: 30px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+h4 {
+  font-size: 14px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.4em;
+}
+p.additional-info {
+  font-family: "Roboto", sans-serif;
+  background-color: white;
+  color: #002465;
+  box-shadow: 0px 0px 2px black;
+  border-radius: 5px;
+  position: absolute;
+  max-width: 250px;
+  padding: 7px;
+  z-index: 8;
+  word-break: break-word;
+}
+
+header {
+  background: #002465 url("..//images/background-header.svg") no-repeat bottom;
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  left: 0;
+  box-shadow: 1px 0px 3px #BABABA;
+  z-index: 10;
+}
+header #logo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+header #logo img {
+  width: 100%;
+}
+header #menu-links {
+  margin-top: 40%;
+}
+header #menu-links, header #menu-account {
+  color: white;
+}
+header #menu-links a, header #menu-account a {
+  color: inherit;
+  text-decoration: none;
+}
+header #menu-links h4, header #menu-account h4 {
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+header #menu-links .link, header #menu-account .link {
+  max-height: 120px;
+  text-align: center;
+}
+header #menu-links .link a, header #menu-account .link a {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+header #menu-links .link a h4, header #menu-account .link a h4 {
+  font-weight: 400;
+  margin: 0;
+}
+header #menu-links .link.active, header #menu-account .link.active {
+  color: #002465;
+  background-color: #FCFCFC;
+}
+header #menu-links .link.active h4, header #menu-account .link.active h4 {
+  font-weight: 700;
+}
+header #menu-links .link:hover:not(.active), header #menu-links .link:focus:not(.active), header #menu-account .link:hover:not(.active), header #menu-account .link:focus:not(.active) {
+  background-color: #001f56;
+  transition: 0.3s;
+  box-shadow: inset 0 0 5px black;
+  -moz-box-shadow: inset 0 0 5px black;
+  -webkit-box-shadow: inset 0 0 5px black;
+  color: white;
+}
+header #menu-links .link .fal, header #menu-account .link .fal {
+  font-size: 16px;
+  margin: 0px 15px 0px 0px;
+}
+header #menu-account {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+header #menu-account #logout {
+  cursor: pointer;
+  background-color: #b40000;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  border: none;
+  font-size: 14px;
+}
+header #menu-account #logout:hover, header #menu-account #logout:focus {
+  background-color: #a50000;
+}
+
+main {
+  width: 100%;
+}
+main:not(#form-page) {
+  margin-left: 200px;
+  padding: 20px 40px 40px 40px;
+  box-sizing: border-box;
+}
+main#form-page {
+  height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 10px;
+}
+main#form-page form {
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+main#form-page form input, main#form-page form label, main#form-page form .default {
+  width: 100%;
+  margin: auto;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+main#form-page form a {
+  text-align: right;
+}
+main#form-page form input[type=submit], main#form-page form .default {
+  margin-top: 20px;
+}
+main #page-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 10px;
+  align-items: center;
+}
+main #page-header #status-bar {
+  font-size: 14px;
+}
+main #page-header #status-bar ul {
+  margin: 0px;
+  margin-right: 10px;
+  padding: 0px;
+  display: inline-flex;
+  align-items: center;
+}
+main #page-header #status-bar ul li {
+  list-style: none;
+  margin: 0px 0px 5px 0px;
+}
+main #page-header #status-bar ul li:not(:last-child):after {
+  content: "|";
+  margin: 0px 10px;
+  color: #BABABA;
+  font-family: "Font Awesome 5 Pro";
+  font-weight: 600;
+}
+main #page-header .create {
+  margin-left: 20px;
+}
+main .header-fixed {
+  background-color: white;
+  border-bottom: 1px solid #BABABA;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9;
+  margin-left: 200px;
+  padding: 10px 40px;
+}
+main .filters, main .custom-radio-filters {
+  margin: 10px 0px;
+}
+main .filters :not(:last-child), main .custom-radio-filters :not(:last-child) {
+  margin-right: 10px;
+}
+main .filters .create, main .custom-radio-filters .create {
+  margin-left: 20px;
+}
+main .filters .filter, main .custom-radio-filters .filter {
+  background-color: #FCFCFC;
+  color: #002465;
+  margin-right: 10px;
+  border: 1px solid #002465;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-size: 13px;
+  cursor: pointer;
+}
+main .filters .filter:hover, main .filters .filter:focus, main .custom-radio-filters .filter:hover, main .custom-radio-filters .filter:focus {
+  box-shadow: 0px 2px 2px #BABABA;
+}
+main .filters input[type=checkbox], main .filters input[type=radio], main .custom-radio-filters input[type=checkbox], main .custom-radio-filters input[type=radio] {
+  display: none;
+}
+main .filters input[type=checkbox]:checked + label, main .filters input[type=radio]:checked + label, main .custom-radio-filters input[type=checkbox]:checked + label, main .custom-radio-filters input[type=radio]:checked + label {
+  background-color: #002465;
+  color: white;
+}
+main .filters input[type=checkbox]:checked + label:before, main .custom-radio-filters input[type=checkbox]:checked + label:before {
+  font-family: "Font Awesome 5 Pro";
+  content: "";
+  font-weight: 300;
+  margin-right: 10px;
+}
+main .user-control {
+  display: flex;
+}
+main .user-control #user-details, main .user-control #user-password {
+  width: 50%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0px 2px 2px #EBEBEB;
+  margin: 20px 0px;
+}
+main .user-control #user-details {
+  margin-right: 40px;
+}
+main .admin {
+  margin-top: 40px;
+}
+main #form-header {
+  margin-top: 70px;
+}
+main #form-header #breadcrumbs {
+  font-size: 13px;
+  margin: 20px 0px;
+}
+main #form-header #breadcrumbs ul {
+  margin: 0px;
+  margin-right: 10px;
+  padding: 0px;
+  display: inline-flex;
+  align-items: center;
+}
+main #form-header #breadcrumbs ul li {
+  list-style: none;
+  margin: 0px 0px 5px 0px;
+}
+main #form-header #breadcrumbs ul li:not(:last-child):after {
+  content: "";
+  margin: 0px 10px;
+  color: #BABABA;
+  font-family: "Font Awesome 5 Pro";
+  font-weight: 600;
+}
+main #form-header #breadcrumbs a {
+  color: #424242;
+  border-bottom: 1px dotted #BABABA;
+}
+main #form-header #breadcrumbs a:hover, main #form-header #breadcrumbs a:focus {
+  border-bottom: 1px dotted #424242;
+}
+main table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+main table thead {
+  text-align: left;
+  line-height: 1.3em;
+}
+main table thead th {
+  padding: 15px 0px;
+  font-weight: 500;
+}
+main table thead .fas {
+  margin-left: 10px;
+  color: #002465;
+}
+main table tbody tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+main table tbody td {
+  border: 1px solid #dedede;
+  padding: 10px;
+}
+main table tbody td a {
+  border-bottom: 1px dotted #BABABA;
+  text-decoration: none;
+  white-space: pre-wrap;
+}
+main table tbody td a:hover, main table tbody td a:focus {
+  border-bottom: 1px dotted #002465;
+}
+main table tbody td.description {
+  width: 50%;
+}
+main table tbody td.wide {
+  width: 25%;
+}
+main table tbody td.button-cell {
+  padding: 0px 5px;
+  text-align: center;
+}
+main .two-column-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 30px;
+  justify-content: center;
+  font-size: 14px;
+}
+main .two-column-table p {
+  margin-bottom: 15px;
+}
+main .two-column-table div {
+  width: 100%;
+}
+main .two-column-table div label, main .two-column-table div input, main .two-column-table div select, main .two-column-table div textarea {
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: fill-available;
+  margin-bottom: 10px;
+}
+main .two-column-table div label {
+  margin-top: 10px;
+}
+main .two-column-table input[type=submit] {
+  grid-column-start: 2;
+  width: 150px;
+  justify-self: end;
+  margin-top: 20px;
+}
+main .two-column-table.date {
+  grid-template-columns: auto auto;
+  justify-content: start;
+}
+main .grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 0.2fr;
+  grid-column-gap: 10px;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+main .editable-field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 5px;
+}
+main form {
+  width: 100%;
+}
+main form#record-form > .flex > div {
+  margin-bottom: 10px;
+}
+main form label {
+  font-size: 14px;
+  display: block;
+}
+main form label input:not([type=checkbox]), main form label select {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+main form input, main form select, main form .select2-selection--single, main form textarea {
+  font-family: "Roboto", sans-serif;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #707070;
+}
+main form input[type=date], main form select[type=date], main form .select2-selection--single[type=date], main form textarea[type=date] {
+  margin-right: 5px;
+  width: max-content;
+}
+main form input[type=button], main form select[type=button], main form .select2-selection--single[type=button], main form textarea[type=button] {
+  width: max-content;
+}
+main form input[type=radio], main form input[type=checkbox], main form select[type=radio], main form select[type=checkbox], main form .select2-selection--single[type=radio], main form .select2-selection--single[type=checkbox], main form textarea[type=radio], main form textarea[type=checkbox] {
+  margin: 0px;
+  margin-right: 10px;
+  width: max-content;
+}
+main form select, main form .select2-selection--single {
+  height: 39.76px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%238C98F2'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
+  background-size: 12px;
+  background-position: calc(100% - 11px) calc(100% - 9px);
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+}
+main form textarea {
+  width: 100%;
+  display: block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+main form .richText {
+  margin-bottom: 10px;
+  border: 1px solid #707070;
+  border-radius: 5px;
+  overflow: hidden;
+}
+main form .richText .richText-toolbar ul li a {
+  border-right: 1px solid #707070;
+  border-bottom: 1px solid #707070;
+}
+main form .richText .richText-toolbar ul li a:hover, main form .richText .richText-toolbar ul li a:focus {
+  background-color: #EBEBEB;
+}
+main form .richText .richText-toolbar {
+  border-bottom: 1px solid #707070;
+}
+main form .richText .richText-editor {
+  height: 100px;
+  box-sizing: border-box;
+}
+main form .select2-selection--single {
+  height: 40px !important;
+}
+main form .select2-container--default {
+  width: -moz-available !important;
+  width: -webkit-fill-available !important;
+  width: fill-available !important;
+}
+main form .select2-container--default .select2-selection--single {
+  border: 1px solid #707070;
+}
+main form .select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 1.4em;
+}
+main form .select2-container--default .select2-selection--single .select2-selection__arrow {
+  display: none;
+}
+main form :disabled {
+  background-color: #EBEBEB;
+  border: none;
+}
+main form :disabled.admin-editable {
+  border: 1px solid #005bfe;
+}
+main form .create {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+}
+main form .form-section {
+  margin-top: 40px;
+}
+main form .form-section fieldset {
+  border: 0;
+  padding: 0;
+  background-color: white;
+  border: 1px solid #BABABA;
+  margin: 0;
+}
+main form .form-section fieldset:first-of-type {
+  border-top-left-radius: 10px;
+}
+main form .form-section fieldset:last-of-type {
+  border-bottom-left-radius: 10px;
+  overflow: hidden;
+}
+main form .form-section fieldset .fieldset-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  height: 60px;
+  padding-left: 20px;
+  border-bottom: 1px solid #BABABA;
+}
+main form .form-section fieldset .fieldset-header > div {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  justify-content: space-between;
+  margin-right: 60px;
+}
+main form .form-section fieldset .fieldset-header > div .toggle-tab-button {
+  color: #002465;
+  background-color: #EBEBEB;
+  border-radius: 0px;
+  height: 100%;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+main form .form-section fieldset .fieldset-header > div .toggle-tab-button:after {
+  font-family: "Font Awesome 5 Pro";
+  content: "";
+  font-weight: 700;
+}
+main form .form-section fieldset .fieldset-header > div .toggle-tab-button.active:after {
+  font-family: "Font Awesome 5 Pro";
+  content: "";
+  font-weight: 700;
+}
+main form .form-section fieldset .fieldset-header label {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+main form .form-section fieldset .fieldset-header h3 {
+  padding: 5px 0px;
+  margin: 0px;
+}
+main form .form-section fieldset .fieldset-body {
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  transition: all 0.4s;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+main form .form-section fieldset .fieldset-body.expand {
+  opacity: 1;
+  padding: 40px;
+  height: auto;
+}
+main form .form-section fieldset .fieldset-body > h3:first-child {
+  margin-top: 0px;
+}
+main form .form-section fieldset .fieldset-body > h3:not(:first-child) {
+  margin-top: 40px;
+}
+main form .form-section fieldset .fieldset-body label, main form .form-section fieldset .fieldset-body input, main form .form-section fieldset .fieldset-body textarea {
+  margin-bottom: 10px;
+}
+main .modal {
+  display: none;
+}
+main .modal.active {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(31, 31, 31, 0.5);
+}
+main .modal.active .modal-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 20px;
+  animation-duration: 0.3s;
+  animation-name: modalSlide;
+  margin: 10px;
+}
+main .modal.active .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main .modal.active .modal-header h2 {
+  margin-bottom: 0px;
+}
+main .modal.active .modal-header input[type=button] {
+  margin-right: 0px;
+  margin-left: auto;
+}
+main .modal.active .modal-header, main .modal.active .modal-body {
+  margin-bottom: 30px;
+}
+main .modal.active .modal-header p, main .modal.active .modal-body p {
+  font-size: 16px;
+  text-align: center;
+}
+main .modal.active .modal-footer {
+  display: flex;
+}
+main .modal.active .modal-footer input[type=submit]:only-child {
+  margin-right: 0px;
+  margin-left: auto;
+}
+main .modal.active .modal-footer input[type=submit]:not(:only-child) {
+  width: max-content;
+}
+main .modal.active .modal-footer input[type=submit]:not(:only-child):not(:last-child) {
+  margin-right: 50px;
+}
+main .error-notification {
+  display: block;
+  border-radius: 10px;
+  border-left: 10px solid #b40000;
+  background-color: #ffe7e7;
+  padding: 20px;
+  margin: 10px 0px 30px 0px;
+}
+main .error-notification h3 {
+  margin: 0px;
+  margin-bottom: 10px;
+  color: #810000;
+}
+main .error-notification p {
+  margin-bottom: 0px;
+}
+main .error {
+  border: 1px solid #b40000;
+  border-left: 5px solid #b40000;
+  background-color: #ffe7e7;
+}
+main .error-message {
+  color: #b40000;
+  margin: 0px;
+  margin-bottom: 5px !important;
+  text-align: right;
+}
+main #pagination {
+  background-color: white;
+  display: flex;
+  box-shadow: 0px 2px 2px #BABABA;
+  width: max-content;
+  margin: 40px auto 0px auto;
+  border-radius: 30px;
+}
+main #pagination #first, main #pagination #last, main #pagination #prev, main #pagination #next {
+  background-color: #002465;
+  border: none;
+  border-radius: 0px;
+}
+main #pagination #first .fal, main #pagination #last .fal, main #pagination #prev .fal, main #pagination #next .fal {
+  margin: auto;
+  font-weight: 600;
+}
+main #pagination #first .fa-caret-left, main #pagination #first .fa-caret-right, main #pagination #last .fa-caret-left, main #pagination #last .fa-caret-right, main #pagination #prev .fa-caret-left, main #pagination #prev .fa-caret-right, main #pagination #next .fa-caret-left, main #pagination #next .fa-caret-right {
+  font-size: 20px;
+}
+main #pagination #first:hover:not(.inactive), main #pagination #first:focus:not(.inactive), main #pagination #last:hover:not(.inactive), main #pagination #last:focus:not(.inactive), main #pagination #prev:hover:not(.inactive), main #pagination #prev:focus:not(.inactive), main #pagination #next:hover:not(.inactive), main #pagination #next:focus:not(.inactive) {
+  background-color: #001f56;
+  box-shadow: inset 0 0 5px black;
+  -moz-box-shadow: inset 0 0 5px black;
+  -webkit-box-shadow: inset 0 0 5px black;
+}
+main #pagination #first {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+main #pagination #last {
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+main #pagination ul {
+  margin: 0px 10px;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+main #pagination ul li {
+  list-style: none;
+  padding: 5px 15px;
+  color: #002465;
+}
+main #pagination ul li.active {
+  color: #002465;
+  text-decoration: underline;
+}
+main .highlight {
+  font-weight: 700;
+  color: #002465;
+}
+
+footer {
+  height: 120px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+}
+footer img {
+  max-width: 200px;
+}
+
+.select2-search--dropdown {
+  padding: 10px;
+}
+.select2-search--dropdown .select2-search__field {
+  padding: 10px;
+  font-size: 16px;
+}
+
+@keyframes modalSlide {
+  from {
+    margin-top: -15%;
+  }
+  to {
+    margin-top: 0%;
+  }
+}
+@media only screen and (max-width: 1280px) {
+  body {
+    display: block;
+  }
+
+  header {
+    background: #002465 url("..//images/background-header.svg") no-repeat bottom right;
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 60px;
+    top: 0;
+  }
+  header #logo {
+    width: max-content;
+    overflow: hidden;
+  }
+  header #logo a {
+    line-height: 0px;
+  }
+  header #logo a img {
+    height: 60px;
+    width: auto;
+  }
+  header #menu-links, header #menu-account {
+    position: relative;
+    width: max-content;
+    margin-top: 0px;
+    display: flex;
+  }
+  header #menu-account {
+    margin-left: auto;
+    margin-right: 0px;
+  }
+  header #menu-account #logout:after {
+    font-family: "Font Awesome 5 Pro";
+    content: "";
+    font-weight: 300;
+    margin: 0px 5px;
+  }
+
+  main {
+    box-sizing: border-box;
+    margin-top: 80px;
+  }
+  main:not(#form-page) {
+    margin-left: 0px;
+    padding: 0px 10px 30px 10px;
+  }
+  main #page-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  main #form-header {
+    margin-top: 170px;
+  }
+  main .header-fixed {
+    margin-top: 60px;
+    margin-left: 0px;
+    padding: 10px;
+  }
+}
+@media only screen and (max-width: 1020px) {
+  main #page-header #status-bar {
+    margin-bottom: 10px;
+  }
+  main table .button-link {
+    white-space: pre-wrap;
+  }
+  main #form-header {
+    margin-top: 150px;
+  }
+  main .filters :not(.create) {
+    display: none;
+  }
+  main .user-control {
+    display: block;
+  }
+  main .user-control #user-details, main .user-control #user-password {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+@media only screen and (max-width: 880px) {
+  header h4 {
+    visibility: hidden;
+    width: 0px;
+    padding: 0px;
+  }
+  header #menu-account .link .fal, header #menu-links .link .fal {
+    margin: 0px 5px;
+  }
+
+  main #page-header #status-bar ul {
+    display: none;
+  }
+  main .filters :not(.create) {
+    display: none;
+  }
+  main #pagination ul {
+    visibility: hidden;
+    width: 0px;
+    padding: 0px;
+  }
+  main:not(#form-page) .two-column-table {
+    display: block;
+  }
+}
+@media only screen and (max-width: 520px) {
+  header #logo {
+    visibility: hidden;
+    width: 0px;
+    padding: 0px;
+  }
+
+  main #page-header div:not(#status-bar) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  main #page-header div:not(#status-bar) > *:not(.create) {
+    margin: 5px;
+  }
+  main #page-header .create {
+    margin-left: 0px;
+  }
+  main:not(#form-page) .grid {
+    display: block;
+  }
+  main form .form-section fieldset .fieldset-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    height: max-content;
+    min-height: 60px;
+  }
+  main form .form-section fieldset .fieldset-header h3 {
+    font-size: 14px;
+    margin-right: 60px;
+  }
+  main form .form-section fieldset .fieldset-body.expand {
+    padding: 15px;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

@@ -1,0 +1,40 @@
+{% extends "./base.html" %}
+
+{% block page_header %}
+<div id="page-header">
+  <h1>Archival records ({{ records_count }})</h1>
+  <div class="filters">
+    <input id="collection" type="checkbox" aria-label="collection"/>
+    <label for="collection" class="filter">Collection ({{ collection_count }})</label>
+    <input id="file" type="checkbox" aria-label="file"/>
+    <label for="file" class="filter">File ({{ file_count }})</label>
+    <input id="item" type="checkbox" aria-label="item"/>
+    <label for="item" class="filter">Item ({{ item_count }})</label>
+    <input id="series" type="checkbox" aria-label="series"/>
+    <label for="series" class="filter">Series ({{ series_count }})</label>
+  </div>
+</div>
+{% endblock page_header %}
+
+{% block content %}
+<table>
+  <thead>
+    <tr>
+      <th>Name<i class="fas fa-sort"></i></th>
+      <th>Type/level<i class="fas fa-sort"></i></th>
+      <th>Publication status<i class="fas fa-sort"></i></th>
+      <th>Last edited<i class="fas fa-sort"></i></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in records %}
+    <tr>
+      <td class="description"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record|truncatewords:15 }}</a></td>
+      <td>{{ record.archival_level }}</td>
+      <td>{{ record.publication_status }}</td>
+      <td>QAZ</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

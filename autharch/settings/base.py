@@ -120,6 +120,7 @@ INSTALLED_APPS += [
     'reversion',
     'script_codes.apps.ScriptCodesConfig',
     'scm.apps.ScmConfig',
+    'editor.apps.EditorConfig',
 
     # keep this as the last app
     'hal.apps.HalConfig'
