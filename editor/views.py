@@ -1,4 +1,7 @@
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+
+from reversion.models import Version
 
 from archival.models import ArchivalRecord
 from authority.models import Entity
@@ -37,9 +40,12 @@ def entity_history(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     context = {
         'current_section': 'entities',
-        'entity': entity,
+        'edit_url': reverse('editor:entity-edit',
+                            kwargs={'entity_id': entity_id}),
+        'item': entity,
+        'versions': Version.objects.get_for_object(entity),
     }
-    return render(request, 'editor/entity_history.html', context)
+    return render(request, 'editor/history.html', context)
 
 
 def entities_list(request):
@@ -77,9 +83,12 @@ def record_history(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     context = {
         'current_section': 'records',
-        'record': record,
+        'edit_url': reverse('editor:record-edit',
+                            kwargs={'record_id': record_id}),
+        'item': record,
+        'versions': Version.objects.get_for_object(record),
     }
-    return render(request, 'editor/record_history.html', context)
+    return render(request, 'editor/history.html', context)
 
 
 def records_list(request):
