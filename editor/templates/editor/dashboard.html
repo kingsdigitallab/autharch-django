@@ -1,0 +1,52 @@
+{% extends "./base.html" %}
+{% load editor_form_tags %}
+
+{% block page_header %}
+<div id="page-header">
+  <h1>My Dashboard</h1>
+
+  <p>Permission level: <span class="highlight">QAZ: permission group?</span></p>
+</div>
+{% endblock page_header %}
+
+{% block content %}
+<div class="user-contol">
+  <div id="user-details">
+    <h2>Details</h2>
+
+    <form action="." method="post" class="two-column-table">
+      {% csrf_token %}
+      <div>
+        {% render_field user_form.first_name %}
+        {% render_field user_form.email %}
+      </div>
+      <div>
+        {% render_field user_form.last_name %}
+      </div>
+      <input type="submit" class="save" value="Save" />
+    </form>
+  </div>
+  <div id="user-password">
+    <h2>Change Password</h2>
+    <form action="." method="post" class="two-column-table">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="error-notification">
+        {{ form.non_field_errors %}
+      </div>
+      {% endif %}
+      <div>
+        {% render_field password_form.old_password %}
+      </div>
+      <div></div>
+      <div>
+        {% render_field password_form.new_password1 %}
+      </div>
+      <div>
+        {% render_field password_form.new_password2 %}
+      </div>
+      <input type="submit" class="save" value="Save" />
+    </form>
+  </div>
+</div>
+{% endblock content %}

@@ -1,4 +1,6 @@
-from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from reversion.models import Version
@@ -6,11 +8,33 @@ from reversion.models import Version
 from archival.models import ArchivalRecord
 from authority.models import Entity
 
-from .forms import ArchivalRecordEditForm, EntityEditForm
+from .forms import ArchivalRecordEditForm, EntityEditForm, UserEditForm
 
 
+@login_required
 def dashboard(request):
-    pass
+    user = request.user
+    if request.method == 'POST':
+        if request.POST.get('old_password') is not None:
+            password_form = PasswordChangeForm(user=user, data=request.POST)
+            if password_form.is_valid():
+                password_form.save()
+                return redirect('editor:dashboard')
+        elif request.POST.get('email') is not None:
+            user_form = UserEditForm(request.POST, instance=user)
+            if user_form.is_valid():
+                user_form.save()
+                return redirect('editor:dashboard')
+    else:
+        user_form = UserEditForm(instance=user)
+        password_form = PasswordChangeForm(user=user)
+    context = {
+        'current_section': 'account',
+        'password_form': password_form,
+        'user': user,
+        'user_form': user_form,
+    }
+    return render(request, 'editor/dashboard.html', context)
 
 
 def entity_create(request):

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 
 from archival.models import ArchivalRecord
 from authority.models import Entity
@@ -57,3 +58,10 @@ class EntityEditForm(forms.ModelForm):
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
         }
+
+
+class UserEditForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
