@@ -128,8 +128,11 @@ $(document).ready(function() {
 
     // ADD-ONS
     
-    // change textareas to richtext fields
-    $('.richtext').richText();
+    // Change textareas to richtext fields. A unique ID must be
+    // provided for each, to avoid the contents being duplicated.
+    $('.richtext').each(function(index) {
+        $(this).richText({id: "richtext-" + index});
+    });
 
     // add search bar to the select dropdown
     $(".select-with-search").select2( {
