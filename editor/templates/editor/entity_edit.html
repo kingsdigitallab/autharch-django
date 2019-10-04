@@ -5,8 +5,8 @@
 <div id="page-header" class="header-fixed">
   <div id="status-bar">
     <ul>
-      <li>Publication status: <span class="highlight">QAZ</span></li>
-      <li>Maintenance status: <span class="highlight">QAZ</span></li>
+      <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
+      <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li>
       <li>Last edited: <span class="highlight">QAZ</span></li>
       <li><span class="highlight">{{ entity.modified }}</span></li>
     </ul>
@@ -50,6 +50,33 @@
   </div>
   <div class="form-section">
     <h2>IDENTITIES (QAZ) <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon">&#xf059;</span></h2>
-    
+  </div>
+  <div class="form-section">
+    <h2>SOURCES (QAZ) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
+  </div>
+  <div class="form-section">
+    <h2>CONTROL (QAZ) <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    <fieldset id="control">
+      <div class="fieldset-header">
+        <h3>Record ID: QAZ</h3>
+        <div>
+          <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+        </div>
+      </div>
+      <div class="fieldset-body expand">
+        <div class="two-column-table">
+          <div>
+            QAZ Language
+            QAZ Rights citation
+          </div>
+          <div>
+            QAZ Script
+            QAZ Rights abbreviation
+          </div>
+        </div>
+        QAZ Rights declaration
+      </div>
+    </fieldset>
+  </div>
 </form>
 {% endblock content %}
