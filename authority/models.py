@@ -47,7 +47,7 @@ class LanguageScriptMixin(models.Model):
 class Entity(TimeStampedModel, DateRangeMixin):
     entity_type = models.ForeignKey(EntityType, on_delete=models.CASCADE)
     project = models.ForeignKey('archival.Project', on_delete=models.SET_NULL,
-                                null=True,
+                                blank=True, null=True,
                                 help_text='Which project does this record\
                                     belong to?')
 

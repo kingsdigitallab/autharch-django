@@ -50,6 +50,402 @@
   </div>
   <div class="form-section">
     <h2>IDENTITIES (QAZ) <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    {{ form.formsets.identities.management_form }}
+    {% for identity in form.formsets.identities.forms %}
+    <fieldset class="optional-to-delete" data-content-reference="identity">
+      <div class="fieldset-header">
+        <h3>QAZ Display name for identity</h3>
+        <div class="flex">
+          <div>
+            {% render_field identity.preferred_identity %}
+          </div>
+          <div>
+            <label class="button-link danger">
+              QAZ deletion should be done through checkbox
+            </label>
+          </div>
+          <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+        </div>
+      </div>
+      <div class="fieldset-body expand">
+        <h3>NAME ENTRIES (QAZ) <span role="button" aria-label="additional info" data-content-type="name-entry" class="icon-only additional-info-icon">&#xf059;</span>
+        </h3>
+        {{ identity.formsets.name_entries.management_form }}
+        {% for name_entry in identity.formsets.name_entries.forms %}
+        <fieldset class="optional-to-delete" data-content-reference="name-entry">
+          <div class="fieldset-header">
+            <h3>QAZ Display name for name entry</h3>
+            <div class="flex">
+              <div>
+                {% render_field name_entry.authorised_form %}
+              </div>
+              <div>
+                <label class="button-link danger">
+                  QAZ deletion should be done through checkbox
+                </label>
+              </div>
+              <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+            </div>
+          </div>
+          <div class="fieldset-body expand">
+            <div class="two-column-table">
+              <div>
+                <div class="grid optional-to-delete" data-content-reference="name-part-value">
+                  {% for name_part in name_entry.formsets.name_parts.forms %}
+                  {% render_field name_part.name_part_type %}
+                  {% render_field name_part.part %}
+                  {% endfor %}
+                </div>
+                QAZ add extra
+              </div>
+              <div>
+                {% render_field name_entry.display_name %}
+                <div class="two-column-table">
+                  <div>
+                    {% render_field name_entry.language %}
+                  </div>
+                  <div>
+                    {% render_field name_entry.script %}
+                  </div>
+                </div>
+                <div class="two-column-table">
+                  <div>
+                    {% render_field name_entry.date_from %}
+                  </div>
+                  <div>
+                    {% render_field name_entry.date_to %}
+                  </div>
+                </div>
+                {% render_field name_entry.display_date %}
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        {% endfor %}
+        <label class="create linked-button">
+          <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add name entry
+        </label>
+        <br>
+        <h3>DESCRIPTIONS (QAZ)
+          <span role="button" aria-label="additional info" data-content-type="descriptions" class="icon-only additional-info-icon">&#xf059;</span>
+        </h3>
+        {{ identity.formsets.descriptions.management_form }}
+        {% for description in identity.formsets.descriptions.forms %}
+        <fieldset class="optional-to-delete" data-content-reference="description">
+          <div class="fieldset-header">
+            <h3>QAZ</h3>
+            <div class="flex">
+              <div>
+                QAZ Delete with checkbox
+              </div>
+              <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+            </div>
+          </div>
+          <div class="fieldset-body expand">
+            <h3>GENDER (QAZ)
+              <span role="button" aria-label="additional info" data-content-type="gender" class="icon-only additional-info-icon">&#xf059;</span>
+            </h3>
+            {{ description.formsets.localdescriptions.management_form }}
+            {% for local_description in description.formsets.localdescriptions.forms %}
+            <fieldset class="optional-to-delete" data-content-reference="gender">
+              <div class="fieldset-header">
+                <h3>QAZ</h3>
+                <div class="flex">
+                  <div>
+                    QAZ Delete with checkbox
+                  </div>
+                  <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+                </div>
+              </div>
+              <div class="fieldset-body expand">
+                <div class="two-column-table">
+                  <div>
+                    {% render_field local_description.gender %}
+                    <div class="two-column-table date">
+                      <div>
+                        {% render_field local_description.date_from %}
+                      </div>
+                      <div>
+                        {% render_field local_description.date_to %}
+                      </div>
+                    </div>
+                    {% render_field local_description.display_date %}
+                  </div>
+                  <div>
+                    {% render_field local_description.notes %}
+                    {% render_field local_description.citation %}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            {% endfor %}
+            <label class="create linked-button">
+              <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add gender
+            </label>
+
+            <h3>BIOGRAPHY/HISTORY (QAZ)
+              <span role="button" aria-label="additional info" data-content-type="biography" class="icon-only additional-info-icon">&#xf059;</span>
+            </h3>
+            {{ description.formsets.biography_histories.management_form }}
+            {% for biography in description.formsets.biography_histories.forms %}
+            <fieldset class="optional-to-delete" data-content-reference="biography">
+              <div class="fieldset-header">
+                <h3>QAZ</h3>
+                <div class="flex">
+                  <div>
+                    QAZ Delete should be done via checkbox
+                  </div>
+                  <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+                </div>
+              </div>
+              <div class="fieldset-body expand">
+                {% render_field biography.abstract %}
+                {% render_field biography.content %}
+                {% render_field biography.description %}
+                {% render_field biography.sources %}
+                {% render_field biography.copyright %}
+              </div>
+            </fieldset>
+            {% endfor %}
+            <label class="create linked-button">
+              <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add biography/history
+            </label>
+            <h3>LANGUAGES USED (QAZ)
+              <span role="button" aria-label="additional info" data-content-type="language" class="icon-only additional-info-icon">&#xf059;</span>
+            </h3>
+            {{ description.formsets.language_scripts.management_form }}
+            {% for language in description.formsets.language_scripts.forms %}
+            <fieldset class="optional-to-delete" data-content-reference="languages">
+              <div class="fieldset-header">
+                <h3>QAZ</h3>
+                <div class="flex">
+                  <div>
+                    QAZ Delete via checkbox
+                  </div>
+                  <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+                </div>
+              </div>
+              <div class="fieldset-body expand">
+                <div class="two-column-table">
+                  <div>
+                    {% render_field language.language %}
+                  </div>
+                  <div>
+                    {% render_field language.script %}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            {% endfor %}
+            <label class="create linked-button">
+              <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add language
+            </label>
+            <h3>PLACES (QAZ)
+              <span role="button" aria-label="additional info" data-content-type="place" class="icon-only additional-info-icon">&#xf059;</span>
+            </h3>
+            {{ description.formsets.places.management_form }}
+            {% for place in description.formsets.places.forms %}
+            <fieldset class="optional-to-delete" data-content-reference="place">
+              <div class="fieldset-header">
+                <h3>QAZ</h3>
+                <div class="flex">
+                  <div>
+                    QAZ Delete via checkbox
+                  </div>
+                  <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+                </div>
+              </div>
+              <div class="fieldset-body expand">
+                <div class="two-column-table">
+                  <div>
+                    {% render_field place.place %}
+                    {% render_field place.address %}
+                  </div>
+                  <div>
+                    {% render_field place.role %}
+                    <div class="two-column-table date">
+                      <div>
+                        {% render_field place.date_from %}
+                      </div>
+                      <div>
+                        {% render_field place.date_to %}
+                      </div>
+                    </div>
+                    {% render_field place.display_date %}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            {% endfor %}
+            <label class="create linked-button">
+              <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add place
+            </label>
+            <h3>MANDATE (QAZ)
+              <span role="button" aria-label="additional info" data-content-type="mandate" class="icon-only additional-info-icon">&#xf059;</span>
+            </h3>
+            {{ description.formsets.mandates.management_form }}
+            {% for mandate in description.formsets.mandates.forms %}
+            <fieldset class="optional-to-delete" data-content-reference="mandate">
+              <div class="fieldset-header">
+                <h3>QAZ</h3>
+                <div class="flex">
+                  <div>
+                    QAZ Delete via checkbox
+                  </div>
+                  <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+                </div>
+              </div>
+              <div class="fieldset-body expand">
+                <div class="two-column-table">
+                  <div>
+                    {% render_field mandate.term %}
+                    {% render_field mandate.notes %}
+                  </div>
+                  <div>
+                    <div class="two-column-table date">
+                      <div>
+                        {% render_field mandate.date_from %}
+                      </div>
+                      <div>
+                        {% render_field mandate.date_to %}
+                      </div>
+                    </div>
+                    {% render_field mandate.display_date %}
+                    {% render_field mandate.citation %}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            {% endfor %}
+            <label class="create linked-button">
+              <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add mandate
+            </label>
+            <h3>LEGAL STATUS (QAZ)
+              <span role="button" aria-label="additional info" data-content-type="legal-status" class="icon-only additional-info-icon">&#xf059;</span>
+            </h3>
+            {{ description.formsets.legal_statuses.management_form }}
+            {% for legal_status in description.formsets.legal_statuses.forms %}
+            <fieldset class="optional-to-delete" data-content-reference="legal-status">
+              <div class="fieldset-header">
+                <h3>QAZ</h3>
+                <div class="flex">
+                  <div>
+                    QAZ: Delete via checkbox
+                  </div>
+                  <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+                </div>
+              </div>
+              <div class="fieldset-body expand">
+                <div class="two-column-table">
+                  <div>
+                    {% render_field legal_status.term %}
+                    {% render_field legal_status.notes %}
+                  </div>
+                  <div>
+                    <div class="two-column-table date">
+                      <div>
+                        {% render_field legal_status.date_from %}
+                      </div>
+                      <div>
+                        {% render_field legal_status.date_to %}
+                      </div>
+                      {% render_field legal_status.display_date %}
+                      {% render_field legal_status.citation %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            {% endfor %}
+            <label class="create linked-button">
+              <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add legal status
+            </label>
+            QAZ All of FUNCTIONS
+          </div>
+        </fieldset>
+        {% endfor %}
+        <label class="create linked-button">
+          <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add description
+        </label>
+
+        <h3>RELATIONS (QAZ)
+          <span role="button" aria-label="additional info" data-content-type="relations" class="icon-only additional-info-icon">&#xf059;</span>
+        </h3>
+        {{ identity.formsets.relations.management_form }}
+        {% for relation in identity.formsets.relations.forms %}
+        <fieldset class="optional-to-delete" data-content-reference="relation">
+          <div class="fieldset-header">
+            <h3>QAZ</h3>
+            <div class="flex">
+              <div>
+                QAZ Delete via checkbox
+              </div>
+              <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+            </div>
+          </div>
+          <div class="fieldset-body expand">
+            <div class="two-column-table">
+              <div>
+                {% render_field relation.relation_type %}
+                {% render_field relation.related_entity %}
+                <div class="two-column-table date">
+                  <div>
+                    {% render_field relation.date_from %}
+                  </div>
+                  <div>
+                    {% render_field relation.date_to %}
+                  </div>
+                </div>
+                {% render_field relation.display_date %}
+              </div>
+              <div>
+                {% render_field relation.relation_detail %}
+                {% render_field relation.place %}
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        {% endfor %}
+        <label class="create linked-button">
+          <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add relation
+        </label>
+        <br>
+        <h3>RESOURCES (QAZ)
+          <span role="button" aria-label="additional info" data-content-type="resources" class="icon-only additional-info-icon">&#xf059;</span>
+        </h3>
+        {{ identity.formsets.resources.management_form }}
+        {% for resource in identity.formsets.resources.forms %}
+        <fieldset class="optional-to-delete" data-content-reference="resource">
+          <div class="fieldset-header">
+            <h3>QAZ</h3>
+            <div class="flex">
+              <div>
+                QAZ Delete via checkbox
+              </div>
+              <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+            </div>
+          </div>
+          <div class="fieldset-body expand">
+            <div class="two-column-table">
+              <div>
+                {% render_field resource.relation_type %}
+                {% render_field resource.citation %}
+              </div>
+              <div>
+                {% render_field resource.url %}
+                {% render_field resource.notes %}
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        {% endfor %}
+        <label class="create linked-button">
+          <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add resource
+        </label>
+        <br>
+      </div>
+    </fieldset>
+    {% endfor %}
   </div>
   <div class="form-section">
     <h2>SOURCES (QAZ) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
