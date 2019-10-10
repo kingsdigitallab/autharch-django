@@ -54,7 +54,7 @@
     {% for identity in form.formsets.identities.forms %}
     <fieldset class="optional-to-delete" data-content-reference="identity">
       <div class="fieldset-header">
-        <h3>QAZ Display name for identity</h3>
+        <h3>QAZ</h3>
         <div class="flex">
           <div>
             {% render_field identity.preferred_identity %}
@@ -74,7 +74,7 @@
         {% for name_entry in identity.formsets.name_entries.forms %}
         <fieldset class="optional-to-delete" data-content-reference="name-entry">
           <div class="fieldset-header">
-            <h3>QAZ Display name for name entry</h3>
+            <h3>{{ name_entry.display_name.value }}</h3>
             <div class="flex">
               <div>
                 {% render_field name_entry.authorised_form %}
@@ -108,15 +108,7 @@
                     {% render_field name_entry.script %}
                   </div>
                 </div>
-                <div class="two-column-table">
-                  <div>
-                    {% render_field name_entry.date_from %}
-                  </div>
-                  <div>
-                    {% render_field name_entry.date_to %}
-                  </div>
-                </div>
-                {% render_field name_entry.display_date %}
+                {% include "./includes/date_section.html" with form=name_entry only %}
               </div>
             </div>
           </div>
@@ -149,7 +141,7 @@
             {% for local_description in description.formsets.localdescriptions.forms %}
             <fieldset class="optional-to-delete" data-content-reference="gender">
               <div class="fieldset-header">
-                <h3>QAZ</h3>
+                <h3>{{ local_description.gender.value }}</h3>
                 <div class="flex">
                   <div>
                     QAZ Delete with checkbox
@@ -161,15 +153,7 @@
                 <div class="two-column-table">
                   <div>
                     {% render_field local_description.gender %}
-                    <div class="two-column-table date">
-                      <div>
-                        {% render_field local_description.date_from %}
-                      </div>
-                      <div>
-                        {% render_field local_description.date_to %}
-                      </div>
-                    </div>
-                    {% render_field local_description.display_date %}
+                    {% include "./includes/date_section.html" with form=local_description only %}
                   </div>
                   <div>
                     {% render_field local_description.notes %}
@@ -190,7 +174,7 @@
             {% for biography in description.formsets.biography_histories.forms %}
             <fieldset class="optional-to-delete" data-content-reference="biography">
               <div class="fieldset-header">
-                <h3>QAZ</h3>
+                <h3>{{ biography.abstract.value|truncatewords:10 }}</h3>
                 <div class="flex">
                   <div>
                     QAZ Delete should be done via checkbox
@@ -205,6 +189,38 @@
                 {% render_field biography.sources %}
                 {% render_field biography.copyright %}
               </div>
+
+              <h3>EVENTS (QAZ)
+                <span role="button" aria-label="additional info" data-content-type="events" class="icon-only additional-info-icon">&#xf059;</span>
+              </h3>
+              {{ biography.formsets.events.management_form }}
+              {% for event in biography.formsets.events.forms %}
+              <fieldset class="optional-to-delete" data-content-reference="event">
+                <div class="fieldset-header">
+                  <h3>QAZ</h3>
+                  <div class="flex">
+                    <div>
+                      Delete via checkbox
+                    </div>
+                    <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+                  </div>
+                </div>
+                <div class="fieldset-body expand">
+                  <div class="two-column-table">
+                    <div>
+                      {% render_field event.event %}
+                    </div>
+                    <div>
+                      {% render_field event.place %}
+                      {% include "./includes/date_section.html" with form=event only %}
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              {% endfor %}
+              <label class="create linked-button">
+                <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add event
+              </label>
             </fieldset>
             {% endfor %}
             <label class="create linked-button">
@@ -263,15 +279,7 @@
                   </div>
                   <div>
                     {% render_field place.role %}
-                    <div class="two-column-table date">
-                      <div>
-                        {% render_field place.date_from %}
-                      </div>
-                      <div>
-                        {% render_field place.date_to %}
-                      </div>
-                    </div>
-                    {% render_field place.display_date %}
+                    {% include "./includes/date_section.html" with form=place only %}
                   </div>
                 </div>
               </div>
@@ -302,15 +310,7 @@
                     {% render_field mandate.notes %}
                   </div>
                   <div>
-                    <div class="two-column-table date">
-                      <div>
-                        {% render_field mandate.date_from %}
-                      </div>
-                      <div>
-                        {% render_field mandate.date_to %}
-                      </div>
-                    </div>
-                    {% render_field mandate.display_date %}
+                    {% include "./includes/date_section.html" with form=mandate only %}
                     {% render_field mandate.citation %}
                   </div>
                 </div>
@@ -342,16 +342,8 @@
                     {% render_field legal_status.notes %}
                   </div>
                   <div>
-                    <div class="two-column-table date">
-                      <div>
-                        {% render_field legal_status.date_from %}
-                      </div>
-                      <div>
-                        {% render_field legal_status.date_to %}
-                      </div>
-                      {% render_field legal_status.display_date %}
-                      {% render_field legal_status.citation %}
-                    </div>
+                    {% include "./includes/date_section.html" with form=legal_status only %}
+                    {% render_field legal_status.citation %}
                   </div>
                 </div>
               </div>
@@ -388,15 +380,7 @@
               <div>
                 {% render_field relation.relation_type %}
                 {% render_field relation.related_entity %}
-                <div class="two-column-table date">
-                  <div>
-                    {% render_field relation.date_from %}
-                  </div>
-                  <div>
-                    {% render_field relation.date_to %}
-                  </div>
-                </div>
-                {% render_field relation.display_date %}
+                {% include "./includes/date_section.html" with form=relation only %}
               </div>
               <div>
                 {% render_field relation.relation_detail %}
@@ -449,9 +433,36 @@
   </div>
   <div class="form-section">
     <h2>SOURCES (QAZ) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    {{ entity.formsets.control.forms.0.formsets.sources.management_form }}
+    {% for source in entity.formsets.control.forms.0.formsetes.sources.forms %}
+    <fieldset class="optional-to-delete" data-content-reference="sources">
+      <div class="fieldset-header">
+        <h3>QAZ</h3>
+        <div class="flex">
+          <div>
+            Delete via checkbox
+          </div>
+          <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+        </div>
+      </div>
+      <div class="fieldset-body expand">
+        <div class="two-column-table">
+          <div>
+            {% render_field source.name %}
+          </div>
+          <div>
+            {% render_field source.url %}
+          </div>
+        </div>
+        {% render_field source.notes %}
+      </div>
+    </fieldset>
+    {% endfor %}
   </div>
   <div class="form-section">
     <h2>CONTROL (QAZ) <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    {{ entity.formsets.control.management_form }}
+    {% for control in entity.formsets.control.forms %}
     <fieldset id="control">
       <div class="fieldset-header">
         <h3>Record ID: QAZ</h3>
@@ -462,17 +473,41 @@
       <div class="fieldset-body expand">
         <div class="two-column-table">
           <div>
-            QAZ Language
+            {% render_field control.language %}
             QAZ Rights citation
           </div>
           <div>
-            QAZ Script
+            {% render_field control.script %}
             QAZ Rights abbreviation
           </div>
         </div>
-        QAZ Rights declaration
+        {% render_field control.rights_declaration %}
       </div>
     </fieldset>
+    {% endfor %}
+  </div>
+  <div class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Log comments</h2>
+        <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
+      </div>
+      <div class="modal-body">
+        <div class="two-column-table">
+          <div>
+            QAZ Publication status
+            QAZ Editing event type
+          </div>
+          <div>
+            QAZ Maintenance status
+          </div>
+        </div>
+        QAZ Comments
+      </div>
+      <div class="modal-footer">
+        <input type="submit" value="Save" class="save" />
+      </div>
+    </div>
   </div>
 </form>
 {% endblock content %}

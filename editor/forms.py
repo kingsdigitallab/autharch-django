@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 
 from archival.models import ArchivalRecord
 from authority.models import (
-    BiographyHistory, Description, Entity, Event, Identity, LanguageScript,
-    LegalStatus, LocalDescription, Mandate, NameEntry, NamePart, Place,
-    Relation, Resource
+    BiographyHistory, Control, Description, Entity, Event, Identity,
+    LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
+    NamePart, Place, Relation, Resource, Source
 )
 
 
@@ -123,6 +123,13 @@ class ResourceEditInlineForm(forms.ModelForm):
         model = Resource
 
 
+class SourceEditInlineForm(forms.ModelForm):
+
+    class Meta:
+        exclude = []
+        model = Source
+
+
 class BiographyHistoryEditInlineForm(ContainerModelForm):
 
     def _add_formsets(self, *args, **kwargs):
@@ -137,6 +144,21 @@ class BiographyHistoryEditInlineForm(ContainerModelForm):
     class Meta:
         exclude = []
         model = BiographyHistory
+
+
+class ControlEditInlineForm(ContainerModelForm):
+
+    def _add_formsets(self, *args, **kwargs):
+        formsets = {}
+        data = kwargs.get('data')
+        SourceFormset = forms.models.inlineformset_factory(
+            Control, Source, form=SourceEditInlineForm, extra=0)
+        formsets['sources'] = SourceFormset(
+            data, instance=self.instance, prefix=self.prefix + '-source')
+
+    class Meta:
+        exclude = []
+        model = Control
 
 
 class DescriptionEditInlineForm(ContainerModelForm):
@@ -281,9 +303,12 @@ class EntityEditForm(ContainerModelForm):
         IdentityFormset = forms.models.inlineformset_factory(
             Entity, Identity, exclude=[], form=IdentityEditInlineForm,
             extra=0)
-        identity_formset = IdentityFormset(*args, instance=self.instance,
-                                           prefix='identity')
-        formsets['identities'] = identity_formset
+        formsets['identities'] = IdentityFormset(*args, instance=self.instance,
+                                                 prefix='identity')
+        ControlFormset = forms.models.inlineformset_factory(
+            Entity, Control, exclude=[], form=ControlEditInlineForm, extra=0,
+            max_num=1, validate_max=True)
+        formsets['control'] = ControlFormset()
         return formsets
 
     class Meta:

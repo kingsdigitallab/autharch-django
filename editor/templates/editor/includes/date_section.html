@@ -1,0 +1,10 @@
+{% load editor_form_tags %}
+<div class="two-column-table date">
+  <div>
+    {% render_field form.date_from %}
+  </div>
+  <div>
+    {% render_field form.date_to %}
+  </div>
+</div>
+{% render_field form.display_date %}
