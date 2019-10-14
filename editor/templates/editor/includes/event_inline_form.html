@@ -1,0 +1,23 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="event">
+  <div class="fieldset-header">
+    <h3>{{ form.event.value|truncatewords:10</h3>
+    <div class="flex">
+      <div>
+        Delete via checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <div class="two-column-table">
+      <div>
+        {% render_field form.event %}
+      </div>
+      <div>
+        {% render_field form.place %}
+        {% include "./date_section.html" with form=form only %}
+      </div>
+    </div>
+  </div>
+</fieldset>

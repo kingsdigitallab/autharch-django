@@ -1,0 +1,24 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="gender">
+  <div class="fieldset-header">
+    <h3>{{ form.gender.value }}</h3>
+    <div class="flex">
+      <div>
+        QAZ Delete with checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <div class="two-column-table">
+      <div>
+        {% render_field form.gender %}
+        {% include "./date_section.html" with form=form class="date" only %}
+      </div>
+      <div>
+        {% render_field form.notes %}
+        {% render_field form.citation %}
+      </div>
+    </div>
+  </div>
+</fieldset>

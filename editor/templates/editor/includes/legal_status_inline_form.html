@@ -1,0 +1,24 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="legal-status">
+  <div class="fieldset-header">
+    <h3>{{ form.term.value }}</h3>
+    <div class="flex">
+      <div>
+        QAZ: Delete via checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <div class="two-column-table">
+      <div>
+        {% render_field form.term %}
+        {% render_field form.notes %}
+      </div>
+      <div>
+        {% include "./date_section.html" with form=form class="date" only %}
+        {% render_field form.citation %}
+      </div>
+    </div>
+  </div>
+</fieldset>

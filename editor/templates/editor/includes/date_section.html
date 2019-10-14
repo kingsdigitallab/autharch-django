@@ -1,5 +1,5 @@
 {% load editor_form_tags %}
-<div class="two-column-table date">
+<div class="two-column-table{% if class %} date{% endif %}">
   <div>
     {% render_field form.date_from %}
   </div>

@@ -11,12 +11,7 @@
     <link rel="stylesheet" href="{% static 'scss/select2.min.css' %}" />
     <link rel="stylesheet" href="{% static 'scss/styles.css' %}" />
     {% endblock head_css %}
-    {% block head_js %}
-    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'js/jquery.richtext.min.js' %}"></script>
-    <script src="{% static 'js/select2/select2.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    {% endblock head_js %}
+    {% block head_js %}{% endblock head_js %}
   </head>
   <body>
     <header>
@@ -63,5 +58,11 @@
       {% endblock content %}
       {% endblock main %}
     </main>
+    {% block end_js %}
+    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.richtext.min.js' %}"></script>
+    <script src="{% static 'js/select2/select2.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% endblock end_js %}
   </body>
 </html>

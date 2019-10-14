@@ -1,0 +1,77 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="description">
+  <div class="fieldset-header">
+    <h3>QAZ</h3>
+    <div class="flex">
+      <div>
+        QAZ Delete with checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <h3>GENDER (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="gender" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.localdescriptions.management_form }}
+    {% for local_description in form.formsets.localdescriptions.forms %}
+    {% include "./local_description_inline_form.html" with form=local_description %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add gender
+    </label>
+
+    <h3>BIOGRAPHY/HISTORY (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="biography" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.biography_histories.management_form }}
+    {% for biography in form.formsets.biography_histories.forms %}
+    {% include "./biography_history_inline_form.html" with form=biography %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add biography/history
+    </label>
+
+    <h3>LANGUAGES USED (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="language" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.language_scripts.management_form }}
+    {% for language in form.formsets.language_scripts.forms %}
+    {% include "./language_script_inline_form.html" with form=language %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add language
+    </label>
+    <h3>PLACES (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="place" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.places.management_form }}
+    {% for place in form.formsets.places.forms %}
+    {% include "./place_inline_form.html" with form=place %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add place
+    </label>
+    <h3>MANDATE (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="mandate" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.mandates.management_form }}
+    {% for mandate in form.formsets.mandates.forms %}
+    {% include "./mandate_inline_form.html" with form=mandate %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add mandate
+    </label>
+    <h3>LEGAL STATUS (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="legal-status" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.legal_statuses.management_form }}
+    {% for legal_status in form.formsets.legal_statuses.forms %}
+    {% include "./legal_status_inline_form.html" with form=legal_status %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add legal status
+    </label>
+    QAZ All of FUNCTIONS
+  </div>
+</fieldset>

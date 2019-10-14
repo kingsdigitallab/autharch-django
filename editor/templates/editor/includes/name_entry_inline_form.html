@@ -1,0 +1,44 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="name-entry">
+  <div class="fieldset-header">
+    <h3>{{ form.display_name.value }}</h3>
+    <div class="flex">
+      <div>
+        {% render_field form.authorised_form %}
+      </div>
+      <div>
+        <label class="button-link danger">
+          QAZ deletion should be done through checkbox
+        </label>
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <div class="two-column-table">
+      <div>
+        <div class="grid optional-to-delete" data-content-reference="name-part-value">
+          {{ form.formsets.name_parts.management_form }}
+          {% for name_part in form.formsets.name_parts.forms %}
+          {% include "./name_part_inline_form.html" with form=name_part %}
+          {% endfor %}
+        </div>
+        <label class="button-link create">
+          <input type="button" class="icon-only" value="&#xf067;" onclick="addField(this)">Add name part
+        </label>
+      </div>
+      <div>
+        {% render_field form.display_name %}
+        <div class="two-column-table">
+          <div>
+            {% render_field form.language %}
+          </div>
+          <div>
+            {% render_field form.script %}
+          </div>
+        </div>
+        {% include "./date_section.html" with form=name_entry only %}
+      </div>
+    </div>
+  </div>
+</fieldset>

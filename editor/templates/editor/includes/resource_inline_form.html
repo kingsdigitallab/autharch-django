@@ -1,0 +1,24 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="resource">
+  <div class="fieldset-header">
+    <h3>QAZ</h3>
+    <div class="flex">
+      <div>
+        QAZ Delete via checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <div class="two-column-table">
+      <div>
+        {% render_field form.relation_type %}
+        {% render_field form.citation %}
+      </div>
+      <div>
+        {% render_field form.url %}
+        {% render_field form.notes %}
+      </div>
+    </div>
+  </div>
+</fieldset>

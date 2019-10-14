@@ -1,0 +1,30 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="biography">
+  <div class="fieldset-header">
+    <h3>{{ form.abstract.value|truncatewords:10 }}</h3>
+    <div class="flex">
+      <div>
+        QAZ Delete should be done via checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    {% render_field form.abstract %}
+    {% render_field form.content %}
+    {% render_field form.description %}
+    {% render_field form.sources %}
+    {% render_field form.copyright %}
+  </div>
+
+  <h3>EVENTS (QAZ)
+    <span role="button" aria-label="additional info" data-content-type="events" class="icon-only additional-info-icon">&#xf059;</span>
+  </h3>
+  {{ form.formsets.events.management_form }}
+  {% for event in form.formsets.events.forms %}
+  {% include "./event_inline_form.html" with form=event %}
+  {% endfor %}
+  <label class="create linked-button">
+    <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add event
+  </label>
+</fieldset>

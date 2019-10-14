@@ -1,0 +1,22 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-content-reference="languages">
+  <div class="fieldset-header">
+    <h3>QAZ</h3>
+    <div class="flex">
+      <div>
+        QAZ Delete via checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <div class="two-column-table">
+      <div>
+        {% render_field form.language %}
+      </div>
+      <div>
+        {% render_field form.script %}
+      </div>
+    </div>
+  </div>
+</fieldset>

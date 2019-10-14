@@ -1,0 +1,62 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-form-type="identity">
+  <div class="fieldset-header">
+    <h3>QAZ</h3>
+    <div class="flex">
+      <div>
+        {% render_field form.preferred_identity %}
+      </div>
+      <div>
+        <label class="button-link danger">
+          QAZ deletion should be done through checkbox
+        </label>
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <h3>NAME ENTRIES (QAZ) <span role="button" aria-label="additional info" data-content-type="name-entry" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.name_entries.management_form }}
+    {% for name_entry in form.formsets.name_entries.forms %}
+    {% include "./name_entry_inline_form.html" with form=name_entry %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add name entry
+    </label>
+    <br>
+    <h3>DESCRIPTIONS (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="descriptions" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.descriptions.management_form }}
+    {% for description in form.formsets.descriptions.forms %}
+    {% include "./description_inline_form.html" with form=description %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add description
+    </label>
+
+    <h3>RELATIONS (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="relations" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.relations.management_form }}
+    {% for relation in form.formsets.relations.forms %}
+    {% include "./relation_inline_form.html" with form=relation %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add relation
+    </label>
+    <br>
+    <h3>RESOURCES (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="resources" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    {{ form.formsets.resources.management_form }}
+    {% for resource in form.formsets.resources.forms %}
+    {% include "./resource_inline_form.html" with form=resource %}
+    {% endfor %}
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add resource
+    </label>
+    <br>
+  </div>
+</fieldset>
