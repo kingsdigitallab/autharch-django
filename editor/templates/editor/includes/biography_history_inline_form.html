@@ -1,10 +1,12 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-content-reference="biography">
+<fieldset class="optional-to-delete" data-form-type="biography">
   <div class="fieldset-header">
     <h3>{{ form.abstract.value|truncatewords:10 }}</h3>
     <div class="flex">
       <div>
-        QAZ Delete should be done via checkbox
+        <label class="button-link danger">
+          <input type="button" class="icon-only" value="&#xf2ed;" onclick="deleteField(this)">Delete
+        </label>
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>
@@ -17,14 +19,20 @@
     {% render_field form.copyright %}
   </div>
 
-  <h3>EVENTS (QAZ)
-    <span role="button" aria-label="additional info" data-content-type="events" class="icon-only additional-info-icon">&#xf059;</span>
-  </h3>
-  {{ form.formsets.events.management_form }}
-  {% for event in form.formsets.events.forms %}
-  {% include "./event_inline_form.html" with form=event %}
-  {% endfor %}
-  <label class="create linked-button">
-    <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add event
-  </label>
+  <div class="formset">
+    <h3>EVENTS (QAZ)
+      <span role="button" aria-label="additional info" data-content-type="events" class="icon-only additional-info-icon">&#xf059;</span>
+    </h3>
+    <div class="management_form">
+      {{ form.formsets.events.management_form }}
+    </div>
+    <div class="fieldsets">
+      {% for event in form.formsets.events.forms %}
+      {% include "./event_inline_form.html" with form=event %}
+      {% endfor %}
+    </div>
+    <label class="create linked-button">
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('event', this)">Add event
+    </label>
+  </div>
 </fieldset>

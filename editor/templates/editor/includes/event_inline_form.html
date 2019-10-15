@@ -1,10 +1,12 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-content-reference="event">
+<fieldset class="optional-to-delete" data-form-type="event">
   <div class="fieldset-header">
     <h3>{{ form.event.value|truncatewords:10</h3>
     <div class="flex">
       <div>
-        Delete via checkbox
+        <label class="button-link danger">
+          <input type="button" class="icon-only" value="&#xf2ed;" onclick="deleteField(this)">Delete
+        </label>
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>

@@ -1,5 +1,5 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-content-reference="name-entry">
+<fieldset class="optional-to-delete" data-form-type="name_entry">
   <div class="fieldset-header">
     <h3>{{ form.display_name.value }}</h3>
     <div class="flex">
@@ -8,7 +8,7 @@
       </div>
       <div>
         <label class="button-link danger">
-          QAZ deletion should be done through checkbox
+          <input type="button" class="icon-only" value="&#xf2ed;" onclick="deleteField(this)">Delete
         </label>
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
@@ -16,15 +16,17 @@
   </div>
   <div class="fieldset-body expand">
     <div class="two-column-table">
-      <div>
-        <div class="grid optional-to-delete" data-content-reference="name-part-value">
+      <div class="formset">
+        <div class="management_form">
           {{ form.formsets.name_parts.management_form }}
+        </div>
+        <div class="fieldsets">
           {% for name_part in form.formsets.name_parts.forms %}
           {% include "./name_part_inline_form.html" with form=name_part %}
           {% endfor %}
         </div>
         <label class="button-link create">
-          <input type="button" class="icon-only" value="&#xf067;" onclick="addField(this)">Add name part
+          <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('name_part', this)">Add name part
         </label>
       </div>
       <div>

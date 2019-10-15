@@ -48,14 +48,18 @@
     {% render_field form.date_to %}
     {% render_field form.display_date %}
   </div>
-  <div class="form-section">
+  <div class="form-section formset">
     <h2>IDENTITIES (QAZ) <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon">&#xf059;</span></h2>
-    {{ form.formsets.identities.management_form }}
-    {% for identity in form.formsets.identities.forms %}
-    {% include "./includes/identity_inline_form.html" with form=identity %}
-    {% endfor %}
+    <div class="management_form">
+      {{ form.formsets.identities.management_form }}
+    </div>
+    <div class="fieldsets">
+      {% for identity in form.formsets.identities.forms %}
+      {% include "./includes/identity_inline_form.html" with form=identity %}
+      {% endfor %}
+    </div>
     <label class="create linked-button">
-      <input type="button" class="icon-only" value="&#xf067;" onclick="addBlock(this)">Add identity
+      <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('identity', this)">Add identity
     </label>
   </div>
   <div class="form-section">
