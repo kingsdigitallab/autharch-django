@@ -407,3 +407,101 @@ function login() {
 function logout() {
     window.location.href = "./login.html";
 }
+
+
+/**
+* Add a new empty form of the specified form_type.
+*
+* The blueprints for new forms are in div[@id='empty_forms'], and each
+* has a @data-form-type specifying the form_type.
+*
+* Updates the containing formset's management form controls and sets
+* the name and ids of the new form's controls to use the correct
+* prefix.
+*
+* The place where the new form is put, the location of the management
+* form's TOTAL_FORMS control that is edited, and the determination of
+* nested form's @id/@name prefix is based solely on the provided
+* context element; see {@link getManagementFormTotalControl} and
+* {@link getNewFormParent}.
+*
+* @param {string} formType - the type of form to add, corresponding to
+*                            the @data-form-type of the blueprint
+*                            empty form
+* @param {Element} context - the element from which the call to this
+*                            function was made
+*/
+function addEmptyForm(formType, context) {
+  let jContext = $(context);
+  // Clone the formType form and add it as the last child of the
+  // parent of these forms.
+  let formParent = getNewFormParent(jContext);
+  let newForm = $("#empty_forms").children("*[data-form-type=" + formType + "]").clone();
+  newForm.appendTo(formParent);
+  // Update the new form's controls' @name and @id to use the correct
+  // values for its context in the hierarchy of formsets.
+  let totalControl = getManagementFormTotalControl(jContext);
+  let newFormPrefixNumber = totalControl.attr("value");
+  let newControls = newForm.find("*[name*='__prefix__']");
+  let newFormPrefixName = generateNewFormPrefix(totalControl, "name", newFormPrefixNumber);
+  let newFormPrefixId = generateNewFormPrefix(totalControl, "id", newFormPrefixNumber);
+  let prefixLength = "__prefix__".length;
+  newControls.each(function(index) {
+    $(this).attr("name", function(i, val) {
+      return newFormPrefixName + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
+    });
+    $(this).attr("id", function(i, val) {
+      return newFormPrefixId + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
+    });
+  });
+  // The management form for the formset of the new form must have its
+  // TOTAL_FORMS value incremented by 1 to account for the new form.
+  totalControl.attr("value", Number(newFormPrefixNumber) + 1);
+}
+
+/**
+ * Return a string prefix for a new form whose TOTAL_FORMS control is
+ * the supplied control, based on its attrName attribute value and the
+ * prefixNumber.
+ *
+ * @param {jQuery} control - TOTAL_FORMS control
+ * @param {String} attrName - name of control's attribute to use as the base
+ * @param {String} prefixNumber - string number of the new form
+ * @returns {String}
+ */
+function generateNewFormPrefix(control, attrName, prefixNumber) {
+  let attrValue = control.attr(attrName);
+  return attrValue.slice(0, attrValue.indexOf("TOTAL_FORMS")) + prefixNumber;
+}
+
+
+/**
+ * Return the TOTAL_FORMS form control for the Django formset's
+ * management forms associated with the supplied context element.
+ *
+ * This function is specific to a particular HTML structure, and
+ * should be adapted if/when that structure changes.
+ *
+ * @param {jQuery} context - the element from which to traverse the
+ *                           DOM to find the management forms' controls
+ * @returns {jQuery}
+ */
+function getManagementFormTotalControl(context) {
+  return context.parents(".formset").first().children("div.management_form").children("input[name$='TOTAL_FORMS']");
+}
+
+
+/**
+ * Return the jQuery object containing the element that is to be the
+ * container for a new form.
+ *
+ * This function is specific to a particular HTML structure, and
+ * should be adapted if/when that structure changes.
+ *
+ * @param {jQuery} context - the element from which to traverse the
+ *                           DOM to find the parent for the new form
+ * @returns {jQuery}
+ */
+function getNewFormParent(context) {
+  return context.parents(".formset").first().children("div.fieldsets").last();
+}
