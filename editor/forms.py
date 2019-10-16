@@ -44,14 +44,13 @@ class ContainerModelForm(forms.ModelForm):
     def _add_formsets(self, *args, **kwargs):
         raise NotImplementedError
 
-    def formsets_are_valid(self):
-        for formset in self.formsets.values():
-            if not formset.is_valid():
-                return False
-        return True
+    def has_changed(self):
+        return bool(self.changed_data) or \
+            any(formset.has_changed() for formset in self.formsets.values())
 
     def is_valid(self):
-        return super().is_valid() and self.formsets_are_valid()
+        return super().is_valid() and \
+            all(formset.is_valid() for formset in self.formsets.values())
 
     def save(self, commit=True):
         result = super().save(commit)
@@ -306,7 +305,7 @@ class EntityEditForm(ContainerModelForm):
         formsets['identities'] = IdentityFormset(*args, instance=self.instance,
                                                  prefix='identity')
         ControlFormset = forms.models.inlineformset_factory(
-            Entity, Control, exclude=[], form=ControlEditInlineForm, extra=0,
+            Entity, Control, exclude=[], form=ControlEditInlineForm, extra=1,
             max_num=1, validate_max=True)
         formsets['control'] = ControlFormset()
         return formsets
