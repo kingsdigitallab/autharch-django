@@ -282,9 +282,11 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'languages': forms.SelectMultiple(attrs={'size': 4}),
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'physical_description': forms.Textarea(),
+            'project': forms.HiddenInput(),
             'provenance': forms.Textarea(attrs={'rows': 4}),
             'rights_declaration': forms.Textarea(),
             'start_date': HTML5DateInput(),
+            'uuid': forms.HiddenInput(),
         }
 
 
@@ -318,6 +320,11 @@ class EntityEditForm(ContainerModelForm):
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
         }
+
+
+class LogForm(forms.Form):
+
+    comment = forms.CharField(label='Comments', widget=forms.Textarea)
 
 
 class UserEditForm(forms.ModelForm):

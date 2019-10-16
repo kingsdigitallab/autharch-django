@@ -32,6 +32,15 @@
     </ul>
   </div>
 
+  {% if form.errors %}
+  <div class="error-notifications">
+    {% for field, error in form.errors.items %}
+    <h3>{{ field }}</h3>
+    <p>{{ error }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   <h1>{{ record|truncatewords:15 }}</h1>
 
   <h2>{{ record.archival_level }}</h2>
@@ -42,6 +51,8 @@
       <fieldset id="summary">
         <div class="fieldset-header">
           {% csrf_token %}
+          {% render_field form.uuid %}
+          {% render_field form.project %}
           <h3>{{ record.repository }}</h3>
           <div>
             <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
@@ -204,6 +215,30 @@
           {% render_field form.rights_declaration %}
         </div>
       </fieldset>
+    </div>
+
+    <div class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Log comments</h2>
+          <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
+        </div>
+        <div class="modal-body">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.publication_status %}
+              QAZ Editing event type
+            </div>
+            <div>
+              QAZ Maintenance status
+            </div>
+          </div>
+          {% render_field log_form.comment %}
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Save" class="save" />
+        </div>
+      </div>
     </div>
   </form>
 </div>

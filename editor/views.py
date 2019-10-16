@@ -3,12 +3,15 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
+import reversion
 from reversion.models import Version
+from reversion.views import create_revision
 
 from archival.models import ArchivalRecord
 from authority.models import Entity
 
-from .forms import ArchivalRecordEditForm, EntityEditForm, UserEditForm
+from .forms import ArchivalRecordEditForm, EntityEditForm, LogForm, \
+    UserEditForm
 
 
 @login_required
@@ -87,17 +90,23 @@ def entities_list(request):
     return render(request, 'editor/entities_list.html', context)
 
 
+@create_revision()
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     if request.method == 'POST':
         form = ArchivalRecordEditForm(request.POST, instance=record)
-        if form.is_valid():
+        log_form = LogForm(request.POST)
+        if form.is_valid() and log_form.is_valid():
+            reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
+            redirect('editor:record-edit', record_id=record_id)
     else:
         form = ArchivalRecordEditForm(instance=record)
+        log_form = LogForm()
     context = {
         'current_section': 'records',
         'form': form,
+        'log_form': log_form,
         'record': record,
     }
     return render(request, 'editor/record_edit.html', context)

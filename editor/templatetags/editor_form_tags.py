@@ -25,6 +25,7 @@ def render_field(form_field):
     return {
         'errors': form_field.errors,
         'help_text': form_field.help_text,
+        'is_hidden': form_field.is_hidden,
         'label': form_field.label,
         'render': True,
         'required': form_field.field.required,

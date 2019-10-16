@@ -106,12 +106,22 @@ var additionalInfo = {
 
 $(document).ready(function() {
 
-    // open popup to log changes in entity/archival record sections
-    $("#record-form").submit((event) => {
-        event.preventDefault();
-        // modal template is available in the files entity.html and archival-records.html (they use the same template with the same content)
-        $(".modal").addClass('active');
-    });
+  // In order to not cause problems with client-side form validation
+  // when required fields are hidden, remove the required attribute
+  // from all form controls in the logging dialogue, to be added back
+  // when it is shown.
+  let dialogueRequiredControls = $(".modal").find("*[required]");
+  toggleRequiredControls(dialogueRequiredControls, false);
+
+  // open popup to log changes in entity/archival record sections
+  $("#record-form").submit((event) => {
+    if (!$(".modal").hasClass('active')) {
+      event.preventDefault();
+      // modal template is available in the files entity.html and archival-records.html (they use the same template with the same content)
+      toggleRequiredControls(dialogueRequiredControls, true);
+      $(".modal").addClass('active');
+    }
+  });
 
     // open popup to add new user who can access the admin panel
     $('#add-form').click(() => {
@@ -119,11 +129,11 @@ $(document).ready(function() {
     });
 
     // merge values from the modal and record forms
-    $('#record-modal-form').submit((event) => {
+    /*$('#record-modal-form').submit((event) => {
         event.preventDefault();
         var formVals = $('#record-form, #record-modal-form').serialize();
         $('.modal-footer').append('<p style="white-space: nowrap; overflow: scroll; max-width: 450px;"><b>Merged values from forms:</b> ' + formVals + '</p>');
-    });
+    });*/
 
 
     // ADD-ONS
@@ -439,7 +449,12 @@ function addEmptyForm(formType, context) {
   let newForm = $("#empty_forms").children("*[data-form-type=" + formType + "]").clone();
   newForm.appendTo(formParent);
   // Update the new form's controls' @name and @id to use the correct
-  // values for its context in the hierarchy of formsets.
+  // values for its context in the hierarchy of formsets. Their prefix
+  // (the part up to the end of the last "__prefix__") should be
+  // replaced with the prefix generated from the TOTAL_FORMS control
+  // of the containing formset's management form (plus the number of
+  // this form), which conveniently already has the full prefix
+  // hierarchy in it.
   let totalControl = getManagementFormTotalControl(jContext);
   let newFormPrefixNumber = totalControl.attr("value");
   let newControls = newForm.find("*[name*='__prefix__']");
@@ -504,4 +519,20 @@ function getManagementFormTotalControl(context) {
  */
 function getNewFormParent(context) {
   return context.parents(".formset").first().children("div.fieldsets").last();
+}
+
+
+/**
+ * Set/remove the required attribute of the supplied form controls.
+ *
+ * @param {jQuery} controls - controls to manipulate
+ * @param {Boolean} add_required - whether to add (true) or remove the
+ *                                 required attribute
+ */
+function toggleRequiredControls(controls, add_required) {
+  let value = null;
+  if (add_required) {
+    value = "required";
+  }
+  controls.attr("required", value);
 }
