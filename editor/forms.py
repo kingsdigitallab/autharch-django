@@ -307,7 +307,8 @@ class EntityEditForm(ContainerModelForm):
         ControlFormset = forms.models.inlineformset_factory(
             Entity, Control, exclude=[], form=ControlEditInlineForm, extra=1,
             max_num=1, validate_max=True)
-        formsets['control'] = ControlFormset()
+        formsets['control'] = ControlFormset(*args, instance=self.instance,
+                                             prefix='control')
         return formsets
 
     class Meta:
