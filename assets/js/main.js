@@ -130,7 +130,7 @@ $(document).ready(function() {
 
 
     // ADD-ONS
-    
+
     // Change textareas to richtext fields. A unique ID must be
     // provided for each, to avoid the contents being duplicated.
     $('.richtext').each(function(index) {
@@ -155,36 +155,6 @@ $(document).ready(function() {
             $(el.target).parents('fieldset').first().addClass('border-left');
         }
     });
-    
-    // to stop multiple events from firing inside labels (e.g, select and question mark button)
-    // $('.select2, .richText').click((el) => {
-    //     el.preventDefault();
-    // })
-    // check if additional information for the field exists to display the question mark icon
-    // $('.additional-info-icon').get().forEach((el) => {
-    //     var key = $(el).attr("data-content-type");
-    //     if (!additionalInfo[key]) {
-    //         $(el).addClass('none');
-    //     }
-    // });
-    // display additional information about the fields on hover
-    // $('body').on('click', '.additional-info-icon', (el) => {
-    //     if ($(el.target).siblings('p.additional-info').length) {
-    //         // change icon to 'question mark'
-    //         $(el.target).text("");
-    //         $(el.target).siblings('p.additional-info').remove();
-    //     }
-    //     else {
-    //         var key = $(el.target).attr("data-content-type");
-    //         var position = $(el.target).position();
-    //         if (additionalInfo[key]) {
-    //             $(el.target).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' +additionalInfo[key]+ '</p>'); 
-    //         }
-    //         // change icon to 'close'
-    //         $(el.target).text("");
-    //     }
-    // });
-
 });
 
 function toggleHelpText(el, help_text) {
@@ -200,55 +170,6 @@ function toggleHelpText(el, help_text) {
         $(el).text("");
     }
 }
-
-// change name of the duplicated field
-function updateAttribute(idToIncrement, name) {
-    // var regex = new RegExp('(?<='+idToIncrement + '-)[0-9]+'); lookbehind expression still doesn't work in Safari
-    var regex = new RegExp('(.*'+idToIncrement + '-)([0-9]+)');
-    var name = name.replace(regex, (fullMatch, n, m) => {return n+(Number(m) + 1)});
-    return name;
-}
-
-
-// addField() might require refactoring to merge with addBlock()
-function addField(el) {
-    console.log('here');
-    var template = $(el).parent().prev().clone();
-    var idToIncrement = template.first().attr('data-content-reference');
-    if (idToIncrement) {
-        template.find('*[name]').each((i, elHasName) => {
-            if (elHasName.name && elHasName.name.includes(idToIncrement)) {
-                var newName = updateAttribute(idToIncrement, elHasName.name);
-                elHasName.name = newName;
-            }
-        })
-    }
-    template.find("input[type=text], input[type=date], textarea").val("");
-    template.find(".richText-editor").text("");
-    template.find("input[type=checkbox], input[type=radio]").prop('checked', false);
-
-    $(el).parent().before(template);
-}
-
-// add a record section, e.g., Name entry
-function addBlock(el) {
-    var template = $(el).parent().prev('fieldset').clone();
-    var idToIncrement = template.closest('fieldset').attr('data-content-reference');
-    if (idToIncrement) {
-        template.find('*[name]').each((i, elHasName) => {
-            if (elHasName.name && elHasName.name.includes(idToIncrement)) {
-                var newName = updateAttribute(idToIncrement, elHasName.name);
-                elHasName.name = newName;
-            }
-        })
-    }
-    template.find("input[type=text], input[type=date], textarea").val("");
-    template.find(".richText-editor").text("");
-    template.find("input[type=checkbox], input[type=radio]").prop('checked', false);
-    template.find( "input[name*='preferred']" ).parents('fieldset').last().removeClass('border-left');
-    $(el).parent().before(template);
-}
-
 
 
 //start MODAL TEMPLATES
