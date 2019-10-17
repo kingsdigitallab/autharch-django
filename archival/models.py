@@ -49,10 +49,8 @@ class Organisation(models.Model):
 @reversion.register()
 class ArchivalRecord(PolymorphicModel):
     uuid = models.CharField(max_length=64, unique=True)
-    rcin = models.CharField(max_length=256, blank=True, null=True)
-
-    project = models.ForeignKey(Project, on_delete=models.SET_NULL,
-                                null=True,
+    rcin = models.CharField('RCIN', max_length=256, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True,
                                 help_text='Which project does this record\
                                     belong to?')
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE,
@@ -81,8 +79,8 @@ class ArchivalRecord(PolymorphicModel):
     physical_location = models.CharField(max_length=2048, blank=True,
                                          null=True)
 
-    origin_location = models.CharField(max_length=2048, blank=True,
-                                       null=True)
+    origin_location = models.CharField(
+        'location of originals', max_length=2048, blank=True, null=True)
 
     media = models.ManyToManyField(Media, blank=True)
     caption = models.TextField(blank=True, null=True)
