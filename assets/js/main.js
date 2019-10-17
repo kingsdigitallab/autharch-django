@@ -128,13 +128,6 @@ $(document).ready(function() {
         $('#add-user-form').addClass('active');
     });
 
-    // merge values from the modal and record forms
-    /*$('#record-modal-form').submit((event) => {
-        event.preventDefault();
-        var formVals = $('#record-form, #record-modal-form').serialize();
-        $('.modal-footer').append('<p style="white-space: nowrap; overflow: scroll; max-width: 450px;"><b>Merged values from forms:</b> ' + formVals + '</p>');
-    });*/
-
 
     // ADD-ONS
     
