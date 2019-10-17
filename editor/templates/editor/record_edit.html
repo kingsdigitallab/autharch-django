@@ -7,8 +7,8 @@
     <ul>
       <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
       <li>Maintenance status: <span class="highlight">[QAZ]</span></li>
-      <li>Last edited: <span class="highlight">[QAZ]</span></li>
-      <li><span class="highlight">[QAZ]</span></li>
+      <li>Last edited: <span class="highlight">{{ last_revision.user }}</span></li>
+      <li><span class="highlight">{{ last_revision.date_created }}</span></li>
     </ul>
     <a href="{% url 'editor:record-history' record_id=record.pk %}">
       <i class="far fa-clock"></i>
@@ -216,7 +216,6 @@
         </div>
       </fieldset>
     </div>
-
     <div class="modal">
       <div class="modal-content">
         <div class="modal-header">

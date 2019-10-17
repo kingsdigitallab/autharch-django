@@ -7,8 +7,8 @@
     <ul>
       <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
       <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li>
-      <li>Last edited: <span class="highlight">QAZ</span></li>
-      <li><span class="highlight">{{ entity.modified }}</span></li>
+      <li>Last edited: <span class="highlight">{{ last_revision.user }}</span></li>
+      <li><span class="highlight">{{ last_revision.date_created }}</span></li>
     </ul>
     <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
       <i class="far fa-clock"></i>
@@ -64,8 +64,8 @@
   </div>
   <div class="form-section">
     <h2>SOURCES (QAZ) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
-    {{ entity.formsets.control.forms.0.formsets.sources.management_form }}
-    {% for source in entity.formsets.control.forms.0.formsetes.sources.forms %}
+    {{ form.formsets.control.forms.0.formsets.sources.management_form }}
+    {% for source in form.formsets.control.forms.0.formsetes.sources.forms %}
     <fieldset class="optional-to-delete" data-content-reference="sources">
       <div class="fieldset-header">
         <h3>QAZ</h3>
@@ -92,8 +92,8 @@
   </div>
   <div class="form-section">
     <h2>CONTROL (QAZ) <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
-    {{ entity.formsets.control.management_form }}
-    {% for control in entity.formsets.control.forms %}
+    {{ form.formsets.control.management_form }}
+    {% for control in form.formsets.control.forms %}
     <fieldset id="control">
       <div class="fieldset-header">
         <h3>Record ID: QAZ</h3>
@@ -126,14 +126,14 @@
       <div class="modal-body">
         <div class="two-column-table">
           <div>
-            QAZ Publication status
+            {% render_field form.formsets.control.forms.0.publication_status %}
             QAZ Editing event type
           </div>
           <div>
-            QAZ Maintenance status
+            {% render_field form.formsets.control.forms.0.maintenance_status %}
           </div>
         </div>
-        QAZ Comments
+        {% render_field log_form.comment %}
       </div>
       <div class="modal-footer">
         <input type="submit" value="Save" class="save" />

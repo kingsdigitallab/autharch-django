@@ -47,18 +47,25 @@ def entity_create(request):
     return render(request, 'editor/entity_create.html', context)
 
 
+@create_revision()
 def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     if request.method == 'POST':
         form = EntityEditForm(request.POST, instance=entity)
-        if form.is_valid():
+        log_form = LogForm(request.POST)
+        if form.is_valid() and log_form.is_valid():
+            reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
+            redirect('editor:entity-edit', entity_id=entity_id)
     else:
         form = EntityEditForm(instance=entity)
+        log_form = LogForm()
     context = {
         'current_section': 'entities',
         'entity': entity,
         'form': form,
+        'last_revision': Version.objects.get_for_object(entity)[0].revision,
+        'log_form': log_form,
     }
     return render(request, 'editor/entity_edit.html', context)
 
@@ -107,6 +114,7 @@ def record_edit(request, record_id):
     context = {
         'current_section': 'records',
         'form': form,
+        'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
         'record': record,
     }
