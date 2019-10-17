@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from archival.models import ArchivalRecord
+from archival.models import Collection, File, Item, Series
 from authority.models import (
     BiographyHistory, Control, Description, Entity, Event, Identity,
     LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
@@ -12,6 +12,10 @@ from authority.models import (
 RICHTEXT_ATTRS = {
     'class': 'richtext',
     'rows': 8,
+}
+
+SEARCH_SELECT_ATTRS = {
+    'class': 'select-with-search',
 }
 
 
@@ -255,6 +259,15 @@ class IdentityEditInlineForm(ContainerModelForm):
 
 class ArchivalRecordEditForm(forms.ModelForm):
 
+    """Base class for all ArchivalRecord forms.
+
+    The intention is that this class carries as much of the
+    configuration for all of the polymorphic models as possible, even
+    when they do not apply to a subclass. Only the Meta.model should
+    change.
+
+    """
+
     disabled_fields = (
         'arrangement', 'cataloguer', 'copyright_status', 'description_date',
         'extent', 'physical_description', 'provenance', 'rcin', 'record_type',
@@ -271,7 +284,6 @@ class ArchivalRecordEditForm(forms.ModelForm):
                 pass
 
     class Meta:
-        model = ArchivalRecord
         exclude = []
         widgets = {
             'administrative_history': forms.Textarea(attrs=RICHTEXT_ATTRS),
@@ -281,6 +293,8 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'end_date': HTML5DateInput(),
             'languages': forms.SelectMultiple(attrs={'size': 4}),
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'parent_file': forms.Select(attrs=SEARCH_SELECT_ATTRS),
+            'parent_series': forms.Select(attrs=SEARCH_SELECT_ATTRS),
             'physical_description': forms.Textarea(),
             'project': forms.HiddenInput(),
             'provenance': forms.Textarea(attrs={'rows': 4}),
@@ -288,6 +302,30 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'start_date': HTML5DateInput(),
             'uuid': forms.HiddenInput(),
         }
+
+
+class CollectionArchivalRecordEditForm(ArchivalRecordEditForm):
+
+    class Meta(ArchivalRecordEditForm.Meta):
+        model = Collection
+
+
+class FileArchivalRecordEditForm(ArchivalRecordEditForm):
+
+    class Meta(ArchivalRecordEditForm.Meta):
+        model = File
+
+
+class ItemArchivalRecordEditForm(ArchivalRecordEditForm):
+
+    class Meta(ArchivalRecordEditForm.Meta):
+        model = Item
+
+
+class SeriesArchivalRecordEditForm(ArchivalRecordEditForm):
+
+    class Meta(ArchivalRecordEditForm.Meta):
+        model = Series
 
 
 class EntityEditForm(ContainerModelForm):
@@ -332,3 +370,24 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+
+
+def get_archival_record_edit_form_for_subclass(instance):
+    """Returns the appropriate subclass of ArchivalRecordEditForm for the
+    type of `instance`."""
+    # Rather than do generic cleverness with getattr, just enumerate
+    # the options.
+    #
+    # However, if ever there was a tempting situation to engage in
+    # metaclass programming etc, it's with this whole situation.
+    if isinstance(instance, Collection):
+        return CollectionArchivalRecordEditForm
+    elif isinstance(instance, File):
+        return FileArchivalRecordEditForm
+    elif isinstance(instance, Item):
+        return ItemArchivalRecordEditForm
+    elif isinstance(instance, Series):
+        return SeriesArchivalRecordEditForm
+    else:
+        raise Exception('Trying to get an ArchivalRecordEditForm subclass'
+                        ' for an unrecognised ArchivalRecord subclass.')

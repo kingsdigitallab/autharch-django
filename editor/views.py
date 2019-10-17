@@ -10,8 +10,8 @@ from reversion.views import create_revision
 from archival.models import ArchivalRecord
 from authority.models import Entity
 
-from .forms import ArchivalRecordEditForm, EntityEditForm, LogForm, \
-    UserEditForm
+from .forms import EntityEditForm, LogForm, UserEditForm, \
+    get_archival_record_edit_form_for_subclass
 
 
 @login_required
@@ -93,15 +93,16 @@ def entities_list(request):
 @create_revision()
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
+    form_class = get_archival_record_edit_form_for_subclass(record)
     if request.method == 'POST':
-        form = ArchivalRecordEditForm(request.POST, instance=record)
+        form = form_class(request.POST, instance=record)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
             reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
             redirect('editor:record-edit', record_id=record_id)
     else:
-        form = ArchivalRecordEditForm(instance=record)
+        form = form_class(instance=record)
         log_form = LogForm()
     context = {
         'current_section': 'records',
