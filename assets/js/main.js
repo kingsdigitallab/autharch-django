@@ -110,16 +110,23 @@ $(document).ready(function() {
   // when required fields are hidden, remove the required attribute
   // from all form controls in the logging dialogue, to be added back
   // when it is shown.
-  let dialogueRequiredControls = $(".modal").find("*[required]");
+  let dialogueRequiredControls = $("#log-modal").find("*[required]");
   toggleRequiredControls(dialogueRequiredControls, false);
+
+  // Cancel buttons on modal dialogues should close the modal and not
+  // allow default handling of the event.
+  $(".modal-cancel").click(function(event) {
+    let modal = $(event.target).parents(".modal").first().removeClass("active");
+    event.preventDefault();
+  });
 
   // open popup to log changes in entity/archival record sections
   $("#record-form").submit((event) => {
-    if (!$(".modal").hasClass('active')) {
+    if (!$("#log-modal").hasClass('active')) {
       event.preventDefault();
       // modal template is available in the files entity.html and archival-records.html (they use the same template with the same content)
       toggleRequiredControls(dialogueRequiredControls, true);
-      $(".modal").addClass('active');
+      $("#log-modal").addClass('active');
     }
   });
 
@@ -301,18 +308,6 @@ function deleteField(el) {
     }
 }
 
-// delete an entire record (entity or archival record)
-function deleteRecord(el) {
-    warningModal();
-    $('input[type=submit]').click((e) => {
-        $('.modal').removeClass('active');
-        if($(e.target).attr('value') == 'Delete') {
-            // DELETE RECORD
-            window.location.href = "./entities.html";
-        }
-        return false;
-    });
-}
 
 // expand/collapse entity/archival record sections
 function toggleTab(el) {
@@ -330,6 +325,16 @@ function login() {
 
 function logout() {
     window.location.href = "./login.html";
+}
+
+
+/**
+ * Create confirmation modal dialogue with form to delete the current
+ * record (whether Archival Record or Entity).
+*/
+function deleteRecord(event) {
+  $("#delete-modal").addClass('active');
+  event.preventDefault();
 }
 
 

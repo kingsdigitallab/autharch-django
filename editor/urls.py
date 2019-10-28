@@ -9,6 +9,8 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('entities/', views.entities_list, name='entities-list'),
     path('entities/<int:entity_id>/', views.entity_edit, name='entity-edit'),
+    path('entities/<int:entity_id>/delete/', views.entity_delete,
+         name='entity-delete'),
     path('entities/<int:entity_id>/history/', views.entity_history,
          name='entity-history'),
     path('entities/new/', views.entity_create, name='entity-create'),

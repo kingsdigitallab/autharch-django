@@ -16,7 +16,7 @@
     </a>
   </div>
   <div>
-    <button aria-label="delete" class="danger-clear" onclick="deleteRecord()">Delete</button>
+    <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
     <input type="submit" value="Save" form="record-form" class="save"/>
     <a href="{% url 'editor:entity-create' %}" class="create"><i class="fas fa-plus"></i></a>
   </div>
@@ -43,6 +43,7 @@
   <h2>{{ entity.entity_type }}</h2>
 </div>
 <form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
+  {% csrf_token %}
   <div class="flex">
     {% render_field form.date_from %}
     {% render_field form.date_to %}
@@ -117,11 +118,11 @@
     </fieldset>
     {% endfor %}
   </div>
-  <div class="modal">
+  <div class="modal" id="log-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2>Log comments</h2>
-        <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
+        <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
       </div>
       <div class="modal-body">
         <div class="two-column-table">
@@ -141,6 +142,22 @@
     </div>
   </div>
 </form>
+<div class="modal" id="delete-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Delete this record?</h2>
+    </div>
+    <div class="modal-body"></div>
+    <div class="modal-footer">
+      <form action="{% url 'editor:entity-delete' entity_id=entity.pk %}" method="post"> `
+        {% csrf_token %}
+        <input type="hidden" name="DELETE" value="DELETE"/>
+        <input type="submit" value="Cancel" class="default modal-cancel"/>
+        <input type="submit" value="Delete" class="danger"/>
+      </form>
+    </div>
+  </div>
+</div>
 <div id="empty_forms" style="display: none;">
   {% comment %}Include an empty form for each sub-form on the page, to
   allow for JS creation of new forms, rather than supplying a set

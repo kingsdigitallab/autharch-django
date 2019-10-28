@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 import reversion
 from reversion.models import Version
@@ -47,6 +48,15 @@ def entity_create(request):
     return render(request, 'editor/entity_create.html', context)
 
 
+@require_POST
+def entity_delete(request, entity_id):
+    entity = get_object_or_404(Entity, pk=entity_id)
+    if request.POST.get('DELETE') == 'DELETE':
+        entity.delete()
+        return redirect('editor:entities-list')
+    return redirect('editor:entity-edit', entity_id=entity_id)
+
+
 @create_revision()
 def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
@@ -56,7 +66,7 @@ def entity_edit(request, entity_id):
         if form.is_valid() and log_form.is_valid():
             reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
-            redirect('editor:entity-edit', entity_id=entity_id)
+            return redirect('editor:entity-edit', entity_id=entity_id)
     else:
         form = EntityEditForm(instance=entity)
         log_form = LogForm()
@@ -107,7 +117,7 @@ def record_edit(request, record_id):
         if form.is_valid() and log_form.is_valid():
             reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
-            redirect('editor:record-edit', record_id=record_id)
+            return redirect('editor:record-edit', record_id=record_id)
     else:
         form = form_class(instance=record)
         log_form = LogForm()
