@@ -158,6 +158,7 @@ class ControlEditInlineForm(ContainerModelForm):
             Control, Source, form=SourceEditInlineForm, extra=0)
         formsets['sources'] = SourceFormset(
             data, instance=self.instance, prefix=self.prefix + '-source')
+        return formsets
 
     class Meta:
         exclude = []
