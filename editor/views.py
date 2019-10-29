@@ -41,6 +41,21 @@ def dashboard(request):
     return render(request, 'editor/dashboard.html', context)
 
 
+def entities_list(request):
+    entities = Entity.objects.all()
+    person_count = entities.filter(entity_type__title='Person').count()
+    corporate_body_count = entities.filter(
+        entity_type__title='corporateBody').count()
+    context = {
+        'corporate_body_count': corporate_body_count,
+        'current_section': 'entities',
+        'entities': entities,
+        'entity_count': entities.count(),
+        'person_count': person_count,
+    }
+    return render(request, 'editor/entities_list.html', context)
+
+
 def entity_create(request):
     context = {
         'current_section': 'entities',
@@ -94,28 +109,13 @@ def entity_history(request, entity_id):
     return render(request, 'editor/history.html', context)
 
 
-def entities_list(request):
-    entities = Entity.objects.all()
-    person_count = entities.filter(entity_type__title='Person').count()
-    corporate_body_count = entities.filter(
-        entity_type__title='corporateBody').count()
-    context = {
-        'corporate_body_count': corporate_body_count,
-        'current_section': 'entities',
-        'entities': entities,
-        'entity_count': entities.count(),
-        'person_count': person_count,
-    }
-    return render(request, 'editor/entities_list.html', context)
-
-
 @require_POST
-def record_delete(request, entity_id):
-    entity = get_object_or_404(Entity, pk=entity_id)
+def record_delete(request, record_id):
+    record = get_object_or_404(ArchivalRecord, pk=record_id)
     if request.POST.get('DELETE') == 'DELETE':
-        entity.delete()
-        return redirect('editor:entities-list')
-    return redirect('editor:entity-edit', entity_id=entity_id)
+        record.delete()
+        return redirect('editor:records-list')
+    return redirect('editor:record-edit', record_id=record_id)
 
 
 @create_revision()
