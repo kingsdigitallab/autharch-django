@@ -120,11 +120,16 @@ $(document).ready(function() {
     event.preventDefault();
   });
 
+  // Submit buttons on modal dialogues should submit the specified form.
+  $(".modal-submit").click(function(event) {
+    let formId = event.target.getAttribute("data-form-id");
+    document.getElementById(formId).submit();
+  });
+
   // open popup to log changes in entity/archival record sections
   $("#record-form").submit((event) => {
     if (!$("#log-modal").hasClass('active')) {
       event.preventDefault();
-      // modal template is available in the files entity.html and archival-records.html (they use the same template with the same content)
       toggleRequiredControls(dialogueRequiredControls, true);
       $("#log-modal").addClass('active');
     }

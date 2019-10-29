@@ -35,7 +35,10 @@
 
   {% if form.errors %}
   <div class="error-notifications">
-    Errors: QAZ
+    {% for field, error in form.errors.items %}
+    <h3>{{ field }}</h3>
+    <p>{{ error }}</p>
+    {% endfor %}
   </div>
   {% endif %}
 
@@ -44,6 +47,9 @@
 </div>
 <form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
   {% csrf_token %}
+  <div class="flex">
+    {% render_field form.entity_type %}
+  </div>
   <div class="flex">
     {% render_field form.date_from %}
     {% render_field form.date_to %}
@@ -137,7 +143,7 @@
         {% render_field log_form.comment %}
       </div>
       <div class="modal-footer">
-        <input type="submit" value="Save" class="save" />
+        <input type="submit" value="Save" class="save modal-submit" data-form-id="record-form" />
       </div>
     </div>
   </div>
