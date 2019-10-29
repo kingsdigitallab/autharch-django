@@ -72,6 +72,8 @@ def entity_edit(request, entity_id):
         log_form = LogForm()
     context = {
         'current_section': 'entities',
+        'delete_url': reverse('editor:entity-delete',
+                              kwargs={'entity_id': entity_id}),
         'entity': entity,
         'form': form,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
@@ -107,6 +109,15 @@ def entities_list(request):
     return render(request, 'editor/entities_list.html', context)
 
 
+@require_POST
+def record_delete(request, entity_id):
+    entity = get_object_or_404(Entity, pk=entity_id)
+    if request.POST.get('DELETE') == 'DELETE':
+        entity.delete()
+        return redirect('editor:entities-list')
+    return redirect('editor:entity-edit', entity_id=entity_id)
+
+
 @create_revision()
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
@@ -123,6 +134,8 @@ def record_edit(request, record_id):
         log_form = LogForm()
     context = {
         'current_section': 'records',
+        'delete_url': reverse('editor:record-delete',
+                              kwargs={'record_id': record_id}),
         'form': form,
         'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,

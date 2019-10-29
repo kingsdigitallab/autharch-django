@@ -142,22 +142,7 @@
     </div>
   </div>
 </form>
-<div class="modal" id="delete-modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Delete this record?</h2>
-    </div>
-    <div class="modal-body"></div>
-    <div class="modal-footer">
-      <form action="{% url 'editor:entity-delete' entity_id=entity.pk %}" method="post"> `
-        {% csrf_token %}
-        <input type="hidden" name="DELETE" value="DELETE"/>
-        <input type="submit" value="Cancel" class="default modal-cancel"/>
-        <input type="submit" value="Delete" class="danger"/>
-      </form>
-    </div>
-  </div>
-</div>
+{% include "./includes/delete_modal.html" with delete_url=delete_url %}
 <div id="empty_forms" style="display: none;">
   {% comment %}Include an empty form for each sub-form on the page, to
   allow for JS creation of new forms, rather than supplying a set

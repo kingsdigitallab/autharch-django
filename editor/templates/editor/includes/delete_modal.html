@@ -1,0 +1,16 @@
+<div class="modal" id="delete-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Delete this record?</h2>
+    </div>
+    <div class="modal-body"></div>
+    <div class="modal-footer">
+      <form action="{{ delete_url }}" method="post"> `
+        {% csrf_token %}
+        <input type="hidden" name="DELETE" value="DELETE"/>
+        <input type="submit" value="Cancel" class="default modal-cancel"/>
+        <input type="submit" value="Delete" class="danger"/>
+      </form>
+    </div>
+  </div>
+</div>

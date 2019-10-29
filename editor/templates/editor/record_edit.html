@@ -16,7 +16,7 @@
     </a>
   </div>
   <div>
-    <button aria-label="delete" class="danger-clear" onclick="deleteRecord()">Delete</button>
+    <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
     <input type="submit" value="Save" form="record-form" class="save"/>
   </div>
 </div>
@@ -241,4 +241,5 @@
     </div>
   </form>
 </div>
+{% include "./includes/delete_modal.html" with delete_url=delete_url %}
 {% endblock content %}
