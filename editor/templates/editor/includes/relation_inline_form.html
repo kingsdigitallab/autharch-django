@@ -12,6 +12,7 @@
   <div class="fieldset-body expand">
     <div class="two-column-table">
       <div>
+        {% render_field form.id %}
         {% render_field form.relation_type %}
         {% render_field form.related_entity %}
         {% include "./date_section.html" with form=form class="date" only %}

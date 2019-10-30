@@ -120,15 +120,12 @@ $(document).ready(function() {
     event.preventDefault();
   });
 
-  // Submit buttons on modal dialogues should submit the specified form.
-  $(".modal-submit").click(function(event) {
-    let formId = event.target.getAttribute("data-form-id");
-    document.getElementById(formId).submit();
-  });
-
-  // open popup to log changes in entity/archival record sections
+  // Open popup to log changes when saving a record, then actually
+  // submit the form when submitting from the popup.
   $("#record-form").submit((event) => {
-    if (!$("#log-modal").hasClass('active')) {
+    if ($("#log-modal").hasClass('active')) {
+      event.target.submit();
+    } else {
       event.preventDefault();
       toggleRequiredControls(dialogueRequiredControls, true);
       $("#log-modal").addClass('active');

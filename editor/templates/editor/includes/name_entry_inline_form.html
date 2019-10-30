@@ -4,6 +4,7 @@
     <h3>{{ form.display_name.value }}</h3>
     <div class="flex">
       <div>
+        {% render_field form.id %}
         {% render_field form.authorised_form %}
       </div>
       <div>
