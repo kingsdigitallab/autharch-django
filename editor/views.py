@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 import reversion
-from reversion.models import Version
+from reversion.models import Version, Revision
 from reversion.views import create_revision
 
 from archival.models import ArchivalRecord
@@ -82,6 +82,10 @@ def entity_edit(request, entity_id):
             reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
             return redirect('editor:entity-edit', entity_id=entity_id)
+        else:
+            print(form.errors)
+            for formset in form.formsets.values():
+                print(formset.errors)
     else:
         form = EntityEditForm(instance=entity)
         log_form = LogForm()
@@ -107,6 +111,19 @@ def entity_history(request, entity_id):
         'versions': Version.objects.get_for_object(entity),
     }
     return render(request, 'editor/history.html', context)
+
+
+def home(request):
+    entities = Entity.objects.all()
+    records = ArchivalRecord.objects.all()
+    context = {
+        'current_section': 'home',
+        'entities': entities,
+        'entity_count': entities.count(),
+        'records': records,
+        'record_count': records.count(),
+    }
+    return render(request, 'editor/home.html', context)
 
 
 @require_POST
@@ -166,14 +183,9 @@ def records_list(request):
     return render(request, 'editor/records_list.html', context)
 
 
-def home(request):
-    entities = Entity.objects.all()
-    records = ArchivalRecord.objects.all()
-    context = {
-        'current_section': 'home',
-        'entities': entities,
-        'entity_count': entities.count(),
-        'records': records,
-        'record_count': records.count(),
-    }
-    return render(request, 'editor/home.html', context)
+@require_POST
+def revert(request):
+    revision_id = request.POST.get('revision_id')
+    revision = get_object_or_404(Revision, pk=revision_id)
+    revision.revert()
+    return redirect(request.POST.get('redirect_url'))

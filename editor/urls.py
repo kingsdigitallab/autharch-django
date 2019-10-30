@@ -20,4 +20,5 @@ urlpatterns = [
          name='record-delete'),
     path('records/<int:record_id>/history/', views.record_history,
          name='record-history'),
+    path('revert/', views.revert, name='revert'),
 ]
