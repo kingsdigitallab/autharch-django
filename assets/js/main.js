@@ -110,12 +110,19 @@ $(document).ready(function() {
   // when required fields are hidden, remove the required attribute
   // from all form controls in the logging dialogue, to be added back
   // when it is shown.
+  //
+  // Might this not better be done by simply adding/removing
+  // novalidate on the form?
   let dialogueRequiredControls = $("#log-modal").find("*[required]");
   toggleRequiredControls(dialogueRequiredControls, false);
 
   // Cancel buttons on modal dialogues should close the modal and not
   // allow default handling of the event.
   $(".modal-cancel").click(function(event) {
+    // Even if this is not the logging dialogue being cancelled, set
+    // its required controls to false; this is the most convenient
+    // place to perform this sadly necessary operation.
+    toggleRequiredControls(dialogueRequiredControls, false);
     let modal = $(event.target).parents(".modal").first().removeClass("active");
     event.preventDefault();
   });
