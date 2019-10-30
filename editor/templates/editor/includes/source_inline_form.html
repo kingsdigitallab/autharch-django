@@ -1,0 +1,24 @@
+{% load editor_form_tags %}
+<fieldset class="optional-to-delete" data-form-type="source">
+  <div class="fieldset-header">
+    <h3>QAZ</h3>
+    <div class="flex">
+      <div>
+        Delete via checkbox
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand">
+    <div class="two-column-table">
+      <div>
+        {% render_field form.id %}
+        {% render_field form.name %}
+      </div>
+      <div>
+        {% render_field form.url %}
+      </div>
+    </div>
+    {% render_field form.notes %}
+  </div>
+</fieldset>
