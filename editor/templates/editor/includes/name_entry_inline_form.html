@@ -18,14 +18,16 @@
   <div class="fieldset-body expand">
     <div class="two-column-table">
       <div class="formset">
+        {% with name_parts=form.formsets.name_parts %}
         <div class="management_form">
-          {{ form.formsets.name_parts.management_form }}
+          {{ name_parts.management_form }}
         </div>
         <div class="fieldsets">
-          {% for name_part in form.formsets.name_parts.forms %}
+          {% for name_part in name_parts.forms %}
           {% include "./name_part_inline_form.html" with form=name_part %}
           {% endfor %}
         </div>
+        {% endwith %}
         <label class="button-link create">
           <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('name_part', this)">Add name part
         </label>

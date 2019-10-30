@@ -15,99 +15,111 @@
       {% render_field form.structure_or_genealogy %}
     </div>
     <div class="formset">
-      <h3>GENDER (QAZ)
+      {% with local_descriptions=form.formsets.local_descriptions %}
+      <h3>GENDER ({{ local_descriptions.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="gender" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.local_descriptions.management_form }}
+        {{ local_descriptions.management_form }}
       </div>
       <div class="fieldsets">
-        {% for local_description in form.formsets.local_descriptions.forms %}
+        {% for local_description in local_descriptions.forms %}
         {% include "./local_description_inline_form.html" with form=local_description %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('local_description', this)">Add gender
       </label>
     </div>
 
     <div class="formset">
-      <h3>BIOGRAPHY/HISTORY (QAZ)
+      {% with biography_histories=form.formsets.biography_histories %}
+      <h3>BIOGRAPHY/HISTORY ({{ biography_histories.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="biography" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.biography_histories.management_form }}
+        {{ biography_histories.management_form }}
       </div>
       <div class="fieldsets">
-        {% for biography in form.formsets.biography_histories.forms %}
+        {% for biography in biography_histories.forms %}
         {% include "./biography_history_inline_form.html" with form=biography %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('biography', this)">Add biography/history
       </label>
     </div>
 
     <div class="formset">
-      <h3>LANGUAGES USED (QAZ)
+      {% with language_scripts=form.formsets.language_scripts %}
+      <h3>LANGUAGES USED ({{ language_scripts.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="language" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.language_scripts.management_form }}
+        {{ language_scripts.management_form }}
       </div>
       <div class="fieldsets">
-        {% for language in form.formsets.language_scripts.forms %}
+        {% for language in language_scripts.forms %}
         {% include "./language_script_inline_form.html" with form=language %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('language', this)">Add language
       </label>
     </div>
     <div class="formset">
-      <h3>PLACES (QAZ)
+      {% with places=form.formsets.places %}
+      <h3>PLACES ({{ places.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="place" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.places.management_form }}
+        {{ places.management_form }}
       </div>
       <div class="fieldsets">
-        {% for place in form.formsets.places.forms %}
+        {% for place in places.forms %}
         {% include "./place_inline_form.html" with form=place %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('place', this)">Add place
       </label>
     </div>
     <div class="formset">
-      <h3>MANDATE (QAZ)
+      {% with mandates=form.formsets.mandates %}
+      <h3>MANDATE ({{ mandates.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="mandate" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.mandates.management_form }}
+        {{ mandates.management_form }}
       </div>
       <div class="fieldsets">
-        {% for mandate in form.formsets.mandates.forms %}
+        {% for mandate in mandates.forms %}
         {% include "./mandate_inline_form.html" with form=mandate %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('mandate', this)">Add mandate
       </label>
     </div>
     <div class="formset">
-      <h3>LEGAL STATUS (QAZ)
+      {% with legal_statuses=form.formsets.legal_statuses %}
+      <h3>LEGAL STATUS ({{ legal_statuses.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="legal-status" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.legal_statuses.management_form }}
+        {{ legal_statuses.management_form }}
       </div>
       <div class="fieldsets">
-        {% for legal_status in form.formsets.legal_statuses.forms %}
+        {% for legal_status in legal_statuses.forms %}
         {% include "./legal_status_inline_form.html" with form=legal_status %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('legal_status', this)">Add legal status
       </label>

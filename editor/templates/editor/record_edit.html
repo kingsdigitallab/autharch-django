@@ -69,6 +69,7 @@
               {% render_field form.parent_series %}
               {% render_field form.parent_file %}
               {% render_field form.references %}
+              {% render_field form.cataloguer %}
             </div>
             <div>
               <label>
@@ -82,6 +83,7 @@
               {% render_field form.url %}
               {% render_field form.origin_location %}
               {% render_field form.related_materials %}
+              {% render_field form.description_date %}
             </div>
           </div>
         </div>
@@ -125,40 +127,16 @@
             </div>
           </div>
           {% render_field form.administrative_history %}
-        </div>
-      </fieldset>
-    </div>
-
-    <div class="form-section">
-      <h2>CONTEXT AREA</h2>
-
-      <fieldset>
-        <div class="fieldset-header">
-          <h3>{{ record.cataloguer }}</h3>
-
-          <div>
-            <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
-          </div>
-        </div>
-        <div class="fieldset-body expand">
-          <div class="two-column-table">
-            <div>
-              {% render_field form.cataloguer %}
-              {% render_field form.arrangement %}
-            </div>
-            <div>
-              {% render_field form.description_date %}
-              {% render_field form.provenance %}
-            </div>
-          </div>
           <div class="two-column-table">
             <div>
               {% render_field form.subjects %}
               {% render_field form.organisation_as_subjects %}
+              {% render_field form.arrangement %}
             </div>
             <div>
               {% render_field form.persons_as_subjects %}
               {% render_field form.places_as_subjects %}
+              {% render_field form.provenance %}
             </div>
           </div>
         </div>
@@ -166,11 +144,11 @@
     </div>
 
     <div class="form-section">
-      <h2>ACCESS AREA</h2>
+      <h2>ACCESS</h2>
 
       <fieldset>
         <div class="fieldset-header">
-          <h3>{{ record.publications|truncatewords:15 }}</h3>
+          <h3>{{ record.withheld }} | {{ record.copyright_status }}</h3>
 
           <div>
             <a class="toggle-tab-button" onclick="toggleTab(this)"></a>

@@ -17,68 +17,76 @@
   </div>
   <div class="fieldset-body expand">
     <div class="formset">
-      <h3>NAME ENTRIES (QAZ)
+      {% with name_entries=form.formsets.name_entries %}
+      <h3>NAME ENTRIES ({{ name_entries.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="name-entry" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.name_entries.management_form }}
+        {{ name_entries.management_form }}
       </div>
       <div class="fieldsets">
-        {% for name_entry in form.formsets.name_entries.forms %}
+        {% for name_entry in name_entries.forms %}
         {% include "./name_entry_inline_form.html" with form=name_entry %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('name_entry', this)">Add name entry
       </label>
     </div>
     <br>
     <div class="formset">
-      <h3>DESCRIPTIONS (QAZ)
+      {% with descriptions=form.formsets.descriptions %}
+      <h3>DESCRIPTIONS ({{ descriptions.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="descriptions" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.descriptions.management_form }}
+        {{ descriptions.management_form }}
       </div>
       <div class="fieldsets">
-        {% for description in form.formsets.descriptions.forms %}
+        {% for description in descriptions.forms %}
         {% include "./description_inline_form.html" with form=description %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('description', this)">Add description
       </label>
     </div>
 
     <div class="formset">
-      <h3>RELATIONS (QAZ)
+      {% with relations=form.formsets.relations %}
+      <h3>RELATIONS ({{ relations.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="relations" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.relations.management_form }}
+        {{ relations.management_form }}
       </div>
       <div class="fieldsets">
-        {% for relation in form.formsets.relations.forms %}
+        {% for relation in relations.forms %}
         {% include "./relation_inline_form.html" with form=relation %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('relation', this)">Add relation
       </label>
     </div>
     <br>
     <div class="formset">
-      <h3>RESOURCES (QAZ)
+      {% with resources=form.formsets.resources %}
+      <h3>RESOURCES ({{ resources.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="resources" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
       <div class="management_form">
-        {{ form.formsets.resources.management_form }}
+        {{ resources.management_form }}
       </div>
       <div class="fieldsets">
-        {% for resource in form.formsets.resources.forms %}
+        {% for resource in resources.forms %}
         {% include "./resource_inline_form.html" with form=resource %}
         {% endfor %}
       </div>
+      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('resource', this)">Add resource
       </label>
