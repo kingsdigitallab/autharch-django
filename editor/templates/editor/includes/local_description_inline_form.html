@@ -1,7 +1,7 @@
 {% load editor_form_tags %}
 <fieldset class="optional-to-delete" data-form-type="local_description">
   <div class="fieldset-header">
-    <h3>{{ form.gender.value }}</h3>
+    <h3>{{ form.gender.value|default:"" }}</h3>
     <div class="flex">
       <div>
         QAZ Delete with checkbox

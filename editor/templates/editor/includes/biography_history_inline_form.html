@@ -1,7 +1,7 @@
 {% load editor_form_tags %}
 <fieldset class="optional-to-delete" data-form-type="biography">
   <div class="fieldset-header">
-    <h3>{{ form.abstract.value|truncatewords:10 }}</h3>
+    <h3>{{ form.abstract.value|default:""|truncatewords:10 }}</h3>
     <div class="flex">
       <div>
         <label class="button-link danger">
@@ -18,24 +18,24 @@
     {% render_field form.description %}
     {% render_field form.sources %}
     {% render_field form.copyright %}
-  </div>
 
-  <div class="formset">
-    {% with events=form.formsets.events %}
-    <h3>EVENTS ({{ events.management_form.INITIAL_FORMS.value|default:"0" }})
-      <span role="button" aria-label="additional info" data-content-type="events" class="icon-only additional-info-icon">&#xf059;</span>
-    </h3>
-    <div class="management_form">
-      {{ events.management_form }}
+    <div class="formset">
+      {% with events=form.formsets.events %}
+      <h3>EVENTS ({{ events.management_form.INITIAL_FORMS.value|default:"0" }})
+        <span role="button" aria-label="additional info" data-content-type="events" class="icon-only additional-info-icon">&#xf059;</span>
+      </h3>
+      <div class="management_form">
+        {{ events.management_form }}
+      </div>
+      <div class="fieldsets">
+        {% for event in events.forms %}
+        {% include "./event_inline_form.html" with form=event %}
+        {% endfor %}
+      </div>
+      {% endwith %}
+      <label class="create linked-button">
+        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('event', this)">Add event
+      </label>
     </div>
-    <div class="fieldsets">
-      {% for event in events.forms %}
-      {% include "./event_inline_form.html" with form=event %}
-      {% endfor %}
-    </div>
-    {% endwith %}
-    <label class="create linked-button">
-      <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('event', this)">Add event
-    </label>
   </div>
 </fieldset>

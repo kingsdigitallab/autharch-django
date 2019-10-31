@@ -1,7 +1,7 @@
 {% load editor_form_tags %}
 <fieldset class="optional-to-delete" data-form-type="event">
   <div class="fieldset-header">
-    <h3>{{ form.event.value|truncatewords:10</h3>
+    <h3>{{ form.event.value|default:""|truncatewords:10 }}</h3>
     <div class="flex">
       <div>
         <label class="button-link danger">
