@@ -106,11 +106,12 @@ var additionalInfo = {
 
 $(document).ready(function() {
 
+  // Return the text nodes of the context. Code by Mark Baijens from https://stackoverflow.com/questions/4106809/how-can-i-change-an-elements-text-without-changing-its-child-elements/4106957
   jQuery.fn.textNodes = function() {
     return this.contents().filter(function() {
       return (this.nodeType === Node.TEXT_NODE);
     });
-  }
+  };
 
   // In order to not cause problems with client-side form validation
   // when required fields are hidden, remove the required attribute
