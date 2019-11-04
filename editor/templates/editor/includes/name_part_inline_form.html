@@ -3,5 +3,6 @@
   {% render_field form.id %}
   {% render_field form.name_part_type %}
   {% render_field form.part %}
-  <input type="button" class="button-link danger icon-only" aria-label="delete field" value="&#xf2ed;" onclick="deleteField(this)">
+  {% include "./delete_form_field.html" with form=form %}
+  <input type="button" class="button-link danger icon-only" aria-label="delete field" value="&#xf2ed;" onclick="toggleDeleteInline(this)">
 </div>

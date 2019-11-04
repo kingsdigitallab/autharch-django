@@ -8,14 +8,13 @@
         {% render_field form.preferred_identity %}
       </div>
       <div>
-        <label class="button-link danger">
-          <input type="button" class="icon-only" value="&#xf2ed;" onclick="deleteField(this)">Delete
-        </label>
+        <label class="button-link danger" data-initial-text="Delete" data-toggled-text="Undo deletion"><input type="button" class="icon-only" value="&#xf2ed;" onclick="toggleDeleteInline(event, this)"/>Delete</label>
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>
   </div>
-  <div class="fieldset-body expand">
+  <div class="fieldset-body expand inline-deletable">
+    {% include "./delete_form_field.html" with form=form %}
     <div class="formset">
       {% with name_entries=form.formsets.name_entries %}
       <h3>NAME ENTRIES ({{ name_entries.management_form.INITIAL_FORMS.value|default:"0" }})

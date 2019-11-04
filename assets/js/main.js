@@ -106,6 +106,12 @@ var additionalInfo = {
 
 $(document).ready(function() {
 
+  jQuery.fn.textNodes = function() {
+    return this.contents().filter(function() {
+      return (this.nodeType === Node.TEXT_NODE);
+    });
+  }
+
   // In order to not cause problems with client-side form validation
   // when required fields are hidden, remove the required attribute
   // from all form controls in the logging dialogue, to be added back
@@ -447,6 +453,55 @@ function getManagementFormTotalControl(context) {
  */
 function getNewFormParent(context) {
   return context.parents(".formset").first().children("div.fieldsets").last();
+}
+
+
+/**
+ * Mark/unmark an inline form for deletion.
+ *
+ * This involves three changes:
+ *
+ * 1. Toggling the DELETE checkbox for the form.
+ * 2. Toggling the visibility of the form.
+ * 3. Toggling the delete/undo icon.
+ *
+ * This code requires the following HTML structure in order to behave
+ * correctly:
+ *
+ * 1. The toggling instigator (the delete/undo icon) must be a
+ * descendant of an element with the data-form-type attribute
+ * set. This attribute marks the element that encompasses the whole of
+ * an inline form.
+ *
+ * 2. The part of the form to be hidden/shown must have the class
+ * attribute value "inline-deletable".
+ *
+ * 3. The part of the form to be hidden/shown must be a descendant of
+ * the encompassing element (see #1).
+ *
+ * 4. The DELETE checkbox for the form must be a grand-child (within
+ * an element with a class of "inline-delete-form-field") of the part
+ * of the form to be hidden/shown (see #2).
+ *
+ * @param {Element} button - the button element that triggered the toggle
+ */
+function toggleDeleteInline(event, button) {
+  event.preventDefault();
+  let jButton = $(button);
+  let label = jButton.parent().first();
+  let labelTextNode = label.textNodes();
+  if (labelTextNode.text() == label.attr("data-initial-text")) {
+    labelTextNode.replaceWith(label.attr("data-toggled-text"));
+  } else {
+    labelTextNode.replaceWith(label.attr("data-initial-text"));
+  }
+  // Find the element for the part of the form to be shown/hidden, and
+  // toggle its visibility.
+  let form_part = jButton.closest("[data-form-type]").find("[class~='inline-deletable']").first();
+  form_part.toggleClass("deleted-inline");
+  // Find and toggle the DELETE checkbox for the form.
+  let deleteField = form_part.children("[class~='inline-delete-form-field']").children("[name$='DELETE']").first();
+  deleteField.prop("checked", !deleteField.prop("checked"));
 }
 
 

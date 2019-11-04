@@ -194,6 +194,14 @@ span[role=button] {
     }
 }
 
+.deleted-inline {
+    display: none !important;
+}
+
+.inline-delete-form-field {
+    display: none;
+}
+
 .inactive {
     background-color: $light-grey !important;
     color: $medium-grey !important;
@@ -328,7 +336,7 @@ p {
 
 
 header {
-    background: $primary url('..//images/background-header.svg') no-repeat bottom;
+    background: $primary url('/static/images/background-header.svg') no-repeat bottom;
     height: 100vh;
     width: 200px;
     position: fixed;
@@ -1031,7 +1039,7 @@ footer {
         display: block;
     }
     header {
-        background: $primary url('..//images/background-header.svg') no-repeat bottom right;
+        background: $primary url('/static/images/background-header.svg') no-repeat bottom right;
         position: fixed;
         display: flex;
         width: 100%;
