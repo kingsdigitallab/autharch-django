@@ -487,22 +487,46 @@ function getNewFormParent(context) {
  * @param {Element} button - the button element that triggered the toggle
  */
 function toggleDeleteInline(event, button) {
-  event.preventDefault();
-  let jButton = $(button);
-  let label = jButton.parent().first();
-  let labelTextNode = label.textNodes();
-  if (labelTextNode.text() == label.attr("data-initial-text")) {
-    labelTextNode.replaceWith(label.attr("data-toggled-text"));
-  } else {
-    labelTextNode.replaceWith(label.attr("data-initial-text"));
-  }
-  // Find the element for the part of the form to be shown/hidden, and
-  // toggle its visibility.
-  let form_part = jButton.closest("[data-form-type]").find("[class~='inline-deletable']").first();
-  form_part.toggleClass("deleted-inline");
-  // Find and toggle the DELETE checkbox for the form.
-  let deleteField = form_part.children("[class~='inline-delete-form-field']").children("[name$='DELETE']").first();
-  deleteField.prop("checked", !deleteField.prop("checked"));
+    event.preventDefault();
+    let jButton = $(button);
+    let labelText = jButton.siblings('span').first();
+    let header = labelText.parents('.fieldset-header');
+    let fieldset = header.parent('fieldset');
+    // grey out the header if inactive
+    header.toggleClass('inactive');
+    //toggle border if the section is 'preferred'
+    if (fieldset.hasClass('border-left')) {
+        fieldset.toggleClass('clear-border');
+    }
+    //remove the checkmark next to 'preferred identity' since the identity is deleted
+    if (header.find('input[id$="preferred_identity"]:checked')) {
+        header.find('input[id$="preferred_identity"]').prop('checked', false);
+    }
+    //toggle the display of preferred identity
+    header.find('input[id$="preferred_identity"]').parent().toggleClass('none');
+
+    // toggle the checkbox button and text label
+    if (header.hasClass('inactive')) {
+        jButton.val("");
+        labelText.text('Undo');
+    } 
+    else {
+        jButton.val("");
+        labelText.text('Delete');
+    }
+    // remove toggle button
+    header.find('.toggle-tab-button').toggleClass('inactive');
+
+    // Find the element for the part of the form to be shown/hidden, and toggle its visibility. 
+    // OL - not sure why data-form-type is needed since it can be removed and replaced with the optional-to-delete attribute.
+    // OL - changed deleted-inline to 'none' that I use for several other elements on the website.
+    let form_part = jButton.closest("[data-form-type]").find("[class~='fieldset-body']").first();
+    form_part.toggleClass("none");
+
+    // Find and toggle the DELETE checkbox for the form. 
+    // OL - this doesn't seem to be needed.
+    // let deleteField = form_part.children("[class~='inline-delete-form-field']").children("[name$='DELETE']").first();
+    // deleteField.prop("checked", !deleteField.prop("checked"));
 }
 
 

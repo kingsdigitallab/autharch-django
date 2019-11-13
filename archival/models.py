@@ -62,7 +62,7 @@ class ArchivalRecord(PolymorphicModel):
     title = models.CharField(max_length=1024, help_text=constants.TITLE_HELP)
 
     publication_description = models.TextField(blank=True, null=True)
-    provenance = models.TextField(blank=True, null=True)
+    provenance = models.TextField('Custodial History/Provenance', blank=True, null=True)
     creation_dates = models.CharField(max_length=1024, null=True, blank=True,
                                       help_text=constants.CREATION_DATES_HELP)
     creation_dates_notes = models.CharField(max_length=1024, null=True,
@@ -110,6 +110,7 @@ class ArchivalRecord(PolymorphicModel):
 
     cataloguer = models.CharField(max_length=512, blank=True, null=True)
     description_date = models.DateField()
+    # description_date = models.CharField(max_length=512, null=True)
 
     rights_declaration = models.TextField(
         default=settings.ARCHIVAL_RIGHTS_DECLARATION)
@@ -192,7 +193,7 @@ class FileBase(models.Model):
     publication_permission = models.TextField(blank=True, null=True)
     withheld = models.CharField(max_length=256, blank=True, null=True)
 
-    url = models.URLField(blank=True, null=True)
+    url = models.URLField('URL', blank=True, null=True)
 
     class Meta:
         abstract = True

@@ -34,7 +34,7 @@
   </div>
 
   {% if form.errors %}
-  <div class="error-notifications">
+  <div class="error-notification">
     {% for field, error in form.errors.items %}
     <h3>{{ field }}</h3>
     <p>{{ error }}</p>
@@ -56,44 +56,54 @@
     {% render_field form.display_date %}
   </div>
   <div class="form-section formset">
-    {% with identities=form.formsets.identities %}
-    <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }}) <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    <h2>IDENTITIES (QAZ) <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon">&#xf059;</span></h2>
     <div class="management_form">
-      {{ identities.management_form }}
+      {{ form.formsets.identities.management_form }}
     </div>
     <div class="fieldsets">
-      {% for identity in identities.forms %}
+      {% for identity in form.formsets.identities.forms %}
       {% include "./includes/identity_inline_form.html" with form=identity %}
       {% endfor %}
     </div>
-    {% endwith %}
     <label class="create linked-button">
       <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('identity', this)">Add identity
     </label>
   </div>
-  <div class="form-section formset">
-    {% with sources=form.formsets.control.forms.0.formssets.sources %}
-    <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
-    <div class="management_form">
-      {{ sources.management_form }}
-    </div>
-    <div class="fieldsets">
-      {% for source in sources.forms %}
-      {% include "./includes/source_inline_form.html" with form=source %}
-      {% endfor %}
-    </div>
-    {% endwith %}
-    <label class="create linked-button">
-      <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('source', this)">Add source
-    </label>
+  <div class="form-section">
+    <h2>SOURCES (QAZ) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    {{ form.formsets.control.forms.0.formsets.sources.management_form }}
+    {% for source in form.formsets.control.forms.0.formsetes.sources.forms %}
+    <fieldset class="optional-to-delete" data-content-reference="sources">
+      <div class="fieldset-header">
+        <h3>QAZ</h3>
+        <div class="flex">
+          <div>
+            Delete via checkbox
+          </div>
+          <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+        </div>
+      </div>
+      <div class="fieldset-body expand">
+        <div class="two-column-table">
+          <div>
+            {% render_field source.name %}
+          </div>
+          <div>
+            {% render_field source.url %}
+          </div>
+        </div>
+        {% render_field source.notes %}
+      </div>
+    </fieldset>
+    {% endfor %}
   </div>
   <div class="form-section">
-    <h2>CONTROL <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    <h2>CONTROL (QAZ) <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
     {{ form.formsets.control.management_form }}
     {% for control in form.formsets.control.forms %}
     <fieldset id="control">
       <div class="fieldset-header">
-        <h3>Record ID: {{ entity.id }}</h3>
+        <h3>Record ID: QAZ</h3>
         <div>
           <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
         </div>
@@ -101,7 +111,6 @@
       <div class="fieldset-body expand">
         <div class="two-column-table">
           <div>
-            {% render_field control.id %}
             {% render_field control.language %}
             QAZ Rights citation
           </div>
@@ -134,7 +143,7 @@
         {% render_field log_form.comment %}
       </div>
       <div class="modal-footer">
-        <input type="submit" value="Save" class="save" />
+        <input type="submit" value="Save" class="save modal-submit" data-form-id="record-form" />
       </div>
     </div>
   </div>
@@ -160,7 +169,6 @@
   {% endwith %}
   {% include "./includes/relation_inline_form.html" with form=identity_form.formsets.relations.empty_form %}
   {% include "./includes/resource_inline_form.html" with form=identity_form.formsets.resources.empty_form %}
-  {% include "./includes/source_inline_form.html" with form=form.formsets.control.forms.0.formsets.sources.empty_form %}
   {% endwith %}
 </div>
 {% endblock content %}

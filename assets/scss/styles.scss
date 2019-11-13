@@ -96,6 +96,10 @@ body {
     margin-left: 10px;
 }
 
+.float-left {
+    float: left;
+}
+
 .hidden {
     visibility: hidden !important;
 }
@@ -117,6 +121,9 @@ body {
     border-left-color: $primary !important;
 }
 
+.clear-border {
+    border: 1px solid #BABABA !important;
+}
 
 
 button, a, .create, .link, input[type=submit], input[type=button], span[role=button] {
@@ -194,13 +201,13 @@ span[role=button] {
     }
 }
 
-.deleted-inline {
-    display: none !important;
-}
+// .deleted-inline {
+//     display: none !important;
+// }
 
-.inline-delete-form-field {
-    display: none;
-}
+// .inline-delete-form-field {
+//     display: none;
+// }
 
 .inactive {
     background-color: $light-grey !important;
@@ -265,12 +272,6 @@ span[role=button] {
     &:hover, &:focus {
         text-decoration: underline;
         cursor: pointer;
-        
-    }
-}
-
-.optional-to-delete {
-    .button-link {
         
     }
 }
@@ -612,14 +613,18 @@ main {
         }
         div {
             width: 100%;
+            overflow: hidden;
             label, input, select, textarea {
                 width: -moz-available;
                 width: -webkit-fill-available;
                 width: fill-available;
                 margin-bottom: 10px;
             }
-            label {
-                margin-top: 10px;
+            // label {
+            //     margin-top: 10px;
+            // }
+            select {
+                width: 100%;
             }
         }
         input[type=submit] {
@@ -919,20 +924,37 @@ main {
     }
 
     .error-notification{
-        display: block;
-        border-radius: 10px;
-        border-left: 10px solid $danger;
-        background-color: lighten($danger, 60%);
-        padding: 20px;
-        margin: 10px 0px 30px 0px;
-        h3 {
-            margin: 0px;
-            margin-bottom: 10px;
-            color: darken($danger, 10%);
+        // display: block;
+        // border-radius: 10px;
+        // border-left: 10px solid $danger;
+        // background-color: lighten($danger, 60%);
+        // padding: 20px;
+        // margin: 10px 0px 30px 0px;
+        // h3 {
+        //     margin: 0px;
+        //     margin-bottom: 10px;
+        //     color: darken($danger, 10%);
+        // }
+        // p {
+        //     margin-bottom: 0px;
+        // } 
+        display: none; 
+        &.active {
+            display: block;
+            border-radius: 10px;
+            border-left: 10px solid $danger;
+            background-color: lighten($danger, 60%);
+            padding: 20px;
+            margin: 10px 0px 30px 0px;
+            h3 {
+                margin: 0px;
+                margin-bottom: 10px;
+                color: darken($danger, 10%);
+            }
+            p {
+                margin-bottom: 0px;
+            }   
         }
-        p {
-            margin-bottom: 0px;
-        }    
     }
 
     .error {
@@ -1082,7 +1104,7 @@ footer {
         margin-top: 80px;
         &:not(#form-page) {
             margin-left: 0px;
-            padding: 0px 10px 30px 10px;
+            padding: 0px 30px 30px 30px;
         } 
         #page-header {
             display: flex;
