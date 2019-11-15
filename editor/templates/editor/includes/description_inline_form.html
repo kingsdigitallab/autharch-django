@@ -1,15 +1,16 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-form-type="description">
+<fieldset data-form-type="description">
   <div class="fieldset-header">
     <h3>QAZ: multiple genders, languages, places, and functions; how to choose?</h3>
     <div class="flex">
       <div>
-        QAZ Delete with checkbox
+        {% include "./delete_inline_button.html" %}
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>
   </div>
-  <div class="fieldset-body expand">
+  <div class="fieldset-body expand inline-deletable">
+    {% include "./delete_form_field.html" with form=form %}
     <div>
       {% render_field form.id %}
       {% render_field form.structure_or_genealogy %}

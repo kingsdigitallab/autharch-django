@@ -71,7 +71,7 @@
       <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('identity', this)">Add identity
     </label>
   </div>
-  <div class="form-section">
+  <div class="form-section formset">
     {% with sources=form.formsets.control.forms.0.formsets.sources %}
     <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
     <div class="management_form">

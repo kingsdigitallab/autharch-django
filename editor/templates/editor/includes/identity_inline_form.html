@@ -1,5 +1,5 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-form-type="identity">
+<fieldset data-form-type="identity">
   <div class="fieldset-header">
     <h3>{{ form.instance }}</h3>
     <div class="flex">
@@ -8,10 +8,7 @@
         {% render_field form.preferred_identity %}
       </div>
       <div>
-        <label class="button-link danger">
-          <input type="button" class="icon-only" value="&#xf2ed;" onclick="toggleDeleteInline(event, this)"/>
-          <span>Delete</span>
-        </label>
+        {% include "./delete_inline_button.html" %}
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>

@@ -1,17 +1,16 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-form-type="biography">
+<fieldset data-form-type="biography">
   <div class="fieldset-header">
     <h3>{{ form.abstract.value|default:""|truncatewords:10 }}</h3>
     <div class="flex">
       <div>
-        <label class="button-link danger">
-          <input type="button" class="icon-only" value="&#xf2ed;" onclick="deleteField(this)">Delete
-        </label>
+        {% include "./delete_inline_button.html" %}
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>
   </div>
-  <div class="fieldset-body expand">
+  <div class="fieldset-body expand inline-deletable">
+    {% include "./delete_form_field.html" with form=form %}
     {% render_field form.id %}
     {% render_field form.abstract %}
     {% render_field form.content %}

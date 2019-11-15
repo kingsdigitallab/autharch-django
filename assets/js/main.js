@@ -306,25 +306,6 @@ function alertPopup(msg) {
 //end MODAL TEMPLATES
 
 
-// delete a field or a section on the entity page
-function deleteField(el) {
-    var ref = $(el).closest('.optional-to-delete').attr('data-content-reference');
-    if ($(el).closest('.optional-to-delete').siblings('[data-content-reference='+ref+']').length >= 1) {
-        warningModal();
-        $('input[type=submit]').click((e) => {
-            $('.modal').removeClass('active');
-            if($(e.target).attr('value') == 'Delete') {
-                $(el).closest('.optional-to-delete').remove();
-            }
-            return false;
-        });
-    }
-    else {
-        alertPopup('You need to have at least one more element of this type to delete selected record.');
-    }
-}
-
-
 // expand/collapse entity/archival record sections
 function toggleTab(el) {
     $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
@@ -495,10 +476,6 @@ function toggleDeleteInline(event, button) {
 
   // grey out the header if inactive
   header.toggleClass('inactive');
-  //toggle border if the section is 'preferred'
-  if (fieldset.hasClass('border-left')) {
-    fieldset.toggleClass('clear-border');
-  }
 
   //toggle the display of preferred identity
   header.find('input[id$="preferred_identity"]').parent().toggleClass('none');

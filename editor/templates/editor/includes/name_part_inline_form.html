@@ -1,8 +1,14 @@
 {% load editor_form_tags %}
-<div class="grid optional-to-delete" data-form-type="name_part">
-  {% render_field form.id %}
-  {% render_field form.name_part_type %}
-  {% render_field form.part %}
-  {% include "./delete_form_field.html" with form=form %}
-  <input type="button" class="button-link danger icon-only" aria-label="delete field" value="&#xf2ed;" onclick="toggleDeleteInline(this)">
+<div data-form-type="name_part">
+  <div class="grid inline-deletable">
+    {% include "./delete_form_field.html" with form=form %}
+    {% render_field form.id %}
+    {% render_field form.name_part_type %}
+    {% render_field form.part %}
+  </div>
+  <div>
+    <label class="button-link danger">
+      <input type="button" class="icon-only" value="&#xf2ed;" onclick="toggleDeleteInline(event, this)"/>
+    </label>
+  </div>
 </div>

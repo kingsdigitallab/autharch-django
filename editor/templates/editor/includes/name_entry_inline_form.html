@@ -1,5 +1,5 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-form-type="name_entry">
+<fieldset data-form-type="name_entry">
   <div class="fieldset-header">
     <h3>{{ form.display_name.value }}</h3>
     <div class="flex">
@@ -8,14 +8,13 @@
         {% render_field form.authorised_form %}
       </div>
       <div>
-        <label class="button-link danger">
-          <input type="button" class="icon-only" value="&#xf2ed;" onclick="deleteField(this)">Delete
-        </label>
+        {% include "./delete_inline_button.html" %}
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>
   </div>
-  <div class="fieldset-body expand">
+  <div class="fieldset-body expand inline-deletable">
+    {% include "./delete_form_field.html" with form=form %}
     <div class="two-column-table">
       <div class="formset">
         {% with name_parts=form.formsets.name_parts %}

@@ -1,15 +1,16 @@
 {% load editor_form_tags %}
-<fieldset class="optional-to-delete" data-form-type="resource">
+<fieldset data-form-type="resource">
   <div class="fieldset-header">
     <h3>{{ form.instance.relation_type|default:"" }}</h3>
     <div class="flex">
       <div>
-        QAZ Delete via checkbox
+        {% include "./delete_inline_button.html" %}
       </div>
       <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
     </div>
   </div>
-  <div class="fieldset-body expand">
+  <div class="fieldset-body expand inline-deletable">
+    {% include "./delete_form_field.html" with form=form %}
     <div class="two-column-table">
       <div>
         {% render_field form.id %}
