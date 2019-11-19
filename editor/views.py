@@ -8,7 +8,7 @@ import reversion
 from reversion.models import Version, Revision
 from reversion.views import create_revision
 
-from archival.models import ArchivalRecord
+from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
 
 from .forms import EntityEditForm, LogForm, UserEditForm, \
@@ -47,11 +47,11 @@ def entities_list(request):
     corporate_body_count = entities.filter(
         entity_type__title='corporateBody').count()
     context = {
-        'corporate_body_count': corporate_body_count,
         'current_section': 'entities',
         'entities': entities,
         'entity_count': entities.count(),
         'person_count': person_count,
+        'corporate_body_count': corporate_body_count
     }
     return render(request, 'editor/entities_list.html', context)
 
@@ -95,7 +95,7 @@ def entity_edit(request, entity_id):
                               kwargs={'entity_id': entity_id}),
         'entity': entity,
         'form': form,
-        'last_revision': Version.objects.get_for_object(entity)[0].revision,
+        # 'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
     }
     return render(request, 'editor/entity_edit.html', context)
@@ -154,7 +154,7 @@ def record_edit(request, record_id):
         'delete_url': reverse('editor:record-delete',
                               kwargs={'record_id': record_id}),
         'form': form,
-        'last_revision': Version.objects.get_for_object(record)[0].revision,
+        # 'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
         'record': record,
     }
@@ -175,13 +175,20 @@ def record_history(request, record_id):
 
 def records_list(request):
     records = ArchivalRecord.objects.all()
+    collection_count = Collection.objects.all().count()
+    item_count = Item.objects.all().count()
+    file_count = File.objects.all().count()
+    series_count = Series.objects.all().count()
     context = {
         'current_section': 'records',
         'records': records,
         'records_count': records.count(),
+        'collection_count': collection_count,
+        'file_count': file_count,
+        'item_count': item_count,
+        'series_count': series_count,
     }
     return render(request, 'editor/records_list.html', context)
-
 
 @require_POST
 def revert(request):

@@ -145,8 +145,31 @@ button, .create, input[type=submit] {
     }
 }
 
-input[type=submit] {
+input[type=submit], .save {
     max-width: max-content;
+}
+
+.search {
+    position: relative;
+    max-width: 700px;
+    min-width: 280px;
+    input[type=search] {
+        font-family: "Roboto", sans-serif;
+        border-radius: 30px;
+        font-size: 14px;
+        padding: 10px 10px 10px 20px;
+        border: 1px solid $primary;
+        width: 100%;
+    }
+    .search-button {
+        position: absolute;
+        background: none;
+    	top: 0px;
+    	right: 0px;
+		color: $primary;
+		font-family: $fontawesome;
+		font-weight: 600;
+	}
 }
 
 span[role=button] {
@@ -451,9 +474,12 @@ main {
 
     #page-header {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: auto 1fr auto;
         grid-column-gap: 10px;
         align-items: center;
+        :not(:first-child) {
+            justify-self: right;
+        }
         #status-bar {
             @include inline-list("|");
             font-size: 14px;

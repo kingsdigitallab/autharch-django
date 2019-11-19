@@ -3,13 +3,20 @@
 {% block page_header %}
 <div id="page-header">
   <h1>Home</h1>
-  <div class="filters">
+  <form class="search">
+      <label>
+          <span hidden>Search</span>
+          <input type="search" aria-label="Search" placeholder="Search our catalogue" onfocus="this.placeholder=''" onblur="this.placeholder='Search document'"/>
+      </label>
+      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+  </form>
+  <!-- <div class="filters">
     <input id="entities" type="checkbox" aria-label="entities" />
     <label for="entities" class="filter">Entities ({{ entity_count }})</label>
     <input id="archival_records" type="checkbox" aria-label="archival records" />
     <label for="archival_records" class="filter">Archival records ({{ record_count }})</label>
     <button aria-label="create entity" class="create">Create new entity</button>
-  </div>
+  </div> -->
 </div>
 {% endblock page_header %}
 

@@ -3,17 +3,32 @@
 {% block page_header %}
 <div id="page-header">
   <h1>Archival records ({{ records_count }})</h1>
-  <div class="filters">
+  <form class="search">
+      <label>
+          <span hidden>Search</span>
+          <input type="search" aria-label="Search" placeholder="Search archival records" onfocus="this.placeholder=''" onblur="this.placeholder='Search our catalogue'"/>
+      </label>
+      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+  </form>
+</div>
+<div class="filters">
+    {% if collection_count  > 0 %}
     <input id="collection" type="checkbox" aria-label="collection"/>
     <label for="collection" class="filter">Collection ({{ collection_count }})</label>
+    {% endif %}
+    {% if file_count > 0 %}
     <input id="file" type="checkbox" aria-label="file"/>
     <label for="file" class="filter">File ({{ file_count }})</label>
+    {% endif %}
+    {% if item_count  > 0 %}
     <input id="item" type="checkbox" aria-label="item"/>
     <label for="item" class="filter">Item ({{ item_count }})</label>
+    {% endif %}
+    {% if series_count > 0 %}
     <input id="series" type="checkbox" aria-label="series"/>
     <label for="series" class="filter">Series ({{ series_count }})</label>
+    {% endif %}
   </div>
-</div>
 {% endblock page_header %}
 
 {% block content %}
