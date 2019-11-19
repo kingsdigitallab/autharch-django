@@ -170,9 +170,21 @@ $(document).ready(function() {
     // optional functionality (can be removed if needed) - dynamic styling of the sections
 
     // style border for preferred names and identities
-    $( "fieldset:has(input[name*='preferred']:checked)" ).addClass('border-left');
+    $( "fieldset:has(input[name*='preferred']:checked)" ).first().addClass('border-left');
+    $( "fieldset:has(input[name*='authorised']:checked)" ).first().addClass('border-left');
 
     $('body').on('click', 'input[name*="preferred"]', (el) => {
+        $('input[name*="preferred"]:checked').prop('checked', false);
+        $(el.target).parents('fieldset').first().find('input[name*="preferred"]').prop('checked', true);
+        $(el.target).parents('fieldset').siblings().removeClass('border-left');
+        if ($(el.target).is(':checked')) {
+            $(el.target).parents('fieldset').first().addClass('border-left');
+        }
+    });
+
+    $('body').on('click', 'input[name*="authorised"]', (el) => {
+        $('input[name*="authorised"]:checked').prop('checked', false);
+        $(el.target).parents('fieldset').first().find('input[name*="authorised"]').prop('checked', true);
         $(el.target).parents('fieldset').siblings().removeClass('border-left');
         if ($(el.target).is(':checked')) {
             $(el.target).parents('fieldset').first().addClass('border-left');
@@ -477,8 +489,12 @@ function toggleDeleteInline(event, button) {
   // grey out the header if inactive
   header.toggleClass('inactive');
 
-  //toggle the display of preferred identity
-  header.find('input[id$="preferred_identity"]').parent().toggleClass('none');
+  // uncheck preferred identity
+  header.find('input[type="checkbox"]:checked').prop('checked', false);
+  fieldset.removeClass('border-left');
+
+  //toggle the display of preferred identity and authorised form
+  header.find('input[type="checkbox"]').parent().toggleClass('none');
 
   // toggle the checkbox button and text label
   if (header.hasClass('inactive')) {
