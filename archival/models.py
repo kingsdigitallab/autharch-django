@@ -215,18 +215,14 @@ class File(ArchivalRecord, SeriesBase, FileBase):
         Series, blank=True, null=True, on_delete=models.CASCADE)
     parent_file = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.CASCADE)
-    # writer
     creators = models.ManyToManyField(
-        Entity, blank=True, related_name='files_created', help_text=constants.WRITER_HELP)
-    # place of writing
+        Entity, verbose_name="Writer", blank=True, related_name='files_created', help_text=constants.WRITER_HELP)
     creation_places = models.ManyToManyField(
-        Place, related_name='files_created', blank=True, help_text=constants.PLACE_OF_WRITING_HELP)
-     # addressee
+        Place, verbose_name="Place of writing", related_name='files_created', blank=True, help_text=constants.PLACE_OF_WRITING_HELP)
     persons_as_relations = models.ManyToManyField( 
-        Entity, blank=True, related_name='files_as_relations')
-    # receiving address
+        Entity, verbose_name="Addressee", blank=True, related_name='files_as_relations')
     places_as_relations = models.ManyToManyField(
-        Place, blank=True, related_name='files_as_relations')
+        Place, verbose_name="Receiving address", blank=True, related_name='files_as_relations')
 
     def __str__(self):
         return self.title
@@ -240,13 +236,13 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
         File, blank=True, null=True, on_delete=models.CASCADE,
         verbose_name='File')
     creators = models.ManyToManyField(
-        Entity, blank=True, related_name='items_created')
+        Entity, verbose_name="Writer", blank=True, related_name='items_created')
     creation_places = models.ManyToManyField(
-        Place, related_name='items_created', blank=True)
+        Place, verbose_name="Place of writing", related_name='items_created', blank=True)
     persons_as_relations = models.ManyToManyField(
-        Entity, blank=True, related_name='items_as_relations')
+        Entity, verbose_name="Addressee", blank=True, related_name='items_as_relations')
     places_as_relations = models.ManyToManyField(
-        Place, blank=True, related_name='items_as_relations')
+        Place, verbose_name="Receiving address", blank=True, related_name='items_as_relations')
 
     def __str__(self):
         return self.title
