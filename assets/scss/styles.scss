@@ -72,7 +72,7 @@ body {
     // flex-wrap: wrap;
     > *:not(:last-child) {
         margin-right: 30px;
-        margin-bottom: 10px;
+        // margin-bottom: 10px;
     }
 }
 
@@ -94,6 +94,10 @@ body {
 
 .margin-left {
     margin-left: 10px;
+}
+
+.margin-bottom {
+    margin-bottom: 10px;
 }
 
 .float-left {
@@ -225,7 +229,7 @@ span[role=button] {
 }
 
 .inactive {
-    background-color: $light-grey !important;
+    background-color: lighten($light-grey, 4%) !important;
     color: $medium-grey !important;
     box-shadow: none !important;
     cursor: auto;
@@ -273,6 +277,13 @@ span[role=button] {
 
     &.create {
         color: $add;
+        &:hover, &:focus {
+            box-shadow: none !important;
+        }
+    }
+
+    &.save {
+        color: $save;
         &:hover, &:focus {
             box-shadow: none !important;
         }
@@ -632,14 +643,14 @@ main {
         div {
             // width: 100%;
             overflow: hidden;
+            justify-content: center;
             label, input, select, textarea {
                 width: -moz-available;
                 width: -webkit-fill-available;
                 width: fill-available;
-                margin-bottom: 10px;
             }
             // label {
-            //     margin-top: 10px;
+            //     margin-top: 5px;
             // }
             select {
                 width: 100%;
@@ -685,7 +696,7 @@ main {
             font-size: 14px;
             display: block;
             // position: relative;
-            input:not([type=checkbox]), select {
+            input, select {
                 margin-top: 0px !important;
                 margin-bottom: 0px !important;
             }
@@ -1125,9 +1136,11 @@ footer {
             padding: 0px 30px 30px 30px;
         } 
         #page-header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            // display: flex;
+            // flex-wrap: wrap;
+            // justify-content: space-between;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
         }
         #form-header {
             margin-top: 170px;
@@ -1144,6 +1157,10 @@ footer {
     
     main {
         #page-header {
+            display: block;
+            .filter {
+                margin-bottom: 10px;
+            }
             #status-bar {
                 margin-bottom: 10px;
             }
@@ -1153,14 +1170,14 @@ footer {
                 white-space: pre-wrap;
             }
         }
-        #form-header{
-            margin-top: 150px;
-        }
-        .filters {
-            :not(.create) {
-                display: none;
-            }
-        }
+        // #form-header{
+        //     margin-top: 150px;
+        // }
+        // .filters {
+        //     :not(.create) {
+        //         display: none;
+        //     }
+        // }
         .user-control {
             display: block;
             #user-details, #user-password {
@@ -1183,18 +1200,13 @@ footer {
         }
     }
     main {
-        #page-header {
-            #status-bar {
-                ul {
-                    display: none;
-                }
-            }
-        }
-        .filters {
-            :not(.create) {
-                display: none;
-            }
-        }
+        // #page-header {
+        //     #status-bar {
+        //         ul {
+        //             display: none;
+        //         }
+        //     }
+        // }
         #pagination {
             ul {
                 @include hidden();
@@ -1209,6 +1221,14 @@ footer {
     }
 }
 
+@media only screen and (max-width: 750px) {
+    main {
+        #form-header{
+            margin-top: 200px;
+        }
+    }
+}
+
 @media only screen and (max-width: 520px) {
     header {
         #logo {
@@ -1217,15 +1237,10 @@ footer {
     }
     main {
         #page-header {
-            div:not(#status-bar) {
-                display: flex;
-                flex-wrap: wrap;
-                > *:not(.create) {
-                    margin: 5px;
-                }
-            }
             .create {
                 margin-left: 0px;
+                display: block;
+                text-align: center;
             }
         }
         &:not(#form-page) {

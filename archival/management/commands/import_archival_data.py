@@ -15,7 +15,7 @@ class Command(BaseCommand):
     help = 'Imports archival data from a spreadsheet or csv file'
     logger = logging.getLogger(__name__)
 
-    language = Language.objects.get(name_en='English')
+    language = Language.objects.filter(name_en='English').first()
     script = Script.objects.get(name='Latin')
 
     def add_arguments(self, parser):

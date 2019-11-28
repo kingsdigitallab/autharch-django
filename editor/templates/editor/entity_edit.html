@@ -57,7 +57,8 @@
   </div>
   <div class="form-section formset">
     {% with identities=form.formsets.identities %}
-    <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }}) <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }}) 
+      <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon" onclick="toggleHelpText(this)">&#xf059;</span></h2>
     <div class="management_form">
       {{ identities.management_form }}
     </div>
@@ -151,7 +152,8 @@
   {% include "./includes/description_inline_form.html" with form=description_form %}
   {% include "./includes/local_description_inline_form.html" with form=description_form.formsets.local_descriptions.empty_form %}
   {% include "./includes/biography_history_inline_form.html" with form=description_form.formsets.biography_histories.empty_form %}
-  {% include "./includes/event_inline_form.html" with form=description_form.formsets.biography_histories.empty_form.formsets.events.empty_form %}
+  {% include "./includes/event_inline_form.html" with form=description_form.formsets.events.empty_form %}
+  {% include "./includes/function_inline_form.html" with form=description_form.formsets.functions.empty_form %}
   {% include "./includes/language_script_inline_form.html" with form=description_form.formsets.language_scripts.empty_form %}
   {% include "./includes/place_inline_form.html" with form=description_form.formsets.places.empty_form %}
   {% include "./includes/mandate_inline_form.html" with form=description_form.formsets.mandates.empty_form %}

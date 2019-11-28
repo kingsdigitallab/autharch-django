@@ -1,6 +1,6 @@
 import nested_admin
 from authority.models import (BiographyHistory, Control, Description, Entity,
-                              Event, Identity, LanguageScript, LegalStatus,
+                              Event, Identity, Function, LanguageScript, LegalStatus,
                               LocalDescription, Mandate, NameEntry, NamePart,
                               Place, Relation, Resource, Source)
 from ckeditor.widgets import CKEditorWidget
@@ -9,21 +9,11 @@ from django.db import models
 from reversion.admin import VersionAdmin
 
 
-class EventInline(nested_admin.NestedStackedInline):
-    model = Event
-
-    autocomplete_fields = ['place']
-    extra = 0
-    formfield_overrides = {
-        models.TextField: {'widget': CKEditorWidget}
-    }
-
-
 class BiographyHistoryInline(nested_admin.NestedStackedInline):
     model = BiographyHistory
 
     extra = 0
-    inlines = [EventInline]
+    # inlines = [EventInline]
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
@@ -72,6 +62,14 @@ class PlaceInline(nested_admin.NestedStackedInline):
         models.TextField: {'widget': CKEditorWidget}
     }
 
+class EventInline(nested_admin.NestedStackedInline):
+    model = Event
+
+    autocomplete_fields = ['place']
+    extra = 0
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget}
+    }
 
 class NamePartInline(nested_admin.NestedTabularInline):
     model = NamePart
@@ -96,6 +94,14 @@ class SourceInline(nested_admin.NestedStackedInline):
         models.TextField: {'widget': CKEditorWidget}
     }
 
+class FunctionInline(nested_admin.NestedStackedInline):
+    model = Function
+
+    extra = 0
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget}
+    }
+
 
 class ControlInline(nested_admin.NestedStackedInline):
     model = Control
@@ -112,12 +118,12 @@ class ControlInline(nested_admin.NestedStackedInline):
 class DescriptionInline(nested_admin.NestedStackedInline):
     model = Description
 
-    autocomplete_fields = ['function']
+    # autocomplete_fields = ['function']
     extra = 0
     formfield_overrides = {
         models.TextField: {'widget': CKEditorWidget}
     }
-    inlines = [PlaceInline, LanguageScriptInline, BiographyHistoryInline,
+    inlines = [PlaceInline, EventInline, FunctionInline, LanguageScriptInline, BiographyHistoryInline,
                LocalDescriptionInline, MandateInline, LegalStatusInline]
 
 

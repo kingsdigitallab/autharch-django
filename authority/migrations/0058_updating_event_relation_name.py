@@ -9,11 +9,3 @@ class Migration(migrations.Migration):
     dependencies = [
         ('authority', '0057_remove_entity_rel'),
     ]
-
-    operations = [
-        migrations.AlterField(
-            model_name='event',
-            name='biography_history',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events', to='authority.BiographyHistory'),
-        ),
-    ]

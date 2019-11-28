@@ -16,11 +16,6 @@ class Migration(migrations.Migration):
             field=models.CharField(max_length=1024, null=True),
         ),
         migrations.AddField(
-            model_name='event',
-            name='display_date',
-            field=models.CharField(max_length=1024, null=True),
-        ),
-        migrations.AddField(
             model_name='identity',
             name='display_date',
             field=models.CharField(max_length=1024, null=True),

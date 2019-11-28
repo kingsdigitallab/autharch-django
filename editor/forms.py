@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from archival.models import Collection, File, Item, Series
 from authority.models import (
-    BiographyHistory, Control, Description, Entity, Event, Identity,
+    BiographyHistory, Control, Description, Function, Entity, Event, Identity,
     LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
     NamePart, Place, Relation, Resource, Source
 )
@@ -77,6 +77,13 @@ class EventEditInlineForm(forms.ModelForm):
         model = Event
 
 
+class FunctionEditInlineForm(forms.ModelForm):
+
+    class Meta:
+        exclude = []
+        model = Function
+
+
 class LanguageScriptEditInlineForm(forms.ModelForm):
 
     class Meta:
@@ -133,16 +140,16 @@ class SourceEditInlineForm(forms.ModelForm):
         model = Source
 
 
-class BiographyHistoryEditInlineForm(ContainerModelForm):
+class BiographyHistoryEditInlineForm(forms.ModelForm):
 
-    def _add_formsets(self, *args, **kwargs):
-        formsets = {}
-        data = kwargs.get('data')
-        EventFormset = forms.models.inlineformset_factory(
-            BiographyHistory, Event, form=EventEditInlineForm, extra=0)
-        formsets['events'] = EventFormset(
-            data, instance=self.instance, prefix=self.prefix + '-event')
-        return formsets
+    # def _add_formsets(self, *args, **kwargs):
+    #     formsets = {}
+    #     data = kwargs.get('data')
+    #     EventFormset = forms.models.inlineformset_factory(
+    #         BiographyHistory, Event, form=EventEditInlineForm, extra=0)
+    #     formsets['events'] = EventFormset(
+    #         data, instance=self.instance, prefix=self.prefix + '-event')
+    #     return formsets
 
     class Meta:
         exclude = []
@@ -176,6 +183,17 @@ class DescriptionEditInlineForm(ContainerModelForm):
             Description, Place, form=PlaceEditInlineForm, extra=0)
         formsets['places'] = PlaceFormset(
             data, instance=instance, prefix=prefix + '-place')
+
+        EventFormset = forms.models.inlineformset_factory(
+            Description, Event, form=EventEditInlineForm, extra=0)
+        formsets['events'] = EventFormset(
+            data, instance=instance, prefix=prefix + '-event')
+            
+        FunctionFormset = forms.models.inlineformset_factory(
+            Description, Function, form=FunctionEditInlineForm, extra=0)
+        formsets['functions'] = FunctionFormset(
+                    data, instance=instance, prefix=prefix + '-function')
+
         LanguageScriptFormset = forms.models.inlineformset_factory(
             Description, LanguageScript, form=LanguageScriptEditInlineForm,
             extra=0)
@@ -258,6 +276,7 @@ class IdentityEditInlineForm(ContainerModelForm):
         exclude = []
 
 
+
 class ArchivalRecordEditForm(forms.ModelForm):
 
     """Base class for all ArchivalRecord forms.
@@ -303,7 +322,7 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'provenance': forms.Textarea(attrs={'rows': 4}),
             'rights_declaration': forms.Textarea(),
             'start_date': HTML5DateInput(),
-            'uuid': forms.HiddenInput(),
+            'uuid': forms.HiddenInput()
         }
 
 

@@ -4,7 +4,7 @@ from jargon.serializers import EntityTypeSerializer
 from rest_framework import serializers
 
 from .models import (
-    BiographyHistory, Control, Description, Entity, Identity, LanguageScript,
+    BiographyHistory, Control, Description, Entity, Identity, Event, LanguageScript,
     LocalDescription, NameEntry, Place
 )
 
@@ -12,7 +12,7 @@ from .models import (
 class BiographyHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = BiographyHistory
-        fields = ['abstract', 'content', 'sources', 'copyright']
+        fields = ['abstract', 'content', 'structure_or_genealogy', 'sources', 'copyright']
         depth = 10
 
 
@@ -22,6 +22,11 @@ class LanguageScriptSerializer(serializers.ModelSerializer):
         fields = ['language', 'script']
         depth = 10
 
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ['event', 'place']
+        depth = 10
 
 class LocalDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,12 +48,13 @@ class DescriptionSerializer(serializers.ModelSerializer):
     biography_history = BiographyHistorySerializer(read_only=True)
     languages_scripts = LanguageScriptSerializer(many=True, read_only=True)
     local_descriptions = LocalDescriptionSerializer(many=True, read_only=True)
+    events = EventSerializer(many=True, read_only=True)
     places = PlaceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Description
-        fields = ['biography_history', 'function', 'local_descriptions',
-                  'languages_scripts', 'places', 'structure_or_genealogy']
+        fields = ['biography_history', 'function', 'local_descriptions', 'events',
+                  'languages_scripts', 'places']
         depth = 10
 
 
@@ -233,6 +239,7 @@ class EntitySerializer(serializers.ModelSerializer):
                 genders_json = []
                 bios_json = []
                 events_json = []
+                #OL - structure/genealogy should be a part of biography/history; not a standalone field. I moved 'structure_or_genealogy' to bio but haven't removed anything else.
                 genealogies_json = []
                 langscripts_json = []
                 places_json = []
@@ -260,7 +267,6 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "name": "Citation",
                                     "content": local_desc.citation
                                 }])
-
                         try:
                             # Bio
                             bio = description.biography_history
@@ -272,33 +278,46 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "name": "Content",
                                     "content": bio.content
                                 }, {
+                                    "name": "Genealogy",
+                                    "content": bio.structure_or_genealogy
+                                }, {
                                     "name": "Sources",
                                     "content": bio.sources
                                 }, {
                                     "name": "Copyright",
                                     "content": bio.copyright
-                                }])
+                                },])
 
-                                # Events (under bio/hist)
-                                for event in bio.events.all():
-                                    events_json.append([{
-                                        "name": "Event",
-                                        "content": event.event
-                                    }, {
-                                        "name": "Place",
-                                        "content": str(event.place)
-                                    }, {
-                                        "name": "Dates",
-                                        "content": event.get_date()
-                                    }])
+                                # for event in bio.events.all():
+                                #     events_json.append([{
+                                #         "name": "Event",
+                                #         "content": event.event
+                                #     }, {
+                                #         "name": "Place",
+                                #         "content": str(event.place)
+                                #     }, {
+                                #         "name": "Dates",
+                                #         "content": event.get_date()
+                                #     }])
+
                         except BiographyHistory.DoesNotExist:
                             pass
 
-                        # Genealogy
-                        genealogies_json.append({
-                            "name": "Genealogy",
-                            "content": description.structure_or_genealogy
-                        })
+                        
+                        # Events (OL - were under bio/hist)
+                        events = description.events
+                        if events.count():
+                            for e in events.all():
+                                events_json.append([{
+                                    "name": "Event",
+                                    "content": e.event
+                                }, {
+                                    "name": "Place",
+                                    "content": str(e.place)
+                                }, {
+                                    "name": "Dates",
+                                    "content": e.get_date()
+                                }])
 
                         # Langscript
                         languages_scripts = description.languages_scripts
@@ -409,6 +428,7 @@ class EntitySerializer(serializers.ModelSerializer):
                         "content": relations_json
                     })
 
+                # OL - moved structure and genealogy to bio but haven't removed the json links (yet)
                 # Geneaologies
                 if len(genealogies_json):
                     identity_json.append({

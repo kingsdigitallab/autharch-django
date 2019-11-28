@@ -11,10 +11,11 @@ from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
 from script_codes.models import Script
 
+from . import constants
 
 class DateRangeMixin(models.Model):
-    date_from = models.DateField(blank=True, null=True)
-    date_to = models.DateField(blank=True, null=True)
+    date_from = models.DateField(blank=True, null=True, help_text=constants.START_DATE_HELP)
+    date_to = models.DateField(blank=True, null=True, help_text=constants.END_DATE_HELP)
     display_date = models.CharField(max_length=1024, null=True, blank=True)
 
     class Meta:
@@ -36,8 +37,9 @@ class DateRangeMixin(models.Model):
 
 
 class LanguageScriptMixin(models.Model):
-    language = models.ForeignKey(Language, on_delete=models.PROTECT)
-    script = models.ForeignKey(Script, on_delete=models.PROTECT)
+    language = models.ForeignKey(Language, blank=True, on_delete=models.PROTECT,
+                                   help_text=constants.LANGUAGE_HELP)
+    script = models.ForeignKey(Script, blank=True, on_delete=models.PROTECT)
 
     class Meta:
         abstract = True
@@ -158,8 +160,6 @@ class Description(DateRangeMixin, TimeStampedModel):
         Identity, on_delete=models.CASCADE, related_name='descriptions')
     function = models.ManyToManyField(Function, blank=True)
 
-    structure_or_genealogy = models.TextField(blank=True, null=True)
-
 
 @reversion.register()
 class Place(DateRangeMixin, TimeStampedModel):
@@ -167,8 +167,8 @@ class Place(DateRangeMixin, TimeStampedModel):
         Description, on_delete=models.CASCADE, related_name='places')
 
     place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)
-    address = models.TextField(blank=True, null=True)
-    role = models.TextField(blank=True, null=True)
+    address = models.TextField(null=True)
+    role = models.TextField(null=True, help_text=constants.PLACE_ROLE_HELP)
 
 
 @reversion.register()
@@ -182,10 +182,14 @@ class BiographyHistory(TimeStampedModel):
     description = models.OneToOneField(Description, on_delete=models.CASCADE,
                                        related_name='biography_history')
 
-    abstract = models.TextField(blank=True, null=True)
+    abstract = models.TextField(null=True,
+                                   help_text=constants.BIOGRAPHY_ABSTRACT_HELP)
     content = models.TextField(blank=True, null=True)
+    structure_or_genealogy = models.TextField(blank=True, null=True,
+                                   help_text=constants.BIOGRAPHY_STRUCTURE_GENEALOGY_HELP)
     sources = models.TextField(blank=True, null=True)
-    copyright = models.TextField(blank=True, null=True)
+    copyright = models.TextField(blank=True, null=True,
+                                   help_text=constants.BIOGRAPHY_COPYRIGHT_HELP)
 
     class Meta:
         verbose_name = 'Biography/History'
@@ -194,8 +198,8 @@ class BiographyHistory(TimeStampedModel):
 
 @reversion.register()
 class Event(DateRangeMixin, TimeStampedModel):
-    biography_history = models.ForeignKey(
-        BiographyHistory, on_delete=models.CASCADE, related_name='events')
+    description = models.ForeignKey(
+        Description, on_delete=models.CASCADE, related_name='events')
 
     event = models.TextField()
     place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)
@@ -206,8 +210,8 @@ class LocalDescription(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='local_descriptions')
 
-    gender = models.CharField(max_length=256)
-    notes = models.TextField(blank=True)
+    gender = models.CharField(max_length=256, help_text=constants.GENDER_HELP)
+    notes = models.TextField('Descriptive notes', blank=True)
     citation = models.TextField(blank=True)
 
 
@@ -220,6 +224,11 @@ class Mandate(DateRangeMixin, TimeStampedModel):
     notes = models.TextField(blank=True, null=True)
     citation = models.TextField(blank=True, null=True)
 
+@reversion.register()
+class Function(DateRangeMixin, TimeStampedModel):
+    description = models.ForeignKey(Description, on_delete=models.CASCADE,
+                                    related_name='functions')
+    title = models.ForeignKey(Function, on_delete=models.CASCADE)
 
 @reversion.register()
 class LegalStatus(DateRangeMixin, TimeStampedModel):
@@ -228,7 +237,8 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
 
     term = models.CharField(max_length=256, blank=True)
     notes = models.TextField(blank=True, null=True)
-    citation = models.TextField(blank=True, null=True)
+    citation = models.TextField(blank=True, null=True,
+                                   help_text=constants.LEGAL_STATUS_CITATION_HELP)
 
     class Meta:
         verbose_name_plural = 'Legal status'
@@ -241,9 +251,9 @@ class Relation(DateRangeMixin, TimeStampedModel):
     relation_type = models.ForeignKey(
         EntityRelationType, on_delete=models.PROTECT)
     related_entity = models.ForeignKey(
-        Entity, on_delete=models.CASCADE, blank=True, null=True,
+        Entity, on_delete=models.CASCADE, null=True,
         related_name='related_to_relations')
-    relation_detail = models.TextField(blank=True, null=True)
+    relation_detail = models.TextField(null=True)
     place = models.ForeignKey(
         GeoPlace, blank=True, null=True, on_delete=models.CASCADE)
     notes = models.TextField()
@@ -254,10 +264,10 @@ class Resource(TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='resources')
     relation_type = models.ForeignKey(
-        ResourceRelationType, on_delete=models.PROTECT)
-    url = models.URLField(blank=True, null=True)
+        ResourceRelationType, on_delete=models.PROTECT, help_text=constants.RESOURCE_RELATIONSHIP_TYPE_HELP)
+    url = models.URLField(null=True)
     citation = models.TextField()
-    notes = models.TextField(blank=True, null=True)
+    notes = models.TextField(null=True)
 
 
 @reversion.register()
@@ -284,4 +294,4 @@ class Source(TimeStampedModel):
 
     name = models.CharField(max_length=256)
     url = models.URLField(blank=True, null=True)
-    notes = models.TextField(blank=True, null=True)
+    notes = models.TextField(null=True)
