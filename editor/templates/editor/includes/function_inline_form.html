@@ -1,0 +1,23 @@
+{% load editor_form_tags %}
+<fieldset data-form-type="function">
+  <div class="fieldset-header">
+    <h3>{{ form.function.value|default:""|truncatewords:10 }}</h3>
+    <div class="flex">
+      <div>
+        {% include "./delete_inline_button.html" %}
+      </div>
+      <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+    </div>
+  </div>
+  <div class="fieldset-body expand inline-deletable">
+    {% include "./delete_form_field.html" with form=form %}
+    <div class="two-column-table">
+      <div>
+        {% render_field form.title %}
+      </div>
+      <div>
+        {% include "./date_section.html" with form=form only %}
+      </div>
+    </div>
+  </div>
+</fieldset>
