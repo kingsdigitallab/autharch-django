@@ -96,7 +96,10 @@ class LegalStatusEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = LegalStatus
-
+        widgets = {
+            'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
+        }
 
 class LocalDescriptionEditInlineForm(forms.ModelForm):
 
@@ -110,6 +113,10 @@ class MandateEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = Mandate
+        widgets = {
+            'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
+        }
 
 
 class PlaceEditInlineForm(forms.ModelForm):
@@ -131,6 +138,9 @@ class ResourceEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = Resource
+        widgets = {
+            'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
+        }
 
 
 class SourceEditInlineForm(forms.ModelForm):
@@ -154,6 +164,13 @@ class BiographyHistoryEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = BiographyHistory
+        widgets = {
+            'abstract': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'content': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'structure_or_genealogy': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'sources': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'copyright': forms.Textarea(attrs=RICHTEXT_ATTRS),
+        }
 
 
 class ControlEditInlineForm(ContainerModelForm):
@@ -223,7 +240,6 @@ class DescriptionEditInlineForm(ContainerModelForm):
     class Meta:
         exclude = []
         model = Description
-
 
 class NameEntryEditInlineForm(ContainerModelForm):
 

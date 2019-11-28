@@ -211,7 +211,7 @@ class LocalDescription(DateRangeMixin, TimeStampedModel):
                                     related_name='local_descriptions')
 
     gender = models.CharField(max_length=256, help_text=constants.GENDER_HELP)
-    notes = models.TextField('Descriptive notes', blank=True)
+    notes = models.TextField(verbose_name='Descriptive notes', blank=True)
     citation = models.TextField(blank=True)
 
 
@@ -221,14 +221,14 @@ class Mandate(DateRangeMixin, TimeStampedModel):
                                     related_name='mandates')
 
     term = models.CharField(max_length=256, blank=True)
-    notes = models.TextField(blank=True, null=True)
+    notes = models.TextField(verbose_name="Descriptive Notes", blank=True, null=True)
     citation = models.TextField(blank=True, null=True)
 
 @reversion.register()
 class Function(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='functions')
-    title = models.ForeignKey(Function, on_delete=models.CASCADE)
+    title = models.ForeignKey(Function, verbose_name="Function", on_delete=models.CASCADE)
 
 @reversion.register()
 class LegalStatus(DateRangeMixin, TimeStampedModel):
@@ -236,7 +236,7 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
                                     related_name='legal_statuses')
 
     term = models.CharField(max_length=256, blank=True)
-    notes = models.TextField(blank=True, null=True)
+    notes = models.TextField(verbose_name="Descriptive Notes", blank=True, null=True)
     citation = models.TextField(blank=True, null=True,
                                    help_text=constants.LEGAL_STATUS_CITATION_HELP)
 
@@ -249,13 +249,13 @@ class Relation(DateRangeMixin, TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='relations')
     relation_type = models.ForeignKey(
-        EntityRelationType, on_delete=models.PROTECT)
+        EntityRelationType, verbose_name="Relationship type", on_delete=models.PROTECT)
     related_entity = models.ForeignKey(
-        Entity, on_delete=models.CASCADE, null=True,
+        Entity, verbose_name="Related person or corporate body", on_delete=models.CASCADE, null=True,
         related_name='related_to_relations')
-    relation_detail = models.TextField(null=True)
+    relation_detail = models.TextField(verbose_name="Description", null=True)
     place = models.ForeignKey(
-        GeoPlace, blank=True, null=True, on_delete=models.CASCADE)
+        GeoPlace, verbose_name="Place related to relationship", blank=True, null=True, on_delete=models.CASCADE)
     notes = models.TextField()
 
 
@@ -264,8 +264,8 @@ class Resource(TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='resources')
     relation_type = models.ForeignKey(
-        ResourceRelationType, on_delete=models.PROTECT, help_text=constants.RESOURCE_RELATIONSHIP_TYPE_HELP)
-    url = models.URLField(null=True)
+        ResourceRelationType, verbose_name="Resource relationship type", on_delete=models.PROTECT, help_text=constants.RESOURCE_RELATIONSHIP_TYPE_HELP)
+    url = models.URLField(verbose_name="URL", null=True)
     citation = models.TextField()
     notes = models.TextField(null=True)
 
@@ -293,5 +293,5 @@ class Source(TimeStampedModel):
                                 related_name="sources")
 
     name = models.CharField(max_length=256)
-    url = models.URLField(blank=True, null=True)
+    url = models.URLField(verbose_name="URL", blank=True, null=True)
     notes = models.TextField(null=True)
