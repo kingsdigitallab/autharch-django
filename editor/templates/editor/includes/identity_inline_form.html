@@ -5,7 +5,11 @@
     <div class="flex">
       <div>
         {% render_field form.id %}
-        {% render_field form.preferred_identity %}
+        <!-- {% render_field form.preferred_identity %} -->
+        <label>
+            {{ form.preferred_identity }}
+            {{ form.preferred_identity.label }}
+        </label>
       </div>
       <div>
         {% include "./delete_inline_button.html" %}
