@@ -29,4 +29,20 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
+        migrations.CreateModel(
+            name='Event',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
+                ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, verbose_name='modified')),
+                ('date_from', models.DateField()),
+                ('date_to', models.DateField(blank=True, null=True)),
+                ('event', models.TextField()),
+                ('place', models.CharField(max_length=256)),
+                ('biography_history', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='authority.BiographyHistory')),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
     ]

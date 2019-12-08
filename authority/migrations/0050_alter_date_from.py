@@ -21,6 +21,11 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(blank=True, to='jargon.Function'),
         ),
         migrations.AlterField(
+            model_name='event',
+            name='date_from',
+            field=models.DateField(blank=True),
+        ),
+        migrations.AlterField(
             model_name='identity',
             name='date_from',
             field=models.DateField(blank=True),

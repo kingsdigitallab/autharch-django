@@ -23,6 +23,11 @@ class Migration(migrations.Migration):
             preserve_default=False,
         ),
         migrations.AlterField(
+            model_name='event',
+            name='place',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='geonames_place.Place'),
+        ),
+        migrations.AlterField(
             model_name='relation',
             name='place',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='geonames_place.Place'),

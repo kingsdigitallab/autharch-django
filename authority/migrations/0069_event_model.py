@@ -3,7 +3,6 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import model_utils.fields
 
 
 class Migration(migrations.Migration):
@@ -14,21 +13,29 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Event',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
-                ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, verbose_name='modified')),
-                ('date_from', models.DateField(blank=True, help_text='Date of existence. A birth date, or for corporate bodies, a creation date.', null=True)),
-                ('date_to', models.DateField(blank=True, help_text='Date of existence. A death date, or for corporate bodies, an extinction date.', null=True)),
-                ('display_date', models.CharField(blank=True, max_length=1024, null=True)),
-                ('event', models.TextField()),
-                ('description', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events', to='authority.Description')),
-                ('place', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='geonames_place.Place')),
-            ],
-            options={
-                'abstract': False,
-            },
+        migrations.RemoveField(
+            model_name='event',
+            name='biography_history',
+        ),
+        migrations.AddField(
+            model_name='event',
+            name='description',
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='events', to='authority.Description'),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='event',
+            name='date_from',
+            field=models.DateField(blank=True, help_text='Date of existence. A birth date, or for corporate bodies, a creation date.', null=True),
+        ),
+        migrations.AlterField(
+            model_name='event',
+            name='date_to',
+            field=models.DateField(blank=True, help_text='Date of existence. A death date, or for corporate bodies, an extinction date.', null=True),
+        ),
+        migrations.AlterField(
+            model_name='event',
+            name='place',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='geonames_place.Place'),
         ),
     ]

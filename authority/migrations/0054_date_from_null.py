@@ -21,6 +21,11 @@ class Migration(migrations.Migration):
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
+            model_name='event',
+            name='date_from',
+            field=models.DateField(blank=True, null=True),
+        ),
+        migrations.AlterField(
             model_name='legalstatus',
             name='date_from',
             field=models.DateField(blank=True, null=True),
