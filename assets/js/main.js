@@ -1,103 +1,106 @@
 $(document).ready(function() {
 
-    // Return the text nodes of the context. Code by Mark Baijens from https://stackoverflow.com/questions/4106809/how-can-i-change-an-elements-text-without-changing-its-child-elements/4106957
-    jQuery.fn.textNodes = function() {
+  // Return the text nodes of the context. Code by Mark Baijens from
+  // https://stackoverflow.com/questions/4106809/how-can-i-change-an-elements-text-without-changing-its-child-elements/4106957
+  jQuery.fn.textNodes = function() {
     return this.contents().filter(function() {
-        return (this.nodeType === Node.TEXT_NODE);
+      return (this.nodeType === Node.TEXT_NODE);
     });
-    };
+  };
 
-    // In order to not cause problems with client-side form validation
-    // when required fields are hidden, remove the required attribute
-    // from all form controls in the logging dialogue, to be added back
-    // when it is shown.
-    //
-    // Might this not better be done by simply adding/removing
-    // novalidate on the form?
-    let dialogueRequiredControls = $("#log-modal").find("*[required]");
-    toggleRequiredControls(dialogueRequiredControls, false);
+  // In order to not cause problems with client-side form validation
+  // when required fields are hidden, remove the required attribute
+  // from all form controls in the logging dialogue, to be added back
+  // when it is shown.
+  //
+  // This is a better approach than toggling novalidate on the form,
+  // since we presumably do want that minimal validation to occur when
+  // submitting, and this just stops it from failing on specific
+  // fields that aren't editable yet.
+  let dialogueRequiredControls = $("#log-modal").find("*[required]");
+  toggleRequiredControls(dialogueRequiredControls, false);
 
-    // Cancel buttons on modal dialogues should close the modal and not
-    // allow default handling of the event.
-    $(".modal-cancel").click(function(event) {
+  // Cancel buttons on modal dialogues should close the modal and not
+  // allow default handling of the event.
+  $(".modal-cancel").click(function(event) {
     // Even if this is not the logging dialogue being cancelled, set
     // its required controls to false; this is the most convenient
     // place to perform this sadly necessary operation.
     toggleRequiredControls(dialogueRequiredControls, false);
     let modal = $(event.target).parents(".modal").first().removeClass("active");
     event.preventDefault();
-    });
+  });
 
-    // Open popup to log changes when saving a record, then actually
-    // submit the form when submitting from the popup.
-    $("#record-form").submit((event) => {
+  // Open popup to log changes when saving a record, then actually
+  // submit the form when submitting from the popup.
+  $("#record-form").submit((event) => {
     if ($("#log-modal").hasClass('active')) {
-        event.target.submit();
+      event.target.submit();
     } else {
-        event.preventDefault();
-        toggleRequiredControls(dialogueRequiredControls, true);
-        $("#log-modal").addClass('active');
+      event.preventDefault();
+      toggleRequiredControls(dialogueRequiredControls, true);
+      $("#log-modal").addClass('active');
     }
-    });
+  });
 
-    // open popup to add new user who can access the admin panel
-    $('#add-form').click(() => {
-        $('#add-user-form').addClass('active');
-    });
-
-
-    // ADD-ONS
-
-    // Change textareas to richtext fields. A unique ID must be
-    // provided for each, to avoid the contents being duplicated.
-    $('.richtext').each(function(index) {
-        $(this).richText({id: "richtext-" + index});
-    });
-
-    // add search bar to the select dropdown
-    $(".select-with-search").select2( {
-        placeholder: "Select",
-        allowClear: true
-    } );
+  // open popup to add new user who can access the admin panel
+  $('#add-form').click(() => {
+    $('#add-user-form').addClass('active');
+  });
 
 
-    // optional functionality (can be removed if needed) - dynamic styling of the sections
+  // ADD-ONS
 
-    // style border for preferred names and identities
-    $( "fieldset:has(input[name*='preferred']:checked)").addClass('border-left');
-    $( "fieldset:has(input[name*='authorised']:checked)").addClass('border-left');
+  // Change textareas to richtext fields. A unique ID must be
+  // provided for each, to avoid the contents being duplicated.
+  $('.richtext').each(function(index) {
+    $(this).richText({id: "richtext-" + index});
+  });
 
-    $('body').on('click', 'input[name*="preferred"]', (el) => {
-        $('input[name*="preferred"]:checked').prop('checked', false);
-        $(el.target).parents('fieldset').first().find('input[name*="preferred"]').prop('checked', true);
-        $(el.target).parents('fieldset').siblings().removeClass('border-left');
-        if ($(el.target).is(':checked')) {
-            $(el.target).parents('fieldset').first().addClass('border-left');
-        }
-    });
+  // add search bar to the select dropdown
+  $(".select-with-search").select2( {
+    placeholder: "Select",
+    allowClear: true
+  } );
 
-    $('body').on('click', 'input[name*="authorised"]', (el) => {
-        $('input[name*="authorised"]:checked').prop('checked', false);
-        $(el.target).parents('fieldset').first().find('input[name*="authorised"]').prop('checked', true);
-        $(el.target).parents('fieldset').siblings().removeClass('border-left');
-        if ($(el.target).is(':checked')) {
-            $(el.target).parents('fieldset').first().addClass('border-left');
-        }
-    });
+
+  // optional functionality (can be removed if needed) - dynamic styling of the sections
+
+  // style border for preferred names and identities
+  $( "fieldset:has(input[name*='preferred']:checked)").addClass('border-left');
+  $( "fieldset:has(input[name*='authorised']:checked)").addClass('border-left');
+
+  $('body').on('click', 'input[name*="preferred"]', (el) => {
+    $('input[name*="preferred"]:checked').prop('checked', false);
+    $(el.target).parents('fieldset').first().find('input[name*="preferred"]').prop('checked', true);
+    $(el.target).parents('fieldset').siblings().removeClass('border-left');
+    if ($(el.target).is(':checked')) {
+      $(el.target).parents('fieldset').first().addClass('border-left');
+    }
+  });
+
+  $('body').on('click', 'input[name*="authorised"]', (el) => {
+    $('input[name*="authorised"]:checked').prop('checked', false);
+    $(el.target).parents('fieldset').first().find('input[name*="authorised"]').prop('checked', true);
+    $(el.target).parents('fieldset').siblings().removeClass('border-left');
+    if ($(el.target).is(':checked')) {
+      $(el.target).parents('fieldset').first().addClass('border-left');
+    }
+  });
 });
 
 function toggleHelpText(el, help_text) {
-    if ($(el).siblings('p.additional-info').length) {
-        // change icon to 'question mark'
-        $(el).text("");
-        $(el).siblings('p.additional-info').remove();
-    }
-    else {
-        var position = $(el).position();
-        $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>'); 
-        // change icon to 'close'
-        $(el).text("");
-    }
+  if ($(el).siblings('p.additional-info').length) {
+    // change icon to 'question mark'
+    $(el).text("");
+    $(el).siblings('p.additional-info').remove();
+  }
+  else {
+    var position = $(el).position();
+    $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
+    // change icon to 'close'
+    $(el).text("");
+  }
 }
 
 
@@ -105,9 +108,9 @@ function toggleHelpText(el, help_text) {
 
 // update entity name part fields if the 'Royal name' checkbox is checked
 function updateBlock(el) {
-    var val= el.name.slice(0, -10);
-    if($(el).is(":checked")){
-        $(el).siblings('.required-fields').html(`
+  var val= el.name.slice(0, -10);
+  if($(el).is(":checked")){
+    $(el).siblings('.required-fields').html(`
             <div class="grid">
                 <span class="required">Forename(s)</span>
                 <input type="text" placeholder="Forename(s)" onfocus="this.placeholder=''" onblur="this.placeholder='Forename(s)'" value="" aria-label="forename" name="`+ val +`forename"/>
@@ -117,20 +120,20 @@ function updateBlock(el) {
                 <input type="text" placeholder="Proper title" onfocus="this.placeholder=''" onblur="this.placeholder='Proper title'" value="" aria-label="proper title" name="`+ val +`proper-title"/>
             </div>
         `);
-    }
-    else if($(el).is(":not(:checked)")){
-        $(el).siblings('.required-fields').html(`
+  }
+  else if($(el).is(":not(:checked)")){
+    $(el).siblings('.required-fields').html(`
             <div class="grid">
                 <span class="required">Surname</span>
                 <input type="text"  placeholder="Surname" onfocus="this.placeholder=''" onblur="this.placeholder='Surname'" value="" aria-label="surname" name="`+ val +`surname"/>
             </div>
         `);
-    }
+  }
 }
 
 function editValue(val) {
-    if(val == 'place') {
-        $('main').append(`<div class="modal active" id="edit-place-form">
+  if(val == 'place') {
+    $('main').append(`<div class="modal active" id="edit-place-form">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h2>Find place</h2>
@@ -174,12 +177,12 @@ function editValue(val) {
                                 </div>
                             </div>
                         </div>`);
-                        }
+  }
 }
 
 
 function warningModal() {
-    $('main').append(`<div class="modal active">
+  $('main').append(`<div class="modal active">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h2>Delete this record?</h2>
@@ -191,11 +194,11 @@ function warningModal() {
                                 <input type="submit" value="Delete" class="danger"/>
                             </div>
                         </div>
-                    </div>`); 
+                    </div>`);
 }
 
 function alertPopup(msg) {
-    $('main').append(`<div class="modal active">
+  $('main').append(`<div class="modal active">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
@@ -214,27 +217,27 @@ function alertPopup(msg) {
 
 // expand/collapse entity/archival record sections
 function toggleTab(el) {
-    $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
-    $(el).toggleClass('active');
+  $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
+  $(el).toggleClass('active');
 }
 
 function closeBlock(el) {
-    $('.'+el).removeClass('active');
+  $('.'+el).removeClass('active');
 }
 
 function login() {
-    window.location.href = "./home.html";
+  window.location.href = "./home.html";
 }
 
 function logout() {
-    window.location.href = "./login.html";
+  window.location.href = "./login.html";
 }
 
 
 /**
  * Create confirmation modal dialogue with form to delete the current
  * record (whether Archival Record or Entity).
-*/
+ */
 function deleteRecord(event) {
   $("#delete-modal").addClass('active');
   event.preventDefault();
@@ -242,29 +245,28 @@ function deleteRecord(event) {
 
 
 /**
-* Add a new empty form of the specified form_type.
-*
-* The blueprints for new forms are in div[@id='empty_forms'], and each
-* has a @data-form-type specifying the form_type.
-*
-* Updates the containing formset's management form controls and sets
-* the name and ids of the new form's controls to use the correct
-* prefix.
-*
-* The place where the new form is put, the location of the management
-* form's TOTAL_FORMS control that is edited, and the determination of
-* nested form's @id/@name prefix is based solely on the provided
-* context element; see {@link getManagementFormTotalControl} and
-* {@link getNewFormParent}.
-*
-* @param {string} formType - the type of form to add, corresponding to
-*                            the @data-form-type of the blueprint
-*                            empty form
-* @param {Element} context - the element from which the call to this
-*                            function was made
-*/
+ * Add a new empty form of the specified form_type.
+ *
+ * The blueprints for new forms are in div[@id='empty_forms'], and each
+ * has a @data-form-type specifying the form_type.
+ *
+ * Updates the containing formset's management form controls and sets
+ * the name and ids of the new form's controls to use the correct
+ * prefix.
+ *
+ * The place where the new form is put, the location of the management
+ * form's TOTAL_FORMS control that is edited, and the determination of
+ * nested form's @id/@name prefix is based solely on the provided
+ * context element; see {@link getManagementFormTotalControl} and
+ * {@link getNewFormParent}.
+ *
+ * @param {string} formType - the type of form to add, corresponding to
+ *                            the @data-form-type of the blueprint
+ *                            empty form
+ * @param {Element} context - the element from which the call to this
+ *                            function was made
+ */
 function addEmptyForm(formType, context) {
-    
   let jContext = $(context);
   // Clone the formType form and add it as the last child of the
   // parent of these forms.
@@ -347,8 +349,8 @@ function getNewFormParent(context) {
 
 // this won't delete the field(s), just hide them. The deletion needs to be executed in the backend, once the form is submitted.
 function deleteField(el) {
-    event.preventDefault();
-    $(el).closest('[data-form-type]').addClass('none');
+  event.preventDefault();
+  $(el).closest('[data-form-type]').addClass('none');
 }
 
 /**
@@ -381,41 +383,42 @@ function deleteField(el) {
  * @param {Element} button - the button element that triggered the toggle
  */
 function toggleDeleteInline(event, button) {
-    event.preventDefault();
-    let jButton = $(button);
-    let label = jButton.parent('label');
-    let header = label.parents('.fieldset-header');
-    let fieldset = header.parent('fieldset');
+  event.preventDefault();
+  let jButton = $(button);
+  let label = jButton.parent('label');
+  let header = label.parents('.fieldset-header');
+  let fieldset = header.parent('fieldset');
 
-    // grey out the header if inactive
-    header.toggleClass('inactive');
-    // uncheck preferred identity
-    header.find('input[type="checkbox"]:checked').prop('checked', false);
-    fieldset.removeClass('border-left');
-    // remove toggle button
-    header.find('.toggle-tab-button').toggleClass('inactive');
-    //toggle the display of preferred identity and authorised form
-    header.find('input[type="checkbox"]').parent().toggleClass('none');
+  // grey out the header if inactive
+  header.toggleClass('inactive');
+  // uncheck preferred identity
+  header.find('input[type="checkbox"]:checked').prop('checked', false);
+  fieldset.removeClass('border-left');
+  // remove toggle button
+  header.find('.toggle-tab-button').toggleClass('inactive');
+  //toggle the display of preferred identity and authorised form
+  header.find('input[type="checkbox"]').parent().toggleClass('none');
 
-    // Find the element for the part of the form to be shown/hidden, and toggle its visibility.
-    let form_part = jButton.closest("[data-form-type]").find("[class~='inline-deletable']").first();
-    form_part.toggleClass("none");
+  // Find the element for the part of the form to be shown/hidden,
+  // and toggle its visibility.
+  let form_part = jButton.closest("[data-form-type]").find("[class~='inline-deletable']").first();
+  form_part.toggleClass("none");
 
-    // toggle the checkbox button and text label
-    if (form_part.hasClass('none')) {
-        jButton.val("");
-        label.removeClass('danger');
-        label.addClass('save');
-        label.append(`<span>Undo</span>`);
-        label.parent().after(`<button class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete forever</button>`)
-    }
-    else {
-        jButton.val("");
-        label.removeClass('save');
-        label.addClass('danger');
-        label.children('span').remove();
-        label.parent().siblings('button').remove();
-    }
+  // toggle the checkbox button and text label
+  if (form_part.hasClass('none')) {
+    jButton.val("");
+    label.removeClass('danger');
+    label.addClass('save');
+    label.append(`<span>Undo</span>`);
+    label.parent().after(`<button class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete forever</button>`)
+  }
+  else {
+    jButton.val("");
+    label.removeClass('save');
+    label.addClass('danger');
+    label.children('span').remove();
+    label.parent().siblings('button').remove();
+  }
 
   // Find and toggle the DELETE checkbox for the form.
   let deleteField = form_part.children("[class~='inline-delete-form-field']").children("[name$='DELETE']").first();

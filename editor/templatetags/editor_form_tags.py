@@ -9,9 +9,9 @@ def render_field(form_field):
     """Renders the form field `form_field`, including label, widget, and
     error messages.
 
-    Due to polymorphism, `form_field` may be an empty string, when the
-    model subclass does not have that field. In such cases, do not
-    render anything.
+    Due to polymorphism of the AuthorityRecord-based models,
+    `form_field` may be an empty string, when the model subclass does
+    not have that field. In such cases, do not render anything.
 
     """
     if form_field == '':
