@@ -21,7 +21,22 @@
         pkg: apt-transport-https
         state: present
         update_cache: yes
-      tags: -system
+      tags:
+        -system
+
+    - name: apt | add elasticsearch key
+      apt_key:
+        url: https://packages.elastic.co/GPG-KEY-elasticsearch
+        state: present
+      tags:
+        - system
+
+    - name: apt | add elasticsearch sources
+      apt_repository:
+        repo: 'deb https://packages.elastic.co/elasticsearch/2.x/debian stable main'
+        state: present
+      tags:
+        - system
 
     - name: apt | install required system packages
       apt:
@@ -305,7 +320,7 @@
         chdir: "{{ project_root }}"
       ignore_errors: yes
       tags:
-        - djang
+        - django
 
 - hosts: all
   vars_files:

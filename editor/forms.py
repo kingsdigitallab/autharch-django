@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 
+import haystack.forms
+from haystack.query import SQ
+
 from archival.models import Collection, File, Item, Series
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
@@ -12,6 +15,12 @@ from authority.models import (
 RICHTEXT_ATTRS = {
     'class': 'richtext',
     'rows': 8,
+}
+
+SEARCH_INPUT_ATTRS = {
+    'aria-label': 'Search',
+    'placeholder': 'Search our catalogue',
+    'type': 'search',
 }
 
 SEARCH_SELECT_ATTRS = {
@@ -100,6 +109,7 @@ class LegalStatusEditInlineForm(forms.ModelForm):
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
         }
+
 
 class LocalDescriptionEditInlineForm(forms.ModelForm):
 
@@ -200,17 +210,14 @@ class DescriptionEditInlineForm(ContainerModelForm):
             Description, Place, form=PlaceEditInlineForm, extra=0)
         formsets['places'] = PlaceFormset(
             data, instance=instance, prefix=prefix + '-place')
-
         EventFormset = forms.models.inlineformset_factory(
             Description, Event, form=EventEditInlineForm, extra=0)
         formsets['events'] = EventFormset(
             data, instance=instance, prefix=prefix + '-event')
-            
         FunctionFormset = forms.models.inlineformset_factory(
             Description, Function, form=FunctionEditInlineForm, extra=0)
         formsets['functions'] = FunctionFormset(
-                    data, instance=instance, prefix=prefix + '-function')
-
+            data, instance=instance, prefix=prefix + '-function')
         LanguageScriptFormset = forms.models.inlineformset_factory(
             Description, LanguageScript, form=LanguageScriptEditInlineForm,
             extra=0)
@@ -240,6 +247,7 @@ class DescriptionEditInlineForm(ContainerModelForm):
     class Meta:
         exclude = []
         model = Description
+
 
 class NameEntryEditInlineForm(ContainerModelForm):
 
@@ -290,7 +298,6 @@ class IdentityEditInlineForm(ContainerModelForm):
     class Meta:
         model = Identity
         exclude = []
-
 
 
 class ArchivalRecordEditForm(forms.ModelForm):
@@ -429,3 +436,51 @@ def get_archival_record_edit_form_for_subclass(instance):
     else:
         raise Exception('Trying to get an ArchivalRecordEditForm subclass'
                         ' for an unrecognised ArchivalRecord subclass.')
+
+
+# Search forms.
+
+class FacetedSearchForm(haystack.forms.SearchForm):
+
+    """We do not want the faceting to narrow the results searched over,
+    but rather for them to be ORed together as a filter. Therefore do
+    not inherit from haystack.forms.FacetedSearchForm."""
+
+    q = forms.CharField(required=False, label='Search',
+                        widget=forms.TextInput(attrs=SEARCH_INPUT_ATTRS))
+
+    def __init__(self, *args, **kwargs):
+        self.selected_facets = kwargs.pop('selected_facets', [])
+        super().__init__(*args, **kwargs)
+
+    def _apply_facets(self, sqs):
+        query = None
+        for facet in self.selected_facets:
+            if ':' not in facet:
+                continue
+            field, value = facet.split(':', 1)
+            if value:
+                if query is None:
+                    query = SQ(**{field: sqs.query.clean(value)})
+                else:
+                    query = query | SQ(**{field: sqs.query.clean(value)})
+        if query is not None:
+            sqs = sqs.filter(query)
+        return sqs
+
+    def no_query_found(self):
+        return self.searchqueryset.all()
+
+    def search(self):
+        sqs = super().search()
+        sqs = self._apply_facets(sqs)
+        return sqs
+
+
+class SearchForm(haystack.forms.SearchForm):
+
+    q = forms.CharField(required=False, label='Search',
+                        widget=forms.TextInput(attrs=SEARCH_INPUT_ATTRS))
+
+    def no_query_found(self):
+        return self.searchqueryset.all()

@@ -3,32 +3,20 @@
 {% block page_header %}
 <div id="page-header">
   <h1>Archival records ({{ records_count }})</h1>
-  <form class="search">
-      <label>
-          <span hidden>Search</span>
-          <input type="search" aria-label="Search" placeholder="Search our catalogue" onfocus="this.placeholder=''" onblur="this.placeholder='Search document'"/>
-      </label>
-      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+  <form action="." class="search" method="get">
+    <label>
+      <span hidden>Search</span>
+      {{ form.q }}
+    </label>
+    <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
   </form>
 </div>
 <div class="filters">
-    {% if collection_count  > 0 %}
-    <input id="collection" type="checkbox" aria-label="collection"/>
-    <label for="collection" class="filter">Collection ({{ collection_count }})</label>
-    {% endif %}
-    {% if file_count > 0 %}
-    <input id="file" type="checkbox" aria-label="file"/>
-    <label for="file" class="filter">File ({{ file_count }})</label>
-    {% endif %}
-    {% if item_count  > 0 %}
-    <input id="item" type="checkbox" aria-label="item"/>
-    <label for="item" class="filter">Item ({{ item_count }})</label>
-    {% endif %}
-    {% if series_count > 0 %}
-    <input id="series" type="checkbox" aria-label="series"/>
-    <label for="series" class="filter">Series ({{ series_count }})</label>
-    {% endif %}
-  </div>
+  {% for record_type in facets.fields.record_type %}
+  <input id="{{ record_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ record_type.0 }}" value=""/>
+  <label for="{{ record_type.0 }}-input" class="filter">{{ record_type.0 }} ({{ record_type.1 }})</label>
+  {% endfor %}
+</div>
 {% endblock page_header %}
 
 {% block content %}
@@ -42,13 +30,15 @@
     </tr>
   </thead>
   <tbody>
-    {% for record in records %}
+    {% for result in object_list %}
+    {% with record=result.object %}
     <tr>
       <td class="description"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record|truncatewords:15 }}</a></td>
       <td>{{ record.archival_level }}</td>
       <td>{{ record.publication_status }}</td>
       <td>QAZ</td>
     </tr>
+    {% endwith %}
     {% endfor %}
   </tbody>
 </table>

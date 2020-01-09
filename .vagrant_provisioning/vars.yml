@@ -24,6 +24,7 @@ system_packages:
     adminer,
     aptitude,
     binutils,
+    elasticsearch,
     gdal-bin,
     git,
     git-core,

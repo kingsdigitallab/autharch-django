@@ -4,19 +4,12 @@
 <div id="page-header">
   <h1>Home</h1>
   <form class="search">
-      <label>
-          <span hidden>Search</span>
-          <input type="search" aria-label="Search" placeholder="Search our catalogue" onfocus="this.placeholder=''" onblur="this.placeholder='Search document'"/>
-      </label>
-      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+    <label>
+      <span hidden>Search</span>
+      {{ form.q }}
+    </label>
+    <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
   </form>
-  <!-- <div class="filters">
-    <input id="entities" type="checkbox" aria-label="entities" />
-    <label for="entities" class="filter">Entities ({{ entity_count }})</label>
-    <input id="archival_records" type="checkbox" aria-label="archival records" />
-    <label for="archival_records" class="filter">Archival records ({{ record_count }})</label>
-    <button aria-label="create entity" class="create">Create new entity</button>
-  </div> -->
 </div>
 {% endblock page_header %}
 
@@ -32,25 +25,28 @@
     </tr>
   </thead>
   <tbody>
-    {% for record in records %}
+    {% for result in object_list %}
+    {% with model_obj=result.object %}
     <tr>
+      {% if result.model_name == 'entity' %}
       <td class="description">
-        <a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record|truncatewords:15 }}</a>
+        <a href="{% url 'editor:entity-edit' entity_id=model_obj.pk %}">{{ model_obj }}</a>
+      </td>
+      <td>Entity</td>
+      <td>{{ model_obj.entity_type }}</td>
+      <td></td>
+      <td>{{ model_obj.modified }}</td>
+      {% else %}
+      <td class="description">
+        <a href="{% url 'editor:record-edit' record_id=model_obj.pk %}">{{ model_obj|truncatewords:15 }}</a>
       </td>
       <td>Archival record</td>
-      <td>{{ record.archival_level }}</td>
-      <td>{{ record.publication_status }}</td>
+      <td>{{ model_obj.archival_level }}</td>
+      <td>{{ model_obj.publication_status }}</td>
       <td>[record datetime]</td>
+      {% endif %}
     </tr>
-    {% endfor %}
-    {% for entity in entities %}
-    <tr>
-      <td class="description">{{ entity }}</td>
-      <td>Entity</td>
-      <td>{{ entity.entity_type }}</td>
-      <td></td>
-      <td>{{ entity.modified }}</td>
-    </tr>
+    {% endwith %}
     {% endfor %}
   </tbody>
 </table>

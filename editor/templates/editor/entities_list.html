@@ -3,25 +3,21 @@
 {% block page_header %}
 <div id="page-header">
   <h1>Entities ({{ entity_count }})</h1>
-  <form class="search">
-      <label>
-          <span hidden>Search</span>
-          <input type="search" aria-label="Search" placeholder="Search our catalogue" onfocus="this.placeholder=''" onblur="this.placeholder='Search document'"/>
-      </label>
-      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+  <form action="." class="search" method="get">
+    <label>
+      <span hidden>Search</span>
+      {{ form.q }}
+    </label>
+    <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
   </form>
   <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>
 </div>
 <div class="filters">
-    {% if person_count  > 0 %}
-    <input id="person" type="checkbox" aria-label="person"/>
-    <label for="person" class="filter">Person ({{ person_count }})</label>
-    {% endif %}
-    {% if corporate_body_count  > 0 %}
-    <input id="corporate_body" type="checkbox" aria-label="corporate body"/>
-    <label for="corporate_body" class="filter">Corporate Body ({{ corporate_body_count }})</label>
-    {% endif %}
-  </div>
+  {% for entity_type in facets.fields.entity_type %}
+  <input id="{{ entity_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
+  <label for="{{ entity_type.0 }}-input" class="filter">{{ entity_type.0 }} ({{ entity_type.1 }})</label>
+  {% endfor %}
+</div>
 {% endblock page_header %}
 
 {% block content %}
@@ -35,13 +31,15 @@
     </tr>
   </thead>
   <tbody>
-    {% for entity in entities %}
+    {% for result in object_list %}
+    {% with entity=result.object %}
     <tr>
       <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity|truncatewords:15 }}</a></td>
       <td>{{ entity.entity_type }}</td>
       <td></td>
       <td>{{ entity.modified }}</td>
     </tr>
+    {% endwith %}
     {% endfor %}
   </tbody>
 </table>

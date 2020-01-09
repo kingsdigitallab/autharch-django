@@ -121,6 +121,7 @@ INSTALLED_APPS += [
     'script_codes.apps.ScriptCodesConfig',
     'scm.apps.ScmConfig',
     'editor.apps.EditorConfig',
+    'haystack',
 
     # keep this as the last app
     'hal.apps.HalConfig'
@@ -338,6 +339,18 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+
+
+# Haystack.
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',  # noqa
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = None
+
 
 ARCHIVAL_RIGHTS_DECLARATION = """
 <p>

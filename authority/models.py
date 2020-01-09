@@ -13,9 +13,12 @@ from script_codes.models import Script
 
 from . import constants
 
+
 class DateRangeMixin(models.Model):
-    date_from = models.DateField(blank=True, null=True, help_text=constants.START_DATE_HELP)
-    date_to = models.DateField(blank=True, null=True, help_text=constants.END_DATE_HELP)
+    date_from = models.DateField(blank=True, null=True,
+                                 help_text=constants.START_DATE_HELP)
+    date_to = models.DateField(blank=True, null=True,
+                               help_text=constants.END_DATE_HELP)
     display_date = models.CharField(max_length=1024, null=True, blank=True)
 
     class Meta:
@@ -37,8 +40,9 @@ class DateRangeMixin(models.Model):
 
 
 class LanguageScriptMixin(models.Model):
-    language = models.ForeignKey(Language, blank=True, on_delete=models.PROTECT,
-                                   help_text=constants.LANGUAGE_HELP)
+    language = models.ForeignKey(
+        Language, blank=True, on_delete=models.PROTECT,
+        help_text=constants.LANGUAGE_HELP)
     script = models.ForeignKey(Script, blank=True, on_delete=models.PROTECT)
 
     class Meta:
@@ -48,10 +52,9 @@ class LanguageScriptMixin(models.Model):
 @reversion.register()
 class Entity(TimeStampedModel, DateRangeMixin):
     entity_type = models.ForeignKey(EntityType, on_delete=models.CASCADE)
-    project = models.ForeignKey('archival.Project', on_delete=models.SET_NULL,
-                                blank=True, null=True,
-                                help_text='Which project does this record\
-                                    belong to?')
+    project = models.ForeignKey(
+        'archival.Project', on_delete=models.SET_NULL, blank=True, null=True,
+        help_text='Which project does this record belong to?')
 
     class Meta:
         verbose_name_plural = 'Entities'
@@ -66,6 +69,9 @@ class Entity(TimeStampedModel, DateRangeMixin):
     def display_name(self):
         return self.identities.order_by(
             '-preferred_identity').first().authorised_form.display_name
+
+    def get_all_name_entries(self):
+        return NameEntry.objects.filter(identity__entity=self)
 
     @staticmethod
     def get_or_create_by_display_name(name, language, script, project=None):
@@ -139,7 +145,7 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
         verbose_name_plural = 'Name entries'
 
     def __str__(self):
-        return ', '.join(['{}: {}'.format(
+        return self.display_name or ', '.join(['{}: {}'.format(
             p.name_part_type, p.part) for p in self.parts.all()])
 
 
@@ -183,13 +189,14 @@ class BiographyHistory(TimeStampedModel):
                                        related_name='biography_history')
 
     abstract = models.TextField(null=True,
-                                   help_text=constants.BIOGRAPHY_ABSTRACT_HELP)
+                                help_text=constants.BIOGRAPHY_ABSTRACT_HELP)
     content = models.TextField(blank=True, null=True)
-    structure_or_genealogy = models.TextField(blank=True, null=True,
-                                   help_text=constants.BIOGRAPHY_STRUCTURE_GENEALOGY_HELP)
+    structure_or_genealogy = models.TextField(
+        blank=True, null=True,
+        help_text=constants.BIOGRAPHY_STRUCTURE_GENEALOGY_HELP)
     sources = models.TextField(blank=True, null=True)
     copyright = models.TextField(blank=True, null=True,
-                                   help_text=constants.BIOGRAPHY_COPYRIGHT_HELP)
+                                 help_text=constants.BIOGRAPHY_COPYRIGHT_HELP)
 
     class Meta:
         verbose_name = 'Biography/History'
@@ -209,7 +216,6 @@ class Event(DateRangeMixin, TimeStampedModel):
 class LocalDescription(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='local_descriptions')
-
     gender = models.CharField(max_length=256, help_text=constants.GENDER_HELP)
     notes = models.TextField(verbose_name='Descriptive notes', blank=True)
     citation = models.TextField(blank=True)
@@ -221,14 +227,18 @@ class Mandate(DateRangeMixin, TimeStampedModel):
                                     related_name='mandates')
 
     term = models.CharField(max_length=256, blank=True)
-    notes = models.TextField(verbose_name="Descriptive Notes", blank=True, null=True)
+    notes = models.TextField(verbose_name="Descriptive Notes", blank=True,
+                             null=True)
     citation = models.TextField(blank=True, null=True)
+
 
 @reversion.register()
 class Function(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='functions')
-    title = models.ForeignKey(Function, verbose_name="Function", on_delete=models.CASCADE)
+    title = models.ForeignKey(Function, verbose_name="Function",
+                              on_delete=models.CASCADE)
+
 
 @reversion.register()
 class LegalStatus(DateRangeMixin, TimeStampedModel):
@@ -236,9 +246,10 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
                                     related_name='legal_statuses')
 
     term = models.CharField(max_length=256, blank=True)
-    notes = models.TextField(verbose_name="Descriptive Notes", blank=True, null=True)
+    notes = models.TextField(verbose_name="Descriptive Notes", blank=True,
+                             null=True)
     citation = models.TextField(blank=True, null=True,
-                                   help_text=constants.LEGAL_STATUS_CITATION_HELP)
+                                help_text=constants.LEGAL_STATUS_CITATION_HELP)
 
     class Meta:
         verbose_name_plural = 'Legal status'
@@ -249,13 +260,16 @@ class Relation(DateRangeMixin, TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='relations')
     relation_type = models.ForeignKey(
-        EntityRelationType, verbose_name="Relationship type", on_delete=models.PROTECT)
+        EntityRelationType, verbose_name="Relationship type",
+        on_delete=models.PROTECT)
     related_entity = models.ForeignKey(
-        Entity, verbose_name="Related person or corporate body", on_delete=models.CASCADE, null=True,
+        Entity, verbose_name="Related person or corporate body",
+        on_delete=models.CASCADE, null=True,
         related_name='related_to_relations')
     relation_detail = models.TextField(verbose_name="Description", null=True)
     place = models.ForeignKey(
-        GeoPlace, verbose_name="Place related to relationship", blank=True, null=True, on_delete=models.CASCADE)
+        GeoPlace, verbose_name="Place related to relationship", blank=True,
+        null=True, on_delete=models.CASCADE)
     notes = models.TextField()
 
 
@@ -264,7 +278,9 @@ class Resource(TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='resources')
     relation_type = models.ForeignKey(
-        ResourceRelationType, verbose_name="Resource relationship type", on_delete=models.PROTECT, help_text=constants.RESOURCE_RELATIONSHIP_TYPE_HELP)
+        ResourceRelationType, verbose_name="Resource relationship type",
+        on_delete=models.PROTECT,
+        help_text=constants.RESOURCE_RELATIONSHIP_TYPE_HELP)
     url = models.URLField(verbose_name="URL", null=True)
     citation = models.TextField()
     notes = models.TextField(null=True)

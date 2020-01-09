@@ -4,6 +4,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from haystack.generic_views import FacetedSearchView, SearchView
+from haystack.query import SearchQuerySet
+
 import reversion
 from reversion.models import Version, Revision
 from reversion.views import create_revision
@@ -11,8 +14,48 @@ from reversion.views import create_revision
 from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
 
-from .forms import EntityEditForm, LogForm, UserEditForm, \
-    get_archival_record_edit_form_for_subclass
+from .forms import EntityEditForm, LogForm, UserEditForm, FacetedSearchForm, \
+    SearchForm, get_archival_record_edit_form_for_subclass
+
+
+class HomeView(SearchView):
+
+    template_name = 'editor/home.html'
+    queryset = SearchQuerySet().models(Collection, Entity, File, Item, Series)
+    form_class = SearchForm
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['current_section'] = 'home'
+        return context
+
+
+class EntityListView(FacetedSearchView):
+
+    template_name = 'editor/entities_list.html'
+    queryset = SearchQuerySet().models(Entity).facet('entity_type',
+                                                     sort='index')
+    form_class = FacetedSearchForm
+    facet_fields = ['entity_type']
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['current_section'] = 'entities'
+        return context
+
+
+class RecordListView(FacetedSearchView):
+
+    template_name = 'editor/records_list.html'
+    queryset = SearchQuerySet().models(Collection, File, Item, Series).facet(
+        'record_type', sort='index')
+    form_class = FacetedSearchForm
+    facet_fields = ['record_type']
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['current_section'] = 'records'
+        return context
 
 
 @login_required
@@ -41,21 +84,6 @@ def dashboard(request):
     return render(request, 'editor/dashboard.html', context)
 
 
-def entities_list(request):
-    entities = Entity.objects.all()
-    person_count = entities.filter(entity_type__title='Person').count()
-    corporate_body_count = entities.filter(
-        entity_type__title='corporateBody').count()
-    context = {
-        'current_section': 'entities',
-        'entities': entities,
-        'entity_count': entities.count(),
-        'person_count': person_count,
-        'corporate_body_count': corporate_body_count
-    }
-    return render(request, 'editor/entities_list.html', context)
-
-
 def entity_create(request):
     context = {
         'current_section': 'entities',
@@ -82,10 +110,6 @@ def entity_edit(request, entity_id):
             reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
             return redirect('editor:entity-edit', entity_id=entity_id)
-        else:
-            print(form.errors)
-            for formset in form.formsets.values():
-                print(formset.errors)
     else:
         form = EntityEditForm(instance=entity)
         log_form = LogForm()
@@ -95,7 +119,7 @@ def entity_edit(request, entity_id):
                               kwargs={'entity_id': entity_id}),
         'entity': entity,
         'form': form,
-        # 'last_revision': Version.objects.get_for_object(entity)[0].revision,
+        'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
     }
     return render(request, 'editor/entity_edit.html', context)
@@ -111,19 +135,6 @@ def entity_history(request, entity_id):
         'versions': Version.objects.get_for_object(entity),
     }
     return render(request, 'editor/history.html', context)
-
-
-def home(request):
-    entities = Entity.objects.all()
-    records = ArchivalRecord.objects.all()
-    context = {
-        'current_section': 'home',
-        'entities': entities,
-        'entity_count': entities.count(),
-        'records': records,
-        'record_count': records.count(),
-    }
-    return render(request, 'editor/home.html', context)
 
 
 @require_POST
@@ -154,7 +165,7 @@ def record_edit(request, record_id):
         'delete_url': reverse('editor:record-delete',
                               kwargs={'record_id': record_id}),
         'form': form,
-        # 'last_revision': Version.objects.get_for_object(record)[0].revision,
+        'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
         'record': record,
     }
@@ -172,23 +183,6 @@ def record_history(request, record_id):
     }
     return render(request, 'editor/history.html', context)
 
-
-def records_list(request):
-    records = ArchivalRecord.objects.all()
-    collection_count = Collection.objects.all().count()
-    item_count = Item.objects.all().count()
-    file_count = File.objects.all().count()
-    series_count = Series.objects.all().count()
-    context = {
-        'current_section': 'records',
-        'records': records,
-        'records_count': records.count(),
-        'collection_count': collection_count,
-        'file_count': file_count,
-        'item_count': item_count,
-        'series_count': series_count,
-    }
-    return render(request, 'editor/records_list.html', context)
 
 @require_POST
 def revert(request):
