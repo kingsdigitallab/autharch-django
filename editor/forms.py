@@ -162,15 +162,6 @@ class SourceEditInlineForm(forms.ModelForm):
 
 class BiographyHistoryEditInlineForm(forms.ModelForm):
 
-    # def _add_formsets(self, *args, **kwargs):
-    #     formsets = {}
-    #     data = kwargs.get('data')
-    #     EventFormset = forms.models.inlineformset_factory(
-    #         BiographyHistory, Event, form=EventEditInlineForm, extra=0)
-    #     formsets['events'] = EventFormset(
-    #         data, instance=self.instance, prefix=self.prefix + '-event')
-    #     return formsets
-
     class Meta:
         exclude = []
         model = BiographyHistory
@@ -332,9 +323,7 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'administrative_history': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'arrangement': forms.Textarea(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            # 'description_date': HTML5DateInput(),
             'end_date': HTML5DateInput(),
-            # 'languages': forms.SelectMultiple(attrs={'size': 4}),
             'languages': forms.Select(attrs=SEARCH_SELECT_ATTRS),
             'creators': forms.Select(attrs=SEARCH_SELECT_ATTRS),
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),

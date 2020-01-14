@@ -163,7 +163,7 @@ class Collection(ArchivalRecord):
 
 
 class SeriesBase(models.Model):
-    publications = models.ManyToManyField(Publication,
+    publications = models.ManyToManyField(Publication, verbose_name="Known previous publications",
                                    help_text=constants.PUBLICATIONS_HELP)
 
     class Meta:

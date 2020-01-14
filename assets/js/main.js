@@ -57,6 +57,17 @@ $(document).ready(function() {
     $(this).richText({id: "richtext-" + index});
   });
 
+  //add tablesorter to the tables
+  $(function() {
+    $("#records").tablesorter({
+        widgets: ["filter"],
+        widgetOptions: {
+            filter_columnFilters: true
+        }
+    });
+    
+});
+
   // add search bar to the select dropdown
   $(".select-with-search").select2( {
     placeholder: "Select",
@@ -87,6 +98,7 @@ $(document).ready(function() {
       $(el.target).parents('fieldset').first().addClass('border-left');
     }
   });
+
 });
 
 function toggleHelpText(el, help_text) {

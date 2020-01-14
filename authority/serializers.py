@@ -288,23 +288,11 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "content": bio.copyright
                                 },])
 
-                                # for event in bio.events.all():
-                                #     events_json.append([{
-                                #         "name": "Event",
-                                #         "content": event.event
-                                #     }, {
-                                #         "name": "Place",
-                                #         "content": str(event.place)
-                                #     }, {
-                                #         "name": "Dates",
-                                #         "content": event.get_date()
-                                #     }])
-
                         except BiographyHistory.DoesNotExist:
                             pass
 
                         
-                        # Events (OL - were under bio/hist)
+                        # Events (OL - events were under bio/hist)
                         events = description.events
                         if events.count():
                             for e in events.all():

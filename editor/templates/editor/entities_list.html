@@ -21,22 +21,22 @@
 {% endblock page_header %}
 
 {% block content %}
-<table id="records">
+<table id="records" class="tablesorter">
   <thead>
     <tr>
-      <th>Name<i class="fas fa-sort"></i></th>
-      <th>Type/level<i class="fas fa-sort"></i></th>
-      <th>Publication status<i class="fas fa-sort"></i></th>
-      <th>Last edited<i class="fas fa-sort"></i></th>
+      <th>Title</th>
+      <th>Type/level</th>
+      <th>Publication status</th>
+      <th>Last edited</th>
     </tr>
   </thead>
   <tbody>
     {% for result in object_list %}
     {% with entity=result.object %}
     <tr>
-      <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity|truncatewords:15 }}</a></td>
+      <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity|truncatewords:30 }}</a></td>
       <td>{{ entity.entity_type }}</td>
-      <td></td>
+      <td>QAZ</td>
       <td>{{ entity.modified }}</td>
     </tr>
     {% endwith %}
