@@ -2,7 +2,7 @@
 
 {% block page_header %}
 <div id="page-header">
-  <h1>Entities ({{ entity_count }})</h1>
+  <h1>Entities ({{ object_list.count }})</h1>
   <form action="." class="search" method="get">
     <label>
       <span hidden>Search</span>
@@ -10,13 +10,14 @@
     </label>
     <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
   </form>
+  <button aria-label="filter" class="filter-button" onclick="toggleFilter(this)">Filter</button>
   <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>
-</div>
-<div class="filters">
-  {% for entity_type in facets.fields.entity_type %}
-  <input id="{{ entity_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
-  <label for="{{ entity_type.0 }}-input" class="filter">{{ entity_type.0 }} ({{ entity_type.1 }})</label>
-  {% endfor %}
+  <div class="filters-hidden">
+    {% for record_type in facets.fields.record_type %}
+    <input id="{{ record_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ record_type.0 }}" value=""/>
+    <label for="{{ record_type.0 }}-input" class="filter">{{ record_type.0 }} ({{ record_type.1 }})</label>
+    {% endfor %}
+  </div>
 </div>
 {% endblock page_header %}
 

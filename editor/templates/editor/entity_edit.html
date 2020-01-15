@@ -15,11 +15,9 @@
       <span class="dotted-underline">History</span>
     </a>
   </div>
-  <div>
-    <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
-    <input type="submit" value="Save" form="record-form" class="save"/>
-    <a href="{% url 'editor:entity-create' %}" class="create"><i class="fas fa-plus"></i></a>
-  </div>
+  <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
+  <input type="submit" value="Save" form="record-form" class="save"/>
+  <a href="{% url 'editor:entity-create' %}" class="create"><i class="fas fa-plus"></i></a>
 </div>
 {% endblock page_header %}
 
@@ -74,7 +72,8 @@
   </div>
   <div class="form-section formset">
     {% with sources=form.formsets.control.forms.0.formsets.sources %}
-    <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) 
+      <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
     <div class="management_form">
       {{ sources.management_form }}
     </div>
@@ -89,7 +88,8 @@
     </label>
   </div>
   <div class="form-section">
-    <h2>CONTROL <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
+    <h2>CONTROL 
+      <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
     {{ form.formsets.control.management_form }}
     {% for control in form.formsets.control.forms %}
     <fieldset id="control">

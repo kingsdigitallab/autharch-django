@@ -6,9 +6,9 @@ END_DATE_HELP = 'Date of existence. A death date, or for corporate bodies, an ex
 
 START_DATE_HELP = 'Date of existence. A birth date, or for corporate bodies, a creation date.'  # noqa
 
-# IDENTITIES_HELP = 'This element denotes names used by the entity.'
+IDENTITIES_HELP = 'This element denotes names used by the entity.'
 
-# NAME_ENTRY_HELP = 'This element &quot;is used to record a name by which the corporate body, the person, or the family described in the EAC-CPF instance is known&quot;. See name entry at https://eac.staatsbibliothek-berlin.de.'
+NAME_ENTRY_HELP = 'This element &quot;is used to record a name by which the corporate body, the person, or the family described in the EAC-CPF instance is known&quot;. See name entry at https://eac.staatsbibliothek-berlin.de.'
 
 # NAME_ENTRY_LANGUAGE_HELP = 'Name entry(s) will always be in their English form and use the Latin script and this information is captured in attributes within the name entry.'
 
@@ -30,7 +30,7 @@ BIOGRAPHY_COPYRIGHT_HELP = 'Copyright statements for biographies or histories ar
 
 LANGUAGE_HELP = 'This element denotes the language(s) used by an entity.'
 
-# PLACE_HELP = 'This element is used to capture geographical locations of significance in the history of the entity. The content for place is controlled and should conform to the GeoNames form of the geographic name; or the Wikidata form if the name is not available in GeoNames.'
+PLACE_HELP = 'This element is used to capture geographical locations of significance in the history of the entity. The content for place is controlled and should conform to the GeoNames form of the geographic name; or the Wikidata form if the name is not available in GeoNames.'
 
 PLACE_ROLE_HELP = 'For preference, for personal entities we should capture, at minimum, birth and death places. If it is considered useful, further places can be captured such as residences.'
 

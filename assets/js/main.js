@@ -233,6 +233,11 @@ function toggleTab(el) {
   $(el).toggleClass('active');
 }
 
+function toggleFilter(el) {
+  $(el).siblings('.filters-hidden').toggleClass('expand');
+  $(el).toggleClass('expand');
+}
+
 function closeBlock(el) {
   $('.'+el).removeClass('active');
 }

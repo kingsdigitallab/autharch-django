@@ -450,6 +450,7 @@ header {
 
 main {
     width: 100%;
+    position: relative;
     
     &:not(#form-page) {
         margin-left: 200px;
@@ -485,7 +486,7 @@ main {
 
     #page-header {
         display: grid;
-        grid-template-columns: auto 1fr auto;
+        grid-template-columns: auto 1fr auto auto;
         grid-column-gap: 10px;
         align-items: center;
         :not(:first-child) {
@@ -511,43 +512,104 @@ main {
         margin-left: 200px;
         padding: 10px 40px;
     }
-
-    .filters, .custom-radio-filters {
-        margin: 10px 0px;
+    .filter-button {
+        position: relative;
+        &:after {
+            content: "\f054";
+            font-family: $fontawesome;
+            font-weight: 600;
+            margin-left: 7px;
+        }
+        &.expand{
+            position: fixed;
+            right: 50px;
+            top: inherit;
+            z-index: 9;
+            &:after {
+                content: "\f00d";
+            }
+        }
+        background-color: $background;
+        color: $primary;
+        border: 1px solid $primary;
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-size: 13px;
+        display: inline-block;
+        cursor: pointer;
+        &:hover, &:focus {
+            box-shadow: 0px 2px 2px $medium-grey;
+        }
+    }
+    .filters-hidden {
+        -moz-transition: auto .4s;
+        -webkit-transition: all .4s;
+        -o-transition: all .4s;
+        transition: all .4s;
+        right: -100%;
+        opacity: 0;
+        position: fixed;
+        top: 0;
+        padding: 40px;
+        padding-top: 80px;
+        max-width: 300px;
+        height: 100vh;
+        overflow: scroll;
+        background-color: white;
+        box-shadow: -1px 0px 3px $light-grey;
+        &.expand {
+            right: 0;
+            opacity: 1;
+        }
+        div {
+            max-height: 75vh;
+            min-height: 75vh;
+            margin-bottom: 20px;
+            border-bottom: 1px solid $light-grey;
+            overflow: scroll;
+            .filter-list {
+                border: none;
+                &:not(:last-of-type) {
+                    margin-bottom: 10px;
+                }
+                legend {
+                    color: $primary;
+                }
+                label {
+                    display: block;
+                    font-size: 14px;
+                }
+                .year-search-field {
+					max-width: 140px;
+                }
+            }
+        }
+        input[type=submit] {
+            width: 100%;
+            //to overwrite the default max-width: max-content;
+            max-width: 100% !important;
+        }
+    }
+    
+    .custom-radio-filters {
         :not(:last-child) {
             margin-right: 10px;
         }
         .create {
             margin-left: 20px;
         }
-        .filter {
-            background-color: $background;
-            color: $primary;
-            margin-right: 10px;
-            border: 1px solid $primary;
-            border-radius: 30px;
-            padding: 10px 25px;
-            font-size: 13px;
-            cursor: pointer;
-            &:hover, &:focus {
-                box-shadow: 0px 2px 2px $medium-grey;
-            }
-        }
-        input[type=checkbox], input[type=radio] {
-            display: none;
-        }
-        input[type=checkbox]:checked + label, input[type=radio]:checked + label {
-            background-color: $primary;
-            color: white;
-        }
-        input[type=checkbox]:checked + label {
-            &:before {
-                font-family: $fontawesome;
-                content:"\f00d";
-                font-weight: 300;
-                margin-right: 10px;
-            }
-        }
+        // input[type=checkbox]:checked + label, input[type=radio]:checked + label {
+        //     background-color: $primary;
+        //     color: white;
+        // }
+        // input[type=checkbox]:checked + label {
+        //     &:before {
+        //         font-family: $fontawesome;
+        //         content:"\f00d";
+        //         font-weight: 300;
+        //         margin-right: 10px;
+        //     }
+        // }
     }
 
     .user-control {
@@ -1142,7 +1204,8 @@ footer {
     }
   }
 
-@media only screen and (max-width: 1280px) {
+
+@media only screen and (max-width: 1280px), screen and (max-height: 460px) {
     body {
         display: block;
     }
