@@ -10,54 +10,60 @@
     </label>
     <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
   </form>
-  <button aria-label="filter" class="filter-button" onclick="toggleFilter(this)">Filter</button>
+  <div class="filter-block">
+    <input type="checkbox" class="hidden" id="filter" value="Filter">
+    <label for="filter" class="filter-button">Filter</label>
+    <form action="." class="filters-hidden" method="get">
+        <div>
+          <!-- should be sorted alphabetically -->
+          <fieldset class="filter-list">
+            <legend>Document level</legend>
+            {% for record_type in facets.fields.record_type %}
+            <label for="{{ record_type.0 }}-input">
+              <input id="{{ record_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ record_type.0 }}" value=""/>{{ record_type.0 }} ({{ record_type.1 }})
+            </label>
+            {% endfor %}
+          </fieldset>
+          <fieldset class="filter-list">
+            <legend>Writer</legend>
+            <label>
+              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
+            </label>
+            <label>
+              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
+            </label>
+          </fieldset>
+          <fieldset class="filter-list">
+            <legend>Addressee</legend>
+            <label>
+              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
+            </label>
+            <label>
+              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
+            </label>
+          </fieldset>
+          <fieldset class="filter-list">
+            <legend>Creation year</legend>
+            <label>
+                <input type="number" name="y" value="{{ query }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
+            </label>
+          </fieldset>
+          <fieldset class="filter-list">
+            <legend>Language</legend>
+            <label>
+              <input type="checkbox" aria-label="{{ record_type.0 }}" value="English"/>English
+            </label>
+            <label>
+              <input type="checkbox" aria-label="{{ record_type.0 }}" value="Latin"/>Latin
+            </label>
+          </fieldset>
+        </div>
+        <input type="submit" value="Filter" class="save"/>
+      </form>
+  </div>
+  
+  <!-- <button aria-label="filter" class="filter-button" onclick="toggleFilter(this)">Filter</button> -->
   <span></span>
-  <form action="." class="filters-hidden" method="get">
-    <div>
-      <fieldset class="filter-list">
-        <legend>Document level</legend>
-        {% for record_type in facets.fields.record_type %}
-        <label for="{{ record_type.0 }}-input">
-          <input id="{{ record_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ record_type.0 }}" value=""/>{{ record_type.0 }} ({{ record_type.1 }})
-        </label>
-        {% endfor %}
-      </fieldset>
-      <fieldset class="filter-list">
-        <legend>Writer</legend>
-        <label>
-          <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-        </label>
-        <label>
-          <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-        </label>
-      </fieldset>
-      <fieldset class="filter-list">
-        <legend>Addressee</legend>
-        <label>
-          <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-        </label>
-        <label>
-          <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-        </label>
-      </fieldset>
-      <fieldset class="filter-list">
-        <legend>Creation year</legend>
-        <label>
-            <input type="number" name="y" value="{{ query }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
-        </label>
-      </fieldset>
-      <fieldset class="filter-list">
-        <legend>Language</legend>
-        <label>
-          <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-        </label>
-        <label>
-          <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-        </label>
-      </fieldset>
-    </div>
-    <input type="submit" value="Filter" class="save"/>
-  </form>
 </div>
 <!-- Filter by creator, date, language, person as relation are some examples. -->
 {% endblock page_header %}
