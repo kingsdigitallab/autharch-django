@@ -48,7 +48,6 @@ $(document).ready(function() {
     $('#add-user-form').addClass('active');
   });
 
-
   // ADD-ONS
 
   // Change textareas to richtext fields. A unique ID must be

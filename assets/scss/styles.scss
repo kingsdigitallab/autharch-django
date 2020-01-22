@@ -489,7 +489,7 @@ main {
         grid-template-columns: auto 1fr auto auto;
         grid-column-gap: 10px;
         align-items: center;
-        position: relative;
+        // position: relative;
         :not(:first-child) {
             justify-self: right;
         }
