@@ -26,27 +26,25 @@
   </thead>
   <tbody>
     {% for result in object_list %}
-    {% with model_obj=result.object %}
     <tr>
       {% if result.model_name == 'entity' %}
       <td class="description">
-        <a href="{% url 'editor:entity-edit' entity_id=model_obj.pk %}">{{ model_obj }}</a>
+        <a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a>
       </td>
       <td>Entity</td>
-      <td>{{ model_obj.entity_type }}</td>
+      <td>{{ result.entity_type }}</td>
       <td></td>
-      <td>{{ model_obj.modified }}</td>
+      <td>{{ result.modified }}</td>
       {% else %}
       <td class="description">
-        <a href="{% url 'editor:record-edit' record_id=model_obj.pk %}">{{ model_obj|truncatewords:15 }}</a>
+        <a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:15 }}</a>
       </td>
       <td>Archival record</td>
-      <td>{{ model_obj.archival_level }}</td>
-      <td>{{ model_obj.publication_status }}</td>
+      <td>{{ result.archival_level }}</td>
+      <td>{{ result.publication_status }}</td>
       <td>[record datetime]</td>
       {% endif %}
     </tr>
-    {% endwith %}
     {% endfor %}
   </tbody>
 </table>
