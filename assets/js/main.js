@@ -48,6 +48,11 @@ $(document).ready(function() {
     $('#add-user-form').addClass('active');
   });
 
+  // open popup to add new user who can access the admin panel
+  $('#edit-form').click(() => {
+    $('#edit-user-form').addClass('active');
+  });
+
   // ADD-ONS
 
   // Change textareas to richtext fields. A unique ID must be
@@ -58,7 +63,7 @@ $(document).ready(function() {
 
   //add tablesorter to the tables
   $(function() {
-    $("#records").tablesorter({
+    $("[id$='table']").tablesorter({
         widgets: ["filter"],
         widgetOptions: {
             filter_columnFilters: true

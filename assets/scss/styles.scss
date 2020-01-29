@@ -457,38 +457,46 @@ main {
         padding: 20px 40px 40px 40px;
         box-sizing: border-box;
     }
-    
-    &#form-page {
-        height: calc(100vh - 120px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 0px 10px;
-        form {
-            max-width: 300px;
-            display: flex;
-            flex-direction: column;
-            input,label, .default {
-                width: 100%;
-                margin: auto;
-                margin-bottom: 10px;
-                box-sizing: border-box;
-            }
-            a {
-                text-align: right;
-            }
-            input[type=submit], .default {
-                margin-top: 20px;
-            }
+    .home {
+        h2 {
+            margin: 0em 0em 1em 0em;
+        }
+        table {
+            margin-bottom: 3em;
         }
     }
+    // &#form-page {
+    //     height: calc(100vh - 120px);
+    //     display: flex;
+    //     flex-direction: column;
+    //     align-items: center;
+    //     justify-content: center;
+    //     padding: 0px 10px;
+    //     form {
+    //         max-width: 300px;
+    //         display: flex;
+    //         flex-direction: column;
+    //         input,label, .default {
+    //             width: 100%;
+    //             margin: auto;
+    //             margin-bottom: 10px;
+    //             box-sizing: border-box;
+    //         }
+    //         a {
+    //             text-align: right;
+    //         }
+    //         input[type=submit], .default {
+    //             margin-top: 20px;
+    //         }
+    //     }
+    // }
 
     #page-header {
         display: grid;
         grid-template-columns: auto 1fr auto auto;
         grid-column-gap: 10px;
         align-items: center;
+        margin-bottom: 2em;
         // position: relative;
         :not(:first-child) {
             justify-self: right;
@@ -655,7 +663,7 @@ main {
 
     table {
         width: 100%;
-        margin-top: 20px;
+        // margin-top: 20px;
         border-collapse: collapse;
         font-size: 13px;
 

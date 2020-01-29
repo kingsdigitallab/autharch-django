@@ -14,40 +14,51 @@
 {% endblock page_header %}
 
 {% block content %}
-<table id="records" class="tablesorter">
+<div class="home">
+<h2>Records for revision</h2>
+<table id="publication-table" class="tablesorter">
   <thead>
     <tr>
       <th scope="col">Title</th>
       <th scope="col">Record type</th>
-      <th scope="col">Type/level</th>
+      <th scope="col">Level</th>
       <th scope="col">Publication status</th>
-      <th scope="col">Last edited</th>
+      <th scope="col">Updated</th>
     </tr>
   </thead>
   <tbody>
-    {% for result in object_list %}
-    {% with model_obj=result.object %}
+    <!-- limit to 5 records per page -->
     <tr>
-      {% if result.model_name == 'entity' %}
-      <td class="description">
-        <a href="{% url 'editor:entity-edit' entity_id=model_obj.pk %}">{{ model_obj }}</a>
-      </td>
-      <td>Entity</td>
-      <td>{{ model_obj.entity_type }}</td>
       <td></td>
-      <td>{{ model_obj.modified }}</td>
-      {% else %}
-      <td class="description">
-        <a href="{% url 'editor:record-edit' record_id=model_obj.pk %}">{{ model_obj|truncatewords:15 }}</a>
-      </td>
-      <td>Archival record</td>
-      <td>{{ model_obj.archival_level }}</td>
-      <td>{{ model_obj.publication_status }}</td>
-      <td>[record datetime]</td>
-      {% endif %}
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
-    {% endwith %}
-    {% endfor %}
   </tbody>
 </table>
+
+<h2>Recently updated by me</h2>
+<table id="recently-updated-table" class="tablesorter">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Record type</th>
+      <th scope="col">Level</th>
+      <th scope="col">Publication status</th>
+      <th scope="col">Updated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- limit to 5 records per page -->
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
 {% endblock content %}
