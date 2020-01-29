@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="user-contol">
-  <div id="user-details">
+  <!-- <div id="user-details">
     <h2>Details</h2>
     <form action="." method="post" class="two-column-table">
       {% csrf_token %}
@@ -46,7 +46,7 @@
       </div>
       <input type="submit" class="save" value="Save" />
     </form>
-  </div>
+  </div> -->
   <div class="admin">
       <h2>Admin table</h2>
       <table id="admin-table">
@@ -86,50 +86,27 @@
               <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
           </div>
           <div class="modal-body">
-              <form action="" method="" id="edit-user">
-                  <div class="two-column-table">
-                      <div>
-                          <label>
-                              <span class="required">Username</span>
-                              <input type="text" name="username"/>
-                          </label>
-                          <label>
-                              <span class="required">First name</span>
-                              <input type="text" name="first-name"/>
-                          </label>
-                          <label>
-                              <span class="required">Last name</span>
-                              <input type="text" name="last-name"/>
-                          </label>
-                          <label>
-                              <span class="required">Email address</span>
-                              <input type="email" name="email-address"/>
-                          </label>
-                      </div>
-                      <div>
-                          <label>
-                              <span class="required">Password</span>
-                              <input type="password" name="password"/>
-                          </label>
-                          <label>
-                              <span class="required">Confirm password</span>
-                              <input type="password" name="confirm-password"/>
-                          </label>
-                          <label>
-                              <span class="required">Permission level</span>
-                              <select name="permission-level">
-                                  <option>Select</option>
-                                  <option value="Admin">Admin</option>
-                                  <option value="Moderator">Moderator</option>
-                                  <option value="User">User</option>
-                              </select>
-                          </label>
-                      </div>
+              <form action="." method="post">
+                <div class="two-column-table">
+                  {% csrf_token %}
+                  <div>
+                    {% render_field user_form.first_name %}
+                    {% render_field user_form.last_name %}
                   </div>
+                  <div>
+                    {% render_field user_form.email %}
+                    QAZ Permission level
+                  </div>
+                </div>
+                <input type="checkbox" id="change-password" aria-label="change password"/>
+                <label for="change-password">Change password</label>
+                <div class="password-fields">
+                    {% render_field password_form.old_password %}
+                    {% render_field password_form.new_password1 %}
+                    {% render_field password_form.new_password2 %}
+                </div>
+                <input type="submit" class="save" value="Save" />
               </form>
-          </div>
-          <div class="modal-footer">
-              <input type="submit" value="Edit user details" form="edit-user" class="save"/>
           </div>
       </div>
   </div>
