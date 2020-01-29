@@ -86,7 +86,7 @@
               <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
           </div>
           <div class="modal-body">
-              <form action="." method="post">
+              <form action="." method="post" id="edit-user">
                 <div class="two-column-table">
                   {% csrf_token %}
                   <div>
@@ -105,8 +105,10 @@
                     {% render_field password_form.new_password1 %}
                     {% render_field password_form.new_password2 %}
                 </div>
-                <input type="submit" class="save" value="Save" />
               </form>
+          </div>
+          <div class="modal-footer">
+              <input type="submit" class="save" value="Edit user details" form="edit-user"/>
           </div>
       </div>
   </div>
