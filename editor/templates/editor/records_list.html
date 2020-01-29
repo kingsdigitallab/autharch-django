@@ -81,15 +81,13 @@
   </thead>
   <tbody>
     {% for result in object_list %}
-    {% with record=result.object %}
     <tr>
-      <td class="description"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record|truncatewords:30 }}</a></td>
-      <td>{{ record.creators }}</td>
-      <td>{{ record.archival_level }}</td>
-      <td>{{ record.publication_status }}</td>
+      <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+      <td>QAZ: many to many field for file and item; display as list? What about collection and series?</td>
+      <td>{{ result.archival_level }}</td>
+      <td>{{ result.publication_status }}</td>
       <td>QAZ</td>
     </tr>
-    {% endwith %}
     {% endfor %}
   </tbody>
 </table>
