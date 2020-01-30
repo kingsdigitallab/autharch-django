@@ -25,7 +25,7 @@
         <div class="link{% if current_section == 'home' %} active{% endif %}">
           <a href="{% url 'editor:home' %}">
             <i class="fal fa-home"></i>
-            <h4>HOME</h4>
+            <h4>MY DASHBOARD</h4>
           </a>
         </div>
         <div class="link{% if current_section == 'entities' %} active{% endif %}">
@@ -45,7 +45,7 @@
         <div class="link{% if current_section == 'account' %} active{% endif %}">
           <a href="{% url 'editor:dashboard' %}">
             <i class="fal fa-user"></i>
-            <h4>MY DASHBOARD</h4>
+            <h4>ACCOUNT CONTROL</h4>
           </a>
         </div>
         <button aria-label="logout" id="logout" onclick="logout()"></button>

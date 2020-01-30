@@ -292,6 +292,9 @@ span[role=button] {
     .fas, .fal {
         margin-right: 5px;
     }
+    .far {
+        font-weight: 600;
+    }
     // .fas {
     //     font-weight: 700;
     // }
@@ -628,7 +631,7 @@ main {
 
     .user-control {
         display: flex;
-        #user-details, #user-password {
+        #user-details, #reset {
             width: 50%;
             background-color: white;
             border-radius: 10px;
@@ -1067,18 +1070,6 @@ main {
                 p {
                     font-size: 16px;
                     text-align: center;
-                }
-                .password-fields {
-                    display: none;
-                }
-                #change-password + label {
-                    margin-top: 2em;
-                    display: inline-block;
-                }
-                #change-password:checked + label {
-                    + .password-fields {
-                        display: block;
-                    }
                 }
             }
             .modal-footer {

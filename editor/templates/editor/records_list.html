@@ -58,7 +58,6 @@
             </label>
           </fieldset>
         </div>
-        <input type="submit" value="Filter" class="save"/>
       </form>
   </div>
   
@@ -83,6 +82,7 @@
     {% for result in object_list %}
     <tr>
       <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+      <!-- display writers as a string compiled out of all writers listed in the document. -->
       <td>QAZ: many to many field for file and item; display as list? What about collection and series?</td>
       <td>{{ result.archival_level }}</td>
       <td>{{ result.publication_status }}</td>

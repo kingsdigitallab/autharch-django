@@ -2,7 +2,8 @@
 
 {% block page_header %}
 <div id="page-header">
-  <h1>Home</h1>
+  <!-- yes, we are renaming home page to My Dashboard and I need to come up with a category title for the former My Dashboard page -->
+  <h1>My Dashboard</h1>
   <form class="search">
     <label>
       <span hidden>Search</span>
@@ -15,6 +16,7 @@
 
 {% block content %}
 <div class="home">
+  <!-- should be available for moderators and admins. Moderators should be able to approve the records for publication and admins should be able to publish them. -->
   <h2>Records for publication</h2>
   <table id="publication-table" class="tablesorter">
       <thead>
@@ -28,27 +30,13 @@
       </thead>
       <tbody>
         <!-- TODO: add pagination and limit to 5 records per page -->
-        {% for result in object_list %}
         <tr>
-          {% if result.model_name == 'entity' %}
-          <td class="description">
-            <a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a>
-          </td>
-          <td>Entity</td>
-          <td>{{ result.entity_type }}</td>
           <td></td>
-          <td>{{ result.modified }}</td>
-          {% else %}
-          <td class="description">
-            <a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:15 }}</a>
-          </td>
-          <td>Archival record</td>
-          <td>{{ result.archival_level }}</td>
-          <td>{{ result.publication_status }}</td>
-          <td>[record datetime]</td>
-          {% endif %}
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
-        {% endfor %}
       </tbody>
   </table>
   <h2>Recently updated by me</h2>

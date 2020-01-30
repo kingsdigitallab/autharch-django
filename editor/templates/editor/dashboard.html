@@ -3,16 +3,14 @@
 
 {% block page_header %}
 <div id="page-header">
-  <h1>My Dashboard</h1>
-
-  <p>Permission level: <span class="highlight">QAZ: permission group?</span></p>
+  <h1>Account control</h1>
 </div>
 {% endblock page_header %}
 
 {% block content %}
-<div class="user-contol">
-  <!-- <div id="user-details">
-    <h2>Details</h2>
+<div class="user-control">
+  <div id="user-details">
+    <h2>Personal details</h2>
     <form action="." method="post" class="two-column-table">
       {% csrf_token %}
       <div>
@@ -21,32 +19,18 @@
       </div>
       <div>
         {% render_field user_form.last_name %}
+        <!-- TBD: username? -->
       </div>
       <input type="submit" class="save" value="Save" />
     </form>
   </div>
-  <div id="user-password">
-    <h2>Change Password</h2>
-    <form action="." method="post" class="two-column-table">
-      {% csrf_token %}
-      {% if form.non_field_errors %}
-      <div class="error-notification">
-        {{ form.non_field_errors %}
-      </div>
-      {% endif %}
-      <div>
-        {% render_field password_form.old_password %}
-      </div>
-      <div></div>
-      <div>
-        {% render_field password_form.new_password1 %}
-      </div>
-      <div>
-        {% render_field password_form.new_password2 %}
-      </div>
-      <input type="submit" class="save" value="Save" />
-    </form>
-  </div> -->
+  <div id="reset">
+      <!-- should be Admin/Moderator/Editor/Visitor-->
+      <p>Permission level: <span class="highlight">QAZ: permission group?</span></p>
+      <!-- display if not admin -->
+      <p>Password: ***** <button aria-label="reset password" class="button-link margin-left"><i class="far fa-unlock-alt"></i> Reset password</button></p>
+  </div>
+</div>
   <div class="admin">
       <h2>Admin table</h2>
       <table id="admin-table">
@@ -67,9 +51,16 @@
                   <td>QAZ</td>
                   <td>QAZ</td>
                   <td>QAZ</td>
-                  <td>moderator</td>
+                  <td>
+                    <select>
+                      <option>Visitor</option>
+                      <option>Editor</option>
+                      <option selected>Moderator</option>
+                      <option>Admin</option>
+                    </select>
+                  </td>
                   <td class="button-cell">
-                      <button aria-label="edit user" class="button-link" id="edit-form"><i class="far fa-edit"></i> QAZ Edit</button>
+                      <button aria-label="reset password" class="button-link"><i class="far fa-unlock-alt"></i> Reset password</button>
                   </td>
                   <td class="button-cell">
                       <button aria-label="delete user" class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>QAZ Delete user</button>
@@ -78,39 +69,6 @@
           </tbody>
       </table>
       <button aria-label="add user" class="create linked-button" id="add-form"><i class="fal fa-plus"></i>QAZ Add user</button>
-  </div>
-  <div class="modal" id="edit-user-form">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h2>Edit user details</h2>
-              <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
-          </div>
-          <div class="modal-body">
-              <form action="." method="post" id="edit-user">
-                <div class="two-column-table">
-                  {% csrf_token %}
-                  <div>
-                    {% render_field user_form.first_name %}
-                    {% render_field user_form.last_name %}
-                  </div>
-                  <div>
-                    {% render_field user_form.email %}
-                    QAZ Permission level
-                  </div>
-                </div>
-                <input type="checkbox" id="change-password" aria-label="change password"/>
-                <label for="change-password">Change password</label>
-                <div class="password-fields">
-                    {% render_field password_form.old_password %}
-                    {% render_field password_form.new_password1 %}
-                    {% render_field password_form.new_password2 %}
-                </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-              <input type="submit" class="save" value="Edit user details" form="edit-user"/>
-          </div>
-      </div>
   </div>
   <div class="modal" id="add-user-form">
       <div class="modal-content">
@@ -123,10 +81,6 @@
                   <div class="two-column-table">
                       <div>
                           <label>
-                              <span class="required">Username</span>
-                              <input type="text" name="username"/>
-                          </label>
-                          <label>
                               <span class="required">First name</span>
                               <input type="text" name="first-name"/>
                           </label>
@@ -134,19 +88,11 @@
                               <span class="required">Last name</span>
                               <input type="text" name="last-name"/>
                           </label>
-                          <label>
-                              <span class="required">Email address</span>
-                              <input type="email" name="email-address"/>
-                          </label>
                       </div>
                       <div>
                           <label>
-                              <span class="required">Password</span>
-                              <input type="password" name="password"/>
-                          </label>
-                          <label>
-                              <span class="required">Confirm password</span>
-                              <input type="password" name="confirm-password"/>
+                              <span class="required">Email address</span>
+                              <input type="email" name="email-address"/>
                           </label>
                           <label>
                               <span class="required">Permission level</span>
@@ -154,10 +100,27 @@
                                   <option>Select</option>
                                   <option value="Admin">Admin</option>
                                   <option value="Moderator">Moderator</option>
-                                  <option value="User">User</option>
+                                  <option value="Editor">Editor</option>
+                                  <option value="Visitor">Visitor</option>
                               </select>
                           </label>
+                          <!-- TBD: username? -->
                       </div>
+                  </div>
+                  <br>
+                  <div class="two-column-table">
+                    <div>
+                        <label>
+                            <span class="required">Password</span>
+                            <input type="password" name="password"/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <span class="required">Confirm password</span>
+                            <input type="password" name="confirm-password"/>
+                        </label>
+                    </div>
                   </div>
               </form>
           </div>
@@ -165,6 +128,5 @@
               <input type="submit" value="Create new user" form="add-new-user" class="save"/>
           </div>
       </div>
-  </div>
 </div>
 {% endblock content %}
