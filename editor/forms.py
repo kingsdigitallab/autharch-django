@@ -10,6 +10,7 @@ from authority.models import (
     LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
     NamePart, Place, Relation, Resource, Source
 )
+from .models import EditorProfile
 
 
 RICHTEXT_ATTRS = {
@@ -258,9 +259,6 @@ class NameEntryEditInlineForm(ContainerModelForm):
 
 class IdentityEditInlineForm(ContainerModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
         data = kwargs.get('data')
@@ -302,16 +300,22 @@ class ArchivalRecordEditForm(forms.ModelForm):
 
     """
 
-    disabled_fields = (
-        'arrangement', 'cataloguer', 'copyright_status', 'description_date',
-        'extent', 'physical_description', 'provenance', 'rcin', 'record_type',
-        'repository', 'rights_declaration', 'withheld'
-    )
+    disabled_fields = {
+        'editor': (
+            'arrangement', 'cataloguer', 'copyright_status',
+            'description_date', 'extent', 'physical_description',
+            'provenance', 'rcin', 'record_type', 'repository',
+            'rights_declaration', 'withheld'),
+        'moderator': (),
+        'admin': ()
+    }
 
     def __init__(self, *args, **kwargs):
+        user_permission_type = kwargs.pop('user_permission_type')
         super().__init__(*args, **kwargs)
-        for field in self.disabled_fields:
-            # Due to polymorphic model, some fields are not going to exist.
+        for field in self.disabled_fields[user_permission_type]:
+            # Due to polymorphic model, some fields are not going
+            # to exist.
             try:
                 self.fields[field].disabled = True
             except KeyError:
@@ -364,7 +368,7 @@ class SeriesArchivalRecordEditForm(ArchivalRecordEditForm):
 
 class EntityEditForm(ContainerModelForm):
 
-    disabled_fields = []
+    disabled_fields = ['entity_type']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -399,11 +403,104 @@ class LogForm(forms.Form):
     comment = forms.CharField(label='Comments', widget=forms.Textarea)
 
 
+# User dashboard forms.
+
+class EditorProfileEditInlineForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def has_changed(self):
+        return bool(self.changed_data)
+
+    def is_valid(self):
+        return super().is_valid()
+
+    class Meta:
+        model = EditorProfile
+        fields = ['role']
+
+
 class UserEditForm(forms.ModelForm):
+
+    """Form for editing basic details of a user (not password, not editor
+    role)."""
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+
+
+class UserForm(ContainerModelForm):
+
+    """Form for deleting a user or editing its associated editor
+    profile."""
+
+    def _add_formsets(self, *args, **kwargs):
+        formsets = {}
+        data = kwargs.get('data')
+        EditorProfileFormset = forms.models.inlineformset_factory(
+            User, EditorProfile, exclude=[], form=EditorProfileEditInlineForm,
+            extra=0)
+        formsets['editor_profile'] = EditorProfileFormset(
+            data, *args, instance=self.instance,
+            prefix=self.prefix + '-editor_profile')
+        return formsets
+
+    class Meta:
+        model = User
+        fields = ['id']
+
+
+# Search forms.
+
+class FacetedSearchForm(haystack.forms.SearchForm):
+
+    """We do not want the faceting to narrow the results searched over,
+    but rather for them to be ORed together as a filter. Therefore do
+    not inherit from haystack.forms.FacetedSearchForm."""
+
+    q = forms.CharField(required=False, label='Search',
+                        widget=forms.TextInput(attrs=SEARCH_INPUT_ATTRS))
+
+    def __init__(self, *args, **kwargs):
+        self.selected_facets = kwargs.pop('selected_facets', [])
+        super().__init__(*args, **kwargs)
+
+    def _apply_facets(self, sqs):
+        query = None
+        previous_field = None
+        for facet in sorted(self.selected_facets):
+            if ':' not in facet:
+                continue
+            field, value = facet.split(':', 1)
+            if value:
+                if query is None:
+                    query = SQ(**{field: sqs.query.clean(value)})
+                elif field == previous_field:
+                    query = query | SQ(**{field: sqs.query.clean(value)})
+                else:
+                    query = query & SQ(**{field: sqs.query.clean(value)})
+        if query is not None:
+            sqs = sqs.filter(query)
+        return sqs
+
+    def no_query_found(self):
+        return self.searchqueryset.all()
+
+    def search(self):
+        sqs = super().search()
+        sqs = self._apply_facets(sqs)
+        return sqs
+
+
+class SearchForm(haystack.forms.SearchForm):
+
+    q = forms.CharField(required=False, label='Search',
+                        widget=forms.TextInput(attrs=SEARCH_INPUT_ATTRS))
+
+    def no_query_found(self):
+        return self.searchqueryset.all()
 
 
 def get_archival_record_edit_form_for_subclass(instance):
@@ -425,51 +522,3 @@ def get_archival_record_edit_form_for_subclass(instance):
     else:
         raise Exception('Trying to get an ArchivalRecordEditForm subclass'
                         ' for an unrecognised ArchivalRecord subclass.')
-
-
-# Search forms.
-
-class FacetedSearchForm(haystack.forms.SearchForm):
-
-    """We do not want the faceting to narrow the results searched over,
-    but rather for them to be ORed together as a filter. Therefore do
-    not inherit from haystack.forms.FacetedSearchForm."""
-
-    q = forms.CharField(required=False, label='Search',
-                        widget=forms.TextInput(attrs=SEARCH_INPUT_ATTRS))
-
-    def __init__(self, *args, **kwargs):
-        self.selected_facets = kwargs.pop('selected_facets', [])
-        super().__init__(*args, **kwargs)
-
-    def _apply_facets(self, sqs):
-        query = None
-        for facet in self.selected_facets:
-            if ':' not in facet:
-                continue
-            field, value = facet.split(':', 1)
-            if value:
-                if query is None:
-                    query = SQ(**{field: sqs.query.clean(value)})
-                else:
-                    query = query | SQ(**{field: sqs.query.clean(value)})
-        if query is not None:
-            sqs = sqs.filter(query)
-        return sqs
-
-    def no_query_found(self):
-        return self.searchqueryset.all()
-
-    def search(self):
-        sqs = super().search()
-        sqs = self._apply_facets(sqs)
-        return sqs
-
-
-class SearchForm(haystack.forms.SearchForm):
-
-    q = forms.CharField(required=False, label='Search',
-                        widget=forms.TextInput(attrs=SEARCH_INPUT_ATTRS))
-
-    def no_query_found(self):
-        return self.searchqueryset.all()

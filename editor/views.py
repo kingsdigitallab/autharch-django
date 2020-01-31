@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
+from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -14,8 +16,11 @@ from reversion.views import create_revision
 from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
 
-from .forms import EntityEditForm, LogForm, UserEditForm, FacetedSearchForm, \
+from .forms import (
+    EntityEditForm, LogForm, UserEditForm, UserForm, FacetedSearchForm,
     SearchForm, get_archival_record_edit_form_for_subclass
+)
+from .models import EditorProfile
 
 
 class HomeView(SearchView):
@@ -48,36 +53,44 @@ class RecordListView(FacetedSearchView):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series).facet(
-        'record_type', sort='index')
+        'archival_level', sort='index').facet('writers', sort='index')
     form_class = FacetedSearchForm
-    facet_fields = ['record_type']
+    facet_fields = ['archival_level', 'writers']
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['current_section'] = 'records'
+        context['writer_manager'] = Entity.objects
+        context['selected_facets'] = self.request.GET.getlist(
+            'selected_facets')
         return context
 
 
 @login_required
 def dashboard(request):
     user = request.user
+    AllUsersFormSet = modelformset_factory(
+        User, extra=0, can_delete=True, form=UserForm)
+    user_form = UserEditForm(instance=user)
+    all_users_formset = None
+    if user.editor_profile.role == EditorProfile.ADMIN:
+        all_users_formset = AllUsersFormSet()
     if request.method == 'POST':
-        if request.POST.get('old_password') is not None:
-            password_form = PasswordChangeForm(user=user, data=request.POST)
-            if password_form.is_valid():
-                password_form.save()
-                return redirect('editor:dashboard')
-        elif request.POST.get('email') is not None:
+        if request.POST.get('user_submit') is not None:
             user_form = UserEditForm(request.POST, instance=user)
             if user_form.is_valid():
                 user_form.save()
                 return redirect('editor:dashboard')
-    else:
-        user_form = UserEditForm(instance=user)
-        password_form = PasswordChangeForm(user=user)
+        elif (user.editor_profile.role == EditorProfile.ADMIN and
+              request.POST.get('all_users_submit') is not None):
+            # Changing editor profile role or deleting user.
+            all_users_formset = AllUsersFormSet(request.POST)
+            if all_users_formset.is_valid():
+                all_users_formset.save()
+                return redirect('editor:dashboard')
     context = {
         'current_section': 'account',
-        'password_form': password_form,
+        'all_users_formset': all_users_formset,
         'user': user,
         'user_form': user_form,
     }
@@ -135,6 +148,29 @@ def entity_history(request, entity_id):
         'versions': Version.objects.get_for_object(entity),
     }
     return render(request, 'editor/history.html', context)
+
+
+def password_change(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        user = None
+    if user is None or request.user.editor_profile.role != EditorProfile.ADMIN:
+        raise Exception(
+            "Have message about no access to change this user's password.")
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(user=user, data=request.POST)
+        if password_form.is_valid():
+            password_form.save()
+            return redirect('editor:dashboard')
+    else:
+        password_form = PasswordChangeForm(user=user)
+    context = {
+        'current_section': 'account',
+        'password_form': password_form,
+        'user': user,
+    }
+    return render(request, 'editor/password_change.html', context)
 
 
 @require_POST

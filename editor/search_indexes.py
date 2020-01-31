@@ -28,6 +28,7 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
     archival_level = indexes.CharField(model_attr='archival_level',
                                        faceted=True)
     publication_status = indexes.CharField(model_attr='publication_status')
+    writers = indexes.MultiValueField(faceted=True)
     description = indexes.CharField()
 
     def get_model(self):
@@ -35,6 +36,9 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_description(self, obj):
         return str(obj)
+
+    def prepare_writers(self, obj):
+        return list(obj.creators.distinct().values_list('pk', flat=True))
 
 
 class ItemIndex(indexes.SearchIndex, indexes.Indexable):
