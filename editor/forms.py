@@ -300,20 +300,16 @@ class ArchivalRecordEditForm(forms.ModelForm):
 
     """
 
-    disabled_fields = {
-        'editor': (
-            'arrangement', 'cataloguer', 'copyright_status',
-            'description_date', 'extent', 'physical_description',
-            'provenance', 'rcin', 'record_type', 'repository',
-            'rights_declaration', 'withheld'),
-        'moderator': (),
-        'admin': ()
-    }
+    disabled_fields = [
+        'arrangement', 'cataloguer', 'copyright_status',
+        'description_date', 'extent', 'physical_description',
+        'provenance', 'rcin', 'record_type', 'repository',
+        'rights_declaration', 'withheld'
+    ]
 
     def __init__(self, *args, **kwargs):
-        user_permission_type = kwargs.pop('user_permission_type')
         super().__init__(*args, **kwargs)
-        for field in self.disabled_fields[user_permission_type]:
+        for field in self.disabled_fields:
             # Due to polymorphic model, some fields are not going
             # to exist.
             try:
@@ -328,11 +324,15 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'arrangement': forms.Textarea(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'end_date': HTML5DateInput(),
-            'languages': forms.Select(attrs=SEARCH_SELECT_ATTRS),
-            'creators': forms.Select(attrs=SEARCH_SELECT_ATTRS),
+            'languages': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
+            'creators': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'parent_file': forms.Select(attrs=SEARCH_SELECT_ATTRS),
             'parent_series': forms.Select(attrs=SEARCH_SELECT_ATTRS),
+            'persons_as_relations': forms.SelectMultiple(
+                attrs=SEARCH_SELECT_ATTRS),
+            'persons_as_subjects': forms.SelectMultiple(
+                attrs=SEARCH_SELECT_ATTRS),
             'physical_description': forms.Textarea(),
             'project': forms.HiddenInput(),
             'provenance': forms.Textarea(attrs={'rows': 4}),
