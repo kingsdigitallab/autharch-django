@@ -17,8 +17,8 @@ from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
 
 from .forms import (
-    EntityEditForm, LogForm, UserEditForm, UserForm, FacetedSearchForm,
-    SearchForm, get_archival_record_edit_form_for_subclass
+    EntityCreateForm, EntityEditForm, LogForm, UserEditForm, UserForm,
+    FacetedSearchForm, SearchForm, get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile
 
@@ -98,10 +98,29 @@ def dashboard(request):
 
 
 def entity_create(request):
+    if request.method == 'POST':
+        form = EntityCreateForm(request.POST)
+        if form.is_valid():
+            entity_type = form.cleaned_data['entity_type']
+            if entity_type == 'CB':
+                return redirect('editor:entity-create-corporate-body')
+            elif entity_type == 'PE':
+                return redirect('editor:entity-create-person')
+    else:
+        form = EntityCreateForm()
     context = {
         'current_section': 'entities',
+        'form': form,
     }
     return render(request, 'editor/entity_create.html', context)
+
+
+def entity_create_person(request):
+    pass
+
+
+def entity_create_corporate_body(request):
+    pass
 
 
 @require_POST
@@ -151,13 +170,15 @@ def entity_history(request, entity_id):
 
 
 def password_change(request, user_id):
+    # Avoid revealing valid user IDs.
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
         user = None
-    if user is None or request.user.editor_profile.role != EditorProfile.ADMIN:
-        raise Exception(
-            "Have message about no access to change this user's password.")
+    editor = request.user
+    if user is None or (editor != user and
+                        editor.editor_profile.role != EditorProfile.ADMIN):
+        redirect('editor:dashboard')
     if request.method == 'POST':
         password_form = PasswordChangeForm(user=user, data=request.POST)
         if password_form.is_valid():

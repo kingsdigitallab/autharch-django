@@ -1,0 +1,22 @@
+{% extends "./base.html" %}
+
+{% block main %}
+<main id="form-page">
+  <h1>Create new entity</h1>
+
+  <form action="." method="post">
+    {% csrf_token %}
+    {{ form.errors }}
+    <div class="custom-radio-filters">
+      {% for radio in form.entity_type %}
+      {{ radio.tag }}
+      <label for="{{ radio.id_for_label }}" class="filter">{{ radio.choice_label }}</label>
+      {% endfor %}
+    </div>
+    <div class="two-column-table">
+      <a class="default" href="{% url 'editor:entities-list' %}">Cancel</a>
+      <input aria-label="submit and continue" class="create" type="submit" value="Continue" />
+    </div>
+  </form>
+</main>
+{% endblock %}

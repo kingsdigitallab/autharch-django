@@ -1,6 +1,6 @@
 {% extends "./base.html" %}
 
-{% block main %}
+{% block content %}
 <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ item|truncatewords:15 }}</span></a>
 
 <h1><span class="highlight">Change history:</span> {{ item|truncatewords:15 }}</h1>
@@ -37,4 +37,4 @@
     </tbody>
   </table>
 </form>
-{% endblock main %}
+{% endblock content %}

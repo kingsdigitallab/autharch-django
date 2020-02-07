@@ -398,6 +398,19 @@ class EntityEditForm(ContainerModelForm):
         }
 
 
+class EntityCreateForm(forms.Form):
+
+    CORPORATE_BODY_ENTITY_TYPE = 'CB'
+    PERSON_ENTITY_TYPE = 'PE'
+    ENTITY_TYPE_CHOICES = (
+        (CORPORATE_BODY_ENTITY_TYPE, 'Corporate Body'),
+        (PERSON_ENTITY_TYPE, 'Person'),
+    )
+
+    entity_type = forms.ChoiceField(
+        widget=forms.RadioSelect, choices=ENTITY_TYPE_CHOICES)
+
+
 class LogForm(forms.Form):
 
     comment = forms.CharField(label='Comments', widget=forms.Textarea)
