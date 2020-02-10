@@ -1,5 +1,6 @@
 from django.db import models
 from model_utils.models import TimeStampedModel
+from editor.constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 
 
 class BaseJargonModel(TimeStampedModel):
@@ -34,6 +35,14 @@ class MaintenanceStatus(BaseJargonModel):
 
 
 class NamePartType(BaseJargonModel):
+    ENTITY_TYPE_CHOICES = (
+        (CORPORATE_BODY_ENTITY_TYPE, 'Corporate Body'),
+        (PERSON_ENTITY_TYPE, 'Person'),
+    )
+
+    entity_type = models.CharField(
+        choices=ENTITY_TYPE_CHOICES, default=PERSON_ENTITY_TYPE, max_length=2)
+
     class Meta:
         verbose_name = 'EAC: Name part type'
         verbose_name_plural = 'EAC: Name part types'

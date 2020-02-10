@@ -107,8 +107,9 @@
           <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('event', this)">Add event
         </label>
     </div>
+    {% with mandates=form.formsets.mandates %}
+    {% if mandates %}
     <div class="formset">
-      {% with mandates=form.formsets.mandates %}
       <h3>MANDATE ({{ mandates.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="mandate" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
@@ -120,13 +121,15 @@
         {% include "./mandate_inline_form.html" with form=mandate %}
         {% endfor %}
       </div>
-      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('mandate', this)">Add mandate
       </label>
     </div>
+    {% endif %}
+    {% endwith %}
+    {% with legal_statuses=form.formsets.legal_statuses %}
+    {% if legal_statuses %}
     <div class="formset">
-      {% with legal_statuses=form.formsets.legal_statuses %}
       <h3>LEGAL STATUS ({{ legal_statuses.management_form.INITIAL_FORMS.value|default:"0" }})
         <span role="button" aria-label="additional info" data-content-type="legal-status" class="icon-only additional-info-icon">&#xf059;</span>
       </h3>
@@ -138,11 +141,12 @@
         {% include "./legal_status_inline_form.html" with form=legal_status %}
         {% endfor %}
       </div>
-      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('legal_status', this)">Add legal status
       </label>
     </div>
+    {% endif %}
+    {% endwith %}
     <div class="formset">
       {% with functions=form.formsets.functions %}
       <h3>FUNCTION ({{ functions.management_form.INITIAL_FORMS.value|default:"0" }})
