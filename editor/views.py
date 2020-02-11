@@ -15,9 +15,7 @@ from reversion.views import create_revision
 
 from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
-from jargon.models import EntityType
 
-from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserEditForm, UserForm,
     FacetedSearchForm, SearchForm, get_archival_record_edit_form_for_subclass
@@ -105,13 +103,7 @@ def entity_create(request):
         form = EntityCreateForm(request.POST)
         if form.is_valid():
             entity = Entity()
-            entity_type = form.cleaned_data['entity_type']
-            if entity_type == CORPORATE_BODY_ENTITY_TYPE:
-                entity.entity_type = EntityType.objects.get(
-                    title='corporateBody')
-            elif entity_type == PERSON_ENTITY_TYPE:
-                entity.entity_type = EntityType.objects.get(
-                    title='person')
+            entity.entity_type = form.cleaned_data['entity_type']
             entity.save()
             return redirect('editor:entity-edit', entity_id=entity.pk)
     else:
