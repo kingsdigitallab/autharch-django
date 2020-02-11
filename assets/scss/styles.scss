@@ -608,25 +608,60 @@ main {
         }  
     }
     
-    .custom-radio-filters {
-        :not(:last-child) {
-            margin-right: 10px;
+    &.create-new-form {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        form {
+            max-width: 250px;
+            > div:last-of-type {
+                margin-top: 2em;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .custom-radio-filters {
+                margin: 10px 0px;
+                justify-self: right;
+                :not(:last-child) {
+                    margin-right: 10px;
+                }
+                .filter {
+                    background-color: $background;
+                    color: $primary;
+                    // margin-right: 10px;
+                    border: 1px solid $primary;
+                    border-radius: 30px;
+                    padding: 10px 25px;
+                    font-size: 13px;
+                    white-space: nowrap;
+                    display: block;
+                    margin: 5px 0px;
+                    cursor: pointer;
+                    &:hover, &:focus {
+                        box-shadow: 0px 2px 2px $medium-grey;
+                    }
+                }
+                input[type=checkbox], input[type=radio] {
+                    display: inline-block;
+                }
+                input[type=checkbox]:checked + label, input[type=radio]:checked + label {
+                    background-color: $primary;
+                    color: white;
+                }
+                input[type=checkbox]:checked + label {
+                    &:before {
+                        font-family: $fontawesome;
+                        content:"\f00d";
+                        font-weight: 300;
+                        margin-right: 10px;
+                    }
+                }
+            }
         }
-        .create {
-            margin-left: 20px;
-        }
-        // input[type=checkbox]:checked + label, input[type=radio]:checked + label {
-        //     background-color: $primary;
-        //     color: white;
-        // }
-        // input[type=checkbox]:checked + label {
-        //     &:before {
-        //         font-family: $fontawesome;
-        //         content:"\f00d";
-        //         font-weight: 300;
-        //         margin-right: 10px;
-        //     }
-        // }
     }
 
     .user-control {
