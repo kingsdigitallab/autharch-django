@@ -1050,11 +1050,13 @@ main {
                         #navigation-pane {
                             background-color: lighten($light-grey, 5%);
                             padding: 10px 20px;
+                            display: flex;
+                            justify-content: space-between;
                             .nav-icon {
                                 font-family: $fontawesome;
                                 font-weight: 200;
                                 color: $primary;
-                                margin-right: 20px;
+                                margin: 0px 10px;
                                 font-size: 1.4em;
                                 cursor: pointer;
                                 &:hover, &:focus {
@@ -1072,6 +1074,12 @@ main {
                             }
                             #full-mode:after {
                                 content: '\f31d';
+                            }
+                            #next:after {
+                                content: '\f061';
+                            }
+                            #prev:after {
+                                content: '\f060';
                             }
                         }
                     }

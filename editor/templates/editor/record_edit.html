@@ -58,10 +58,14 @@
           <div class="two-column-table">
             <div id="openseadragon1" class="image">
                 <div id="navigation-pane">
-                  <span class="nav-icon" id="zoom-in"></span>
-                  <span class="nav-icon" id="zoom-out"></span>
-                  <span class="nav-icon" id="default"></span>
-                  <span class="nav-icon" id="full-mode"></span>
+                    <span class="nav-icon" id="prev"></span>
+                  <div>
+                    <span class="nav-icon" id="zoom-in"></span>
+                    <span class="nav-icon" id="zoom-out"></span>
+                    <span class="nav-icon" id="default"></span>
+                    <span class="nav-icon" id="full-mode"></span>
+                  </div>
+                  <span class="nav-icon" id="next"></span>
                 </div>
             </div>
             <div class="transcription">
@@ -258,6 +262,8 @@
       zoomOutButton:  "zoom-out",
       homeButton:     "default",
       fullPageButton: "full-mode",
+      nextButton:     "next",
+      prevButton: "prev",
       tileSources: {
         height: 1749,
         width:  1400,
