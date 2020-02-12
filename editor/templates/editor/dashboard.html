@@ -28,17 +28,22 @@
       <h2>Change password</h2>
       <form action="." method="post" class="two-column-table">
         {% csrf_token %}
+        {% if password_form.errors %}
+        <div class="error-notification">
+          {{ password_form.errors }}
+        </div>
+        {% endif %}
         <div>
           {% render_field password_form.old_password %}
         </div>
         <div></div>
         <div>
-          {% render_field password_form.new_password %}
+          {% render_field password_form.new_password1 %}
         </div>
         <div>
-          {% render_field password_form.confirm_password %}
+          {% render_field password_form.new_password2 %}
         </div>
-        <input name="user_submit" type="submit" class="save" value="Save" />
+        <input name="password_submit" type="submit" class="save" value="Save" />
       </form>
   </div>
 </div>
@@ -80,9 +85,6 @@
             {% render_field profile.forms.0.id %}
             {{ profile.forms.0.role }}
             {% endwith %}
-          </td>
-          <td class="button-cell">
-            <a href="{% url 'editor:reset-password' user_id=user.pk %}" aria-label="reset password" class="button-link"><i class="fas fa-unlock-alt"></i>Reset password</a>
           </td>
           <td class="button-cell">
             <button aria-label="delete user" class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete user</button>

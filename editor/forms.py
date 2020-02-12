@@ -424,68 +424,11 @@ class LogForm(forms.Form):
 
     comment = forms.CharField(label='Comments', widget=forms.Textarea)
 
-class SetPasswordForm(forms.Form):
-    """
-    A form that lets a user change set their password without entering the old
-    password
-    """
-    error_messages = {
-        'password_mismatch': ("The two password fields didn't match."),
-    }
-    new_password = forms.CharField(label=("New password"),
-                                    widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label=("Confirm new password"),
-                                    widget=forms.PasswordInput)
-
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
-        super(SetPasswordForm, self).__init__(*args, **kwargs)
-
-    def clean_confirm_password(self):
-        password1 = self.cleaned_data.get('new_password')
-        password2 = self.cleaned_data.get('confirm_password')
-        if password1 and password2:
-            if password1 != password2:
-                raise forms.ValidationError(
-                    self.error_messages['password_mismatch'],
-                    code='password_mismatch',
-                )
-        return password2
-
-    def save(self, commit=True):
-        self.user.set_password(self.cleaned_data['new_password1'])
-        if commit:
-            self.user.save()
-        return self.user
-
-
-class PasswordChangeForm(SetPasswordForm):
-    """
-    A form that lets a user change their password by entering their old
-    password.
-    """
-    error_messages = dict(SetPasswordForm.error_messages, **{
-        'password_incorrect': ("Your old password was entered incorrectly. "
-                                "Please enter it again."),
-    })
-    old_password = forms.CharField(label=("Old password"),
-                                   widget=forms.PasswordInput)
-
-    def clean_old_password(self):
-        """
-        Validates that the old_password field is correct.
-        """
-        old_password = self.cleaned_data["old_password"]
-        if not self.user.check_password(old_password):
-            raise forms.ValidationError(
-                self.error_messages['password_incorrect'],
-                code='password_incorrect',
-            )
-        return old_password
-
 
 class PasswordResetForm (forms.Form):
-    email_address = forms.CharField(label=("Email address"), widget=forms.EmailInput)
+    email_address = forms.CharField(label=("Email address"),
+                                    widget=forms.EmailInput)
+
 
 # User dashboard forms.
 

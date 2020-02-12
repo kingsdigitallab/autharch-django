@@ -18,7 +18,8 @@ from authority.models import Entity
 
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserEditForm, UserForm,
-    FacetedSearchForm, PasswordChangeForm, PasswordResetForm, SearchForm, get_archival_record_edit_form_for_subclass
+    FacetedSearchForm, PasswordResetForm, SearchForm,
+    get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile
 
@@ -72,6 +73,7 @@ def dashboard(request):
     AllUsersFormSet = modelformset_factory(
         User, extra=0, can_delete=True, form=UserForm)
     user_form = UserEditForm(instance=user)
+    password_form = PasswordChangeForm(user=user)
     all_users_formset = None
     if user.editor_profile.role == EditorProfile.ADMIN:
         all_users_formset = AllUsersFormSet()
@@ -81,6 +83,11 @@ def dashboard(request):
             if user_form.is_valid():
                 user_form.save()
                 return redirect('editor:dashboard')
+        elif request.POST.get('password_submit') is not None:
+            password_form = PasswordChangeForm(data=request.POST, user=user)
+            if password_form.is_valid():
+                password_form.save()
+                return redirect('editor:dashboard')
         elif (user.editor_profile.role == EditorProfile.ADMIN and
               request.POST.get('all_users_submit') is not None):
             # Changing editor profile role or deleting user.
@@ -88,7 +95,6 @@ def dashboard(request):
             if all_users_formset.is_valid():
                 all_users_formset.save()
                 return redirect('editor:dashboard')
-    password_form = PasswordChangeForm(user=user)
     context = {
         'current_section': 'account',
         'all_users_formset': all_users_formset,
@@ -187,6 +193,7 @@ def password_reset(request, user_id):
         'user': user,
     }
     return render(request, 'editor/password_reset.html', context)
+
 
 @require_POST
 def record_delete(request, record_id):
