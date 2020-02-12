@@ -16,7 +16,6 @@ from reversion.views import create_revision
 from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
 
-from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserEditForm, UserForm,
     FacetedSearchForm, SearchForm, get_archival_record_edit_form_for_subclass
@@ -98,15 +97,15 @@ def dashboard(request):
     return render(request, 'editor/dashboard.html', context)
 
 
+@create_revision()
 def entity_create(request):
     if request.method == 'POST':
         form = EntityCreateForm(request.POST)
         if form.is_valid():
-            entity_type = form.cleaned_data['entity_type']
-            if entity_type == CORPORATE_BODY_ENTITY_TYPE:
-                return redirect('editor:entity-create-corporate-body')
-            elif entity_type == PERSON_ENTITY_TYPE:
-                return redirect('editor:entity-create-person')
+            entity = Entity()
+            entity.entity_type = form.cleaned_data['entity_type']
+            entity.save()
+            return redirect('editor:entity-edit', entity_id=entity.pk)
     else:
         form = EntityCreateForm()
     context = {
@@ -114,14 +113,6 @@ def entity_create(request):
         'form': form,
     }
     return render(request, 'editor/entity_create.html', context)
-
-
-def entity_create_person(request):
-    pass
-
-
-def entity_create_corporate_body(request):
-    pass
 
 
 @require_POST

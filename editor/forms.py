@@ -11,7 +11,7 @@ from authority.models import (
     LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
     NamePart, Place, Relation, Resource, Source
 )
-from jargon.models import NamePartType
+from jargon.models import EntityType, NamePartType
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
@@ -415,13 +415,9 @@ class EntityEditForm(ContainerModelForm):
 
 class EntityCreateForm(forms.Form):
 
-    ENTITY_TYPE_CHOICES = (
-        (CORPORATE_BODY_ENTITY_TYPE, 'Corporate Body'),
-        (PERSON_ENTITY_TYPE, 'Person'),
-    )
-
-    entity_type = forms.ChoiceField(
-        widget=forms.RadioSelect, choices=ENTITY_TYPE_CHOICES)
+    entity_type = forms.ModelChoiceField(
+        widget=forms.RadioSelect, empty_label=None,
+        queryset=EntityType.objects.all())
 
 
 class LogForm(forms.Form):
