@@ -1,5 +1,7 @@
 {% extends "./base.html" %}
 {% load editor_form_tags %}
+{% load compress static %}
+
 
 {% block page_header %}
 <div id="page-header" class="header-fixed">
@@ -44,6 +46,31 @@
   <h2>{{ record.archival_level }}</h2>
 
   <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
+    <div class="form-section">
+      <fieldset id="side-by-side">
+        <div class="fieldset-header">
+          <h3>Transcription</h3>
+          <div>
+            <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div id="openseadragon1" class="image">
+                <div id="navigation-pane">
+                  <span class="nav-icon" id="zoom-in"></span>
+                  <span class="nav-icon" id="zoom-out"></span>
+                  <span class="nav-icon" id="default"></span>
+                  <span class="nav-icon" id="full-mode"></span>
+                </div>
+            </div>
+            <div class="transcription">
+                <textarea class="richtext">QAZ</textarea>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
     <div class="form-section">
       <h2>SUMMARY</h2>
       <fieldset id="summary">
@@ -220,3 +247,26 @@
 </div>
 {% include "./includes/delete_modal.html" with delete_url=delete_url %}
 {% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/openseadragon/openseadragon.min.js' %}"></script>
+<script type="text/javascript">
+  var viewer = OpenSeadragon({
+      id: "openseadragon1",
+      prefixUrl: "{% static 'js/openseadragon/images/' %}",
+      zoomInButton:   "zoom-in",
+      zoomOutButton:  "zoom-out",
+      homeButton:     "default",
+      fullPageButton: "full-mode",
+      tileSources: {
+        height: 1749,
+        width:  1400,
+        tileSize: 1749,
+        minLevel: 11,
+        getTileUrl: function(){
+            return "{% static 'images/GEO_ADD_15_0855_001.jpg' %}";
+        }
+      }
+  });
+</script>
+{% endblock extra_js %}
