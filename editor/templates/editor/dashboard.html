@@ -8,6 +8,7 @@
 {% endblock page_header %}
 
 {% block content %}
+<p>Permission level: <span class="highlight">{{ user.editor_profile.get_role_display }}</span></p>
 <div class="user-control">
   <div id="user-details">
     <h2>Personal details</h2>
@@ -23,10 +24,22 @@
       <input name="user_submit" type="submit" class="save" value="Save" />
     </form>
   </div>
-  <div id="reset">
-    <p>Permission level: <span class="highlight">{{ user.editor_profile.get_role_display }}</span></p>
-    <!-- display if not admin -->
-    <p>Password: ***** <a href="{% url 'editor:reset-password' user_id=user.pk %}" aria-label="change password" class="button-link margin-left"><i class="fas fa-unlock-alt"></i>Change password</a>
+  <div id="change-password">
+      <h2>Change password</h2>
+      <form action="." method="post" class="two-column-table">
+        {% csrf_token %}
+        <div>
+          {% render_field password_form.old_password %}
+        </div>
+        <div></div>
+        <div>
+          {% render_field password_form.new_password %}
+        </div>
+        <div>
+          {% render_field password_form.confirm_password %}
+        </div>
+        <input name="user_submit" type="submit" class="save" value="Save" />
+      </form>
   </div>
 </div>
 
@@ -69,7 +82,7 @@
             {% endwith %}
           </td>
           <td class="button-cell">
-            <a href="{% url 'editor:reset-password' user_id=user.pk %}" aria-label="change password" class="button-link"><i class="fas fa-unlock-alt"></i>Change password</a>
+            <a href="{% url 'editor:reset-password' user_id=user.pk %}" aria-label="reset password" class="button-link"><i class="fas fa-unlock-alt"></i>Reset password</a>
           </td>
           <td class="button-cell">
             <button aria-label="delete user" class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete user</button>
@@ -80,7 +93,7 @@
       </tbody>
     </table>
     <button aria-label="add user" class="create linked-button" id="add-form"><i class="fal fa-plus"></i>Add user</button>
-    <input name="all_users_submit" type="submit" class="save" value="Save" />
+    <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
   </form>
 </div>
   <div class="modal" id="add-user-form">

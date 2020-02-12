@@ -432,18 +432,18 @@ class SetPasswordForm(forms.Form):
     error_messages = {
         'password_mismatch': ("The two password fields didn't match."),
     }
-    new_password1 = forms.CharField(label=("New password"),
+    new_password = forms.CharField(label=("New password"),
                                     widget=forms.PasswordInput)
-    new_password2 = forms.CharField(label=("Confirm new password"),
+    confirm_password = forms.CharField(label=("Confirm new password"),
                                     widget=forms.PasswordInput)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(SetPasswordForm, self).__init__(*args, **kwargs)
 
-    def clean_new_password2(self):
-        password1 = self.cleaned_data.get('new_password1')
-        password2 = self.cleaned_data.get('new_password2')
+    def clean_confirm_password(self):
+        password1 = self.cleaned_data.get('new_password')
+        password2 = self.cleaned_data.get('confirm_password')
         if password1 and password2:
             if password1 != password2:
                 raise forms.ValidationError(
@@ -484,6 +484,8 @@ class PasswordChangeForm(SetPasswordForm):
         return old_password
 
 
+class PasswordResetForm (forms.Form):
+    email_address = forms.CharField(label=("Email address"), widget=forms.EmailInput)
 
 # User dashboard forms.
 

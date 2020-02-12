@@ -582,27 +582,30 @@ main {
     
     .form-page {
         height: 80vh;
+        max-width: 300px;
+        margin: auto;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         form {
-            max-width: 250px;
+            max-width: 300px;
             > div:last-of-type {
                 margin-top: 2em;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            input[type=password], input[type=text] {
+            input[type=email] {
                 width: 100%;
                 display: block;
                 box-sizing: border-box;
+                margin-bottom: 2em;
             }
             input[type=submit] {
-                margin: auto;
-                margin-top: 2em;
                 display: block;
+                margin-left: auto;
+                margin-right: 0;
             }
             .custom-radio-filters {
                 margin: 10px 0px;
@@ -647,7 +650,7 @@ main {
 
     .user-control {
         display: flex;
-        #user-details, #reset {
+        #user-details, #change-password {
             width: 50%;
             background-color: white;
             border-radius: 10px;
@@ -695,6 +698,9 @@ main {
             cursor: pointer;
             white-space: normal;
             padding: 4px 20px 4px 4px;
+            &:hover {
+                color: $primary;
+            }
         }
         &.tablesorter-default thead .headerSortUp,
         &.tablesorter-default thead .tablesorter-headerSortUp,
@@ -733,17 +739,12 @@ main {
             cursor: pointer;
             background-color: #e6bf99;
         }
-
         thead {
             text-align: left;
             line-height: 1.3em;
             th {
                 padding: 15px 0px;
                 font-weight: 500;
-                cursor: pointer;
-                &:hover {
-                    color: $primary;
-                }
             }
             .fas {
                 margin-left: 10px;
@@ -1328,7 +1329,7 @@ footer {
         }
         .user-control {
             display: block;
-            #user-details, #user-password {
+            #user-details, #change-password {
                 width: 100%;
                 box-sizing: border-box;
             }

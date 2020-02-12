@@ -7,7 +7,7 @@ app_name = 'editor'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('dashboard/reset-password/<int:user_id>/', views.password_change,
+    path('dashboard/reset-password/<int:user_id>/', views.password_reset,
          name='reset-password'),
     path('entities/', views.EntityListView.as_view(), name='entities-list'),
     path('entities/<int:entity_id>/', views.entity_edit, name='entity-edit'),

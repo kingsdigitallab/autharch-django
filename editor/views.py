@@ -18,7 +18,7 @@ from authority.models import Entity
 
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserEditForm, UserForm,
-    FacetedSearchForm, PasswordChangeForm, SearchForm, get_archival_record_edit_form_for_subclass
+    FacetedSearchForm, PasswordChangeForm, PasswordResetForm, SearchForm, get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile
 
@@ -88,11 +88,13 @@ def dashboard(request):
             if all_users_formset.is_valid():
                 all_users_formset.save()
                 return redirect('editor:dashboard')
+    password_form = PasswordChangeForm(user=user)
     context = {
         'current_section': 'account',
         'all_users_formset': all_users_formset,
         'user': user,
         'user_form': user_form,
+        'password_form': password_form
     }
     return render(request, 'editor/dashboard.html', context)
 
@@ -161,7 +163,7 @@ def entity_history(request, entity_id):
     return render(request, 'editor/history.html', context)
 
 
-def password_change(request, user_id):
+def password_reset(request, user_id):
     # Avoid revealing valid user IDs.
     try:
         user = User.objects.get(pk=user_id)
@@ -172,19 +174,19 @@ def password_change(request, user_id):
                         editor.editor_profile.role != EditorProfile.ADMIN):
         redirect('editor:dashboard')
     if request.method == 'POST':
-        password_form = PasswordChangeForm(user=user, data=request.POST)
+        password_form = PasswordResetForm(user=user, data=request.POST)
         if password_form.is_valid():
             password_form.save()
             return redirect('editor:dashboard')
     else:
-        password_form = PasswordChangeForm(user=user)
+        # removed user=user from arguments
+        password_form = PasswordResetForm()
     context = {
         'current_section': 'account',
         'password_form': password_form,
         'user': user,
     }
-    return render(request, 'editor/password_change.html', context)
-
+    return render(request, 'editor/password_reset.html', context)
 
 @require_POST
 def record_delete(request, record_id):
