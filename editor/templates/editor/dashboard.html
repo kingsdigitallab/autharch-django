@@ -3,7 +3,7 @@
 
 {% block page_header %}
 <div id="page-header">
-  <h1>Account control</h1>
+  <h1>Account control panel</h1>
 </div>
 {% endblock page_header %}
 
@@ -26,7 +26,7 @@
   <div id="reset">
     <p>Permission level: <span class="highlight">{{ user.editor_profile.get_role_display }}</span></p>
     <!-- display if not admin -->
-    <p>Password: ***** <a href="" aria-label="reset password" class="button-link margin-left"><i class="fas fa-unlock-alt"></i>Reset password</a>
+    <p>Password: ***** <a href="{% url 'editor:reset-password' user_id=user.pk %}" aria-label="change password" class="button-link margin-left"><i class="fas fa-unlock-alt"></i>Change password</a>
   </div>
 </div>
 
@@ -69,7 +69,7 @@
             {% endwith %}
           </td>
           <td class="button-cell">
-            <a href="" aria-label="reset password" class="button-link"><i class="fas fa-unlock-alt"></i>Reset password</a>
+            <a href="{% url 'editor:reset-password' user_id=user.pk %}" aria-label="change password" class="button-link"><i class="fas fa-unlock-alt"></i>Change password</a>
           </td>
           <td class="button-cell">
             <button aria-label="delete user" class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete user</button>

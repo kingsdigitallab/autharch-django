@@ -18,7 +18,7 @@ from authority.models import Entity
 
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserEditForm, UserForm,
-    FacetedSearchForm, SearchForm, get_archival_record_edit_form_for_subclass
+    FacetedSearchForm, PasswordChangeForm, SearchForm, get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile
 
