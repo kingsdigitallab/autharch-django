@@ -18,10 +18,12 @@
             <fieldset class="filter-list">
               <legend>Document level</legend>
               {% for entity_type in facets.fields.entity_type %}
-              <label for="{{ entity_type.0 }}-input" class="filter">
-                <input id="{{ entity_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
-                {{ entity_type.0 }} ({{ entity_type.1 }})
-              </label>
+                <a href="" class="checkbox-anchor">
+                  <label for="{{ entity_type.0 }}-input" class="filter">
+                      <input id="{{ entity_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
+                    {{ entity_type.0 }} ({{ entity_type.1 }})
+                  </label>
+                </a>
               {% endfor %}
             </fieldset>
           </div>

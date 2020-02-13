@@ -31,6 +31,8 @@ $(document).ready(function() {
     event.preventDefault();
   });
 
+  
+
   // Open popup to log changes when saving a record, then actually
   // submit the form when submitting from the popup.
   $("#record-form").submit((event) => {
@@ -45,12 +47,8 @@ $(document).ready(function() {
 
   // open popup to add new user who can access the admin panel
   $('#add-form').click(() => {
+    event.preventDefault();
     $('#add-user-form').addClass('active');
-  });
-
-  // open popup to add new user who can access the admin panel
-  $('#edit-form').click(() => {
-    $('#edit-user-form').addClass('active');
   });
 
   // ADD-ONS
@@ -102,6 +100,10 @@ $(document).ready(function() {
       $(el.target).parents('fieldset').first().addClass('border-left');
     }
   });
+
+  $(".checkbox-anchor").click(function(el) {
+    $(el).children('input[type=checkbox]').prop('checked', true);
+  })
 
 });
 
@@ -258,6 +260,7 @@ function deleteRecord(event) {
   $("#delete-modal").addClass('active');
   event.preventDefault();
 }
+
 
 
 /**
