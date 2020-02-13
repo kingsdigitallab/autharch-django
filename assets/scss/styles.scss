@@ -803,6 +803,9 @@ main {
                 width: -webkit-fill-available;
                 width: fill-available;
             }
+            .inline-deletable {
+                width: 100%;
+            }
             // label {
             //     margin-top: 5px;
             // }
@@ -1046,12 +1049,14 @@ main {
                         border-radius: 5px;
                         overflow: hidden;
                         height: auto;
-                        // background-color: darken($dark-grey, 20%);
+                        background-color: darken($dark-grey, 20%);
+                        cursor: grab;
                         #navigation-pane {
                             background-color: lighten($light-grey, 5%);
                             padding: 10px 20px;
                             display: flex;
                             justify-content: space-between;
+                            cursor: auto;
                             .nav-icon {
                                 font-family: $fontawesome;
                                 font-weight: 200;
@@ -1084,8 +1089,11 @@ main {
                         }
                     }
                     .transcription {
+                        .richText {
+                            margin-bottom: 0;
+                        }
                         .richText-editor {
-                            height: 60vh;
+                            height: 50vh;
                         }
                     }
                 }

@@ -19,16 +19,20 @@
           <fieldset class="filter-list">
             <legend>Document level</legend>
             {% for record_type in facets.fields.record_type %}
-            <label for="{{ record_type.0 }}-input">
-              <input id="{{ record_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ record_type.0 }}" value=""/>{{ record_type.0 }} ({{ record_type.1 }})
-            </label>
+            <a href="" class="checkbox-anchor">
+              <label for="{{ record_type.0 }}-input">
+                <input id="{{ record_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ record_type.0 }}" value=""/>{{ record_type.0 }} ({{ record_type.1 }})
+              </label>
+            </a>
             {% endfor %}
           </fieldset>
           <fieldset class="filter-list">
             <legend>Writer</legend>
-            <label>
-              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-            </label>
+            <a href="" class="checkbox-anchor">
+              <label>
+                <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
+              </label>
+            </a>
             <label>
               <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
             </label>
