@@ -1,4 +1,5 @@
-from django.urls import path
+from django.contrib.auth import views as auth_views
+from django.urls import path, reverse_lazy
 
 from . import views
 
@@ -6,6 +7,33 @@ from . import views
 app_name = 'editor'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
+    path('account/login/',
+         auth_views.LoginView.as_view(
+             template_name='editor/login.html'
+         ), name='login'),
+    path('account/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('account/password_reset/',
+         auth_views.PasswordResetView.as_view(
+             email_template_name='editor/password_reset_email.html',
+             subject_template_name='editor/password_reset_subject.txt',
+             success_url=reverse_lazy('editor:password_reset_done'),
+             template_name='editor/password_reset_form.html'),
+         name='password_reset'),
+    path('account/password_reset/done/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='editor/password_reset_done.html'),
+         name='password_reset_done'),
+    path('account/reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             success_url=reverse_lazy('editor:password_reset_complete'),
+             template_name='editor/password_reset_confirm.html'
+         ),
+         name='password_reset_confirm'),
+    path('account/reset/done/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='editor/password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/reset-password/<int:user_id>/', views.password_reset,
          name='reset-password'),

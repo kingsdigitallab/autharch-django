@@ -233,10 +233,9 @@ WSGI_APPLICATION = PROJECT_NAME + '.wsgi.application'
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth
 # -----------------------------------------------------------------------------
 
-if 'wagtail.core' in INSTALLED_APPS:
-    LOGIN_URL = '/wagtail/login/'
-else:
-    LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = 'editor:home'
+LOGIN_URL = 'editor:login'
+LOGOUT_REDIRECT_URL = 'editor:login'
 
 # -----------------------------------------------------------------------------
 # Sessions

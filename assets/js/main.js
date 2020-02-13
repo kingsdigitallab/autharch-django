@@ -241,14 +241,6 @@ function closeBlock(el) {
   $('.'+el).removeClass('active');
 }
 
-function login() {
-  window.location.href = "./home.html";
-}
-
-function logout() {
-  window.location.href = "./login.html";
-}
-
 
 /**
  * Create confirmation modal dialogue with form to delete the current
@@ -440,6 +432,41 @@ function toggleDeleteInline(event, button) {
   let deleteField = form_part.children("[class~='inline-delete-form-field']").children("[name$='DELETE']").first();
   deleteField.prop("checked", !deleteField.prop("checked"));
 }
+
+
+function toggleDeleteUserForm(event, button) {
+/**
+ * Mark/unmark a user form for deletion.
+ *
+ * This involves three changes:
+ *
+ * 1. Toggling the DELETE checkbox for the form.
+ * 2. Toggling the visibility of the form.
+ * 3. Toggling the delete/undo icon.
+ *
+ * This code requires the following HTML structure in order to behave
+ * correctly:
+ *
+ * 1. The toggling instigator (the delete/undo icon) must be 
+ * descendant of an element with the data-form-type attribute
+ * set. This attribute marks the element that encompasses the whole of
+ * an inline form.
+ *
+ * 2. The part of the form to be hidden/shown must have the class
+ * attribute value "inline-deletable".
+ *
+ * 3. The part of the form to be hidden/shown must be a descendant of
+ * the encompassing element (see #1).
+ *
+ * 4. The DELETE checkbox for the form must be a grand-child (within
+ * an element with a class of "inline-delete-form-field") of the part
+ * of the form to be hidden/shown (see #2).
+ *
+ * @param {Element} button - the button element that triggered the toggle
+ */
+
+}
+
 
 /**
  * Set/remove the required attribute of the supplied form controls.

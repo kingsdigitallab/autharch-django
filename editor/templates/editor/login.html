@@ -1,0 +1,25 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<div class="form-page">
+  <h1>Login</h1>
+
+  {% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  <form action="{% url 'editor:login' %}" method="post">
+    {% csrf_token %}
+    <label>
+      <span class="required">{{ form.username.label }}</span>
+      {{ form.username }}
+    </label>
+    <label>
+      <span class="required">{{ form.username.label }}</span>
+      {{ form.password }}
+    </label>
+    <a href="{% url 'editor:password_reset' %}">Forgot your password?</a>
+    <input type="submit" class="save" value="Login" />
+  </form>
+</div>
+{% endblock content %}
