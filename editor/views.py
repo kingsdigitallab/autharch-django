@@ -60,11 +60,65 @@ class RecordListView(FacetedSearchView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        query_dict = self.request.GET.copy()
+        context['facets'] = self._merge_facets(context['facets'],
+                                               query_dict)
         context['current_section'] = 'records'
         context['writer_manager'] = Entity.objects
-        context['selected_facets'] = self.request.GET.getlist(
-            'selected_facets')
         return context
+
+    def _create_apply_link(self, value_data, query_dict, facet):
+        qd = query_dict.copy()
+        value = value_data[0]
+        count = value_data[1]
+        facets = qd.getlist('selected_facets')
+        new_facet = '{}_exact:{}'.format(facet, value)
+        qd.setlist('selected_facets', facets + [new_facet])
+        link = '?{}'.format(qd.urlencode())
+        return (value, count, link, True)
+
+    def _create_unapply_link(self, value_data, query_dict, facet):
+        qd = query_dict.copy()
+        value = value_data[0]
+        count = value_data[1]
+        facets = qd.getlist('selected_facets')
+        old_facet = '{}_exact:{}'.format(facet, value)
+        facets.remove(old_facet)
+        qd.setlist('selected_facets', facets)
+        link = qd.urlencode()
+        if link:
+            link = '?{}'.format(link)
+        else:
+            link = '.'
+        return (value, count, link, True)
+
+    def _merge_facets(self, facets, query_dict):
+        """Return the Haystack `facets` annotated with links to apply or
+        unapply the facet values. Data from `query_dict` is used to
+        determine selected facets."""
+        selected_facets = self._split_selected_facets(
+            query_dict.getlist('selected_facets'))
+        for facet, values in facets['fields'].items():
+            new_values = []
+            for value_data in values:
+                if value_data[0] in selected_facets.get(facet, []):
+                    new_values.append(self._create_unapply_link(
+                        value_data, query_dict, facet))
+                else:
+                    new_values.append(self._create_apply_link(
+                        value_data, query_dict, facet))
+            facets['fields'][facet] = new_values
+        return facets
+
+    def _split_selected_facets(self, selected_facets):
+        """Return a dictionary of selected facet values keyed by the facet
+        each belongs to."""
+        split_facets = {}
+        for selected_facet in selected_facets:
+            facet, value = selected_facet.split(':', maxsplit=1)
+            facet = facet[:-len('_exact')]
+            split_facets.setdefault(facet, []).append(value)
+        return split_facets
 
 
 @login_required

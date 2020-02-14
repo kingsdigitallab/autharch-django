@@ -18,24 +18,23 @@
           <!-- should be sorted alphabetically -->
           <fieldset class="filter-list">
             <legend>Document level</legend>
-            {% for record_type in facets.fields.record_type %}
-            <a href="" class="checkbox-anchor">
-              <label for="{{ record_type.0 }}-input">
-                <input id="{{ record_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ record_type.0 }}" value=""/>{{ record_type.0 }} ({{ record_type.1 }})
+            {% for archival_level in facets.fields.archival_level %}
+            <a href="{{ archival_level.2 }}" class="checkbox-anchor">
+              <label>
+                <input name="selected_facets" type="checkbox" aria-label="{{ archival_level.0 }}"/>{{ archival_level.0 }} ({{ archival_level.1 }})
               </label>
             </a>
             {% endfor %}
           </fieldset>
           <fieldset class="filter-list">
             <legend>Writer</legend>
-            <a href="" class="checkbox-anchor">
+            {% for writer in facets.fields.writers %}
+            <a href="{{ writer.2 }}" class="checkbox-anchor">
               <label>
-                <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
+                <input type="checkbox" aria-label="{{ writer.0 }}"/>{{ writer.0 }} ({{ writer.1 }})
               </label>
             </a>
-            <label>
-              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-            </label>
+            {% endfor %}
           </fieldset>
           <fieldset class="filter-list">
             <legend>Addressee</legend>
@@ -64,11 +63,8 @@
         </div>
       </form>
   </div>
-  
-  <!-- <button aria-label="filter" class="filter-button" onclick="toggleFilter(this)">Filter</button> -->
   <span></span>
 </div>
-<!-- Filter by creator, date, language, person as relation are some examples. -->
 {% endblock page_header %}
 
 {% block content %}
