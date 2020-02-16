@@ -4,6 +4,24 @@ from django import template
 register = template.Library()
 
 
+@register.inclusion_tag('editor/includes/form_facet.html')
+def render_facet(facet):
+    """Renders the facet `facet`.
+
+    `facet` is a Haystack facet, consisting of four items: the string
+    display value, the integer count,.the string link to apply/unapply
+    the facet, and a Boolean indicating whether the facet is selected.
+
+    """
+    context = {
+        'count': facet[1],
+        'label': facet[0],
+        'link': facet[2],
+        'selected': facet[3],
+    }
+    return context
+
+
 @register.inclusion_tag('editor/includes/form_field.html')
 def render_field(form_field):
     """Renders the form field `form_field`, including label, widget, and

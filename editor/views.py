@@ -54,9 +54,10 @@ class RecordListView(FacetedSearchView):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series).facet(
-        'archival_level', sort='index').facet('writers', sort='index')
+        'archival_level', sort='index').facet('writers', sort='index').facet(
+        'addressees', sort='index').facet('languages', sort='index')
     form_class = FacetedSearchForm
-    facet_fields = ['archival_level', 'writers']
+    facet_fields = ['addressees', 'archival_level', 'languages', 'writers']
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -68,19 +69,21 @@ class RecordListView(FacetedSearchView):
         return context
 
     def _create_apply_link(self, value_data, query_dict, facet):
+        """Return a link to apply the facet value in `value_data` and False to
+        indicate that the facet is not selected."""
         qd = query_dict.copy()
         value = value_data[0]
-        count = value_data[1]
         facets = qd.getlist('selected_facets')
         new_facet = '{}_exact:{}'.format(facet, value)
         qd.setlist('selected_facets', facets + [new_facet])
         link = '?{}'.format(qd.urlencode())
-        return (value, count, link, True)
+        return link, False
 
     def _create_unapply_link(self, value_data, query_dict, facet):
+        """Return a link to apply the facet value in `value_data` and True to
+        indicate that the facet is selected."""
         qd = query_dict.copy()
         value = value_data[0]
-        count = value_data[1]
         facets = qd.getlist('selected_facets')
         old_facet = '{}_exact:{}'.format(facet, value)
         facets.remove(old_facet)
@@ -90,7 +93,7 @@ class RecordListView(FacetedSearchView):
             link = '?{}'.format(link)
         else:
             link = '.'
-        return (value, count, link, True)
+        return link, True
 
     def _merge_facets(self, facets, query_dict):
         """Return the Haystack `facets` annotated with links to apply or
@@ -99,14 +102,30 @@ class RecordListView(FacetedSearchView):
         selected_facets = self._split_selected_facets(
             query_dict.getlist('selected_facets'))
         for facet, values in facets['fields'].items():
+            # Some facet field values are a model object ID, so get
+            # a display string for them.
+            display_values = None
+            if facet == 'addressees':
+                ids = [value[0] for value in values]
+                display_values = Entity.objects.filter(id__in=ids)
+            elif facet == 'writers':
+                ids = [value[0] for value in values]
+                display_values = Entity.objects.filter(id__in=ids)
             new_values = []
             for value_data in values:
                 if value_data[0] in selected_facets.get(facet, []):
-                    new_values.append(self._create_unapply_link(
-                        value_data, query_dict, facet))
+                    link, is_selected = self._create_unapply_link(
+                        value_data, query_dict, facet)
                 else:
-                    new_values.append(self._create_apply_link(
-                        value_data, query_dict, facet))
+                    link, is_selected = self._create_apply_link(
+                        value_data, query_dict, facet)
+                if display_values is None:
+                    new_values.append((value_data[0], value_data[1], link,
+                                       is_selected))
+                else:
+                    new_values.append(
+                        (str(display_values.get(id=value_data[0])),
+                         value_data[1], link, is_selected))
             facets['fields'][facet] = new_values
         return facets
 

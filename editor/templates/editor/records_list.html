@@ -1,4 +1,5 @@
 {% extends "./base.html" %}
+{% load editor_form_tags %}
 
 {% block page_header %}
 <div id="page-header">
@@ -19,31 +20,20 @@
           <fieldset class="filter-list">
             <legend>Document level</legend>
             {% for archival_level in facets.fields.archival_level %}
-            <a href="{{ archival_level.2 }}" class="checkbox-anchor">
-              <label>
-                <input name="selected_facets" type="checkbox" aria-label="{{ archival_level.0 }}"/>{{ archival_level.0 }} ({{ archival_level.1 }})
-              </label>
-            </a>
+            {% render_facet archival_level %}
             {% endfor %}
           </fieldset>
           <fieldset class="filter-list">
             <legend>Writer</legend>
             {% for writer in facets.fields.writers %}
-            <a href="{{ writer.2 }}" class="checkbox-anchor">
-              <label>
-                <input type="checkbox" aria-label="{{ writer.0 }}"/>{{ writer.0 }} ({{ writer.1 }})
-              </label>
-            </a>
+            {% render_facet writer %}
             {% endfor %}
           </fieldset>
           <fieldset class="filter-list">
             <legend>Addressee</legend>
-            <label>
-              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-            </label>
-            <label>
-              <input type="checkbox" aria-label="{{ record_type.0 }}" value="George III"/>George III
-            </label>
+            {% for addressee in facets.fields.addressees %}
+            {% render_facet addressee %}
+            {% endfor %}
           </fieldset>
           <fieldset class="filter-list">
             <legend>Creation year</legend>
@@ -53,12 +43,9 @@
           </fieldset>
           <fieldset class="filter-list">
             <legend>Language</legend>
-            <label>
-              <input type="checkbox" aria-label="{{ record_type.0 }}" value="English"/>English
-            </label>
-            <label>
-              <input type="checkbox" aria-label="{{ record_type.0 }}" value="Latin"/>Latin
-            </label>
+            {% for language in facets.fields.languages %}
+            {% render_facet language %}
+            {% endfor %}
           </fieldset>
         </div>
       </form>
