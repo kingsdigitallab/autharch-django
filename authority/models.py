@@ -41,9 +41,9 @@ class DateRangeMixin(models.Model):
 
 class LanguageScriptMixin(models.Model):
     language = models.ForeignKey(
-        Language, blank=True, on_delete=models.PROTECT,
+        Language, on_delete=models.PROTECT,
         help_text=constants.LANGUAGE_HELP)
-    script = models.ForeignKey(Script, blank=True, on_delete=models.PROTECT)
+    script = models.ForeignKey(Script, on_delete=models.PROTECT)
 
     class Meta:
         abstract = True
