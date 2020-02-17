@@ -15,6 +15,7 @@
 
 {% block content %}
 <div class="home">
+  {% if unpublished_records is not None %}
   <!-- should be available for moderators and admins. Moderators should be able to approve the records for publication and admins should be able to publish them. -->
   <h2>Records for publication</h2>
   <table id="publication-table" class="tablesorter">
@@ -29,15 +30,27 @@
       </thead>
       <tbody>
         <!-- TODO: add pagination and limit to 5 records per page -->
+        {% for record in unpublished_records %}
         <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
+          <td>Archival Record</td>
+          <td>{{ record.archival_level }}</td>
+          <td>{{ record.publication_status }}</td>
+          <td>QAZ</td>
         </tr>
+        {% endfor %}
+        {% for entity in unpublished_entities %}
+        <tr>
+          <td><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
+          <td>Entity</td>
+          <td>{{ entity.entity_type }}</td>
+          <td>{{ entity.control.publication_status }}</td>
+          <td>{{ entity.modified }}</td>
+        </tr>
+        {% endfor %}
       </tbody>
   </table>
+  {% endif %}
   <h2>Recently updated by me</h2>
   <table id="updated-table" class="tablesorter">
       <thead>

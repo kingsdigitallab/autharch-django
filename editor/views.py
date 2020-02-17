@@ -42,9 +42,13 @@ class HomeView(UserPassesTestMixin, SearchView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['current_section'] = 'home'
-        entities, records = self._get_recently_modified(self.request.user)
+        user = self.request.user
+        entities, records = self._get_recently_modified(user)
         context['recently_modified_entities'] = entities
         context['recently_modified_records'] = records
+        entities, records = self._get_unpublished_records(user)
+        context['unpublished_entities'] = entities
+        context['unpublished_records'] = records
         return context
 
     def _get_recently_modified(self, user):
@@ -58,6 +62,17 @@ class HomeView(UserPassesTestMixin, SearchView):
         record_ids = [version.object_id for version in record_versions]
         entities = Entity.objects.filter(id__in=entity_ids)
         records = ArchivalRecord.objects.filter(id__in=record_ids)
+        return entities, records
+
+    def _get_unpublished_records(self, user):
+        entities = None
+        records = None
+        if user.editor_profile.role in (EditorProfile.ADMIN,
+                                        EditorProfile.MODERATOR):
+            entities = Entity.objects.exclude(
+                control__publication_status__title='published')
+            records = ArchivalRecord.objects.exclude(
+                publication_status__title='published')
         return entities, records
 
     def test_func(self):
