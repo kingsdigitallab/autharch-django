@@ -1,5 +1,6 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,7 +11,7 @@ from haystack.generic_views import FacetedSearchView, SearchView
 from haystack.query import SearchQuerySet
 
 import reversion
-from reversion.models import Version, Revision
+from reversion.models import Revision, Version
 from reversion.views import create_revision
 
 from archival.models import ArchivalRecord, Collection, Series, File, Item
@@ -24,7 +25,15 @@ from .forms import (
 from .models import EditorProfile
 
 
-class HomeView(SearchView):
+def is_user_editor_plus(user):
+    try:
+        return user.editor_profile.role in (
+            EditorProfile.ADMIN, EditorProfile.MODERATOR, EditorProfile.EDITOR)
+    except AttributeError:
+        return False
+
+
+class HomeView(UserPassesTestMixin, SearchView):
 
     template_name = 'editor/home.html'
     queryset = SearchQuerySet().models(Collection, Entity, File, Item, Series)
@@ -33,10 +42,29 @@ class HomeView(SearchView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['current_section'] = 'home'
+        entities, records = self._get_recently_modified(self.request.user)
+        context['recently_modified_entities'] = entities
+        context['recently_modified_records'] = records
         return context
 
+    def _get_recently_modified(self, user):
+        """Return the archival records and entities most recently modified by
+        `user`."""
+        entity_versions = Version.objects.get_for_model(Entity).filter(
+            revision__user=user)
+        record_versions = Version.objects.get_for_model(ArchivalRecord).filter(
+            revision__user=user)
+        entity_ids = [version.object_id for version in entity_versions]
+        record_ids = [version.object_id for version in record_versions]
+        entities = Entity.objects.filter(id__in=entity_ids)
+        records = ArchivalRecord.objects.filter(id__in=record_ids)
+        return entities, records
 
-class EntityListView(FacetedSearchView):
+    def test_func(self):
+        return is_user_editor_plus(self.request.user)
+
+
+class EntityListView(UserPassesTestMixin, FacetedSearchView):
 
     template_name = 'editor/entities_list.html'
     queryset = SearchQuerySet().models(Entity).facet('entity_type',
@@ -49,8 +77,11 @@ class EntityListView(FacetedSearchView):
         context['current_section'] = 'entities'
         return context
 
+    def test_func(self):
+        return is_user_editor_plus(self.request.user)
 
-class RecordListView(FacetedSearchView):
+
+class RecordListView(UserPassesTestMixin, FacetedSearchView):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series).facet(
@@ -69,6 +100,7 @@ class RecordListView(FacetedSearchView):
         return context
 
     def _create_apply_link(self, value_data, query_dict, facet):
+
         """Return a link to apply the facet value in `value_data` and False to
         indicate that the facet is not selected."""
         qd = query_dict.copy()
@@ -139,8 +171,11 @@ class RecordListView(FacetedSearchView):
             split_facets.setdefault(facet, []).append(value)
         return split_facets
 
+    def test_func(self):
+        return is_user_editor_plus(self.request.user)
 
-@login_required
+
+@user_passes_test(is_user_editor_plus)
 def dashboard(request):
     user = request.user
     AllUsersFormSet = modelformset_factory(
@@ -178,6 +213,7 @@ def dashboard(request):
     return render(request, 'editor/dashboard.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
 @create_revision()
 def entity_create(request):
     if request.method == 'POST':
@@ -196,6 +232,7 @@ def entity_create(request):
     return render(request, 'editor/entity_create.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
 @require_POST
 def entity_delete(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
@@ -205,6 +242,7 @@ def entity_delete(request, entity_id):
     return redirect('editor:entity-edit', entity_id=entity_id)
 
 
+@user_passes_test(is_user_editor_plus)
 @create_revision()
 def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
@@ -230,6 +268,7 @@ def entity_edit(request, entity_id):
     return render(request, 'editor/entity_edit.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
 def entity_history(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     context = {
@@ -242,6 +281,7 @@ def entity_history(request, entity_id):
     return render(request, 'editor/history.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
 def password_reset(request, user_id):
     # Avoid revealing valid user IDs.
     try:
@@ -268,6 +308,7 @@ def password_reset(request, user_id):
     return render(request, 'editor/password_reset.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
 @require_POST
 def record_delete(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
@@ -277,6 +318,7 @@ def record_delete(request, record_id):
     return redirect('editor:record-edit', record_id=record_id)
 
 
+@user_passes_test(is_user_editor_plus)
 @create_revision()
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
@@ -303,6 +345,7 @@ def record_edit(request, record_id):
     return render(request, 'editor/record_edit.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
 def record_history(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     context = {
@@ -315,6 +358,7 @@ def record_history(request, record_id):
     return render(request, 'editor/history.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
 @require_POST
 def revert(request):
     revision_id = request.POST.get('revision_id')
