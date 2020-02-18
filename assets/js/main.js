@@ -92,7 +92,7 @@ $(document).ready(function() {
       $(el.target).parents('fieldset').first().addClass('border-left');
     }
   });
-  console.log(('.checkbox-anchor').length);
+  
   if ($('.checkbox-anchor').children('input[type=checkbox]:checked').length > 0) {
     $('.clear-filters').addClass('active');
   } else {

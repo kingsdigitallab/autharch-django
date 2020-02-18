@@ -4,14 +4,12 @@
 <div class="form-page">
   <h1>Create new entity</h1>
 
-  <form action="." method="post">
+  <form action="." method="post" class="select-radio">
     {% csrf_token %}
     {{ form.errors }}
-    <div class="custom-radio-filters">
-      {% for radio in form.entity_type %}
-      <label for="{{ radio.id_for_label }}" class="filter">{{ radio.tag }}{{ radio.choice_label }}</label>
-      {% endfor %}
-    </div>
+    {% for radio in form.entity_type %}
+      <label for="{{ radio.id_for_label }}" class="select-radio-button">{{ radio.tag }}{{ radio.choice_label }}</label>
+    {% endfor %}
     <div>
       <a class="dotted-underline" href="{% url 'editor:entities-list' %}">Cancel</a>
       <input aria-label="submit and continue" class="create" type="submit" value="Continue" />

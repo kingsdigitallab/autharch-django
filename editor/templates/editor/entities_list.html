@@ -12,22 +12,23 @@
     </form>
     <div class="filter-block">
       <input type="checkbox" class="hidden" id="filter" value="Filter">
-      <label for="filter" class="filter-button">Filter</label>
-      <form action="." class="filters-hidden" method="get">
-          <div>
-            <fieldset class="filter-list">
-              <legend>Document level</legend>
-              {% for entity_type in facets.fields.entity_type %}
-                <a href="" class="checkbox-anchor">
-                  <label for="{{ entity_type.0 }}-input" class="filter">
-                      <input id="{{ entity_type.0 }}-input" name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
-                    {{ entity_type.0 }} ({{ entity_type.1 }})
-                  </label>
-                </a>
-              {% endfor %}
-            </fieldset>
-          </div>
-        </form>
+      <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+      <div class="filters-hidden">
+        <a href="." class="dotted-underline clear-filters active">Clear filters</a>
+        <form action="." method="get">
+            <div>
+              <fieldset class="filter-list">
+                <legend>Document level</legend>
+                {% for entity_type in facets.fields.entity_type %}
+                  <a href="" class="checkbox-anchor">
+                      <input name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
+                      {{ entity_type.0 }} ({{ entity_type.1 }})
+                  </a>
+                {% endfor %}
+              </fieldset>
+            </div>
+          </form>
+        </div>
     </div>
   <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>
 </div>

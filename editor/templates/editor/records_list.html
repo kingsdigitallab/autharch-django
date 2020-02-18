@@ -15,7 +15,7 @@
     <input type="checkbox" class="hidden" id="filter" aria-label="Filter">
     <label for="filter" class="filter-button"><span hidden>Filter</span></label>
     <div class="filters-hidden">
-      <a href="." class="dotted-underline clear-filters active">Clear filters</a>
+      <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
       <form action="." method="get">
           <div>
             <!-- should be sorted alphabetically -->
@@ -40,7 +40,7 @@
             <fieldset class="filter-list">
               <legend>Creation year</legend>
               <label>
-                  <input type="number" name="y" value="{{ query }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
+                  <input type="number" name="y" value="{{ y }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
               </label>
             </fieldset>
             <fieldset class="filter-list">
