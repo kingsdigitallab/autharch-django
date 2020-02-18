@@ -51,7 +51,6 @@
 {% if all_users_formset %}
 <div class="admin">
   <h2>Admin table</h2>
-
   <form action="." method="post">
     {% csrf_token %}
     {{ all_users_formset.management_form }}
@@ -87,7 +86,6 @@
             {% endwith %}
           </td>
           <td class="button-cell">
-            <!-- Delete user needs to be a link to {% url 'editor:delete-user' user_id=form_user.pk %} -->
             <button aria-label="delete user" class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete user</button>
           </td>
         </tr>
@@ -95,8 +93,7 @@
         {% endfor %}
       </tbody>
     </table>
-    <!-- Add user needs to be a link to {% url 'editor:user-create' %} -->
-    <button aria-label="add user" class="create linked-button" id="add-form"><i class="fal fa-plus"></i>Add user</button>
+    <a href="{% url 'editor:user-create' %}" aria-label="add user" class="create linked-button"><i class="fal fa-plus"></i>Add user</a>
     <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
   </form>
 </div>

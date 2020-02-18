@@ -35,7 +35,7 @@ $(document).ready(function() {
 
   // Open popup to log changes when saving a record, then actually
   // submit the form when submitting from the popup.
-  $("#record-form").submit((event) => {
+  $("#record-form").submit(function(event) {
     if ($("#log-modal").hasClass('active')) {
       event.target.submit();
     } else {
@@ -43,12 +43,6 @@ $(document).ready(function() {
       toggleRequiredControls(dialogueRequiredControls, true);
       $("#log-modal").addClass('active');
     }
-  });
-
-  // open popup to add new user who can access the admin panel
-  $('#add-form').click(() => {
-    event.preventDefault();
-    $('#add-user-form').addClass('active');
   });
 
   // ADD-ONS
@@ -76,14 +70,13 @@ $(document).ready(function() {
     allowClear: true
   } );
 
-
   // optional functionality (can be removed if needed) - dynamic styling of the sections
 
   // style border for preferred names and identities
   $( "fieldset:has(input[name*='preferred']:checked)").addClass('border-left');
   $( "fieldset:has(input[name*='authorised']:checked)").addClass('border-left');
 
-  $('body').on('click', 'input[name*="preferred"]', (el) => {
+  $('body').on('click', 'input[name*="preferred"]', function (el) {
     $('input[name*="preferred"]:checked').prop('checked', false);
     $(el.target).parents('fieldset').first().find('input[name*="preferred"]').prop('checked', true);
     $(el.target).parents('fieldset').siblings().removeClass('border-left');
@@ -92,7 +85,7 @@ $(document).ready(function() {
     }
   });
 
-  $('body').on('click', 'input[name*="authorised"]', (el) => {
+  $('body').on('click', 'input[name*="authorised"]', function (el) {
     $('input[name*="authorised"]:checked').prop('checked', false);
     $(el.target).parents('fieldset').first().find('input[name*="authorised"]').prop('checked', true);
     $(el.target).parents('fieldset').siblings().removeClass('border-left');
@@ -101,9 +94,9 @@ $(document).ready(function() {
     }
   });
 
-  $(".checkbox-anchor").click(function(el) {
-    $(el).children('input[type=checkbox]').prop('checked', true);
-  })
+  // $(".checkbox-anchor").click(function(el) {
+  //   $(el).children('input[type=checkbox]').prop('checked', true);
+  // })
 
 });
 
