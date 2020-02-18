@@ -17,9 +17,9 @@ class ContainerModelFormTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.entity_type1 = EntityType(title='Entity type 1')
+        cls.entity_type1 = EntityType(title='person')
         cls.entity_type1.save()
-        cls.entity_type2 = EntityType(title='Entity type 2')
+        cls.entity_type2 = EntityType(title='corporateBody')
         cls.entity_type2.save()
         cls.language1 = Language(
             iso_639_1='en', name_en='English', name_native='English',
@@ -42,7 +42,6 @@ class ContainerModelFormTestCase(TestCase):
         self.assertEqual(Entity.objects.all()[0], entity)
         self.assertEqual(entity.identities.count(), 1)
         post_data = {
-            'entity_type': self.entity_type2.pk,
             'control-TOTAL_FORMS': 0,
             'control-INITIAL_FORMS': 0,
             'control-MIN_NUM_FORMS': 0,
@@ -93,7 +92,6 @@ class ContainerModelFormTestCase(TestCase):
         self.assertEqual(Entity.objects.all()[0], entity)
         self.assertEqual(entity.identities.count(), 1)
         post_data = {
-            'entity_type': self.entity_type2.pk,
             'control-TOTAL_FORMS': 0,
             'control-INITIAL_FORMS': 0,
             'control-MIN_NUM_FORMS': 0,
@@ -135,101 +133,9 @@ class ContainerModelFormTestCase(TestCase):
         entity = form.save()
         self.assertEqual(Entity.objects.count(), 1)
         self.assertEqual(Entity.objects.all()[0], entity)
-        self.assertEqual(entity.entity_type, self.entity_type2)
+        self.assertEqual(entity.entity_type, self.entity_type1)
         self.assertEqual(entity.identities.count(), 1)
         self.assertEqual(entity.identities.all()[0].name_entries.count(), 0)
-
-    def test_save_new_bare_root(self):
-        """Tests saving a new Entity with no related data."""
-        self.assertEqual(Entity.objects.count(), 0)
-        post_data = {
-            'entity_type': self.entity_type1.pk,
-            'control-TOTAL_FORMS': 0,
-            'control-INITIAL_FORMS': 0,
-            'control-MIN_NUM_FORMS': 0,
-            'control-MAX_NUM_FORMS': 1,
-            'identity-TOTAL_FORMS': 0,
-            'identity-INITIAL_FORMS': 0,
-            'identity-MIN_NUM_FORMS': 0,
-            'identity-MAX_NUM_FORMS': 1000,
-        }
-        form = EntityEditForm(post_data)
-        self.assertTrue(form.is_valid())
-        entity = form.save()
-        self.assertEqual(Entity.objects.count(), 1)
-        self.assertEqual(Entity.objects.all()[0], entity)
-        self.assertEqual(entity.entity_type, self.entity_type1)
-        self.assertEqual(entity.identities.count(), 0)
-
-    def test_save_new_root(self):
-        """Tests saving a new Entity and related data."""
-        self.assertEqual(Entity.objects.count(), 0)
-        post_data = {
-            'entity_type': self.entity_type1.pk,
-            'control-TOTAL_FORMS': 0,
-            'control-INITIAL_FORMS': 0,
-            'control-MIN_NUM_FORMS': 0,
-            'control-MAX_NUM_FORMS': 1,
-            'identity-TOTAL_FORMS': 1,
-            'identity-INITIAL_FORMS': 0,
-            'identity-MIN_NUM_FORMS': 0,
-            'identity-MAX_NUM_FORMS': 1000,
-            'identity-0-display_date': '1912',
-            'identity-0-description-TOTAL_FORMS': 0,
-            'identity-0-description-INITIAL_FORMS': 0,
-            'identity-0-description-MIN_NUM_FORMS': 0,
-            'identity-0-description-MAX_NUM_FORMS': 1000,
-            'identity-0-name_entry-TOTAL_FORMS': 0,
-            'identity-0-name_entry-INITIAL_FORMS': 0,
-            'identity-0-name_entry-MIN_NUM_FORMS': 0,
-            'identity-0-name_entry-MAX_NUM_FORMS': 1000,
-            'identity-0-relation-TOTAL_FORMS': 0,
-            'identity-0-relation-INITIAL_FORMS': 0,
-            'identity-0-relation-MIN_NUM_FORMS': 0,
-            'identity-0-relation-MAX_NUM_FORMS': 1000,
-            'identity-0-resource-TOTAL_FORMS': 0,
-            'identity-0-resource-INITIAL_FORMS': 0,
-            'identity-0-resource-MIN_NUM_FORMS': 0,
-            'identity-0-resource-MAX_NUM_FORMS': 1000,
-        }
-        form = EntityEditForm(post_data)
-        self.assertTrue(form.is_valid())
-        entity = form.save()
-        self.assertEqual(Entity.objects.count(), 1)
-        self.assertEqual(Entity.objects.all()[0], entity)
-        self.assertEqual(entity.entity_type, self.entity_type1)
-        self.assertEqual(entity.identities.count(), 1)
-        self.assertEqual(entity.identities.all()[0].display_date, '1912')
-
-    def test_save_existing_bare_root(self):
-        """Tests saving changes to an existing Entity with no related data."""
-        self.assertEqual(Entity.objects.count(), 0)
-        entity = Entity(entity_type=self.entity_type1)
-        entity.save()
-        self.assertEqual(Entity.objects.count(), 1)
-        self.assertEqual(Entity.objects.all()[0], entity)
-        post_data = {
-            'entity_type': self.entity_type2.pk,
-            'control-TOTAL_FORMS': 0,
-            'control-INITIAL_FORMS': 0,
-            'control-MIN_NUM_FORMS': 0,
-            'control-MAX_NUM_FORMS': 1,
-            'identity-TOTAL_FORMS': 0,
-            'identity-INITIAL_FORMS': 0,
-            'identity-MIN_NUM_FORMS': 0,
-            'identity-MAX_NUM_FORMS': 1000,
-            'identity-0-name_entry-TOTAL_FORMS': 0,
-            'identity-0-name_entry-INITIAL_FORMS': 0,
-            'identity-0-name_entry-MIN_NUM_FORMS': 0,
-            'identity-0-name_entry-MAX_NUM_FORMS': 1000,
-        }
-        form = EntityEditForm(post_data, instance=entity)
-        self.assertTrue(form.is_valid())
-        entity = form.save()
-        self.assertEqual(Entity.objects.count(), 1)
-        self.assertEqual(Entity.objects.all()[0], entity)
-        self.assertEqual(entity.entity_type, self.entity_type2)
-        self.assertEqual(entity.identities.count(), 0)
 
     def test_save_existing_root_new_related(self):
         """Tests saving changes to an existing Entity and adding related
@@ -240,7 +146,6 @@ class ContainerModelFormTestCase(TestCase):
         self.assertEqual(Entity.objects.count(), 1)
         self.assertEqual(Entity.objects.all()[0], entity)
         post_data = {
-            'entity_type': self.entity_type2.pk,
             'control-TOTAL_FORMS': 0,
             'control-INITIAL_FORMS': 0,
             'control-MIN_NUM_FORMS': 0,
@@ -272,7 +177,6 @@ class ContainerModelFormTestCase(TestCase):
         entity = form.save()
         self.assertEqual(Entity.objects.count(), 1)
         self.assertEqual(Entity.objects.all()[0], entity)
-        self.assertEqual(entity.entity_type, self.entity_type2)
         self.assertEqual(entity.identities.count(), 1)
         self.assertEqual(entity.identities.all()[0].display_date, '1912')
 
@@ -288,7 +192,6 @@ class ContainerModelFormTestCase(TestCase):
         self.assertEqual(Entity.objects.all()[0], entity)
         self.assertEqual(entity.identities.count(), 1)
         post_data = {
-            'entity_type': self.entity_type2.pk,
             'control-TOTAL_FORMS': 0,
             'control-INITIAL_FORMS': 0,
             'control-MIN_NUM_FORMS': 0,
@@ -322,7 +225,6 @@ class ContainerModelFormTestCase(TestCase):
         entity = form.save()
         self.assertEqual(Entity.objects.count(), 1)
         self.assertEqual(Entity.objects.all()[0], entity)
-        self.assertEqual(entity.entity_type, self.entity_type2)
         self.assertEqual(entity.identities.count(), 1)
         self.assertEqual(entity.identities.all()[0].display_date, '1812')
 
@@ -339,7 +241,6 @@ class ContainerModelFormTestCase(TestCase):
         self.assertEqual(Entity.objects.all()[0], entity)
         self.assertEqual(entity.identities.count(), 1)
         post_data = {
-            'entity_type': self.entity_type2.pk,
             'control-TOTAL_FORMS': 0,
             'control-INITIAL_FORMS': 0,
             'control-MIN_NUM_FORMS': 0,
@@ -383,6 +284,5 @@ class ContainerModelFormTestCase(TestCase):
         entity = form.save()
         self.assertEqual(Entity.objects.count(), 1)
         self.assertEqual(Entity.objects.all()[0], entity)
-        self.assertEqual(entity.entity_type, self.entity_type2)
         self.assertEqual(entity.identities.count(), 1)
         self.assertEqual(entity.identities.all()[0].name_entries.count(), 1)
