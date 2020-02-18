@@ -53,15 +53,36 @@ $(document).ready(function() {
     $(this).richText({id: "richtext-" + index});
   });
 
-  //add tablesorter to the tables
-  $(function() {
-    $("[id$='table']").tablesorter({
-        widgets: ["filter"],
-        widgetOptions: {
-            filter_columnFilters: true
-        }
+  $('table').each(function(i, el) {
+    $.tablesorter.customPagerControls({
+      table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
+      pager          : $("#"+$(el).next('.pager').attr('id')),                   // pager wrapper (string or jQuery object)
+      pageSize       : '.page-size a',                // container for page sizes
+      currentPage    : '.page-list a',               // container for page selectors
+      ends           : 2,                        // number of pages to show of either end
+      aroundCurrent  : 1,                        // number of pages surrounding the current page
+      link           : '<a href="#" class="page">{page}</a>', // page element; use {page} to include the page number
+      currentClass   : 'current',                // current page class name
+      adjacentSpacer : '',       // spacer for page numbers next to each other
+      distanceSpacer : '<span> &#133; <span>',   // spacer for page numbers away from each other (ellipsis = &#133;)
+      addKeyboard    : true,                     // use left,right,up,down,pageUp,pageDown,home, or end to change current page
+      pageKeyStep    : 10                        // page step to use for pageUp and pageDown
     });
+  
+    //add tablesorter to the tables
+    $("#"+$(el).attr('id'))
+      .tablesorter({
+          widgets: ["filter"],
+          widgetOptions: {
+              filter_columnFilters: true
+          }
+      })
+      .tablesorterPager({
+        container: $("#"+$(el).next('.pager').attr('id')),
+        size: 10
+      });
   });
+  
 
   // add search bar to the select dropdown
   $(".select-with-search").select2( {

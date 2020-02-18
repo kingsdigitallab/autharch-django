@@ -81,4 +81,22 @@
     {% endfor %}
   </tbody>
 </table>
+<div id="records-pager" class="pager">
+  <div class="page-size">
+    <p>
+      rows per page:
+      <a href="#" class="current">10</a> |
+      <a href="#">25</a> |
+      <a href="#">50</a> |
+      <a href="#">100</a>
+    </p>
+  </div>
+  <div class="page-list">
+    <button class="first"><i class="fal fa-step-backward"></i></button>
+    <button class="prev"><i class="fal fa-caret-left"></i></button>
+    <span class="pagecount"></span>
+    <button class="next"><i class="fal fa-caret-right"></i></button>
+    <button class="last"><i class="fal fa-step-forward"></i></button>
+  </div>
+</div>
 {% endblock content %}

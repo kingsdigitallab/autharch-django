@@ -332,6 +332,7 @@ class ArchivalRecordEditForm(forms.ModelForm):
     class Meta:
         exclude = []
         widgets = {
+            'references': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'administrative_history': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'arrangement': forms.Textarea(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
