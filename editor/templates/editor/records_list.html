@@ -39,9 +39,12 @@
             </fieldset>
             <fieldset class="filter-list">
               <legend>Creation year</legend>
-              <label>
+              <!--<label>
                   <input type="number" name="y" value="{{ y }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
-              </label>
+              </label>-->
+              {% for date in facets.fields.dates %}
+              {% render_facet date %}
+              {% endfor %}
             </fieldset>
             <fieldset class="filter-list">
               <legend>Language</legend>
