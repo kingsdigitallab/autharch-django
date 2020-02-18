@@ -61,8 +61,7 @@ $(document).ready(function() {
             filter_columnFilters: true
         }
     });
-    
-});
+  });
 
   // add search bar to the select dropdown
   $(".select-with-search").select2( {
@@ -93,10 +92,12 @@ $(document).ready(function() {
       $(el.target).parents('fieldset').first().addClass('border-left');
     }
   });
-
-  // $(".checkbox-anchor").click(function(el) {
-  //   $(el).children('input[type=checkbox]').prop('checked', true);
-  // })
+  console.log(('.checkbox-anchor').length);
+  if ($('.checkbox-anchor').children('input[type=checkbox]:checked').length > 0) {
+    $('.clear-filters').addClass('active');
+  } else {
+    $('.clear-filters').removeClass('active');
+  }
 
 });
 

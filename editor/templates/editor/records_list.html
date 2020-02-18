@@ -12,43 +12,46 @@
     <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
   </form>
   <div class="filter-block">
-    <input type="checkbox" class="hidden" id="filter" value="Filter">
-    <label for="filter" class="filter-button">Filter</label>
-    <form action="." class="filters-hidden" method="get">
-        <div>
-          <!-- should be sorted alphabetically -->
-          <fieldset class="filter-list">
-            <legend>Document level</legend>
-            {% for archival_level in facets.fields.archival_level %}
-            {% render_facet archival_level %}
-            {% endfor %}
-          </fieldset>
-          <fieldset class="filter-list">
-            <legend>Writer</legend>
-            {% for writer in facets.fields.writers %}
-            {% render_facet writer %}
-            {% endfor %}
-          </fieldset>
-          <fieldset class="filter-list">
-            <legend>Addressee</legend>
-            {% for addressee in facets.fields.addressees %}
-            {% render_facet addressee %}
-            {% endfor %}
-          </fieldset>
-          <fieldset class="filter-list">
-            <legend>Creation year</legend>
-            <label>
-                <input type="number" name="y" value="{{ query }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
-            </label>
-          </fieldset>
-          <fieldset class="filter-list">
-            <legend>Language</legend>
-            {% for language in facets.fields.languages %}
-            {% render_facet language %}
-            {% endfor %}
-          </fieldset>
-        </div>
-      </form>
+    <input type="checkbox" class="hidden" id="filter" aria-label="Filter">
+    <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+    <div class="filters-hidden">
+      <a href="." class="dotted-underline clear-filters active">Clear filters</a>
+      <form action="." method="get">
+          <div>
+            <!-- should be sorted alphabetically -->
+            <fieldset class="filter-list">
+              <legend>Document level</legend>
+              {% for archival_level in facets.fields.archival_level %}
+              {% render_facet archival_level %}
+              {% endfor %}
+            </fieldset>
+            <fieldset class="filter-list">
+              <legend>Writer</legend>
+              {% for writer in facets.fields.writers %}
+              {% render_facet writer %}
+              {% endfor %}
+            </fieldset>
+            <fieldset class="filter-list">
+              <legend>Addressee</legend>
+              {% for addressee in facets.fields.addressees %}
+              {% render_facet addressee %}
+              {% endfor %}
+            </fieldset>
+            <fieldset class="filter-list">
+              <legend>Creation year</legend>
+              <label>
+                  <input type="number" name="y" value="{{ query }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
+              </label>
+            </fieldset>
+            <fieldset class="filter-list">
+              <legend>Language</legend>
+              {% for language in facets.fields.languages %}
+              {% render_facet language %}
+              {% endfor %}
+            </fieldset>
+          </div>
+        </form>
+    </div>
   </div>
   <span></span>
 </div>
