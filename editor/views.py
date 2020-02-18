@@ -107,9 +107,9 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series).facet(
-        'archival_level', sort='index').facet('writers', sort='index').facet(
-        'addressees', sort='index').facet('languages', sort='index').facet(
-        'dates', sort='index')
+        'archival_level', order='term').facet('writers', order='term').facet(
+        'addressees', order='term').facet('languages', order='term').facet(
+        'dates', order='term')
     form_class = FacetedSearchForm
     facet_fields = ['addressees', 'archival_level', 'dates', 'languages',
                     'writers']
