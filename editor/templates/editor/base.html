@@ -48,10 +48,7 @@
             <h4>ACCOUNT CONTROL</h4>
           </a>
         </div>
-        <!-- This should act as a link to the logout page:
-                href="{% url 'editor:logout' %}"
-          -->
-        <button aria-label="logout" id="logout"></button>
+        <a href="{% url 'editor:logout' %}">Logout</a>
       </div>
       {% endblock %}
     </header>
