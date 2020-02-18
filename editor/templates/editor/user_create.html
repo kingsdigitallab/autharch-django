@@ -1,0 +1,31 @@
+{% extends "./base.html" %}
+{% load editor_form_tags %}
+
+{% block content %}
+<form action="." method="post" id="add-new-user">
+  <div class="two-column-table">
+    <div>
+      {% csrf_token %}
+      {% render_field user_form.username %}
+      {% render_field user_form.first_name %}
+      {% render_field user_form.last_name %}
+    </div>
+    <div>
+      {% render_field user_form.email %}
+      {% render_field profile_form.role %}
+    </div>
+  </div>
+  <br>
+  <div class="two-column-table">
+    <div>
+      {% render_field user_form.password1 %}
+    </div>
+    <div>
+      {% render_field user_form.password2 %}
+    </div>
+  </div>
+  <div>
+    <input type="submit" value="Create new user" class="save"/>
+  </div>
+</form>
+{% endblock content %}

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import password_validation
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 
@@ -432,6 +433,16 @@ class PasswordResetForm (forms.Form):
 
 # User dashboard forms.
 
+class EditorProfileForm(forms.Form):
+
+    # There is a problem I haven't been able to understand or fix with
+    # creating an inline object for a parent that doesn't exist yet,
+    # hence this non-model form for use when creating new users.
+
+    role = forms.ChoiceField(choices=EditorProfile.ROLE_CHOICES,
+                             initial=EditorProfile.VISITOR)
+
+
 class EditorProfileEditInlineForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -446,6 +457,51 @@ class EditorProfileEditInlineForm(forms.ModelForm):
     class Meta:
         model = EditorProfile
         fields = ['role']
+
+
+class UserCreateForm(forms.ModelForm):
+
+    password1 = forms.CharField(label='Password', strip=False,
+                                widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm password', strip=False,
+                                widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
+    def _add_formsets(self, *args, **kwargs):
+        formsets = {}
+        EditorProfileFormset = forms.models.inlineformset_factory(
+            User, EditorProfile, exclude=[], form=EditorProfileEditInlineForm,
+            extra=1, max_num=1, validate_max=True)
+        formsets['editor_profile'] = EditorProfileFormset(
+            *args, prefix='profile')
+        return formsets
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                "The two password fields didn't match.")
+        return password2
+
+    def _post_clean(self):
+        super()._post_clean()
+        password = self.cleaned_data.get('password2')
+        if password:
+            try:
+                password_validation.validate_password(password, self.instance)
+            except forms.ValidationError as error:
+                self.add_error('password2', error)
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+        if commit:
+            user.save()
+        return user
 
 
 class UserEditForm(forms.ModelForm):

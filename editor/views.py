@@ -18,11 +18,18 @@ from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
 
 from .forms import (
-    EntityCreateForm, EntityEditForm, LogForm, UserEditForm, UserForm,
-    FacetedSearchForm, PasswordResetForm, SearchForm,
-    get_archival_record_edit_form_for_subclass
+    EntityCreateForm, EntityEditForm, LogForm, UserCreateForm, UserEditForm,
+    UserForm, FacetedSearchForm, PasswordResetForm, SearchForm,
+    EditorProfileForm, get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile
+
+
+def is_user_admin(user):
+    try:
+        return user.editor_profile.role == EditorProfile.ADMIN
+    except AttributeError:
+        return False
 
 
 def is_user_editor_plus(user):
@@ -306,7 +313,7 @@ def password_reset(request, user_id):
     editor = request.user
     if user is None or (editor != user and
                         editor.editor_profile.role != EditorProfile.ADMIN):
-        redirect('editor:dashboard')
+        return redirect('editor:dashboard')
     if request.method == 'POST':
         password_form = PasswordResetForm(user=user, data=request.POST)
         if password_form.is_valid():
@@ -380,3 +387,24 @@ def revert(request):
     revision = get_object_or_404(Revision, pk=revision_id)
     revision.revert()
     return redirect(request.POST.get('redirect_url'))
+
+
+@user_passes_test(is_user_admin)
+def user_create(request):
+    if request.method == 'POST':
+        user_form = UserCreateForm(request.POST)
+        profile_form = EditorProfileForm(request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            role = profile_form.cleaned_data['role']
+            profile = EditorProfile(user=user, role=role)
+            profile.save()
+            return redirect('editor:dashboard')
+    else:
+        user_form = UserCreateForm()
+        profile_form = EditorProfileForm()
+    context = {
+        'profile_form': profile_form,
+        'user_form': user_form,
+    }
+    return render(request, 'editor/user_create.html', context)

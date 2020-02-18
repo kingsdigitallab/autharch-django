@@ -87,6 +87,7 @@
             {% endwith %}
           </td>
           <td class="button-cell">
+            <!-- Delete user needs to be a link to {% url 'editor:delete-user' user_id=form_user.pk %} -->
             <button aria-label="delete user" class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete user</button>
           </td>
         </tr>
@@ -94,68 +95,10 @@
         {% endfor %}
       </tbody>
     </table>
+    <!-- Add user needs to be a link to {% url 'editor:user-create' %} -->
     <button aria-label="add user" class="create linked-button" id="add-form"><i class="fal fa-plus"></i>Add user</button>
     <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
   </form>
-</div>
-<div class="modal" id="add-user-form">
-  <div class="modal-content">
-      <div class="modal-header">
-          <h2>Create new user</h2>
-          <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
-      </div>
-      <div class="modal-body">
-          <form action="" method="" id="add-new-user">
-              <div class="two-column-table">
-                  <div>
-                      <label>
-                          <span class="required">First name</span>
-                          <input type="text" name="first-name"/>
-                      </label>
-                      <label>
-                          <span class="required">Last name</span>
-                          <input type="text" name="last-name"/>
-                      </label>
-                  </div>
-                  <div>
-                      <label>
-                          <span class="required">Email address</span>
-                          <input type="email" name="email-address"/>
-                      </label>
-                      <label>
-                          <span class="required">Permission level</span>
-                          <select name="permission-level">
-                              <option>Select</option>
-                              <option value="Admin">Admin</option>
-                              <option value="Moderator">Moderator</option>
-                              <option value="Editor">Editor</option>
-                              <option value="Visitor">Visitor</option>
-                          </select>
-                      </label>
-                      <!-- TBD: username? -->
-                  </div>
-              </div>
-              <br>
-              <div class="two-column-table">
-                <div>
-                    <label>
-                        <span class="required">Password</span>
-                        <input type="password" name="password"/>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <span class="required">Confirm password</span>
-                        <input type="password" name="confirm-password"/>
-                    </label>
-                </div>
-              </div>
-          </form>
-      </div>
-      <div class="modal-footer">
-          <input type="submit" value="Create new user" form="add-new-user" class="save"/>
-      </div>
-  </div>
 </div>
 {% endif %}
 {% endblock content %}

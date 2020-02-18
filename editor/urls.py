@@ -35,6 +35,7 @@ urlpatterns = [
          ),
          name='password_reset_complete'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/new_user/', views.user_create, name='user-create'),
     path('dashboard/reset-password/<int:user_id>/', views.password_reset,
          name='reset-password'),
     path('entities/', views.EntityListView.as_view(), name='entities-list'),
