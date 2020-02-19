@@ -40,6 +40,12 @@ class ArchivalRecordIndex:
     def prepare_writers(self, obj):
         return list(obj.creators.distinct().values_list('pk', flat=True))
 
+    def prepare_writers_display(self, obj):
+        display_forms = []
+        for writer in obj.creators.distinct():
+            display_forms.append(writer.display_name)
+        return ', '.join(display_forms)
+
 
 class CollectionIndex(indexes.SearchIndex, indexes.Indexable,
                       ArchivalRecordIndex):
@@ -66,6 +72,7 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
     writers = indexes.MultiValueField(faceted=True)
+    writers_display = indexes.CharField()
     description = indexes.CharField()
 
     def get_model(self):
