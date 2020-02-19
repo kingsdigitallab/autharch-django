@@ -19,8 +19,8 @@ from authority.models import Entity
 
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserCreateForm, UserEditForm,
-    UserForm, FacetedSearchForm, PasswordResetForm, SearchForm,
-    EditorProfileForm, get_archival_record_edit_form_for_subclass
+    UserForm, FacetedSearchForm, SearchForm, EditorProfileForm,
+    get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile
 
@@ -303,33 +303,6 @@ def entity_history(request, entity_id):
         'versions': Version.objects.get_for_object(entity),
     }
     return render(request, 'editor/history.html', context)
-
-
-@user_passes_test(is_user_editor_plus)
-def password_reset(request, user_id):
-    # Avoid revealing valid user IDs.
-    try:
-        user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        user = None
-    editor = request.user
-    if user is None or (editor != user and
-                        editor.editor_profile.role != EditorProfile.ADMIN):
-        return redirect('editor:dashboard')
-    if request.method == 'POST':
-        password_form = PasswordResetForm(user=user, data=request.POST)
-        if password_form.is_valid():
-            password_form.save()
-            return redirect('editor:dashboard')
-    else:
-        # removed user=user from arguments
-        password_form = PasswordResetForm()
-    context = {
-        'current_section': 'account',
-        'password_form': password_form,
-        'user': user,
-    }
-    return render(request, 'editor/password_reset.html', context)
 
 
 @user_passes_test(is_user_editor_plus)

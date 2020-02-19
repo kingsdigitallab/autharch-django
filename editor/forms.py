@@ -437,11 +437,6 @@ class LogForm(forms.Form):
     comment = forms.CharField(label='Comments', widget=forms.Textarea)
 
 
-class PasswordResetForm (forms.Form):
-    email_address = forms.CharField(label=("Email address"),
-                                    widget=forms.EmailInput)
-
-
 # User dashboard forms.
 
 class EditorProfileForm(forms.Form):
