@@ -374,9 +374,21 @@ function getNewFormParent(context) {
 }
 
 // this won't delete the field(s), just hide them. The deletion needs to be executed in the backend, once the form is submitted.
-function deleteField(el) {
+function deleteField(el, toDelete) {
   event.preventDefault();
-  $(el).closest('[data-form-type]').addClass('none');
+  $(el).closest(toDelete).addClass('none');
+}
+
+function deleteRow(el) {
+  if (!$(el).parent().siblings('td').hasClass('none')) {
+    $(el).parent().siblings('td').addClass('none');
+    $(el).parent().attr('colspan', '6');
+    $(el).after(`<button class="button-link danger" onclick="deleteField(this, 'tr')"><i class="fas fa-trash-alt"></i>Delete forever</button>`)
+  } else {
+    $(el).parent().attr('colspan', '1');
+    $(el).parent().siblings('td').removeClass('none');
+    $(el).next('button').remove();
+  }
 }
 
 /**
@@ -436,7 +448,7 @@ function toggleDeleteInline(event, button) {
     label.removeClass('danger');
     label.addClass('save');
     label.append(`<span>Undo</span>`);
-    label.parent().after(`<button class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete forever</button>`)
+    label.parent().after(`<button class="button-link danger" onclick="deleteField(this, '[data-form-type]')"><i class="fas fa-trash-alt"></i>Delete forever</button>`)
   }
   else {
     jButton.val("");

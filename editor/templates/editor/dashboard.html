@@ -86,7 +86,11 @@
             {% endwith %}
           </td>
           <td class="button-cell">
-            <button aria-label="delete user" class="button-link danger" onclick="deleteField(this)"><i class="fas fa-trash-alt"></i>Delete user</button>
+            <input type="checkbox" id="delete-user-{{ forloop.counter0 }}" class="none"/>
+            <label for="delete-user-{{ forloop.counter0 }}" class="delete-user" onclick="deleteRow(this)">
+              <span hidden>Delete user</span>
+            </label>
+            <!-- <button aria-label="delete user" class="button-link danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i>Delete user</button> -->
           </td>
         </tr>
         {% endwith %}

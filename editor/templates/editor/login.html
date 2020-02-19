@@ -8,14 +8,14 @@
   <p>Your username and password didn't match. Please try again.</p>
   {% endif %}
 
-  <form action="{% url 'editor:login' %}" method="post">
+  <form action="{% url 'editor:login' %}" method="post" class="one-column">
     {% csrf_token %}
     <label>
-      <span class="required">{{ form.username.label }}</span>
+      <span class="required">{{ form.username.label }}</span><br>
       {{ form.username }}
     </label>
     <label>
-      <span class="required">{{ form.password.label }}</span>
+      <span class="required">{{ form.password.label }}</span><br>
       {{ form.password }}
     </label>
     <a href="{% url 'editor:password_reset' %}">Forgot your password?</a>

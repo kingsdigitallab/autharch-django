@@ -4,7 +4,7 @@ $primary: #001e57;
 // $primary-dark: #001A48;
 $save: #6DA036;
 $add: #0791D5;
-$danger: #b40000;
+$danger: #a10101;
 $background: #FCFCFC;
 $input : #707070;
 $light-grey: #EBEBEB;
@@ -448,6 +448,8 @@ header {
             width: 100%;
             border: none;
             font-size: 14px;
+            display: block;
+            box-sizing: border-box;
             &:hover, &:focus {
                 @include darken($danger);
             }
@@ -460,9 +462,10 @@ header {
 main {
     width: 100%;
     position: relative;
-    margin-left: 250px;
     padding: 20px 40px 40px 40px;
     box-sizing: border-box;
+    margin-left: 250px;
+
     .home {
         h2 {
             margin: 0em 0em 1em 0em;
@@ -531,6 +534,7 @@ main {
             border-radius: 30px;
             padding: 10px 25px;
             font-size: 13px;
+            transition: 0.2s ease-in;
             cursor: pointer;
             &:hover, &:focus {
                 box-shadow: 0px 2px 2px $medium-grey;
@@ -618,13 +622,13 @@ main {
                 justify-content: space-between;
                 align-items: center;
             }
-            input {
+            input[type=search], input[type=text], input[type=number], input[type=email], input[type=password] {
+                width: 100%;
                 max-width: 300px;
+                box-sizing: border-box;
             }
             input[type=email] {
-                width: 100%;
                 display: block;
-                box-sizing: border-box;
                 margin-bottom: 2em;
             }
             input[type=submit] {
@@ -632,12 +636,15 @@ main {
                 margin-left: auto;
                 margin-right: 0;
             }
-            &.select-radio {
+            &.one-column {
                 margin: 10px auto;
                 justify-self: right;
                 max-width: 300px;
                 :not(:last-child) {
                     margin-right: 10px;
+                }
+                label {
+                    width: 100%;
                 }
                 .select-radio-button {
                     background-color: $background;
@@ -650,6 +657,7 @@ main {
                     white-space: nowrap;
                     display: block;
                     margin: 5px 0px;
+                    box-sizing: border-box;
                     cursor: pointer;
                     &:hover, &:focus {
                         box-shadow: 0px 2px 2px $medium-grey;
@@ -803,8 +811,34 @@ main {
                     width: 25%;
                 }
                 &.button-cell {
-                    padding: 0px 5px;
+                    padding: 1.5em 1em;
                     text-align: center;
+                    .delete-user {
+                        display: inline-block;
+                        color: $danger;
+                        cursor: pointer;
+                        &:before {
+                            content: "\f2ed";
+                            font-family: $fontawesome;
+                        }
+                        &:after {
+                            content: "Delete user";
+                        }   
+                    }
+                    button {
+                        margin-left: 2em;
+                    }
+                    input[type=checkbox]:checked + label {
+                        color: $save;
+                        &:before {
+                            content: "\f0e2";
+                            font-family: $fontawesome;
+                            font-weight: 100;
+                        }
+                        &:after {
+                            content: "Undo";
+                        }   
+                    }
                 }
             }
         }

@@ -4,7 +4,7 @@
 <div class="form-page">
   <h1>Create new entity</h1>
 
-  <form action="." method="post" class="select-radio">
+  <form action="." method="post" class="one-column">
     {% csrf_token %}
     {{ form.errors }}
     {% for radio in form.entity_type %}
