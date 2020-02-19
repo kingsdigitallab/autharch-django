@@ -312,16 +312,26 @@ class ArchivalRecordEditForm(forms.ModelForm):
 
     """
 
-    disabled_fields = [
-        'arrangement', 'cataloguer', 'copyright_status',
-        'description_date', 'extent', 'physical_description',
-        'provenance', 'rcin', 'record_type', 'repository',
-        'rights_declaration', 'withheld'
-    ]
+    disabled_fields = {
+        EditorProfile.ADMIN: [],
+        EditorProfile.MODERATOR: [
+            'arrangement', 'cataloguer', 'copyright_status',
+            'description_date', 'extent', 'physical_description', 'provenance',
+            'publication_permission', 'rcin', 'record_type', 'references',
+            'repository', 'rights_declaration', 'withheld'
+        ],
+        EditorProfile.EDITOR: [
+            'arrangement', 'cataloguer', 'copyright_status',
+            'description_date', 'extent', 'physical_description', 'provenance',
+            'publication_permission', 'publication_status', 'rcin',
+            'record_type', 'references', 'repository', 'rights_declaration',
+            'withheld'
+        ],
+    }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.disabled_fields:
+        for field in self.disabled_fields[editor_role]:
             # Due to polymorphic model, some fields are not going
             # to exist.
             try:

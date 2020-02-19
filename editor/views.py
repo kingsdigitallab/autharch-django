@@ -346,16 +346,18 @@ def record_delete(request, record_id):
 @create_revision()
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
+    editor_role = request.user.editor_profile.role
     form_class = get_archival_record_edit_form_for_subclass(record)
     if request.method == 'POST':
-        form = form_class(request.POST, instance=record)
+        form = form_class(request.POST, editor_role=editor_role,
+                          instance=record)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
             reversion.set_comment(log_form.cleaned_data['comment'])
             form.save()
             return redirect('editor:record-edit', record_id=record_id)
     else:
-        form = form_class(instance=record)
+        form = form_class(editor_role=editor_role, instance=record)
         log_form = LogForm()
     context = {
         'current_section': 'records',
