@@ -570,8 +570,9 @@ class FacetedSearchForm(haystack.forms.SearchForm):
                     query = query | SQ(**{field: sqs.query.clean(value)})
                 else:
                     query = query & SQ(**{field: sqs.query.clean(value)})
+            previous_field = field
         if query is not None:
-            sqs = sqs.filter(query)
+            sqs = sqs.narrow(query)
         return sqs
 
     def no_query_found(self):

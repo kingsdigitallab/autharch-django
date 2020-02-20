@@ -106,19 +106,20 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView):
 class RecordListView(UserPassesTestMixin, FacetedSearchView):
 
     template_name = 'editor/records_list.html'
-    queryset = SearchQuerySet().models(Collection, File, Item, Series).facet(
-        'archival_level', order='term').facet('writers', order='term').facet(
-        'addressees', order='term').facet('languages', order='term').facet(
-        'dates', order='term')
+    queryset = SearchQuerySet().models(Collection, File, Item, Series)
     form_class = FacetedSearchForm
     facet_fields = ['addressees', 'archival_level', 'dates', 'languages',
                     'writers']
 
+    def __init__(self, *args, **kwargs):
+        self.full_facet_qs = self._get_full_facet_queryset()
+        super().__init__(*args, **kwargs)
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         query_dict = self.request.GET.copy()
-        context['facets'] = self._merge_facets(context['facets'],
-                                               query_dict)
+        facets = self._get_full_facets()
+        context['facets'] = self._merge_facets(facets, query_dict)
         context['current_section'] = 'records'
         context['writer_manager'] = Entity.objects
         return context
@@ -150,6 +151,30 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView):
         else:
             link = '.'
         return link, True
+
+    def _get_full_facet_queryset(self):
+        """Return a queryset with facets that has not yet been reduced by any
+        query."""
+        qs = self.queryset
+        for field in self.facet_fields:
+            qs = qs.facet(field)
+        return qs
+
+    def _get_full_facets(self):
+        """Return facet data for a queryset that is filtered only by a
+        querystring, and not by any selected facets."""
+        kwargs = {'initial': self.get_initial()}
+        if self.request.method == 'GET':
+            kwargs.update({
+                'data': self.request.GET,
+            })
+        kwargs.update({
+            'searchqueryset': self.full_facet_qs,
+            'load_all': self.load_all,
+        })
+        dummy_form = self.form_class(**kwargs)
+        qs = dummy_form.search()
+        return qs.facet_counts()
 
     def _merge_facets(self, facets, query_dict):
         """Return the Haystack `facets` annotated with links to apply or
