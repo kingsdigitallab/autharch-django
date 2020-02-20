@@ -13,6 +13,16 @@ class BaseJargonModel(TimeStampedModel):
         return self.title
 
 
+class CollaborativeWorkspaceEditorType(BaseJargonModel):
+    class Meta:
+        verbose_name = 'Collaborative workspace editor type'
+
+
+class EditingEventType(BaseJargonModel):
+    class Meta:
+        verbose_name = 'EAD: Maintenance event type'
+
+
 class EntityRelationType(BaseJargonModel):
     class Meta:
         verbose_name = 'EAC: Entity relation type'

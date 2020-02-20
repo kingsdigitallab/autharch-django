@@ -1,10 +1,12 @@
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
-from jargon.models import (EntityRelationType, EntityType,
-                           Function, MaintenanceStatus, NamePartType,
-                           Publication, PublicationStatus, RecordType,
-                           ReferenceSource, Repository, ResourceRelationType)
+from jargon.models import (
+    CollaborativeWorkspaceEditorType, EditingEventType, EntityRelationType,
+    EntityType, Function, MaintenanceStatus, NamePartType, Publication,
+    PublicationStatus, RecordType, ReferenceSource, Repository,
+    ResourceRelationType
+)
 
 
 class BaseJargonAdmin(admin.ModelAdmin):
@@ -12,9 +14,12 @@ class BaseJargonAdmin(admin.ModelAdmin):
         models.TextField: {'widget': CKEditorWidget}
     }
     list_display = ['title']
+    ordering = ['title']
     search_fields = ['title']
 
 
+admin.site.register(CollaborativeWorkspaceEditorType, BaseJargonAdmin)
+admin.site.register(EditingEventType, BaseJargonAdmin)
 admin.site.register(EntityRelationType, BaseJargonAdmin)
 admin.site.register(EntityType, BaseJargonAdmin)
 admin.site.register(Function, BaseJargonAdmin)

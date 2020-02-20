@@ -1,0 +1,56 @@
+[
+{
+  "model": "jargon.editingeventtype",
+  "pk": 1,
+  "fields": {
+    "created": "2020-02-21T14:38:58.746Z",
+    "modified": "2020-02-21T14:38:58.747Z",
+    "title": "cancelled"
+  }
+},
+{
+  "model": "jargon.editingeventtype",
+  "pk": 2,
+  "fields": {
+    "created": "2020-02-21T14:38:58.746Z",
+    "modified": "2020-02-21T14:38:58.747Z",
+    "title": "created"
+  }
+},
+{
+  "model": "jargon.editingeventtype",
+  "pk": 3,
+  "fields": {
+    "created": "2020-02-21T14:38:58.746Z",
+    "modified": "2020-02-21T14:38:58.747Z",
+    "title": "deleted"
+  }
+},
+{
+  "model": "jargon.editingeventtype",
+  "pk": 4,
+  "fields": {
+    "created": "2020-02-21T14:38:58.746Z",
+    "modified": "2020-02-21T14:38:58.747Z",
+    "title": "derived"
+  }
+},
+{
+  "model": "jargon.editingeventtype",
+  "pk": 5,
+  "fields": {
+    "created": "2020-02-21T14:38:58.746Z",
+    "modified": "2020-02-21T14:38:58.747Z",
+    "title": "revised"
+  }
+},
+{
+  "model": "jargon.editingeventtype",
+  "pk": 6,
+  "fields": {
+    "created": "2020-02-21T14:38:58.746Z",
+    "modified": "2020-02-21T14:38:58.747Z",
+    "title": "updated"
+  }
+}
+]
