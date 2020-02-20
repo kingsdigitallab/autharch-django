@@ -74,8 +74,7 @@ class HomeView(UserPassesTestMixin, SearchView):
     def _get_unpublished_records(self, user):
         entities = None
         records = None
-        if user.editor_profile.role in (EditorProfile.ADMIN,
-                                        EditorProfile.MODERATOR):
+        if user.editor_profile.role == EditorProfile.ADMIN:
             entities = Entity.objects.exclude(
                 control__publication_status__title='published')
             records = ArchivalRecord.objects.exclude(
