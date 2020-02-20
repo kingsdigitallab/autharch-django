@@ -541,7 +541,7 @@ class UserForm(ContainerModelForm):
 
     class Meta:
         model = User
-        fields = ['id']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 
 # Search forms.

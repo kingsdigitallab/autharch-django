@@ -68,16 +68,15 @@
       </thead>
       <tbody>
         {% for form in all_users_formset %}
-        {% with form_user=form.instance %}
         <tr>
           <td>
             <span class="inline-delete-form-field none">{{ form.DELETE.as_widget }}</span>
             {% render_field form.id %}
-            {{ form_user.username }}
+            {{ form.username }}
           </td>
-          <td>{{ form_user.first_name }}</td>
-          <td>{{ form_user.last_name }}</td>
-          <td>{{ form_user.email }}</td>
+          <td>{{ form.first_name }}</td>
+          <td>{{ form.last_name }}</td>
+          <td>{{ form.email }}</td>
           <td>
             {% with profile=form.formsets.editor_profile %}
             {{ profile.management_form }}
@@ -93,7 +92,6 @@
             <!-- <button aria-label="delete user" class="button-link danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i>Delete user</button> -->
           </td>
         </tr>
-        {% endwith %}
         {% endfor %}
       </tbody>
     </table>
