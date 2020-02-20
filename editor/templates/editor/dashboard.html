@@ -20,6 +20,7 @@
       </div>
       <div>
         {% render_field user_form.last_name %}
+        {% render_field user_form.username %}
       </div>
       <input name="user_submit" type="submit" class="save" value="Save" />
     </form>
@@ -51,6 +52,19 @@
 {% if all_users_formset %}
 <div class="admin">
   <h2>Admin table</h2>
+
+  {% for error_dict in all_users_formset.errors %}
+  {% for key, msgs in error_dict.items %}
+  {% if key == "__all__" %}
+  <ul>
+    {% for msg in msgs %}
+    <li>{{ msg }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+
   <form action="." method="post">
     {% csrf_token %}
     {{ all_users_formset.management_form }}
@@ -72,11 +86,11 @@
           <td>
             <span class="inline-delete-form-field none">{{ form.DELETE.as_widget }}</span>
             {% render_field form.id %}
-            {{ form.username }}
+            {{ form.username }}{{ form.username.errors }}
           </td>
-          <td>{{ form.first_name }}</td>
-          <td>{{ form.last_name }}</td>
-          <td>{{ form.email }}</td>
+          <td>{{ form.first_name }}{{ form.first_name.errors }}</td>
+          <td>{{ form.last_name }}{{ form.last_name.errors }}</td>
+          <td>{{ form.email }}{{ form.email.errors }}</td>
           <td>
             {% with profile=form.formsets.editor_profile %}
             {{ profile.management_form }}
