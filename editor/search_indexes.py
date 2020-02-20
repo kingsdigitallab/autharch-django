@@ -113,6 +113,8 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     entity_type = indexes.CharField(model_attr='entity_type__title',
                                     faceted=True)
+    publication_status = indexes.CharField(
+        model_attr='control__publication_status__title')
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
 

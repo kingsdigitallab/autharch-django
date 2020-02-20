@@ -15,6 +15,57 @@
 
 {% block content %}
 <div class="home">
+  {% if query %}
+  <h2>Search results</h2>
+
+  <table class="tablesorter" id="search-results-table">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Record type</th>
+        <th scope="col">Type/level</th>
+        <th scope="col">Publication status</th>
+        <th scope="col">Updated</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in object_list %}
+      <tr>
+        {% if result.model_name == 'entity' %}
+        <td><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a></td>
+        <td>Entity</td>
+        <td>{{ result.entity_type }}</td>
+        {% else %}
+        <td><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+        <td>Archival Record</td>
+        <td>{{ result.archival_level }}</td>
+        {% endif %}
+        <td>{{ result.publication_status }}</td>
+        <td>{{ result.modified }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div id="search-results-pager" class="pager">
+    <div class="page-size">
+      <p>
+        rows per page:
+        <a href="#" class="current">10</a> |
+        <a href="#">25</a> |
+        <a href="#">50</a> |
+        <a href="#">100</a>
+      </p>
+    </div>
+    <div class="page-list">
+      <button class="first"><i class="fal fa-step-backward"></i></button>
+      <button class="prev"><i class="fal fa-caret-left"></i></button>
+      <span class="pagecount"></span>
+      <button class="next"><i class="fal fa-caret-right"></i></button>
+      <button class="last"><i class="fal fa-step-forward"></i></button>
+    </div>
+  </div>
+  {% endif %}
+
   <h2>Recently modified by me</h2>
   <table id="modified-table" class="tablesorter">
     <thead>
