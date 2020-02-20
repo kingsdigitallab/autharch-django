@@ -298,6 +298,9 @@ class Control(LanguageScriptMixin, TimeStampedModel):
 
     rights_declaration = models.TextField(
         default=settings.AUTHORITY_RIGHTS_DECLARATION)
+    rights_declaration_abbreviation = models.CharField(
+        max_length=256, blank=True)
+    rights_declaration_citation = models.URLField(blank=True)
 
     class Meta:
         verbose_name_plural = 'Control'

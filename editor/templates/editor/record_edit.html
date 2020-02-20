@@ -212,11 +212,11 @@
           <div class="two-column-table">
             <div>
               Language QAZ
-              Rights citation QAZ
+              {% render_field form.rights_declaration_citation %}
             </div>
             <div>
               Script QAZ
-              Rights abbreviation QAZ
+              {% render_field form.rights_declaration_abbreviation %}
             </div>
           </div>
           {% render_field form.rights_declaration %}

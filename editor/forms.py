@@ -318,13 +318,16 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'arrangement', 'cataloguer', 'copyright_status',
             'description_date', 'extent', 'physical_description', 'provenance',
             'publication_permission', 'rcin', 'record_type', 'references',
-            'repository', 'rights_declaration', 'withheld'
+            'repository', 'rights_declaration',
+            'rights_declaration_abbreviation', 'rights_declaration_citation',
+            'withheld'
         ],
         EditorProfile.EDITOR: [
             'arrangement', 'cataloguer', 'copyright_status',
             'description_date', 'extent', 'physical_description', 'provenance',
             'publication_permission', 'publication_status', 'rcin',
             'record_type', 'references', 'repository', 'rights_declaration',
+            'rights_declaration_abbreviation', 'rights_declaration_citation',
             'withheld'
         ],
     }

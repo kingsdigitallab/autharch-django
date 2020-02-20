@@ -4,7 +4,8 @@ from django.conf import settings
 from django.db import models
 from geonames_place.models import Place
 from jargon.models import (
-    Publication, PublicationStatus, RecordType, ReferenceSource, Repository
+    MaintenanceStatus, Publication, PublicationStatus, RecordType,
+    ReferenceSource, Repository
 )
 from languages_plus.models import Language
 from media.models import Media
@@ -47,7 +48,7 @@ class Organisation(models.Model):
 
 
 @reversion.register()
-class ArchivalRecord(PolymorphicModel):
+class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
     rcin = models.CharField('RCIN', max_length=256, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True,
@@ -62,11 +63,15 @@ class ArchivalRecord(PolymorphicModel):
     title = models.CharField(max_length=1024, help_text=constants.TITLE_HELP)
 
     publication_description = models.TextField(blank=True, null=True)
-    provenance = models.TextField('Custodial History/Provenance', blank=True, null=True, help_text=constants.CUSTODIAL_HISTORY_PROVENANCE_HELP)
-    creation_dates = models.CharField(max_length=1024, null=True, blank=True, help_text=constants.CREATION_DATES_HELP)
+    provenance = models.TextField(
+        'Custodial History/Provenance', blank=True, null=True,
+        help_text=constants.CUSTODIAL_HISTORY_PROVENANCE_HELP)
+    creation_dates = models.CharField(
+        max_length=1024, null=True, blank=True,
+        help_text=constants.CREATION_DATES_HELP)
     creation_dates_notes = models.CharField(max_length=1024, null=True,
                                             blank=True)
-                                            
+
     aquisition_dates = models.CharField(max_length=1024, null=True, blank=True)
     aquisition_dates_notes = models.CharField(max_length=1024, null=True,
                                               blank=True)
@@ -81,15 +86,19 @@ class ArchivalRecord(PolymorphicModel):
 
     origin_location = models.CharField(
         'location of originals', max_length=2048, blank=True, null=True,
-                                  help_text=constants.LOCATION_OF_ORIGINALS_HELP)
+        help_text=constants.LOCATION_OF_ORIGINALS_HELP)
 
     media = models.ManyToManyField(Media, blank=True)
     caption = models.TextField(blank=True, null=True)
 
-    description = models.TextField(blank=True, null=True, help_text=constants.DESCRIPTION_HELP)
-    notes = models.TextField(blank=True, null=True, help_text=constants.NOTES_HELP)
-    languages = models.ManyToManyField(Language, blank=True, help_text=constants.LANGUAGES_HELP)
-    extent = models.CharField(max_length=1024, null=True, help_text=constants.EXTENT_HELP)
+    description = models.TextField(blank=True, null=True,
+                                   help_text=constants.DESCRIPTION_HELP)
+    notes = models.TextField(blank=True, null=True,
+                             help_text=constants.NOTES_HELP)
+    languages = models.ManyToManyField(Language, blank=True,
+                                       help_text=constants.LANGUAGES_HELP)
+    extent = models.CharField(max_length=1024, null=True,
+                              help_text=constants.EXTENT_HELP)
 
     subjects = models.ManyToManyField(Subject, blank=True)
     persons_as_subjects = models.ManyToManyField(Entity, blank=True)
@@ -100,7 +109,8 @@ class ArchivalRecord(PolymorphicModel):
     places_as_subjects = models.ManyToManyField(Place, blank=True)
 
     related_materials = models.CharField(
-        max_length=2048, blank=True, null=True, help_text=constants.RELATED_MATERIALS_HELP)
+        max_length=2048, blank=True, null=True,
+        help_text=constants.RELATED_MATERIALS_HELP)
 
     connection_a = models.CharField(max_length=2048, blank=True, null=True,
                                     help_text="Generic Connection Text A")
@@ -115,6 +125,11 @@ class ArchivalRecord(PolymorphicModel):
 
     rights_declaration = models.TextField(
         default=settings.ARCHIVAL_RIGHTS_DECLARATION)
+    rights_declaration_abbreviation = models.CharField(
+        max_length=256, blank=True)
+    rights_declaration_citation = models.URLField(blank=True)
+    maintenance_status = models.ForeignKey(
+        MaintenanceStatus, on_delete=models.PROTECT)
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
 
@@ -133,10 +148,9 @@ class ArchivalRecord(PolymorphicModel):
 
 @reversion.register()
 class ArchivalRecordSet(TimeStampedModel):
-    project = models.ForeignKey(Project, on_delete=models.SET_NULL,
-                                null=True,
-                                help_text='Which project does this set\
-                                    belong to?')
+    project = models.ForeignKey(
+        Project, on_delete=models.SET_NULL, null=True,
+        help_text='Which project does this set belong to?')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True,
         on_delete=models.SET_NULL)
@@ -155,7 +169,8 @@ class ArchivalRecordSet(TimeStampedModel):
 
 @reversion.register()
 class Collection(ArchivalRecord):
-    administrative_history = models.TextField(help_text=constants.ADMINISTRATIVE_HISTORY_HELP)
+    administrative_history = models.TextField(
+        help_text=constants.ADMINISTRATIVE_HISTORY_HELP)
     arrangement = models.TextField(help_text=constants.ARRANGEMENT_HELP)
 
     def __str__(self):
@@ -163,8 +178,9 @@ class Collection(ArchivalRecord):
 
 
 class SeriesBase(models.Model):
-    publications = models.ManyToManyField(Publication, verbose_name="Known previous publications",
-                                   help_text=constants.PUBLICATIONS_HELP)
+    publications = models.ManyToManyField(
+        Publication, blank=True, verbose_name="Known previous publications",
+        help_text=constants.PUBLICATIONS_HELP)
 
     class Meta:
         abstract = True
@@ -187,20 +203,20 @@ class Series(ArchivalRecord, SeriesBase):
 
 
 class FileBase(models.Model):
-    record_type = models.ManyToManyField(RecordType,
-                                   help_text=constants.RECORD_TYPE_HELP)
+    record_type = models.ManyToManyField(
+        RecordType, help_text=constants.RECORD_TYPE_HELP)
 
-    physical_description = models.TextField(blank=True, null=True,
-                                   help_text=constants.PHYSICAL_DESCRIPTION_HELP)
+    physical_description = models.TextField(
+        blank=True, null=True, help_text=constants.PHYSICAL_DESCRIPTION_HELP)
 
-    copyright_status = models.CharField(max_length=256, blank=True,
-                                   help_text=constants.COPYRIGHT_STATUS_HELP)
+    copyright_status = models.CharField(
+        max_length=256, blank=True, help_text=constants.COPYRIGHT_STATUS_HELP)
     publication_permission = models.TextField('Credit', blank=True, null=True)
     withheld = models.CharField(max_length=256, blank=True, null=True,
-                                   help_text=constants.WITHHELD_HELP)
+                                help_text=constants.WITHHELD_HELP)
 
     url = models.URLField('URL', blank=True, null=True,
-                                   help_text=constants.URL_HELP)
+                          help_text=constants.URL_HELP)
 
     class Meta:
         abstract = True
@@ -216,13 +232,17 @@ class File(ArchivalRecord, SeriesBase, FileBase):
     parent_file = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.CASCADE)
     creators = models.ManyToManyField(
-        Entity, verbose_name="Writer", blank=True, related_name='files_created', help_text=constants.WRITER_HELP)
+        Entity, verbose_name="Writer", blank=True,
+        related_name='files_created', help_text=constants.WRITER_HELP)
     creation_places = models.ManyToManyField(
-        Place, verbose_name="Place of writing", related_name='files_created', blank=True, help_text=constants.PLACE_OF_WRITING_HELP)
-    persons_as_relations = models.ManyToManyField( 
-        Entity, verbose_name="Addressee", blank=True, related_name='files_as_relations')
+        Place, verbose_name="Place of writing", related_name='files_created',
+        blank=True, help_text=constants.PLACE_OF_WRITING_HELP)
+    persons_as_relations = models.ManyToManyField(
+        Entity, verbose_name="Addressee", blank=True,
+        related_name='files_as_relations')
     places_as_relations = models.ManyToManyField(
-        Place, verbose_name="Receiving address", blank=True, related_name='files_as_relations')
+        Place, verbose_name="Receiving address", blank=True,
+        related_name='files_as_relations')
 
     def __str__(self):
         return self.title
@@ -236,13 +256,17 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
         File, blank=True, null=True, on_delete=models.CASCADE,
         verbose_name='File')
     creators = models.ManyToManyField(
-        Entity, verbose_name="Writer", blank=True, related_name='items_created')
+        Entity, verbose_name="Writer", blank=True,
+        related_name='items_created')
     creation_places = models.ManyToManyField(
-        Place, verbose_name="Place of writing", related_name='items_created', blank=True)
+        Place, verbose_name="Place of writing", related_name='items_created',
+        blank=True)
     persons_as_relations = models.ManyToManyField(
-        Entity, verbose_name="Addressee", blank=True, related_name='items_as_relations')
+        Entity, verbose_name="Addressee", blank=True,
+        related_name='items_as_relations')
     places_as_relations = models.ManyToManyField(
-        Place, verbose_name="Receiving address", blank=True, related_name='items_as_relations')
+        Place, verbose_name="Receiving address", blank=True,
+        related_name='items_as_relations')
 
     def __str__(self):
         return self.title
