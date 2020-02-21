@@ -31,7 +31,6 @@ $(document).ready(function() {
     event.preventDefault();
   });
 
-  
 
   // Open popup to log changes when saving a record, then actually
   // submit the form when submitting from the popup.
@@ -373,11 +372,13 @@ function getNewFormParent(context) {
   return context.parents(".formset").first().children("div.fieldsets").last();
 }
 
+
 // this won't delete the field(s), just hide them. The deletion needs to be executed in the backend, once the form is submitted.
 function deleteField(el, toDelete) {
   event.preventDefault();
   $(el).closest(toDelete).addClass('none');
 }
+
 
 function deleteRow(el) {
   if (!$(el).parent().siblings('td').hasClass('none')) {
@@ -389,7 +390,11 @@ function deleteRow(el) {
     $(el).parent().siblings('td').removeClass('none');
     $(el).next('button').remove();
   }
+  // Find and toggle the DELETE checkbox for the form.
+  let deleteField = $(el).closest("[data-form-type]").find("[class~='delete-form-field']").children("[name$='DELETE']").first();
+  deleteField.prop("checked", !deleteField.prop("checked"));
 }
+
 
 /**
  * Mark/unmark an inline form for deletion.
@@ -461,40 +466,6 @@ function toggleDeleteInline(event, button) {
   // Find and toggle the DELETE checkbox for the form.
   let deleteField = form_part.children("[class~='inline-delete-form-field']").children("[name$='DELETE']").first();
   deleteField.prop("checked", !deleteField.prop("checked"));
-}
-
-
-function toggleDeleteUserForm(event, button) {
-/**
- * Mark/unmark a user form for deletion.
- *
- * This involves three changes:
- *
- * 1. Toggling the DELETE checkbox for the form.
- * 2. Toggling the visibility of the form.
- * 3. Toggling the delete/undo icon.
- *
- * This code requires the following HTML structure in order to behave
- * correctly:
- *
- * 1. The toggling instigator (the delete/undo icon) must be 
- * descendant of an element with the data-form-type attribute
- * set. This attribute marks the element that encompasses the whole of
- * an inline form.
- *
- * 2. The part of the form to be hidden/shown must have the class
- * attribute value "inline-deletable".
- *
- * 3. The part of the form to be hidden/shown must be a descendant of
- * the encompassing element (see #1).
- *
- * 4. The DELETE checkbox for the form must be a grand-child (within
- * an element with a class of "inline-delete-form-field") of the part
- * of the form to be hidden/shown (see #2).
- *
- * @param {Element} button - the button element that triggered the toggle
- */
-
 }
 
 

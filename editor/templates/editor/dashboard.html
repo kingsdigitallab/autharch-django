@@ -82,9 +82,9 @@
       </thead>
       <tbody>
         {% for form in all_users_formset %}
-        <tr>
+        <tr data-form-type="user">
           <td>
-            <span class="inline-delete-form-field none">{{ form.DELETE.as_widget }}</span>
+            <span class="delete-form-field none">{{ form.DELETE.as_widget }}</span>
             {% render_field form.id %}
             {{ form.username }}{{ form.username.errors }}
           </td>
