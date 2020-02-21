@@ -1,4 +1,7 @@
 {% extends "./base.html" %}
+{% load static %}
+
+{% block header %}{% endblock header %}
 
 {% block content %}
 <div class="form-page">
@@ -22,4 +25,8 @@
     <input type="submit" class="save" value="Login" />
   </form>
 </div>
+
+<footer>
+  <img src="{% static 'images/GPPLogo.png' %}" alt="GPP logo" />
+</footer>
 {% endblock content %}

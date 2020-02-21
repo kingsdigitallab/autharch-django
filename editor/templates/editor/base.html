@@ -16,8 +16,8 @@
     {% block head_js %}{% endblock head_js %}
   </head>
   <body>
+    {% block header %}
     <header>
-      {% block header %}
       <div id="logo">
         <a href="{% url 'editor:home' %}"><img src="{% static 'images/GPPLogo.png' %}" alt="GPP logo" /></a>
       </div>
@@ -50,8 +50,8 @@
         </div>
         <a href="{% url 'editor:logout' %}" class="button" id="logout"><span hidden>Logout</span></a>
       </div>
-      {% endblock %}
     </header>
+    {% endblock %}
     <main>
       {% block main %}
       {% block page_header %}
