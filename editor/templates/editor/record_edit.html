@@ -227,7 +227,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2>Log comments</h2>
-          <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
+          <!-- <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" /> -->
+          <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
         </div>
         <div class="modal-body">
           <div class="two-column-table">
@@ -242,7 +243,8 @@
           {% render_field log_form.comment %}
         </div>
         <div class="modal-footer">
-          <input type="submit" value="Save" class="save modal-submit" />
+          <!-- <input type="submit" value="Save" class="save modal-submit" /> -->
+          <input type="submit" value="Save" class="save" />
         </div>
       </div>
     </div>

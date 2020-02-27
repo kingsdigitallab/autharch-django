@@ -171,7 +171,7 @@ input[type=submit], .save {
     .search-button {
         position: absolute;
         background: none;
-    	top: 3px;
+    	top: 0px;
     	right: 0px;
 		color: $primary;
 		font-family: $fontawesome;
@@ -962,7 +962,7 @@ main {
             font-size: 14px;
             padding: 10px;
             border: 1px solid $input;
-            line-height: 1em;
+            line-height: 1.4em;
             
             // margin-right: 20px;
             &[type=date] {
