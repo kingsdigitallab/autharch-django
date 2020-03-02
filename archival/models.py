@@ -135,6 +135,8 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
 
     sources = models.TextField(blank=True, null=True)
 
+    transcription = models.TextField(blank=True)
+
     class Meta:
         ordering = ['title']
 
@@ -270,3 +272,15 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
 
     def __str__(self):
         return self.title
+
+
+class ArchivalRecordImage(models.Model):
+
+    record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
+                               related_name='transcription_images')
+    image = models.ImageField(upload_to='ar_transcription_images/')
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ['order']
+        unique_together = (('record', 'order'),)

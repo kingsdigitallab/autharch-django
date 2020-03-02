@@ -361,6 +361,7 @@ def record_edit(request, record_id):
         'delete_url': reverse('editor:record-delete',
                               kwargs={'record_id': record_id}),
         'form': form,
+        'images': record.transcription_images.all(),
         'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
         'record': record,

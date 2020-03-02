@@ -46,6 +46,7 @@
   <h2>{{ record.archival_level }}</h2>
 
   <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
+    {% if images %}
     <div class="form-section">
       <fieldset id="side-by-side">
         <div class="fieldset-header">
@@ -69,12 +70,13 @@
                 </div>
             </div>
             <div class="transcription">
-                <textarea class="richtext">QAZ</textarea>
+              {{ form.transcription }}
             </div>
           </div>
         </div>
       </fieldset>
     </div>
+    {% endif %}
     <div class="form-section">
       <h2>SUMMARY</h2>
       <fieldset id="summary">
@@ -254,6 +256,8 @@
 {% endblock content %}
 
 {% block extra_js %}
+{{ block.super }}
+{% if images %}
 <script src="{% static 'js/openseadragon/openseadragon.min.js' %}"></script>
 <script type="text/javascript">
   var viewer = OpenSeadragon({
@@ -265,15 +269,8 @@
       fullPageButton: "full-mode",
       nextButton:     "next",
       prevButton: "prev",
-      tileSources: {
-        height: 1749,
-        width:  1400,
-        tileSize: 1749,
-        minLevel: 11,
-        getTileUrl: function(){
-            return "{% static 'images/GEO_ADD_15_0855_001.jpg' %}";
-        }
-      }
+    tileSources: [{% for image in images %}{{ image.url }}{% if not forloop.last %}, {% endif %}{% endfor %}]
   });
 </script>
+{% endif %}
 {% endblock extra_js %}

@@ -1,6 +1,6 @@
-from archival.models import (ArchivalRecord, ArchivalRecordSet, Collection,
-                             File, Item, Organisation, Reference, Series,
-                             Subject, Project)
+from archival.models import (
+    ArchivalRecord, ArchivalRecordImage, ArchivalRecordSet, Collection,
+    File, Item, Organisation, Reference, Series, Subject, Project)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -8,6 +8,10 @@ from polymorphic.admin import (PolymorphicChildModelAdmin,
                                PolymorphicChildModelFilter,
                                PolymorphicParentModelAdmin)
 from reversion.admin import VersionAdmin
+
+
+class ArchivalRecordImageInline(admin.TabularInline):
+    model = ArchivalRecordImage
 
 
 @admin.register(ArchivalRecord)
@@ -46,6 +50,7 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
                            'publication_status', 'subjects',
                            'persons_as_subjects', 'organisations_as_subjects',
                            'places_as_subjects', 'media', 'related_entities']
+    inlines = [ArchivalRecordImageInline]
 
     base_fieldsets = [
         ['Repository', {
@@ -94,7 +99,10 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         }],
         ['Project', {
             'fields': ['project']
-        }]
+        }],
+        ['Transcription', {
+            'fields': ['transcription']
+        }],
     ]
 
     formfield_overrides = {
