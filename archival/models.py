@@ -51,9 +51,9 @@ class Organisation(models.Model):
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
     rcin = models.CharField('RCIN', max_length=256, blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True,
-                                help_text='Which project does this record\
-                                    belong to?')
+    project = models.ForeignKey(
+        Project, on_delete=models.SET_NULL, blank=True, null=True,
+        help_text='Which project does this record belong to?')
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE,
                                    help_text=constants.REPOSITORY_HELP)
 

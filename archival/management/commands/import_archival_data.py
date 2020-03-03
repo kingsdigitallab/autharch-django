@@ -1,11 +1,14 @@
 import logging
 
+from django.db import transaction
 import pandas as pd
+
 from archival.models import Collection, File, Item, Reference, Series
-from authority.models import Entity
+from authority.models import Control, Entity
 from django.core.management.base import BaseCommand, CommandError
-from jargon.models import (Publication, PublicationStatus, ReferenceSource,
-                           Repository)
+from jargon.models import (
+    MaintenanceStatus, Publication, PublicationStatus, ReferenceSource,
+    Repository)
 from languages_plus.models import Language
 from script_codes.models import Script
 
@@ -21,6 +24,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('spreadsheet_path', nargs=1, type=str)
 
+    @transaction.atomic
     def handle(self, *args, **options):
         path = options['spreadsheet_path'][0]
 
@@ -113,6 +117,9 @@ class Command(BaseCommand):
         ps, _ = PublicationStatus.objects.get_or_create(
             title=row['Publication Status'])
         obj.publication_status = ps
+
+        ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
+        obj.maintenance_status = ms
 
         obj.save()
 
@@ -233,6 +240,12 @@ class Command(BaseCommand):
 
         entity, _ = Entity.get_or_create_by_display_name(
             name, self.language, self.script)
+        if not entity.control:
+            ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
+            ps, _ = PublicationStatus.objects.get_or_create(title='published')
+            c = Control(entity=entity, maintenance_status=ms,
+                        publication_status=ps)
+            c.save()
 
         return entity
 
