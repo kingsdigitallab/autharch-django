@@ -497,7 +497,10 @@ main {
     position: relative;
     padding: 20px 40px 40px 40px;
     box-sizing: border-box;
-    margin-left: 250px;
+    &:not(.no-sidebar) {
+        margin-left: 250px;
+    }
+    
 
     .home {
         h2 {
@@ -1418,7 +1421,7 @@ footer {
     main {
         box-sizing: border-box; 
         margin-top: 80px;
-        margin-left: 0px;
+        margin-left: 0px !important;
         padding: 0px 30px 30px 30px;
         #page-header {
             // display: flex;

@@ -1,76 +1,79 @@
 {% extends "./base.html" %}
+{% block main %}
+<main>
+  {% block page_header %}
+  <div id="page-header">
+    <h1>Entities ({{ object_list.count }})</h1>
+    <form action="." class="search" method="get">
+        <label>
+          <span hidden>Search</span>
+          {{ form.q }}
+        </label>
+        <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+      </form>
+      <div class="filter-block">
+        <input type="checkbox" class="none" id="filter" value="Filter">
+        <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+        <div class="filters-hidden">
+          <a href="." class="dotted-underline clear-filters active">Clear filters</a>
+          <form action="." method="get">
+              <div>
+                <fieldset class="filter-list">
+                  <legend>Document level</legend>
+                  {% for entity_type in facets.fields.entity_type %}
+                    <a href="" class="checkbox-anchor">
+                        <input name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
+                        {{ entity_type.0 }} ({{ entity_type.1 }})
+                    </a>
+                  {% endfor %}
+                </fieldset>
+              </div>
+            </form>
+          </div>
+      </div>
+    <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>
+  </div>
+  {% endblock page_header %}
 
-{% block page_header %}
-<div id="page-header">
-  <h1>Entities ({{ object_list.count }})</h1>
-  <form action="." class="search" method="get">
-      <label>
-        <span hidden>Search</span>
-        {{ form.q }}
-      </label>
-      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
-    </form>
-    <div class="filter-block">
-      <input type="checkbox" class="none" id="filter" value="Filter">
-      <label for="filter" class="filter-button"><span hidden>Filter</span></label>
-      <div class="filters-hidden">
-        <a href="." class="dotted-underline clear-filters active">Clear filters</a>
-        <form action="." method="get">
-            <div>
-              <fieldset class="filter-list">
-                <legend>Document level</legend>
-                {% for entity_type in facets.fields.entity_type %}
-                  <a href="" class="checkbox-anchor">
-                      <input name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
-                      {{ entity_type.0 }} ({{ entity_type.1 }})
-                  </a>
-                {% endfor %}
-              </fieldset>
-            </div>
-          </form>
-        </div>
+  {% block content %}
+  <table id="records-table" class="tablesorter">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Publication status</th>
+        <th>Updated</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in object_list %}
+      <tr>
+        <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+        <td>{{ result.entity_type }}</td>
+        <td>QAZ</td>
+        <td>{{ result.modified }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div id="entities-pager" class="pager">
+    <div class="page-size">
+      <p>
+        rows per page:
+        <a href="#" class="current">10</a> |
+        <a href="#">25</a> |
+        <a href="#">50</a> |
+        <a href="#">100</a>
+      </p>
     </div>
-  <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>
-</div>
-{% endblock page_header %}
-
-{% block content %}
-<table id="records-table" class="tablesorter">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Type</th>
-      <th>Publication status</th>
-      <th>Updated</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for result in object_list %}
-    <tr>
-      <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
-      <td>{{ result.entity_type }}</td>
-      <td>QAZ</td>
-      <td>{{ result.modified }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<div id="entities-pager" class="pager">
-  <div class="page-size">
-    <p>
-      rows per page:
-      <a href="#" class="current">10</a> |
-      <a href="#">25</a> |
-      <a href="#">50</a> |
-      <a href="#">100</a>
-    </p>
+    <div class="page-list">
+      <button class="first"><i class="fal fa-step-backward"></i></button>
+      <button class="prev"><i class="fal fa-caret-left"></i></button>
+      <span class="pagecount"></span>
+      <button class="next"><i class="fal fa-caret-right"></i></button>
+      <button class="last"><i class="fal fa-step-forward"></i></button>
+    </div>
   </div>
-  <div class="page-list">
-    <button class="first"><i class="fal fa-step-backward"></i></button>
-    <button class="prev"><i class="fal fa-caret-left"></i></button>
-    <span class="pagecount"></span>
-    <button class="next"><i class="fal fa-caret-right"></i></button>
-    <button class="last"><i class="fal fa-step-forward"></i></button>
-  </div>
-</div>
-{% endblock content %}
+  {% endblock content %}
+</main>
+{% endblock main %}

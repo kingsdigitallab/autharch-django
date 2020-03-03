@@ -1,34 +1,37 @@
 {% extends "./base.html" %}
 {% load editor_form_tags %}
-
-{% block content %}
-<div class="form-page">
-    <h1>Create new user</h1>
-    <form action="." method="post">
-      <div class="two-column-table">
-        <div>
-          {% csrf_token %}
-          {% render_field user_form.username %}
-          {% render_field user_form.first_name %}
-          {% render_field user_form.last_name %}
+{% block main %}
+<main>
+  {% block content %}
+  <div class="form-page">
+      <h1>Create new user</h1>
+      <form action="." method="post">
+        <div class="two-column-table">
+          <div>
+            {% csrf_token %}
+            {% render_field user_form.username %}
+            {% render_field user_form.first_name %}
+            {% render_field user_form.last_name %}
+          </div>
+          <div>
+            {% render_field user_form.email %}
+            {% render_field profile_form.role %}
+          </div>
+        </div>
+        <br>
+        <div class="two-column-table">
+          <div>
+            {% render_field user_form.password1 %}
+          </div>
+          <div>
+            {% render_field user_form.password2 %}
+          </div>
         </div>
         <div>
-          {% render_field user_form.email %}
-          {% render_field profile_form.role %}
+          <input type="submit" value="Create new user" class="save"/>
         </div>
-      </div>
-      <br>
-      <div class="two-column-table">
-        <div>
-          {% render_field user_form.password1 %}
-        </div>
-        <div>
-          {% render_field user_form.password2 %}
-        </div>
-      </div>
-      <div>
-        <input type="submit" value="Create new user" class="save"/>
-      </div>
-    </form>
-</div>
-{% endblock content %}
+      </form>
+  </div>
+  {% endblock content %}
+</main>
+{% endblock main %}

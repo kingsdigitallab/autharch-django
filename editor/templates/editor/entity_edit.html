@@ -1,167 +1,170 @@
 {% extends "./base.html" %}
 {% load editor_form_tags %}
-
-{% block page_header %}
-<div id="page-header" class="header-fixed">
-  <div id="status-bar">
-    <ul>
-      <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
-      <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li>
-      <li>Last edited: <span class="highlight">{{ last_revision.user }}</span></li>
-      <li><span class="highlight">{{ last_revision.date_created }}</span></li>
-    </ul>
-    <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
-      <i class="far fa-clock"></i>
-      <span class="dotted-underline">History</span>
-    </a>
-  </div>
-  <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
-  <input type="submit" value="Save" form="record-form" class="save"/>
-  <a href="{% url 'editor:entity-create' %}" class="create" title="Create new entity"><i class="fas fa-plus"></i></a>
-</div>
-{% endblock page_header %}
-
-{% block content %}
-<div id="form-header">
-  <div id="breadcrumbs">
-    <ul>
-      <li><a href="{% url 'editor:home' %}">HOME</a></li>
-      <li><a href="{% url 'editor:entities-list' %}" class="dotted-underline">ENTITIES</a></li>
-      <li>{{ entity|truncatewords:30 }}</li>
-    </ul>
-  </div>
-
-  {% if form.errors %}
-  <div class="error-notification">
-    {% for field, error in form.errors.items %}
-    <h3>{{ field }}</h3>
-    <p>{{ error }}</p>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <h1>{{ entity }}</h1>
-  <h2>{{ entity.entity_type }}</h2>
-</div>
-<form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
-  {% csrf_token %}
-  <div class="flex">
-    {% render_field form.entity_type %}
-  </div>
-  <div class="flex">
-    {% render_field form.date_from %}
-    {% render_field form.date_to %}
-    {% render_field form.display_date %}
-  </div>
-  <div class="form-section formset">
-    {% with identities=form.formsets.identities %}
-    <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }}) 
-      <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon" onclick="toggleHelpText(this)">&#xf059;</span></h2>
-    <div class="management_form">
-      {{ identities.management_form }}
+{% block main %}
+<main>
+  {% block page_header %}
+  <div id="page-header" class="header-fixed">
+    <div id="status-bar">
+      <ul>
+        <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
+        <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li>
+        <li>Last edited: <span class="highlight">{{ last_revision.user }}</span></li>
+        <li><span class="highlight">{{ last_revision.date_created }}</span></li>
+      </ul>
+      <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
+        <i class="far fa-clock"></i>
+        <span class="dotted-underline">History</span>
+      </a>
     </div>
-    <div class="fieldsets">
-      {% for identity in identities.forms %}
-      {% include "./includes/identity_inline_form.html" with form=identity %}
+    <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
+    <input type="submit" value="Save" form="record-form" class="save"/>
+    <a href="{% url 'editor:entity-create' %}" class="create" title="Create new entity"><i class="fas fa-plus"></i></a>
+  </div>
+  {% endblock page_header %}
+
+  {% block content %}
+  <div id="form-header">
+    <div id="breadcrumbs">
+      <ul>
+        <li><a href="{% url 'editor:home' %}">HOME</a></li>
+        <li><a href="{% url 'editor:entities-list' %}" class="dotted-underline">ENTITIES</a></li>
+        <li>{{ entity|truncatewords:30 }}</li>
+      </ul>
+    </div>
+
+    {% if form.errors %}
+    <div class="error-notification">
+      {% for field, error in form.errors.items %}
+      <h3>{{ field }}</h3>
+      <p>{{ error }}</p>
       {% endfor %}
     </div>
-    {% endwith %}
-    <label class="create linked-button">
-      <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('identity', this)">Add identity
-    </label>
+    {% endif %}
+
+    <h1>{{ entity }}</h1>
+    <h2>{{ entity.entity_type }}</h2>
   </div>
-  <div class="form-section formset">
-    {% with sources=form.formsets.control.forms.0.formsets.sources %}
-    <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) 
-      <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
-    <div class="management_form">
-      {{ sources.management_form }}
+  <form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
+    {% csrf_token %}
+    <div class="flex">
+      {% render_field form.entity_type %}
     </div>
-    <div class="fieldsets">
-      {% for source in sources.forms %}
-      {% include "./includes/source_inline_form.html" with form=source %}
+    <div class="flex">
+      {% render_field form.date_from %}
+      {% render_field form.date_to %}
+      {% render_field form.display_date %}
+    </div>
+    <div class="form-section formset">
+      {% with identities=form.formsets.identities %}
+      <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }}) 
+        <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon" onclick="toggleHelpText(this)">&#xf059;</span></h2>
+      <div class="management_form">
+        {{ identities.management_form }}
+      </div>
+      <div class="fieldsets">
+        {% for identity in identities.forms %}
+        {% include "./includes/identity_inline_form.html" with form=identity %}
+        {% endfor %}
+      </div>
+      {% endwith %}
+      <label class="create linked-button">
+        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('identity', this)">Add identity
+      </label>
+    </div>
+    <div class="form-section formset">
+      {% with sources=form.formsets.control.forms.0.formsets.sources %}
+      <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) 
+        <span role="button" aria-label="additional info" data-content-type="sources" class="icon-only additional-info-icon">&#xf059;</span></h2>
+      <div class="management_form">
+        {{ sources.management_form }}
+      </div>
+      <div class="fieldsets">
+        {% for source in sources.forms %}
+        {% include "./includes/source_inline_form.html" with form=source %}
+        {% endfor %}
+      </div>
+      {% endwith %}
+      <label class="create linked-button">
+        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('source', this)">Add source
+      </label>
+    </div>
+    <div class="form-section">
+      <h2>CONTROL 
+        <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
+      {{ form.formsets.control.management_form }}
+      {% for control in form.formsets.control.forms %}
+      <fieldset id="control">
+        <div class="fieldset-header">
+          <h3>Record ID: {{ entity.id }}</h3>
+          <div>
+            <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              {% render_field control.language %}
+              {% render_field control.rights_declaration_citation %}
+            </div>
+            <div>
+              {% render_field control.script %}
+              {% render_field control.rights_declaration_abbreviation %}
+            </div>
+          </div>
+          {% render_field control.rights_declaration %}
+        </div>
+      </fieldset>
       {% endfor %}
     </div>
-    {% endwith %}
-    <label class="create linked-button">
-      <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('source', this)">Add source
-    </label>
-  </div>
-  <div class="form-section">
-    <h2>CONTROL 
-      <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span></h2>
-    {{ form.formsets.control.management_form }}
-    {% for control in form.formsets.control.forms %}
-    <fieldset id="control">
-      <div class="fieldset-header">
-        <h3>Record ID: {{ entity.id }}</h3>
-        <div>
-          <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
+    <div class="modal" id="log-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Log comments</h2>
+          <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
         </div>
-      </div>
-      <div class="fieldset-body expand">
-        <div class="two-column-table">
-          <div>
-            {% render_field control.language %}
-            {% render_field control.rights_declaration_citation %}
+        <div class="modal-body">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.formsets.control.forms.0.publication_status %}
+              QAZ Editing event type
+            </div>
+            <div>
+              {% render_field form.formsets.control.forms.0.maintenance_status %}
+            </div>
           </div>
-          <div>
-            {% render_field control.script %}
-            {% render_field control.rights_declaration_abbreviation %}
-          </div>
+          {% render_field log_form.comment %}
         </div>
-        {% render_field control.rights_declaration %}
-      </div>
-    </fieldset>
-    {% endfor %}
-  </div>
-  <div class="modal" id="log-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Log comments</h2>
-        <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
-      </div>
-      <div class="modal-body">
-        <div class="two-column-table">
-          <div>
-            {% render_field form.formsets.control.forms.0.publication_status %}
-            QAZ Editing event type
-          </div>
-          <div>
-            {% render_field form.formsets.control.forms.0.maintenance_status %}
-          </div>
+        <div class="modal-footer">
+          <input type="submit" value="Save" class="save modal-submit" />
         </div>
-        {% render_field log_form.comment %}
-      </div>
-      <div class="modal-footer">
-        <input type="submit" value="Save" class="save modal-submit" />
       </div>
     </div>
+  </form>
+  {% include "./includes/delete_modal.html" with delete_url=delete_url %}
+  <div id="empty_forms" style="display: none;">
+    {% comment %}Include an empty form for each sub-form on the page, to
+    allow for JS creation of new forms, rather than supplying a set
+    number of extra forms server-side.{% endcomment %}
+    {% with identity_form=form.formsets.identities.empty_form %}
+    {% include "./includes/identity_inline_form.html" with form=identity_form %}
+    {% include "./includes/name_entry_inline_form.html" with form=identity_form.formsets.name_entries.empty_form %}
+    {% include "./includes/name_part_inline_form.html" with form=identity_form.formsets.name_entries.empty_form.formsets.name_parts.empty_form %}
+    {% with description_form=identity_form.formsets.descriptions.empty_form %}
+    {% include "./includes/description_inline_form.html" with form=description_form %}
+    {% include "./includes/local_description_inline_form.html" with form=description_form.formsets.local_descriptions.empty_form %}
+    {% include "./includes/biography_history_inline_form.html" with form=description_form.formsets.biography_histories.empty_form %}
+    {% include "./includes/event_inline_form.html" with form=description_form.formsets.events.empty_form %}
+    {% include "./includes/function_inline_form.html" with form=description_form.formsets.functions.empty_form %}
+    {% include "./includes/language_script_inline_form.html" with form=description_form.formsets.language_scripts.empty_form %}
+    {% include "./includes/place_inline_form.html" with form=description_form.formsets.places.empty_form %}
+    {% include "./includes/mandate_inline_form.html" with form=description_form.formsets.mandates.empty_form %}
+    {% include "./includes/legal_status_inline_form.html" with form=description_form.formsets.legal_statuses.empty_form %}
+    {% endwith %}
+    {% include "./includes/relation_inline_form.html" with form=identity_form.formsets.relations.empty_form %}
+    {% include "./includes/resource_inline_form.html" with form=identity_form.formsets.resources.empty_form %}
+    {% include "./includes/source_inline_form.html" with form=form.formsets.control.forms.0.formsets.sources.empty_form %}
+    {% endwith %}
   </div>
-</form>
-{% include "./includes/delete_modal.html" with delete_url=delete_url %}
-<div id="empty_forms" style="display: none;">
-  {% comment %}Include an empty form for each sub-form on the page, to
-  allow for JS creation of new forms, rather than supplying a set
-  number of extra forms server-side.{% endcomment %}
-  {% with identity_form=form.formsets.identities.empty_form %}
-  {% include "./includes/identity_inline_form.html" with form=identity_form %}
-  {% include "./includes/name_entry_inline_form.html" with form=identity_form.formsets.name_entries.empty_form %}
-  {% include "./includes/name_part_inline_form.html" with form=identity_form.formsets.name_entries.empty_form.formsets.name_parts.empty_form %}
-  {% with description_form=identity_form.formsets.descriptions.empty_form %}
-  {% include "./includes/description_inline_form.html" with form=description_form %}
-  {% include "./includes/local_description_inline_form.html" with form=description_form.formsets.local_descriptions.empty_form %}
-  {% include "./includes/biography_history_inline_form.html" with form=description_form.formsets.biography_histories.empty_form %}
-  {% include "./includes/event_inline_form.html" with form=description_form.formsets.events.empty_form %}
-  {% include "./includes/function_inline_form.html" with form=description_form.formsets.functions.empty_form %}
-  {% include "./includes/language_script_inline_form.html" with form=description_form.formsets.language_scripts.empty_form %}
-  {% include "./includes/place_inline_form.html" with form=description_form.formsets.places.empty_form %}
-  {% include "./includes/mandate_inline_form.html" with form=description_form.formsets.mandates.empty_form %}
-  {% include "./includes/legal_status_inline_form.html" with form=description_form.formsets.legal_statuses.empty_form %}
-  {% endwith %}
-  {% include "./includes/relation_inline_form.html" with form=identity_form.formsets.relations.empty_form %}
-  {% include "./includes/resource_inline_form.html" with form=identity_form.formsets.resources.empty_form %}
-  {% include "./includes/source_inline_form.html" with form=form.formsets.control.forms.0.formsets.sources.empty_form %}
-  {% endwith %}
-</div>
-{% endblock content %}
+  {% endblock content %}
+</main>
+{% endblock main %}

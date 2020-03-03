@@ -1,117 +1,120 @@
 {% extends "./base.html" %}
 {% load editor_form_tags %}
-
-{% block page_header %}
-<div id="page-header">
-  <h1>Account control panel</h1>
-</div>
-{% endblock page_header %}
-
-{% block content %}
-<p>Permission level: <span class="highlight">{{ user.editor_profile.get_role_display }}</span></p>
-<div class="user-control">
-  <div id="user-details">
-    <h2>Personal details</h2>
-    <form action="." method="post" class="two-column-table">
-      {% csrf_token %}
-      <div>
-        {% render_field user_form.first_name %}
-        {% render_field user_form.email %}
-      </div>
-      <div>
-        {% render_field user_form.last_name %}
-        {% render_field user_form.username %}
-      </div>
-      <input name="user_submit" type="submit" class="save" value="Save" />
-    </form>
+{% block main %}
+<main>
+  {% block page_header %}
+  <div id="page-header">
+    <h1>Account control panel</h1>
   </div>
-  <div id="change-password">
-      <h2>Change password</h2>
+  {% endblock page_header %}
+
+  {% block content %}
+  <p>Permission level: <span class="highlight">{{ user.editor_profile.get_role_display }}</span></p>
+  <div class="user-control">
+    <div id="user-details">
+      <h2>Personal details</h2>
       <form action="." method="post" class="two-column-table">
         {% csrf_token %}
-        {% if password_form.errors %}
-        <div class="error-notification">
-          {{ password_form.errors }}
-        </div>
-        {% endif %}
         <div>
-          {% render_field password_form.old_password %}
-        </div>
-        <div></div>
-        <div>
-          {% render_field password_form.new_password1 %}
+          {% render_field user_form.first_name %}
+          {% render_field user_form.email %}
         </div>
         <div>
-          {% render_field password_form.new_password2 %}
+          {% render_field user_form.last_name %}
+          {% render_field user_form.username %}
         </div>
-        <input name="password_submit" type="submit" class="save" value="Save" />
+        <input name="user_submit" type="submit" class="save" value="Save" />
       </form>
+    </div>
+    <div id="change-password">
+        <h2>Change password</h2>
+        <form action="." method="post" class="two-column-table">
+          {% csrf_token %}
+          {% if password_form.errors %}
+          <div class="error-notification">
+            {{ password_form.errors }}
+          </div>
+          {% endif %}
+          <div>
+            {% render_field password_form.old_password %}
+          </div>
+          <div></div>
+          <div>
+            {% render_field password_form.new_password1 %}
+          </div>
+          <div>
+            {% render_field password_form.new_password2 %}
+          </div>
+          <input name="password_submit" type="submit" class="save" value="Save" />
+        </form>
+    </div>
   </div>
-</div>
 
-{% if all_users_formset %}
-<div class="admin">
-  <h2>Admin table</h2>
+  {% if all_users_formset %}
+  <div class="admin">
+    <h2>Admin table</h2>
 
-  {% for error_dict in all_users_formset.errors %}
-  {% for key, msgs in error_dict.items %}
-  {% if key == "__all__" %}
-  <ul>
-    {% for msg in msgs %}
-    <li>{{ msg }}</li>
+    {% for error_dict in all_users_formset.errors %}
+    {% for key, msgs in error_dict.items %}
+    {% if key == "__all__" %}
+    <ul>
+      {% for msg in msgs %}
+      <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
     {% endfor %}
-  </ul>
-  {% endif %}
-  {% endfor %}
-  {% endfor %}
+    {% endfor %}
 
-  <form action="." method="post">
-    {% csrf_token %}
-    {{ all_users_formset.management_form }}
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th scope="col">Username</th>
-          <th scope="col">First name</th>
-          <th scope="col">Last name</th>
-          <th scope="col">Email address</th>
-          <th scope="col">Permission level</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for form in all_users_formset %}
-        <tr data-form-type="user">
-          <td>
-            <span class="delete-form-field none">{{ form.DELETE.as_widget }}</span>
-            {% render_field form.id %}
-            {{ form.username }}{{ form.username.errors }}
-          </td>
-          <td>{{ form.first_name }}{{ form.first_name.errors }}</td>
-          <td>{{ form.last_name }}{{ form.last_name.errors }}</td>
-          <td>{{ form.email }}{{ form.email.errors }}</td>
-          <td>
-            {% with profile=form.formsets.editor_profile %}
-            {{ profile.management_form }}
-            {% render_field profile.forms.0.id %}
-            {{ profile.forms.0.role }}
-            {% endwith %}
-          </td>
-          <td class="button-cell">
-            <input type="checkbox" id="delete-user-{{ forloop.counter0 }}" class="none"/>
-            <label for="delete-user-{{ forloop.counter0 }}" class="delete-user" onclick="deleteRow(this)">
-              <span hidden>Delete user</span>
-            </label>
-            <!-- <button aria-label="delete user" class="button-link danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i>Delete user</button> -->
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <a href="{% url 'editor:user-create' %}" aria-label="add user" class="create linked-button"><i class="fal fa-plus"></i>Add user</a>
-    <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
-  </form>
-</div>
-{% endif %}
-{% endblock content %}
+    <form action="." method="post">
+      {% csrf_token %}
+      {{ all_users_formset.management_form }}
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col">Email address</th>
+            <th scope="col">Permission level</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for form in all_users_formset %}
+          <tr data-form-type="user">
+            <td>
+              <span class="delete-form-field none">{{ form.DELETE.as_widget }}</span>
+              {% render_field form.id %}
+              {{ form.username }}{{ form.username.errors }}
+            </td>
+            <td>{{ form.first_name }}{{ form.first_name.errors }}</td>
+            <td>{{ form.last_name }}{{ form.last_name.errors }}</td>
+            <td>{{ form.email }}{{ form.email.errors }}</td>
+            <td>
+              {% with profile=form.formsets.editor_profile %}
+              {{ profile.management_form }}
+              {% render_field profile.forms.0.id %}
+              {{ profile.forms.0.role }}
+              {% endwith %}
+            </td>
+            <td class="button-cell">
+              <input type="checkbox" id="delete-user-{{ forloop.counter0 }}" class="none"/>
+              <label for="delete-user-{{ forloop.counter0 }}" class="delete-user" onclick="deleteRow(this)">
+                <span hidden>Delete user</span>
+              </label>
+              <!-- <button aria-label="delete user" class="button-link danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i>Delete user</button> -->
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a href="{% url 'editor:user-create' %}" aria-label="add user" class="create linked-button"><i class="fal fa-plus"></i>Add user</a>
+      <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
+    </form>
+  </div>
+  {% endif %}
+  {% endblock content %}
+</main>
+{% endblock main %}

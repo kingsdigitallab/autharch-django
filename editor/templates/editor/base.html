@@ -52,14 +52,12 @@
       </div>
     </header>
     {% endblock %}
-    <main>
-      {% block main %}
-      {% block page_header %}
-      {% endblock page_header %}
-      {% block content %}
-      {% endblock content %}
-      {% endblock main %}
-    </main>
+    {% block main %}
+    {% block page_header %}
+    {% endblock page_header %}
+    {% block content %}
+    {% endblock content %}
+    {% endblock main %}
     {% block end_js %}
     <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery.richtext.min.js' %}"></script>

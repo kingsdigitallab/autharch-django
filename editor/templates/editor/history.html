@@ -1,40 +1,43 @@
 {% extends "./base.html" %}
+{% block main %}
+<main>
+  {% block content %}
+  <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ item|truncatewords:15 }}</span></a>
 
-{% block content %}
-<a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ item|truncatewords:15 }}</span></a>
+  <h1><span class="highlight">Change history:</span> {{ item|truncatewords:15 }}</h1>
 
-<h1><span class="highlight">Change history:</span> {{ item|truncatewords:15 }}</h1>
-
-<form action="{% url 'editor:revert' %}" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="redirect_url" value="{{ edit_url }}"/>
-  <table>
-    <thead>
-      <tr>
-        <th>Last edited</th>
-        <th>User</th>
-        <th>Status</th>
-        <th>Logged comment</th>
-        <th>Changes</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for version in versions %}
-      <tr>
-        {% with revision=version.revision %}
-        <td>{{ revision.date_created }}</td>
-        <td>{{ revision.user }}</td>
-        <td>Publication status: QAZ<br>
-          Maintenance status: QAZ<br>
-          Editing event type: QAZ</td>
-        <td class="wide">{{ revision.comment }}</td>
-        <td class="wide">QAZ</td>
-        <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Reset</button></td>
-        {% endwith %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</form>
-{% endblock content %}
+  <form action="{% url 'editor:revert' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="redirect_url" value="{{ edit_url }}"/>
+    <table>
+      <thead>
+        <tr>
+          <th>Last edited</th>
+          <th>User</th>
+          <th>Status</th>
+          <th>Logged comment</th>
+          <th>Changes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for version in versions %}
+        <tr>
+          {% with revision=version.revision %}
+          <td>{{ revision.date_created }}</td>
+          <td>{{ revision.user }}</td>
+          <td>Publication status: QAZ<br>
+            Maintenance status: QAZ<br>
+            Editing event type: QAZ</td>
+          <td class="wide">{{ revision.comment }}</td>
+          <td class="wide">QAZ</td>
+          <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Reset</button></td>
+          {% endwith %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+  {% endblock content %}
+</main>
+{% endblock main %}
