@@ -45,7 +45,9 @@
             {% render_field form.script %}
           </div>
         </div>
-        {% include "./date_section.html" with form=name_entry only %}
+        <div data-label-type="name-used">
+          {% include "./date_section.html" with form=name_entry only %}
+        </div>
       </div>
     </div>
   </div>

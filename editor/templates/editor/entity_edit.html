@@ -46,14 +46,9 @@
   </div>
   <form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
     {% csrf_token %}
-    <div class="flex">
+    <!-- <div class="flex">
       {% render_field form.entity_type %}
-    </div>
-    <div class="flex">
-      {% render_field form.date_from %}
-      {% render_field form.date_to %}
-      {% render_field form.display_date %}
-    </div>
+    </div> -->
     <div class="form-section formset">
       {% with identities=form.formsets.identities %}
       <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }}) 
