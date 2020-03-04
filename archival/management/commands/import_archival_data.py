@@ -244,7 +244,8 @@ class Command(BaseCommand):
             ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
             ps, _ = PublicationStatus.objects.get_or_create(title='published')
             c = Control(entity=entity, maintenance_status=ms,
-                        publication_status=ps)
+                        publication_status=ps, language=self.language,
+                        script=self.script)
             c.save()
 
         return entity
