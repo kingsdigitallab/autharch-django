@@ -1,7 +1,7 @@
 {% load editor_form_tags %}
 <fieldset data-form-type="resource">
   <div class="fieldset-header">
-    <h3>{{ form.instance.relation_type|default:"" }}</h3>
+    <h4>{{ form.instance.relation_type|default:"" }}</h4>
     <div class="flex">
       <div>
         {% include "./delete_inline_button.html" %}

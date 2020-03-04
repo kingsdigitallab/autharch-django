@@ -24,7 +24,7 @@ $fontawesome: 'Font Awesome 5 Pro';
 }
 
 @mixin button($button-color) {
-    height: 40px;
+    // height: 40px;
     box-sizing: border-box;
     background-color: $button-color;
     line-height: 1.4em;
@@ -171,11 +171,12 @@ input[type=submit], .save {
     .search-button {
         position: absolute;
         background: none;
-    	top: 0px;
+    	top: -1px;
     	right: 0px;
 		color: $primary;
 		font-family: $fontawesome;
-		font-weight: 600;
+        font-weight: 600;
+        font-size: 15px;
 	}
 }
 
@@ -333,25 +334,26 @@ h2, h3, h4 {
 }
 
 h1 {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 500;
     color: $primary;
     line-height: 1.1em;
 }
 
 h2 {
-    font-size: 18px;
-    color: $primary;
+    font-size: 16px;
+    // color: $primary;
     margin-top: 0px;
     margin-bottom: 15px;
 }
 
 h3 {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 h4 {
     font-size: 14px;
+    font-weight: 500;
 }
 
 p {
@@ -505,9 +507,12 @@ main {
     .home {
         h2 {
             margin: 0em 0em 1em 0em;
+            &:not(:first-of-type) {
+                margin: 3em 0em 1em 0em;
+            }
         }
-        .pager:first-of-type {
-            margin-bottom: 6em;
+        .pager {
+            margin-bottom: 3em;
         }
     }
 
@@ -1098,7 +1103,7 @@ main {
                         margin-bottom: 0px !important;
                         height: 100%;
                     }
-                    h3 {
+                    h4 {
                         padding: 5px 0px;
                         margin: 0px;
                     }

@@ -50,7 +50,7 @@
       <div class="form-section">
         <fieldset id="side-by-side">
           <div class="fieldset-header">
-            <h3>Transcription</h3>
+            <h4>Transcription</h4>
             <div>
               <a class="toggle-tab-button" onclick="toggleTab(this)"></a>
             </div>
@@ -83,7 +83,7 @@
             {% csrf_token %}
             {% render_field form.uuid %}
             {% render_field form.project %}
-            <h3>{{ record.repository }}</h3>
+            <h4>{{ record.repository }}</h4>
             <div>
               <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
             </div>
@@ -124,7 +124,7 @@
         <h2>DESCRIPTION</h2>
         <fieldset id="description">
           <div class="fieldset-header">
-            <h3>{{ record.title }}</h3>
+            <h4>{{ record.title }}</h4>
             <div>
               <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
             </div>
@@ -178,7 +178,7 @@
 
         <fieldset>
           <div class="fieldset-header">
-            <h3>{{ record.withheld }} | {{ record.copyright_status }}</h3>
+            <h4>{{ record.withheld }} | {{ record.copyright_status }}</h4>
 
             <div>
               <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
@@ -204,7 +204,7 @@
 
         <fieldset>
           <div class="fieldset-header">
-            <h3>Record ID: {{ record.pk }}</h3>
+            <h4>Record ID: {{ record.pk }}</h4>
             <div>
               <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
             </div>

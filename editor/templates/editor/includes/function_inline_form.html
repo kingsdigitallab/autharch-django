@@ -1,7 +1,7 @@
 {% load editor_form_tags %}
 <fieldset data-form-type="function">
   <div class="fieldset-header">
-    <h3>{{ form.function.value|default:""|truncatewords:10 }}</h3>
+    <h4>{{ form.function.value|default:""|truncatewords:10 }}</h4>
     <div class="flex">
       <div>
         {% include "./delete_inline_button.html" %}

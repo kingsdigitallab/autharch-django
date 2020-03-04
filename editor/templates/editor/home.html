@@ -18,7 +18,7 @@
   {% block content %}
   <div class="home">
     {% if query %}
-    <h2>Search results</h2>
+    <h2>{{ object_list.count }} search results for "{{ query }}"</h2>
 
     <table class="tablesorter" id="search-results-table">
       <thead>
@@ -48,80 +48,39 @@
         {% endfor %}
       </tbody>
     </table>
-    <div id="search-results-pager" class="pager">
-      <div class="page-size">
-        <p>
-          rows per page:
-          <a href="#" class="current">10</a> |
-          <a href="#">25</a> |
-          <a href="#">50</a> |
-          <a href="#">100</a>
-        </p>
+    {% if object_list.count > 10 %}
+      <div id="search-results-pager" class="pager">
+        <div class="page-size">
+          <p>
+            rows per page:
+            <a href="#" class="current">10</a>
+            {% if object_list.count > 25 %}
+            | <a href="#">25</a>
+            {% if object_list.count > 50 %}
+            | <a href="#">50</a>
+              {% if object_list.count > 100 %}
+              |  <a href="#">100</a>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+          </p>
+        </div>
+        <div class="page-list">
+          <button class="first"><i class="fal fa-step-backward"></i></button>
+          <button class="prev"><i class="fal fa-caret-left"></i></button>
+          <span class="pagecount"></span>
+          <button class="next"><i class="fal fa-caret-right"></i></button>
+          <button class="last"><i class="fal fa-step-forward"></i></button>
+        </div>
       </div>
-      <div class="page-list">
-        <button class="first"><i class="fal fa-step-backward"></i></button>
-        <button class="prev"><i class="fal fa-caret-left"></i></button>
-        <span class="pagecount"></span>
-        <button class="next"><i class="fal fa-caret-right"></i></button>
-        <button class="last"><i class="fal fa-step-forward"></i></button>
-      </div>
-    </div>
     {% endif %}
 
+    <!-- if not search results page -->
+    {% else %}
     <h2>Recently modified by me</h2>
-    <table id="modified-table" class="tablesorter">
-      <thead>
-        <tr>
-          <th scope="col">Title</th>
-          <th scope="col">Record type</th>
-          <th scope="col">Type/level</th>
-          <th scope="col">Publication status</th>
-          <th scope="col">Updated</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for record in recently_modified_records %}
-        <tr>
-          <td><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
-          <td>Archival Record</td>
-          <td>{{ record.archival_level }}</td>
-          <td>{{ record.publication_status }}</td>
-          <td>QAZ</td>
-        </tr>
-        {% endfor %}
-        {% for entity in recently_modified_entities %}
-        <tr>
-          <td><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
-          <td>Entity</td>
-          <td>{{ entity.entity_type }}</td>
-          <td>{{ entity.control.publication_status }}</td>
-          <td>{{ entity.modified }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div id="modified-pager" class="pager">
-      <div class="page-size">
-        <p>
-          rows per page:
-          <a href="#" class="current">10</a> |
-          <a href="#">25</a> |
-          <a href="#">50</a> |
-          <a href="#">100</a>
-        </p>
-      </div>
-      <div class="page-list">
-        <button class="first"><i class="fal fa-step-backward"></i></button>
-        <button class="prev"><i class="fal fa-caret-left"></i></button>
-        <span class="pagecount"></span>
-        <button class="next"><i class="fal fa-caret-right"></i></button>
-        <button class="last"><i class="fal fa-step-forward"></i></button>
-      </div>
-    </div>
-    {% if unpublished_records is not None %}
-    <!-- should be available for moderators and admins. Moderators should be able to approve the records for publication and admins should be able to publish them. -->
-    <h2>Records for publication</h2>
-    <table id="publication-table" class="tablesorter">
+    <!-- display table if there are any recently modified records -->
+    {% if recently_modified_entities or recently_modified_records %}
+      <table id="modified-table" class="tablesorter">
         <thead>
           <tr>
             <th scope="col">Title</th>
@@ -132,8 +91,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- TODO: add pagination and limit to 5 records per page -->
-          {% for record in unpublished_records %}
+          {% for record in recently_modified_records %}
           <tr>
             <td><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
             <td>Archival Record</td>
@@ -142,7 +100,7 @@
             <td>QAZ</td>
           </tr>
           {% endfor %}
-          {% for entity in unpublished_entities %}
+          {% for entity in recently_modified_entities %}
           <tr>
             <td><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
             <td>Entity</td>
@@ -152,26 +110,101 @@
           </tr>
           {% endfor %}
         </tbody>
-    </table>
-    <div id="publication-pager" class="pager">
-      <div class="page-size">
-        <p>
-          rows per page:
-          <a href="#" class="current">10</a> |
-          <a href="#">25</a> |
-          <a href="#">50</a> |
-          <a href="#">100</a>
-        </p>
-      </div>
-      <div class="page-list">
-        <button class="first"><i class="fal fa-step-backward"></i></button>
-        <button class="prev"><i class="fal fa-caret-left"></i></button>
-        <span class="pagecount"></span>
-        <button class="next"><i class="fal fa-caret-right"></i></button>
-        <button class="last"><i class="fal fa-step-forward"></i></button>
-      </div>
-    </div>
+      </table>
+      <!-- if count of records and entities exceeds 10, add pagination -->
+      {% if recently_modified_entities.count|add:recently_modified_records.count > 10 %}
+        <div id="modified-pager" class="pager">
+          <div class="page-size">
+            <p>
+              rows per page:
+              <a href="#" class="current">10</a>
+              {% if recently_modified_entities.count|add:recently_modified_records.count > 25 %}
+                | <a href="#">25</a>
+                {% if recently_modified_entities.count|add:recently_modified_records.count > 50 %}
+                | <a href="#">50</a>
+                  {% if recently_modified_entities.count|add:recently_modified_records.count > 100 %}
+                  | <a href="#">100</a>
+                  {% endif%}
+                {% endif %}
+              {% endif %}
+            </p>
+          </div>
+          <div class="page-list">
+            <button class="first"><i class="fal fa-step-backward"></i></button>
+            <button class="prev"><i class="fal fa-caret-left"></i></button>
+            <span class="pagecount"></span>
+            <button class="next"><i class="fal fa-caret-right"></i></button>
+            <button class="last"><i class="fal fa-step-forward"></i></button>
+          </div>
+        </div>
+      {% endif %}
+      {% else %}
+      <p>You don't have recently modified records</p>
     {% endif %}
+    
+    {% if unpublished_records is not None %}
+    <!-- should be available for moderators and admins. Moderators should be able to approve the records for publication and admins should be able to publish them. -->
+      <h2>Records for publication</h2>
+      <table id="publication-table" class="tablesorter">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Record type</th>
+              <th scope="col">Type/level</th>
+              <th scope="col">Publication status</th>
+              <th scope="col">Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in unpublished_records %}
+            <tr>
+              <td><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
+              <td>Archival Record</td>
+              <td>{{ record.archival_level }}</td>
+              <td>{{ record.publication_status }}</td>
+              <td>QAZ</td>
+            </tr>
+            {% endfor %}
+            {% for entity in unpublished_entities %}
+            <tr>
+              <td><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
+              <td>Entity</td>
+              <td>{{ entity.entity_type }}</td>
+              <td>{{ entity.control.publication_status }}</td>
+              <td>{{ entity.modified }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+      <!-- if count of records and entities exceeds 10, add pagination -->
+      {% if unpublished_entities.count|add:unpublished_records.count > 10 %}
+        <div id="publication-pager" class="pager">
+          <div class="page-size">
+            <p>
+              rows per page:
+              <a href="#" class="current">10</a>
+              {% if unpublished_entities.count|add:unpublished_records.count > 25 %}
+                | <a href="#">25</a>
+                {% if unpublished_entities.count|add:unpublished_records.count > 50 %}
+                | <a href="#">50</a>
+                  {% if unpublished_entities.count|add:unpublished_records.count > 100 %}
+                  | <a href="#">100</a>
+                  {% endif%}
+                {% endif %}
+              {% endif %}
+            </p>
+          </div>
+          <div class="page-list">
+            <button class="first"><i class="fal fa-step-backward"></i></button>
+            <button class="prev"><i class="fal fa-caret-left"></i></button>
+            <span class="pagecount"></span>
+            <button class="next"><i class="fal fa-caret-right"></i></button>
+            <button class="last"><i class="fal fa-step-forward"></i></button>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
   </div>
   {% endblock content %}
 </main>

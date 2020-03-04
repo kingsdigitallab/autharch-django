@@ -1,7 +1,7 @@
 {% load editor_form_tags %}
 <fieldset data-form-type="place">
   <div class="fieldset-header">
-    <h3>{{ form.instance.place|default:"" }}</h3>
+    <h4>{{ form.instance.place|default:"" }}</h4>
     <div class="flex">
       <div>
         {% include "./delete_inline_button.html" %}

@@ -89,10 +89,16 @@
     <div class="page-size">
       <p>
         rows per page:
-        <a href="#" class="current">10</a> |
-        <a href="#">25</a> |
-        <a href="#">50</a> |
-        <a href="#">100</a>
+        <a href="#" class="current">10</a> 
+        {% if object_list.count > 25 %}
+          | <a href="#">25</a>
+          {% if object_list.count > 50 %}
+          | <a href="#">50</a>
+            {% if object_list.count > 100 %}
+            |  <a href="#">100</a>
+            {% endif %}
+          {% endif %}
+        {% endif %}
       </p>
     </div>
     <div class="page-list">
