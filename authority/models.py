@@ -116,6 +116,7 @@ class Entity(TimeStampedModel, DateRangeMixin):
         ps, _ = PublicationStatus.objects.get_or_create(title='inprocess')
         control.maintenance_status = ms
         control.publication_status = ps
+        control.save()
 
         return entity, True
 
