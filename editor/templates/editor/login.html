@@ -1,5 +1,4 @@
 {% extends "./base.html" %}
-{% load static %}
 {% block main %}
 <main class="no-sidebar">
   {% block header %}{% endblock header %}
@@ -22,7 +21,7 @@
         <span class="required">{{ form.password.label }}</span><br>
         {{ form.password }}
       </label>
-      <a href="{% url 'editor:password_reset' %}">Forgot your password?</a>
+      <a href="{% url 'editor:password_reset' %}" class="dotted-underline">Forgot your password?</a>
       <input type="submit" class="save" value="Login" />
     </form>
   </div>
