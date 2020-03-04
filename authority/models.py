@@ -109,6 +109,14 @@ class Entity(TimeStampedModel, DateRangeMixin):
         name_entry.script = script
         name_entry.save()
 
+        control = Control(entity=entity)
+        control.language = language
+        control.script = script
+        ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
+        ps, _ = PublicationStatus.objects.get_or_create(title='inprocess')
+        control.maintenance_status = ms
+        control.publication_status = ps
+
         return entity, True
 
 

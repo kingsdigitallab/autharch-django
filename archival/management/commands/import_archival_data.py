@@ -4,7 +4,7 @@ from django.db import transaction
 import pandas as pd
 
 from archival.models import Collection, File, Item, Reference, Series
-from authority.models import Control, Entity
+from authority.models import Entity
 from django.core.management.base import BaseCommand, CommandError
 from jargon.models import (
     MaintenanceStatus, Publication, PublicationStatus, ReferenceSource,
@@ -240,13 +240,6 @@ class Command(BaseCommand):
 
         entity, _ = Entity.get_or_create_by_display_name(
             name, self.language, self.script)
-        if not hasattr(entity, 'control'):
-            ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
-            ps, _ = PublicationStatus.objects.get_or_create(title='published')
-            c = Control(entity=entity, maintenance_status=ms,
-                        publication_status=ps, language=self.language,
-                        script=self.script)
-            c.save()
 
         return entity
 
