@@ -1,4 +1,5 @@
 {% extends "./base.html" %}
+{% load editor_form_tags %}
 {% block main %}
 <main>
   {% block page_header %}
@@ -21,10 +22,7 @@
                 <fieldset class="filter-list">
                   <legend>Document level</legend>
                   {% for entity_type in facets.fields.entity_type %}
-                    <a href="" class="checkbox-anchor">
-                        <input name="selected_facets" type="checkbox" aria-label="{{ entity_type.0 }}" value=""/>
-                        {{ entity_type.0 }} ({{ entity_type.1 }})
-                    </a>
+                  {% render_facet entity_type %}
                   {% endfor %}
                 </fieldset>
               </div>

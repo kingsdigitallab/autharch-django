@@ -40,6 +40,80 @@ def is_user_editor_plus(user):
         return False
 
 
+class FacetMixin:
+
+    def _create_apply_link(self, value_data, query_dict, facet):
+        """Return a link to apply the facet value in `value_data` and False to
+        indicate that the facet is not selected."""
+        qd = query_dict.copy()
+        value = value_data[0]
+        facets = qd.getlist('selected_facets')
+        new_facet = '{}_exact:{}'.format(facet, value)
+        qd.setlist('selected_facets', facets + [new_facet])
+        link = '?{}'.format(qd.urlencode())
+        return link, False
+
+    def _create_unapply_link(self, value_data, query_dict, facet):
+        """Return a link to apply the facet value in `value_data` and True to
+        indicate that the facet is selected."""
+        qd = query_dict.copy()
+        value = value_data[0]
+        facets = qd.getlist('selected_facets')
+        old_facet = '{}_exact:{}'.format(facet, value)
+        facets.remove(old_facet)
+        qd.setlist('selected_facets', facets)
+        link = qd.urlencode()
+        if link:
+            link = '?{}'.format(link)
+        else:
+            link = '.'
+        return link, True
+
+    def _merge_facets(self, facets, query_dict):
+        """Return the Haystack `facets` annotated with links to apply or
+        unapply the facet values. Data from `query_dict` is used to
+        determine selected facets."""
+        selected_facets = self._split_selected_facets(
+            query_dict.getlist('selected_facets'))
+        for facet, values in facets['fields'].items():
+            # Some facet field values are a model object ID, so get
+            # a display string for them.
+            display_values = None
+            if facet == 'addressees':
+                ids = [value[0] for value in values]
+                display_values = Entity.objects.filter(id__in=ids)
+            elif facet == 'writers':
+                ids = [value[0] for value in values]
+                display_values = Entity.objects.filter(id__in=ids)
+            new_values = []
+            for value_data in values:
+                if value_data[0] in selected_facets.get(facet, []):
+                    link, is_selected = self._create_unapply_link(
+                        value_data, query_dict, facet)
+                else:
+                    link, is_selected = self._create_apply_link(
+                        value_data, query_dict, facet)
+                if display_values is None:
+                    new_values.append((value_data[0], value_data[1], link,
+                                       is_selected))
+                else:
+                    new_values.append(
+                        (str(display_values.get(id=value_data[0])),
+                         value_data[1], link, is_selected))
+            facets['fields'][facet] = new_values
+        return facets
+
+    def _split_selected_facets(self, selected_facets):
+        """Return a dictionary of selected facet values keyed by the facet
+        each belongs to."""
+        split_facets = {}
+        for selected_facet in selected_facets:
+            facet, value = selected_facet.split(':', maxsplit=1)
+            facet = facet[:-len('_exact')]
+            split_facets.setdefault(facet, []).append(value)
+        return split_facets
+
+
 class HomeView(UserPassesTestMixin, SearchView):
 
     template_name = 'editor/home.html'
@@ -85,24 +159,25 @@ class HomeView(UserPassesTestMixin, SearchView):
         return is_user_editor_plus(self.request.user)
 
 
-class EntityListView(UserPassesTestMixin, FacetedSearchView):
+class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/entities_list.html'
-    queryset = SearchQuerySet().models(Entity).facet('entity_type',
-                                                     sort='index')
+    queryset = SearchQuerySet().models(Entity)
     form_class = FacetedSearchForm
     facet_fields = ['entity_type']
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['current_section'] = 'entities'
+        context['facets'] = self._merge_facets(context['facets'],
+                                               self.request.GET.copy())
         return context
 
     def test_func(self):
         return is_user_editor_plus(self.request.user)
 
 
-class RecordListView(UserPassesTestMixin, FacetedSearchView):
+class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series)
@@ -122,34 +197,6 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView):
         context['current_section'] = 'records'
         context['writer_manager'] = Entity.objects
         return context
-
-    def _create_apply_link(self, value_data, query_dict, facet):
-
-        """Return a link to apply the facet value in `value_data` and False to
-        indicate that the facet is not selected."""
-        qd = query_dict.copy()
-        value = value_data[0]
-        facets = qd.getlist('selected_facets')
-        new_facet = '{}_exact:{}'.format(facet, value)
-        qd.setlist('selected_facets', facets + [new_facet])
-        link = '?{}'.format(qd.urlencode())
-        return link, False
-
-    def _create_unapply_link(self, value_data, query_dict, facet):
-        """Return a link to apply the facet value in `value_data` and True to
-        indicate that the facet is selected."""
-        qd = query_dict.copy()
-        value = value_data[0]
-        facets = qd.getlist('selected_facets')
-        old_facet = '{}_exact:{}'.format(facet, value)
-        facets.remove(old_facet)
-        qd.setlist('selected_facets', facets)
-        link = qd.urlencode()
-        if link:
-            link = '?{}'.format(link)
-        else:
-            link = '.'
-        return link, True
 
     def _get_full_facet_queryset(self):
         """Return a queryset with facets that has not yet been reduced by any
@@ -174,50 +221,6 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView):
         dummy_form = self.form_class(**kwargs)
         qs = dummy_form.search()
         return qs.facet_counts()
-
-    def _merge_facets(self, facets, query_dict):
-        """Return the Haystack `facets` annotated with links to apply or
-        unapply the facet values. Data from `query_dict` is used to
-        determine selected facets."""
-        selected_facets = self._split_selected_facets(
-            query_dict.getlist('selected_facets'))
-        for facet, values in facets['fields'].items():
-            # Some facet field values are a model object ID, so get
-            # a display string for them.
-            display_values = None
-            if facet == 'addressees':
-                ids = [value[0] for value in values]
-                display_values = Entity.objects.filter(id__in=ids)
-            elif facet == 'writers':
-                ids = [value[0] for value in values]
-                display_values = Entity.objects.filter(id__in=ids)
-            new_values = []
-            for value_data in values:
-                if value_data[0] in selected_facets.get(facet, []):
-                    link, is_selected = self._create_unapply_link(
-                        value_data, query_dict, facet)
-                else:
-                    link, is_selected = self._create_apply_link(
-                        value_data, query_dict, facet)
-                if display_values is None:
-                    new_values.append((value_data[0], value_data[1], link,
-                                       is_selected))
-                else:
-                    new_values.append(
-                        (str(display_values.get(id=value_data[0])),
-                         value_data[1], link, is_selected))
-            facets['fields'][facet] = new_values
-        return facets
-
-    def _split_selected_facets(self, selected_facets):
-        """Return a dictionary of selected facet values keyed by the facet
-        each belongs to."""
-        split_facets = {}
-        for selected_facet in selected_facets:
-            facet, value = selected_facet.split(':', maxsplit=1)
-            facet = facet[:-len('_exact')]
-            split_facets.setdefault(facet, []).append(value)
-        return split_facets
 
     def test_func(self):
         return is_user_editor_plus(self.request.user)
