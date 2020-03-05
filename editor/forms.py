@@ -281,7 +281,8 @@ class IdentityEditInlineForm(ContainerModelForm):
             data, instance=self.instance, prefix=self.prefix + '-name_entry')
         DescriptionFormset = inlineformset_factory(
             Identity, Description, exclude=[], form=DescriptionEditInlineForm,
-            extra=0, entity_type=self.Meta.entity_type)
+            extra=0, entity_type=self.Meta.entity_type, max_num=1,
+            validate_max=True)
         formsets['descriptions'] = DescriptionFormset(
             data, instance=self.instance, prefix=self.prefix + '-description')
         RelationFormset = forms.models.inlineformset_factory(
