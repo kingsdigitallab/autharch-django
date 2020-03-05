@@ -84,7 +84,7 @@ $(document).ready(function() {
       .tablesorter({
           widgets: ["filter"],
           widgetOptions: {
-              filter_columnFilters: true
+              filter_columnFilters: true,
           }
       })
       .tablesorterPager({

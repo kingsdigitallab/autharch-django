@@ -17,7 +17,6 @@
         <label for="filter" class="filter-button"><span hidden>Filter</span></label>
         <div class="filters-hidden">
           <a href="." class="dotted-underline clear-filters active">Clear filters</a>
-          <form action="." method="get">
               <div>
                 <fieldset class="filter-list">
                   <legend>Document level</legend>
@@ -26,7 +25,6 @@
                   {% endfor %}
                 </fieldset>
               </div>
-            </form>
           </div>
       </div>
     <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>

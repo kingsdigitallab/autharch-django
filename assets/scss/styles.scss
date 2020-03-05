@@ -3,7 +3,7 @@
 $primary: #001e57;
 // $primary-dark: #001A48;
 $save: #6DA036;
-$add: #0791D5;
+$add: #0b87c5;
 $danger: #a10101;
 $background: #FCFCFC;
 $input : #707070;
@@ -140,6 +140,12 @@ button, a, .create, .link, input[type=submit], input[type=button], span[role=but
     }
 }
 
+button, a, input, th {
+    &:focus {
+        outline: 5px auto -webkit-focus-ring-color;
+    }
+}
+
 button, .create, input[type=submit] {
     color: white;
     border: none;
@@ -246,6 +252,7 @@ span[role=button] {
 .current {
     color: $primary;
     text-decoration: underline;
+    font-weight: 500;
 }
 
 .icon-only {
@@ -388,6 +395,11 @@ header {
         width: 100%;
         display: flex;
         align-items: center;
+        a {
+            &:hover, &:focus {
+                background-color: darken($primary, 20%);
+            }
+        }
         img {
             width: 100%;
         }
@@ -418,6 +430,9 @@ header {
                     font-weight: 400;
                     margin: 0;
                 }
+                // &:focus {
+                //     text-decoration: underline;
+                // }
             }
             &.active {
                 color: $primary;
@@ -637,7 +652,7 @@ main {
         input[type=checkbox]:checked + label.filter-button {
             position: fixed; 
             line-height: 1.4em;
-            right: 3.2em;
+            right: 3.3em;
             z-index: 9;
             margin-top:-19px;
             animation: opacityChange 0.7s;
@@ -1318,6 +1333,12 @@ main {
     .pager {
         .page-size {
             text-align: right;
+            a {
+                font-weight: bold;
+                &:hover, &:focus {
+                    text-decoration: underline;
+                }
+            }
         }
         .page-list {
             background-color: white;
