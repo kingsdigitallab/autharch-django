@@ -75,6 +75,7 @@ class FacetMixin:
         determine selected facets."""
         selected_facets = self._split_selected_facets(
             query_dict.getlist('selected_facets'))
+        selected = []
         for facet, values in facets['fields'].items():
             # Some facet field values are a model object ID, so get
             # a display string for them.
@@ -96,11 +97,19 @@ class FacetMixin:
                 if display_values is None:
                     new_values.append((value_data[0], value_data[1], link,
                                        is_selected))
+                    if value_data[0] in selected_facets.get(facet, []):
+                        selected.append((value_data[0], value_data[1], link,
+                                       is_selected))
                 else:
                     new_values.append(
                         (str(display_values.get(id=value_data[0])),
                          value_data[1], link, is_selected))
+                    if value_data[0] in selected_facets.get(facet, []):
+                        selected.append(
+                        (str(display_values.get(id=value_data[0])),
+                         value_data[1], link, is_selected))
             facets['fields'][facet] = new_values
+            facets['selected'] = selected
         return facets
 
     def _split_selected_facets(self, selected_facets):

@@ -62,6 +62,16 @@
   {% endblock page_header %}
 
   {% block content %}
+  {% if facets.selected %}
+    <div class="selected-facets">
+      <h4>Selected filters</h4>
+      {% for selected_facet in facets.selected %}
+        {% render_facet selected_facet %}
+      {% endfor %}  
+      <a href="." class="dotted-underline clear-filters">Clear all filters</a>  
+    </div>
+  {% endif %}
+ 
   <table id="records-list-table" class="tablesorter">
     <thead>
       <tr>
@@ -85,6 +95,7 @@
       {% endfor %}
     </tbody>
   </table>
+  {% if object_list.count > 10 %}
   <div id="records-pager" class="pager">
     <div class="page-size">
       <p>
@@ -109,6 +120,7 @@
       <button class="last"><i class="fal fa-step-forward"></i></button>
     </div>
   </div>
+  {% endif %}
   {% endblock content %}
 </main>
 {% endblock main%}

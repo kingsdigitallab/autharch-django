@@ -130,7 +130,7 @@ $(document).ready(function() {
   }
 
   // change date labels dynamically
-  $('*[data-label-type]').each(function() {
+  $('div[data-label-type]').each(function() {
     var label = $(this).attr("data-label-type");
     var regex = /(date).*$/g;
     $(this).find('label').each(function() {
