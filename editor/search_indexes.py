@@ -56,6 +56,7 @@ class CollectionIndex(indexes.SearchIndex, indexes.Indexable,
     publication_status = indexes.CharField(model_attr='publication_status')
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
+    modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
 
     def get_model(self):
@@ -73,6 +74,7 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     languages = indexes.MultiValueField(faceted=True)
     writers = indexes.MultiValueField(faceted=True)
     writers_display = indexes.CharField()
+    modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
 
     def get_model(self):
@@ -88,6 +90,7 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
+    modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
 
     def get_model(self):
@@ -102,6 +105,7 @@ class SeriesIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     publication_status = indexes.CharField(model_attr='publication_status')
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
+    modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
 
     def get_model(self):
