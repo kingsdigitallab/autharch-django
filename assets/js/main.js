@@ -314,6 +314,13 @@ function deleteRecord(event) {
  */
 function addEmptyForm(formType, context) {
   let jContext = $(context);
+  let managementFormContainer = getManagementFormContainer(jContext);
+  let maxNumControl = managementFormContainer.children("input[name$='MAX_NUM_FORMS']");
+  let totalControl = managementFormContainer.children("input[name$='TOTAL_FORMS']");
+  let newFormPrefixNumber = totalControl.attr("value");
+  if (newFormPrefixNumber >= maxNumControl.attr("value")) {
+    return;
+  }
   // Clone the formType form and add it as the last child of the
   // parent of these forms.
   let formParent = getNewFormParent(jContext);
@@ -326,8 +333,6 @@ function addEmptyForm(formType, context) {
   // of the containing formset's management form (plus the number of
   // this form), which conveniently already has the full prefix
   // hierarchy in it.
-  let totalControl = getManagementFormTotalControl(jContext);
-  let newFormPrefixNumber = totalControl.attr("value");
   let newControls = newForm.find("*[name*='__prefix__']");
   let newFormPrefixName = generateNewFormPrefix(totalControl, "name", newFormPrefixNumber);
   let newFormPrefixId = generateNewFormPrefix(totalControl, "id", newFormPrefixNumber);
@@ -362,18 +367,18 @@ function generateNewFormPrefix(control, attrName, prefixNumber) {
 
 
 /**
- * Return the TOTAL_FORMS form control for the Django formset's
- * management forms associated with the supplied context element.
+ * Return the container for the Django formset's management form
+ * controls associated with the supplied context element.
  *
  * This function is specific to a particular HTML structure, and
  * should be adapted if/when that structure changes.
  *
  * @param {jQuery} context - the element from which to traverse the
- *                           DOM to find the management forms' controls
+ *                           DOM to find the management form's container
  * @returns {jQuery}
  */
-function getManagementFormTotalControl(context) {
-  return context.parents(".formset").first().children("div.management_form").children("input[name$='TOTAL_FORMS']");
+function getManagementFormContainer(context) {
+  return context.parents(".formset").first().children("div.management_form");
 }
 
 
