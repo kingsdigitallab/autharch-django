@@ -95,6 +95,10 @@ class EventEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = Event
+        labels = {
+            'date_from': 'Event date from',
+            'date_to': 'Event date until',
+        }
 
 
 class FunctionEditInlineForm(forms.ModelForm):
@@ -102,6 +106,10 @@ class FunctionEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = Function
+        labels = {
+            'date_from': 'Event date from',
+            'date_to': 'Event date until',
+        }
 
 
 class LanguageScriptEditInlineForm(forms.ModelForm):
@@ -127,6 +135,11 @@ class LocalDescriptionEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = LocalDescription
+        labels = {
+            'date_from': 'Gender used from',
+            'date_to': 'Gender used until',
+            'display_date': 'Display date gender used',
+        }
 
 
 class MandateEditInlineForm(forms.ModelForm):
@@ -267,6 +280,11 @@ class NameEntryEditInlineForm(ContainerModelForm):
     class Meta:
         exclude = []
         model = NameEntry
+        labels = {
+            'date_from': 'Name used from',
+            'date_to': 'Name used until',
+            'display_date': 'Display date name used',
+        }
 
 
 class IdentityEditInlineForm(ContainerModelForm):
@@ -300,6 +318,10 @@ class IdentityEditInlineForm(ContainerModelForm):
     class Meta:
         model = Identity
         exclude = []
+        labels = {
+            'date_from': 'Identity existed from',
+            'date_to': 'Identity existed until',
+        }
 
 
 class ArchivalRecordEditForm(forms.ModelForm):

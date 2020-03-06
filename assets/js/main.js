@@ -1,14 +1,3 @@
-var dateLabels = {
-  "dates-of-existence": {
-    "date_from": "Identity existed from",
-    "date_to": "Identity existed until",
-  },
-  "name-used": {
-    "date_from": "Name used from",
-    "date_to": "Name used until",
-    "date": "Display date name used"
-  },
-}
 $(document).ready(function() {
 
   // Return the text nodes of the context. Code by Mark Baijens from
@@ -128,17 +117,6 @@ $(document).ready(function() {
   } else {
     $('.clear-filters').removeClass('active');
   }
-
-  // change date labels dynamically
-  $('div[data-label-type]').each(function() {
-    var label = $(this).attr("data-label-type");
-    var regex = /(date).*$/g;
-    $(this).find('label').each(function() {
-      var name = $(this).find('input').attr('name');
-      name = name.match(regex);
-      $(this).find('span').first().text(dateLabels[label][name]);
-    });
-  });
 
 });
 
