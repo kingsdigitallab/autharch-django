@@ -9,7 +9,7 @@
     <div id="status-bar">
       <ul>
         <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
-        <li>Maintenance status: <span class="highlight">[QAZ]</span></li>
+        <li>Maintenance status: <span class="highlight">{{ record.maintenance_status }}</span></li>
         <li>Last edited: <span class="highlight">{{ last_revision.user }}</span></li>
         <li><span class="highlight">{{ last_revision.date_created }}</span></li>
       </ul>
@@ -235,10 +235,9 @@
             <div class="two-column-table">
               <div>
                 {% render_field form.publication_status %}
-                QAZ Editing event type
               </div>
               <div>
-                QAZ Maintenance status
+                {% render_field form.maintenance_status %}
               </div>
             </div>
             {% render_field log_form.comment %}
