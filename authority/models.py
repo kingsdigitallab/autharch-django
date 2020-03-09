@@ -60,15 +60,15 @@ class Entity(TimeStampedModel, DateRangeMixin):
         verbose_name_plural = 'Entities'
 
     def __str__(self):
-        try:
-            return self.display_name
-        except AttributeError:
-            return 'Unsaved object'
+        return self.display_name
 
     @property
     def display_name(self):
-        return self.identities.order_by(
-            '-preferred_identity').first().authorised_form.display_name
+        try:
+            return self.identities.order_by(
+                '-preferred_identity').first().authorised_form.display_name
+        except AttributeError:
+            return 'Unnamed object'
 
     def get_all_name_entries(self):
         return NameEntry.objects.filter(identity__entity=self)
