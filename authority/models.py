@@ -49,12 +49,22 @@ class LanguageScriptMixin(models.Model):
         abstract = True
 
 
+class NonDeletedEntityManager(models.Manager):
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+
 @reversion.register()
 class Entity(TimeStampedModel, DateRangeMixin):
     entity_type = models.ForeignKey(EntityType, on_delete=models.CASCADE)
     project = models.ForeignKey(
         'archival.Project', on_delete=models.SET_NULL, blank=True, null=True,
         help_text='Which project does this record belong to?')
+    is_deleted = models.BooleanField(default=False)
+
+    objects = models.Manager()
+    non_deleted_objects = NonDeletedEntityManager()
 
     class Meta:
         verbose_name_plural = 'Entities'

@@ -10,6 +10,7 @@ from jargon.models import (
 from languages_plus.models import Language
 from media.models import Media
 from model_utils.models import TimeStampedModel
+from polymorphic.managers import PolymorphicManager
 from polymorphic.models import PolymorphicModel
 
 from . import constants
@@ -47,6 +48,12 @@ class Organisation(models.Model):
         return self.title
 
 
+class NonDeletedArchivalRecordManager(PolymorphicManager):
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+
 @reversion.register()
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
@@ -56,6 +63,7 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
         help_text='Which project does this record belong to?')
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE,
                                    help_text=constants.REPOSITORY_HELP)
+    is_deleted = models.BooleanField(default=False)
 
     references = models.ManyToManyField(Reference, blank=True,
                                         help_text=constants.REFERENCES_HELP)
@@ -136,6 +144,9 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     sources = models.TextField(blank=True, null=True)
 
     transcription = models.TextField(blank=True)
+
+    objects = PolymorphicManager()
+    non_deleted_objects = NonDeletedArchivalRecordManager()
 
     class Meta:
         ordering = ['title']

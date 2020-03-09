@@ -16,13 +16,15 @@ from reversion.views import create_revision
 
 from archival.models import ArchivalRecord, Collection, Series, File, Item
 from authority.models import Entity
+from jargon.models import (CollaborativeWorkspaceEditorType as CWEditorType,
+                           EditingEventType)
 
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserCreateForm, UserEditForm,
     UserForm, FacetedSearchForm, SearchForm, EditorProfileForm,
     get_archival_record_edit_form_for_subclass
 )
-from .models import EditorProfile
+from .models import EditorProfile, RevisionMetadata
 
 
 def is_user_admin(user):
@@ -99,15 +101,15 @@ class FacetMixin:
                                        is_selected))
                     if value_data[0] in selected_facets.get(facet, []):
                         selected.append((value_data[0], value_data[1], link,
-                                       is_selected))
+                                         is_selected))
                 else:
                     new_values.append(
                         (str(display_values.get(id=value_data[0])),
                          value_data[1], link, is_selected))
                     if value_data[0] in selected_facets.get(facet, []):
                         selected.append(
-                        (str(display_values.get(id=value_data[0])),
-                         value_data[1], link, is_selected))
+                            (str(display_values.get(id=value_data[0])),
+                             value_data[1], link, is_selected))
             facets['fields'][facet] = new_values
             facets['selected'] = selected
         return facets
@@ -159,9 +161,10 @@ class HomeView(UserPassesTestMixin, SearchView):
         records = None
         if user.editor_profile.role == EditorProfile.ADMIN:
             entities = Entity.objects.exclude(
-                control__publication_status__title='published')
+                control__publication_status__title='published').exclude(
+                    is_deleted=True)
             records = ArchivalRecord.objects.exclude(
-                publication_status__title='published')
+                publication_status__title='published').exclude(is_deleted=True)
         return entities, records
 
     def test_func(self):
@@ -279,6 +282,11 @@ def entity_create(request):
     if request.method == 'POST':
         form = EntityCreateForm(request.POST)
         if form.is_valid():
+            reversion.set_comment('Created empty entity.')
+            event_type = EditingEventType.objects.get(title='created')
+            editor_type = CWEditorType.objects.get(title='human')
+            reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                               collaborative_workspace_editor_type=editor_type)
             entity = Entity()
             entity.entity_type = form.cleaned_data['entity_type']
             entity.save()
@@ -292,12 +300,21 @@ def entity_create(request):
     return render(request, 'editor/entity_create.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
 @require_POST
+@user_passes_test(is_user_editor_plus)
+@create_revision()
 def entity_delete(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
+    if entity.is_deleted:
+        return redirect('editor:entity-history', entity_id=entity_id)
     if request.POST.get('DELETE') == 'DELETE':
-        entity.delete()
+        reversion.set_comment('Deleted entity.')
+        event_type = EditingEventType.objects.get(title='deleted')
+        editor_type = CWEditorType.objects.get(title='human')
+        reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                           collaborative_workspace_editor_type=editor_type)
+        entity.is_deleted = True
+        entity.save()
         return redirect('editor:entities-list')
     return redirect('editor:entity-edit', entity_id=entity_id)
 
@@ -306,11 +323,17 @@ def entity_delete(request, entity_id):
 @create_revision()
 def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
+    if entity.is_deleted:
+        return redirect('editor:entity-history', entity_id=entity_id)
     if request.method == 'POST':
         form = EntityEditForm(request.POST, instance=entity)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
             reversion.set_comment(log_form.cleaned_data['comment'])
+            event_type = EditingEventType.objects.get(title='revised')
+            editor_type = CWEditorType.objects.get(title='human')
+            reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                               collaborative_workspace_editor_type=editor_type)
             form.save()
             return redirect('editor:entity-edit', entity_id=entity_id)
     else:
@@ -331,22 +354,34 @@ def entity_edit(request, entity_id):
 @user_passes_test(is_user_editor_plus)
 def entity_history(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
+    control = entity.control
     context = {
         'current_section': 'entities',
         'edit_url': reverse('editor:entity-edit',
                             kwargs={'entity_id': entity_id}),
         'item': entity,
+        'maintenance_status': control.maintenance_status,
+        'publication_status': control.publication_status,
         'versions': Version.objects.get_for_object(entity),
     }
     return render(request, 'editor/history.html', context)
 
 
 @user_passes_test(is_user_editor_plus)
+@create_revision()
 @require_POST
 def record_delete(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
+    if record.is_deleted:
+        return redirect('editor:record-history', record_id=record_id)
     if request.POST.get('DELETE') == 'DELETE':
-        record.delete()
+        reversion.set_comment('Deleted archival record.')
+        event_type = EditingEventType.objects.get(title='deleted')
+        editor_type = CWEditorType.objects.get(title='human')
+        reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                           collaborative_workspace_editor_type=editor_type)
+        record.is_deleted = True
+        record.save()
         return redirect('editor:records-list')
     return redirect('editor:record-edit', record_id=record_id)
 
@@ -355,6 +390,8 @@ def record_delete(request, record_id):
 @create_revision()
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
+    if record.is_deleted:
+        return redirect('editor:record-history', record_id=record_id)
     editor_role = request.user.editor_profile.role
     form_class = get_archival_record_edit_form_for_subclass(record)
     if request.method == 'POST':
@@ -363,6 +400,10 @@ def record_edit(request, record_id):
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
             reversion.set_comment(log_form.cleaned_data['comment'])
+            event_type = EditingEventType.objects.get(title='revised')
+            editor_type = CWEditorType.objects.get(title='human')
+            reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                               collaborative_workspace_editor_type=editor_type)
             form.save()
             return redirect('editor:record-edit', record_id=record_id)
     else:
@@ -389,6 +430,8 @@ def record_history(request, record_id):
         'edit_url': reverse('editor:record-edit',
                             kwargs={'record_id': record_id}),
         'item': record,
+        'maintenance_status': record.maintenance_status,
+        'publication_status': record.publication_status,
         'versions': Version.objects.get_for_object(record),
     }
     return render(request, 'editor/history.html', context)

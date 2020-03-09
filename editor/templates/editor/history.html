@@ -26,9 +26,9 @@
           {% with revision=version.revision %}
           <td>{{ revision.date_created }}</td>
           <td>{{ revision.user }}</td>
-          <td>Publication status: QAZ<br>
-            Maintenance status: QAZ<br>
-            Editing event type: QAZ</td>
+          <td>Publication status: {{ publication_status }}<br>
+            Maintenance status: {{ maintenance_status }}<br>
+            Editing event type: {{ revision.revision_metadata.editing_event_type }}</td>
           <td class="wide">{{ revision.comment }}</td>
           <td class="wide">QAZ</td>
           <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Reset</button></td>
