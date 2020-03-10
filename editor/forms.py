@@ -107,8 +107,9 @@ class FunctionEditInlineForm(forms.ModelForm):
         exclude = []
         model = Function
         labels = {
-            'date_from': 'Event date from',
-            'date_to': 'Event date until',
+            'date_from': 'Date function active from',
+            'date_to': 'Date function active until',
+            'display_date': 'Date function active',
         }
 
 
