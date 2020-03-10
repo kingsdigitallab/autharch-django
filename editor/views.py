@@ -10,14 +10,18 @@ from django.views.decorators.http import require_POST
 from haystack.generic_views import FacetedSearchView, SearchView
 from haystack.query import SearchQuerySet
 
+from languages_plus.models import Language
+from script_codes.models import Script
+
 import reversion
 from reversion.models import Revision, Version
 from reversion.views import create_revision
 
 from archival.models import ArchivalRecord, Collection, Series, File, Item
-from authority.models import Entity
-from jargon.models import (CollaborativeWorkspaceEditorType as CWEditorType,
-                           EditingEventType)
+from authority.models import Control, Entity
+from jargon.models import (
+    CollaborativeWorkspaceEditorType as CWEditorType, EditingEventType,
+    MaintenanceStatus, PublicationStatus)
 
 from .forms import (
     EntityCreateForm, EntityEditForm, LogForm, UserCreateForm, UserEditForm,
@@ -290,6 +294,14 @@ def entity_create(request):
             entity = Entity()
             entity.entity_type = form.cleaned_data['entity_type']
             entity.save()
+            language = Language.objects.get(name_en='English')
+            script = Script.objects.get(name='Latin')
+            ms = MaintenanceStatus.objects.get(title='new')
+            ps = PublicationStatus.objects.get(title='inprocess')
+            control = Control(entity=entity, language=language, script=script,
+                              maintenance_status=ms, publication_status=ps)
+            control.save()
+            entity.save()  # To cause reindexing with control data.
             return redirect('editor:entity-edit', entity_id=entity.pk)
     else:
         form = EntityCreateForm()
