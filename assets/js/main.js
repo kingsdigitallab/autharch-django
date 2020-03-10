@@ -295,12 +295,10 @@ function addEmptyForm(formType, context) {
   let jContext = $(context);
   let managementFormContainer = getManagementFormContainer(jContext);
   let maxNumControl = managementFormContainer.children("input[name$='MAX_NUM_FORMS']");
+  let maxNumForms = Number(maxNumControl.attr("value"))
   let totalControl = managementFormContainer.children("input[name$='TOTAL_FORMS']");
-  let newFormPrefixNumber = totalControl.attr("value");
-  // if (newFormPrefixNumber >= maxNumControl.attr("value")) {
-  //   return;
-  // }
-  if ((Number(newFormPrefixNumber)+1) >= maxNumControl.attr("value")) {
+  let newFormPrefixNumber = Number(totalControl.attr("value"));
+  if ((newFormPrefixNumber+1) >= maxNumControl.attr("value")) {
     $(jContext).parent("label").hide();
   }
   // Clone the formType form and add it as the last child of the
@@ -329,7 +327,7 @@ function addEmptyForm(formType, context) {
   });
   // The management form for the formset of the new form must have its
   // TOTAL_FORMS value incremented by 1 to account for the new form.
-  totalControl.attr("value", Number(newFormPrefixNumber) + 1);
+  totalControl.attr("value", newFormPrefixNumber + 1);
 }
 
 /**
@@ -339,12 +337,12 @@ function addEmptyForm(formType, context) {
  *
  * @param {jQuery} control - TOTAL_FORMS control
  * @param {String} attrName - name of control's attribute to use as the base
- * @param {String} prefixNumber - string number of the new form
+ * @param {Number} prefixNumber - number of the new form
  * @returns {String}
  */
 function generateNewFormPrefix(control, attrName, prefixNumber) {
   let attrValue = control.attr(attrName);
-  return attrValue.slice(0, attrValue.indexOf("TOTAL_FORMS")) + prefixNumber;
+  return attrValue.slice(0, attrValue.indexOf("TOTAL_FORMS")) + String(prefixNumber);
 }
 
 
