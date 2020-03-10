@@ -158,8 +158,10 @@
     {% include "./includes/function_inline_form.html" with form=description_form.formsets.functions.empty_form %}
     {% include "./includes/language_script_inline_form.html" with form=description_form.formsets.language_scripts.empty_form %}
     {% include "./includes/place_inline_form.html" with form=description_form.formsets.places.empty_form %}
+    {% if description_form.formsets.mandates %}
     {% include "./includes/mandate_inline_form.html" with form=description_form.formsets.mandates.empty_form %}
     {% include "./includes/legal_status_inline_form.html" with form=description_form.formsets.legal_statuses.empty_form %}
+    {% endif %}
     {% endwith %}
     {% include "./includes/relation_inline_form.html" with form=identity_form.formsets.relations.empty_form %}
     {% include "./includes/resource_inline_form.html" with form=identity_form.formsets.resources.empty_form %}

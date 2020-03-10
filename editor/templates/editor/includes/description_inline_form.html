@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="fieldset-body expand inline-deletable">
-    {% include "./delete_form_field.html" with form=form %}
+    {% render_form_delete_widget form.DELETE %}
     <div>
       {% render_field form.id %}
       {% render_field form.structure_or_genealogy %}

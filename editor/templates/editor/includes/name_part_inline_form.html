@@ -1,7 +1,7 @@
 {% load editor_form_tags %}
 <div data-form-type="name_part" class="flex">
   <div class="grid inline-deletable">
-    {% include "./delete_form_field.html" with form=form %}
+    {% render_form_delete_widget form.DELETE %}
     {% render_field form.id %}
     {% render_field form.name_part_type %}
     {% render_field form.part %}

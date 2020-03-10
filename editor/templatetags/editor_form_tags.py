@@ -49,3 +49,12 @@ def render_field(form_field):
         'required': form_field.field.required,
         'widget': widget,
     }
+
+
+@register.inclusion_tag('editor/includes/delete_form_field.html')
+def render_form_delete_widget(field):
+    """Renders the widget for a form's DELETE `field`."""
+    context = {}
+    context['widget'] = field.as_widget(
+        attrs={'aria-label': 'delete field checkbox'})
+    return context

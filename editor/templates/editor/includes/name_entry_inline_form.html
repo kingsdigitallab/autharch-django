@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="fieldset-body expand inline-deletable">
-    {% include "./delete_form_field.html" with form=form %}
+    {% render_form_delete_widget form.DELETE %}
     <div class="two-column-table">
       <div class="formset">
         {% with name_parts=form.formsets.name_parts %}
