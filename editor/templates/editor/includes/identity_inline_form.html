@@ -1,7 +1,9 @@
 {% load editor_form_tags %}
 <fieldset data-form-type="identity">
   <div class="fieldset-header">
-    <h4>{{ form.instance }}</h4>
+    {% if form.instance %}
+      <h4>{{ form.instance }}</h4>
+    {% endif %}
     <div class="flex">
       <div>
         {% render_field form.id %}

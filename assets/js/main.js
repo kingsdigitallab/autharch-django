@@ -74,6 +74,7 @@ $(document).ready(function() {
           widgets: ["filter"],
           widgetOptions: {
               filter_columnFilters: true,
+              filter_filterLabel : 'Filter "{{label}}"',
           }
       })
       .tablesorterPager({
@@ -296,8 +297,11 @@ function addEmptyForm(formType, context) {
   let maxNumControl = managementFormContainer.children("input[name$='MAX_NUM_FORMS']");
   let totalControl = managementFormContainer.children("input[name$='TOTAL_FORMS']");
   let newFormPrefixNumber = totalControl.attr("value");
-  if (newFormPrefixNumber >= maxNumControl.attr("value")) {
-    return;
+  // if (newFormPrefixNumber >= maxNumControl.attr("value")) {
+  //   return;
+  // }
+  if ((Number(newFormPrefixNumber)+1) >= maxNumControl.attr("value")) {
+    $(jContext).parent("label").hide();
   }
   // Clone the formType form and add it as the last child of the
   // parent of these forms.
@@ -380,6 +384,7 @@ function getNewFormParent(context) {
 function deleteField(el, toDelete) {
   event.preventDefault();
   $(el).closest(toDelete).addClass('none');
+  $(el).parents(".formset").first().children("label").show();
 }
 
 
@@ -387,7 +392,7 @@ function deleteRow(el) {
   if (!$(el).parent().siblings('td').hasClass('none')) {
     $(el).parent().siblings('td').addClass('none');
     $(el).parent().attr('colspan', '6');
-    $(el).after(`<button class="button-link danger" onclick="deleteField(this, 'tr')"><i class="fas fa-trash-alt"></i>Delete forever</button>`)
+    $(el).after(`<button class="button-link danger" onclick="deleteField(this, 'tr')"><i class="fas fa-trash-alt"></i>Delete permanently</button>`)
   } else {
     $(el).parent().attr('colspan', '1');
     $(el).parent().siblings('td').removeClass('none');
@@ -456,7 +461,7 @@ function toggleDeleteInline(event, button) {
     label.removeClass('danger');
     label.addClass('save');
     label.append(`<span>Undo</span>`);
-    label.parent().after(`<button class="button-link danger" onclick="deleteField(this, '[data-form-type]')"><i class="fas fa-trash-alt"></i>Delete forever</button>`)
+    label.parent().after(`<button class="button-link danger" onclick="deleteField(this, '[data-form-type]')"><i class="fas fa-trash-alt"></i>Delete permanently</button>`)
   }
   else {
     jButton.val("");

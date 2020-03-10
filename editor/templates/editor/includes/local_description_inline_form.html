@@ -1,7 +1,9 @@
 {% load editor_form_tags %}
 <fieldset data-form-type="local_description">
   <div class="fieldset-header">
-    <h4>{{ form.gender.value|default:"" }}</h4>
+    {% if form.gender.value %}
+      <h4>{{ form.gender.value|default:"" }}</h4>
+    {% endif %}
     <div class="flex">
       <div>
         {% include "./delete_inline_button.html" %}

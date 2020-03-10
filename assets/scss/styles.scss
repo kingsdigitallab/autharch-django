@@ -3,7 +3,7 @@
 $primary: #001e57;
 // $primary-dark: #001A48;
 $save: #6DA036;
-$add: #0b87c5;
+$add: #0e7bc5;
 $danger: #a10101;
 $background: #FCFCFC;
 $input : #707070;
@@ -140,9 +140,9 @@ button, a, .create, .link, input[type=submit], input[type=button], span[role=but
     }
 }
 
-button, a, input, th {
+button, a, input, th, select, textarea, .openseadragon-canvas, .richText-editor, .select2-selection, .select2-search__field {
     &:focus {
-        outline: 5px auto -webkit-focus-ring-color;
+        outline: 5px auto -webkit-focus-ring-color !important;
     }
 }
 
@@ -199,7 +199,7 @@ span[role=button] {
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
         margin-top: 0px;
-        margin-right: -1px;
+        // margin-right: -1px;
         max-width: max-content;
     }
 }
@@ -292,7 +292,7 @@ span[role=button] {
     }
 
     &.create {
-        color: $add;
+        color: darken($add, 5%);
         &:hover, &:focus {
             box-shadow: none !important;
         }
@@ -393,8 +393,8 @@ header {
     z-index: 10;
     #logo {
         width: 100%;
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
         a {
             &:hover, &:focus {
                 background-color: darken($primary, 20%);
@@ -476,7 +476,9 @@ header {
         }
     }
 }
-
+.select2-selection__choice__remove {
+    color: $danger !important;
+}
 .select2-container--default, .select2-container {
     width: -moz-available !important;
     width: -webkit-fill-available !important;
@@ -944,6 +946,9 @@ main {
             .inline-deletable {
                 width: 100%;
             }
+            .delete-button-block {
+                margin-top: 15px;
+            }
             label {
                 margin-top: 5px;
                 height: auto;
@@ -1166,7 +1171,7 @@ main {
                     h3:not(:first-child) {
                         margin-top: 40px;
                     }
-                    label, input, textarea, button {
+                    label, input, textarea {
                         margin-bottom: 10px;
                     }
                     .image {
@@ -1329,6 +1334,13 @@ main {
         margin: 0px;
         margin-bottom: 5px !important;
         text-align: right;
+    }
+    .errorlist {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 5px;
+        font-size: 13px;
+        color: $danger;
     }
     .pager {
         .page-size {

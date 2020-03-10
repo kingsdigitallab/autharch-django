@@ -24,10 +24,10 @@
       <thead>
         <tr>
           <th scope="col" data-label="Title">Title</th>
-          <th scope="col">Record type</th>
-          <th scope="col">Type/level</th>
-          <th scope="col">Publication status</th>
-          <th scope="col">Updated</th>
+          <th scope="col" data-label="Record type">Record type</th>
+          <th scope="col" data-label="Type/level">Type/level</th>
+          <th scope="col" data-label="Publication status">Publication status</th>
+          <th scope="col" data-label="Updated">Updated</th>
         </tr>
       </thead>
       <tbody>
@@ -43,7 +43,7 @@
           <td>{{ result.archival_level }}</td>
           {% endif %}
           <td>{{ result.publication_status }}</td>
-          <td>{{ result.modified }}</td>
+          <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -83,11 +83,11 @@
       <table id="modified-table" class="tablesorter">
         <thead>
           <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Record type</th>
-            <th scope="col">Type/level</th>
-            <th scope="col">Publication status</th>
-            <th scope="col">Updated</th>
+            <th scope="col" data-label="Title" class="filter-match">Title</th>
+            <th scope="col" data-label="Record type" class="filter-match">Record type</th>
+            <th scope="col" data-label="Type/level" class="filter-match">Type/level</th>
+            <th scope="col" data-label="Publication status" class="filter-match">Publication status</th>
+            <th scope="col" data-label="Updated" class="filter-match">Updated</th>
           </tr>
         </thead>
         <tbody>
@@ -97,7 +97,7 @@
             <td>Archival Record</td>
             <td>{{ record.archival_level }}</td>
             <td>{{ record.publication_status }}</td>
-            <td>{{ record.modified }}</td>
+            <td data-text="{{ record.modified.isoformat }}" class="{sorter: 'isoDate'}">{{ record.modified }}</td>
           </tr>
           {% endfor %}
           {% for entity in recently_modified_entities %}
@@ -106,7 +106,7 @@
             <td>Entity</td>
             <td>{{ entity.entity_type }}</td>
             <td>{{ entity.control.publication_status }}</td>
-            <td>{{ entity.modified }}</td>
+            <td data-text="{{ entity.modified.isoformat }}" class="{sorter: 'isoDate'}">{{ entity.modified }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -148,11 +148,11 @@
       <table id="publication-table" class="tablesorter">
           <thead>
             <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Record type</th>
-              <th scope="col">Type/level</th>
-              <th scope="col">Publication status</th>
-              <th scope="col">Updated</th>
+              <th scope="col" data-label="Title">Title</th>
+              <th scope="col" data-label="Record type">Record type</th>
+              <th scope="col" data-label="Type/level">Type/level</th>
+              <th scope="col" data-label="Publication status">Publication status</th>
+              <th scope="col" data-label="Updated">Updated</th>
             </tr>
           </thead>
           <tbody>
@@ -162,7 +162,7 @@
               <td>Archival Record</td>
               <td>{{ record.archival_level }}</td>
               <td>{{ record.publication_status }}</td>
-              <td>{{ record.modified }}</td>
+              <td data-text="{{ record.modified.isoformat }}">{{ record.modified }}</td>
             </tr>
             {% endfor %}
             {% for entity in unpublished_entities %}
@@ -171,7 +171,7 @@
               <td>Entity</td>
               <td>{{ entity.entity_type }}</td>
               <td>{{ entity.control.publication_status }}</td>
-              <td>{{ entity.modified }}</td>
+              <td data-text="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>
             </tr>
             {% endfor %}
           </tbody>

@@ -6,8 +6,9 @@
     {% render_field form.name_part_type %}
     {% render_field form.part %}
   </div>
-  <div>
+  <div class="delete-button-block">
     <label class="button-link danger">
+      <span hidden>Delete name part</span>
       <input type="button" class="icon-only" value="&#xf2ed;" onclick="toggleDeleteInline(event, this)"/>
     </label>
   </div>
