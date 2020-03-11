@@ -99,6 +99,10 @@ class EventEditInlineForm(forms.ModelForm):
             'date_from': 'Event date from',
             'date_to': 'Event date until',
         }
+        widgets = {
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput(),
+        }
 
 
 class FunctionEditInlineForm(forms.ModelForm):
@@ -110,6 +114,10 @@ class FunctionEditInlineForm(forms.ModelForm):
             'date_from': 'Date function active from',
             'date_to': 'Date function active until',
             'display_date': 'Date function active',
+        }
+        widgets = {
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput(),
         }
 
 
@@ -140,6 +148,10 @@ class LocalDescriptionEditInlineForm(forms.ModelForm):
             'date_from': 'Gender used from',
             'date_to': 'Gender used until',
             'display_date': 'Display date gender used',
+        }
+        widgets = {
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput(),
         }
 
 
@@ -286,6 +298,10 @@ class NameEntryEditInlineForm(ContainerModelForm):
             'date_to': 'Name used until',
             'display_date': 'Display date name used',
         }
+        widgets = {
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput(),
+        }
 
 
 class IdentityEditInlineForm(ContainerModelForm):
@@ -322,6 +338,10 @@ class IdentityEditInlineForm(ContainerModelForm):
         labels = {
             'date_from': 'Identity existed from',
             'date_to': 'Identity existed until',
+        }
+        widgets = {
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput(),
         }
 
 
