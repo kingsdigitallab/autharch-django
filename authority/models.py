@@ -101,7 +101,7 @@ class Entity(TimeStampedModel, DateRangeMixin):
         if name_entries and name_entries.count() == 1:
             return name_entries[0].identity.entity, False
 
-        et, _ = EntityType.objects.get_or_create(title='Person')
+        et, _ = EntityType.objects.get_or_create(title='person')
 
         entity = Entity(entity_type=et)
         entity.save()
@@ -123,7 +123,7 @@ class Entity(TimeStampedModel, DateRangeMixin):
         control.language = language
         control.script = script
         ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
-        ps, _ = PublicationStatus.objects.get_or_create(title='inprocess')
+        ps, _ = PublicationStatus.objects.get_or_create(title='inProcess')
         control.maintenance_status = ms
         control.publication_status = ps
         control.save()

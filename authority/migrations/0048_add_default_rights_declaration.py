@@ -25,7 +25,7 @@ def add_rights_declaration(apps, schema_editor):
             e.control.maintenance_status, _ = \
                 MaintenanceStatus.objects.get_or_create(title='new')
             e.control.publication_status, _ = \
-                PublicationStatus.objects.get_or_create(title='inprocess')
+                PublicationStatus.objects.get_or_create(title='inProcess')
             e.control.save()
 
         if not e.control.rights_declaration:

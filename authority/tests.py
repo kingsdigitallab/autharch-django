@@ -34,7 +34,7 @@ class TestEntity(TestCase):
         self.assertEquals(name, entity.display_name)
         self.assertFalse(created)
 
-        et, _ = EntityType.objects.get_or_create(title='Person')
+        et, _ = EntityType.objects.get_or_create(title='person')
 
         entity = Entity(entity_type=et)
         entity.save()

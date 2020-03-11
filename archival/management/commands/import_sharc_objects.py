@@ -115,7 +115,7 @@ class Command(BaseCommand):
         obj.related_materials = ' '.join(related_entries)
 
         ps, _ = PublicationStatus.objects.get_or_create(
-            title='Published')
+            title='published')
         obj.publication_status = ps
         obj.rights_declaration = """
             <p>
@@ -131,8 +131,8 @@ class Command(BaseCommand):
         # Related entity:
         if shakespeare_connection_rel_work:
             a, _ = Entity.get_or_create_by_display_name(
-                re.sub(r'\(.*\)', '', shakespeare_connection_rel_work), self.language, self.script,
-                self.project)
+                re.sub(r'\(.*\)', '', shakespeare_connection_rel_work),
+                self.language, self.script, self.project)
             if _:
                 a.project = self.project
                 a.entity_type = self.et_work
