@@ -1,9 +1,13 @@
 {% load editor_form_tags %}
 <fieldset data-form-type="place">
   <div class="fieldset-header">
-    {% if form.instance.place %}
-      <h4>{{ form.instance.place|default:"" }}</h4>
-    {% endif %}
+    <h4>
+      {% if form.instance.place %}
+        {{ form.instance.place|default:"" }}
+      {% else %}
+        Place
+      {% endif %}
+    </h4>
     <div class="flex">
       <div>
         {% include "./delete_inline_button.html" %}

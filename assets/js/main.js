@@ -49,7 +49,13 @@ $(document).ready(function() {
   // Change textareas to richtext fields. A unique ID must be
   // provided for each, to avoid the contents being duplicated.
   $('.richtext').each(function(index) {
-    $(this).richText({id: "richtext-" + index});
+    $(this).richText({
+      imageUpload:false,
+      fileUpload:false,
+      videoEmbed:false,
+      code:false,
+      id: "richText-" + index
+    });
   });
 
   $('table').each(function(i, el) {

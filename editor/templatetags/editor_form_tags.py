@@ -39,7 +39,9 @@ def render_field(form_field):
             'class': ' '.join((form_field.css_classes(), 'error'))
         })
     else:
-        widget = form_field.as_widget()
+        widget = form_field.as_widget(attrs={
+            'aria-label': 'input field'
+        })
     return {
         'errors': form_field.errors,
         'help_text': form_field.help_text,

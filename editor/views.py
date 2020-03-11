@@ -45,6 +45,10 @@ def is_user_editor_plus(user):
     except AttributeError:
         return False
 
+class PasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs.pop("autofocus", None)
 
 class FacetMixin:
 
@@ -294,7 +298,7 @@ def entity_create(request):
             entity = Entity()
             entity.entity_type = form.cleaned_data['entity_type']
             entity.save()
-            language = Language.objects.get(name_en='English')
+            language = Language.objects.filter(name_en='English').first()
             script = Script.objects.get(name='Latin')
             ms = MaintenanceStatus.objects.get(title='new')
             ps = PublicationStatus.objects.get(title='inprocess')

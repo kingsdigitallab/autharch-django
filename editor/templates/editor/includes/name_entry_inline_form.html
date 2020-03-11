@@ -1,9 +1,13 @@
 {% load editor_form_tags %}
 <fieldset data-form-type="name_entry">
   <div class="fieldset-header">
-    {% if form.display_name.value %}
-      <h4>{{ form.display_name.value }}</h4>
-    {% endif %}
+    <h4>
+      {% if form.display_name.value %}
+        {{ form.display_name.value }}
+      {% else %}
+        Name entry
+      {% endif %}
+    </h4>
     <div class="flex">
       <div>
         {% render_field form.id %}

@@ -48,8 +48,8 @@
         {% endfor %}
       </tbody>
     </table>
-    {% if object_list.count > 10 %}
-      <div id="search-results-pager" class="pager">
+    <div id="search-results-table_pager_info" class="pager">
+      {% if object_list.count > 10 %}
         <div class="page-size">
           <p>
             rows per page:
@@ -72,8 +72,8 @@
           <button class="next"><i class="fal fa-caret-right"></i></button>
           <button class="last"><i class="fal fa-step-forward"></i></button>
         </div>
-      </div>
-    {% endif %}
+      {% endif %}
+    </div>
 
     <!-- if not search results page -->
     {% else %}
@@ -112,8 +112,8 @@
         </tbody>
       </table>
       <!-- if count of records and entities exceeds 10, add pagination -->
-      {% if recently_modified_entities.count|add:recently_modified_records.count > 10 %}
-        <div id="modified-pager" class="pager">
+      <div id="modified-table_pager_info" class="pager">
+        {% if recently_modified_entities.count|add:recently_modified_records.count > 10 %}
           <div class="page-size">
             <p>
               rows per page:
@@ -136,8 +136,8 @@
             <button class="next"><i class="fal fa-caret-right"></i></button>
             <button class="last"><i class="fal fa-step-forward"></i></button>
           </div>
-        </div>
-      {% endif %}
+        {% endif %}
+      </div>
       {% else %}
       <p>You don't have recently modified records</p>
     {% endif %}
@@ -177,8 +177,8 @@
           </tbody>
       </table>
       <!-- if count of records and entities exceeds 10, add pagination -->
-      {% if unpublished_entities.count|add:unpublished_records.count > 10 %}
-        <div id="publication-pager" class="pager">
+      <div id="publication-table_pager_info" class="pager">
+        {% if unpublished_entities.count|add:unpublished_records.count > 10 %}
           <div class="page-size">
             <p>
               rows per page:
@@ -201,8 +201,8 @@
             <button class="next"><i class="fal fa-caret-right"></i></button>
             <button class="last"><i class="fal fa-step-forward"></i></button>
           </div>
-        </div>
-      {% endif %}
+        {% endif %}
+      </div>
     {% endif %}
   {% endif %}
   </div>

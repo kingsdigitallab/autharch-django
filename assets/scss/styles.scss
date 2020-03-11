@@ -336,7 +336,7 @@ a {
 }
 
 
-h2, h3, h4 {
+h2, h3 {
     font-weight: 400;
 }
 
@@ -1048,6 +1048,9 @@ main {
             border: 1px solid $input;
             border-radius: 5px;
             overflow: hidden;
+            .richText-help-popup {
+                overflow: scroll;
+            }
             .richText-toolbar ul li a{
                 border-right: 1px solid $input;
                 border-bottom: 1px solid $input;
@@ -1059,6 +1062,9 @@ main {
             }
             .richText-toolbar {
                 border-bottom: 1px solid $input;
+                .fa-repeat:before {
+                    content: "\f01e";
+                }
             }
             .richText-editor {
                 height: 100px;

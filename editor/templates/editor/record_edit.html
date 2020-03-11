@@ -178,7 +178,15 @@
 
         <fieldset>
           <div class="fieldset-header">
-            <h4>{{ record.withheld }} | {{ record.copyright_status }}</h4>
+            <h4>
+              {% if record.withheld %}
+                {{ record.withheld }} | 
+              {% elif record.copyright_status %} 
+                {{ record.copyright_status }}
+              {% else %}
+                Access
+              {% endif %}
+            </h4>
 
             <div>
               <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
