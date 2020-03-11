@@ -12,13 +12,13 @@ def add_rights_declaration(apps, schema_editor):
     PublicationStatus = apps.get_model('jargon', 'PublicationStatus')
     Script = apps.get_model('script_codes', 'Script')
 
-    language, _ = Language.objects.get_or_create(name_en='English')
-    script, _ = Script.objects.get_or_create(name='Latin')
-
     for e in Entity.objects.all():
         try:
             _ = e.control
         except Control.DoesNotExist:
+            language = Language.objects.get(name_en='English')
+            script = Script.objects.get(name='Latin')
+
             e.control = Control()
             e.control.language = language
             e.control.script = script
