@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth import password_validation
+from django.contrib.auth.forms import PasswordChangeForm \
+    as DjangoPasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 
@@ -21,6 +23,18 @@ from .models import EditorProfile
 RICHTEXT_ATTRS = {
     'class': 'richtext',
     'rows': 8,
+}
+
+ENTITY_SEARCH_INPUT_ATTRS = {
+    'aria-label': 'Search',
+    'placeholder': 'Search entities',
+    'type': 'search',
+}
+
+RECORD_SEARCH_INPUT_ATTRS = {
+    'aria-label': 'Search',
+    'placeholder': 'Search archival records',
+    'type': 'search',
 }
 
 SEARCH_INPUT_ATTRS = {
@@ -589,6 +603,13 @@ class UserForm(ContainerModelForm):
         fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 
+class PasswordChangeForm(DjangoPasswordChangeForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs.pop("autofocus", None)
+
+
 # Search forms.
 
 class FacetedSearchForm(haystack.forms.SearchForm):
@@ -596,9 +617,6 @@ class FacetedSearchForm(haystack.forms.SearchForm):
     """We do not want the faceting to narrow the results searched over,
     but rather for them to be ORed together as a filter. Therefore do
     not inherit from haystack.forms.FacetedSearchForm."""
-
-    q = forms.CharField(required=False, label='Search',
-                        widget=forms.TextInput(attrs=SEARCH_INPUT_ATTRS))
 
     def __init__(self, *args, **kwargs):
         self.selected_facets = kwargs.pop('selected_facets', [])
@@ -630,6 +648,20 @@ class FacetedSearchForm(haystack.forms.SearchForm):
         sqs = super().search()
         sqs = self._apply_facets(sqs)
         return sqs
+
+
+class ArchivalRecordFacetedSearchForm(FacetedSearchForm):
+
+    q = forms.CharField(required=False, label='Search',
+                        widget=forms.TextInput(
+                            attrs=RECORD_SEARCH_INPUT_ATTRS))
+
+
+class EntityFacetedSearchForm(FacetedSearchForm):
+
+    q = forms.CharField(required=False, label='Search',
+                        widget=forms.TextInput(
+                            attrs=ENTITY_SEARCH_INPUT_ATTRS))
 
 
 class SearchForm(haystack.forms.SearchForm):

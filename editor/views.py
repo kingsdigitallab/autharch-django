@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory
@@ -24,8 +23,9 @@ from jargon.models import (
     MaintenanceStatus, PublicationStatus)
 
 from .forms import (
-    EntityCreateForm, EntityEditForm, LogForm, UserCreateForm, UserEditForm,
-    UserForm, FacetedSearchForm, SearchForm, EditorProfileForm,
+    ArchivalRecordFacetedSearchForm, EditorProfileForm, EntityCreateForm,
+    EntityEditForm, EntityFacetedSearchForm, LogForm, PasswordChangeForm,
+    SearchForm, UserCreateForm, UserEditForm, UserForm,
     get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile, RevisionMetadata
@@ -45,10 +45,6 @@ def is_user_editor_plus(user):
     except AttributeError:
         return False
 
-class PasswordChangeForm(PasswordChangeForm):
-    def __init__(self, *args, **kwargs):
-        super(PasswordChangeForm, self).__init__(*args, **kwargs)
-        self.fields['old_password'].widget.attrs.pop("autofocus", None)
 
 class FacetMixin:
 
@@ -183,7 +179,7 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/entities_list.html'
     queryset = SearchQuerySet().models(Entity)
-    form_class = FacetedSearchForm
+    form_class = EntityFacetedSearchForm
     facet_fields = ['entity_type']
 
     def get_context_data(self, *args, **kwargs):
@@ -201,7 +197,7 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series)
-    form_class = FacetedSearchForm
+    form_class = ArchivalRecordFacetedSearchForm
     facet_fields = ['addressees', 'archival_level', 'dates', 'languages',
                     'writers']
 
