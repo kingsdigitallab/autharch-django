@@ -480,9 +480,9 @@ header {
     color: $danger !important;
 }
 .select2-container--default, .select2-container {
-    width: -moz-available !important;
-    width: -webkit-fill-available !important;
-    width: fill-available !important;
+    // width: -moz-available !important;
+    // width: -webkit-fill-available !important;
+    // width: fill-available !important;
     .select2-selection--single, .select2-selection--multiple {
         border: 1px solid $input;
         min-height: 40px;
