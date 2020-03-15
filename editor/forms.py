@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 
 import haystack.forms
-from haystack.query import SQ
 
 from archival.models import Collection, File, Item, Series
 from authority.models import (
@@ -612,42 +611,10 @@ class PasswordChangeForm(DjangoPasswordChangeForm):
 
 # Search forms.
 
-class FacetedSearchForm(haystack.forms.SearchForm):
-
-    """We do not want the faceting to narrow the results searched over,
-    but rather for them to be ORed together as a filter. Therefore do
-    not inherit from haystack.forms.FacetedSearchForm."""
-
-    def __init__(self, *args, **kwargs):
-        self.selected_facets = kwargs.pop('selected_facets', [])
-        super().__init__(*args, **kwargs)
-
-    def _apply_facets(self, sqs):
-        query = None
-        previous_field = None
-        for facet in sorted(self.selected_facets):
-            if ':' not in facet:
-                continue
-            field, value = facet.split(':', 1)
-            if value:
-                if query is None:
-                    query = SQ(**{field: sqs.query.clean(value)})
-                elif field == previous_field:
-                    query = query | SQ(**{field: sqs.query.clean(value)})
-                else:
-                    query = query & SQ(**{field: sqs.query.clean(value)})
-            previous_field = field
-        if query is not None:
-            sqs = sqs.narrow(query)
-        return sqs
+class FacetedSearchForm(haystack.forms.FacetedSearchForm):
 
     def no_query_found(self):
         return self.searchqueryset.all()
-
-    def search(self):
-        sqs = super().search()
-        sqs = self._apply_facets(sqs)
-        return sqs
 
 
 class ArchivalRecordFacetedSearchForm(FacetedSearchForm):
