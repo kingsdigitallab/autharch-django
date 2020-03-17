@@ -57,7 +57,24 @@ $(document).ready(function() {
       id: "richText-" + index
     });
   });
-
+  $('.richtext').attr('aria-label', 'richtext editor');
+  $('.richText-toolbar').each(function(i) {
+    $(this).find('li').each(function(j) {
+      var updatedId = $(this).find("[for^=richText-]").attr('id')+'-'+i+'-'+j;
+      $(this).find("label").attr('for', updatedId);
+      $(this).find("[id^=richText-]").attr('id', updatedId);
+      $(this).find("[id^=openIn]").attr({
+        'id': $(this).find("[id^=openIn]").attr('id')+'-'+i+'-'+j,
+        'aria-label': 'richText-form-item'
+      });
+    });
+    $(this).find(".richText-form-item").each(function(k) {
+      $(this).find("input").attr({
+        'id': $(this).find("input").attr('id')+'-'+i+'-'+k,
+        'aria-label': 'id'
+      });
+    });
+  });
   $('table').each(function(i, el) {
     $.tablesorter.customPagerControls({
       table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
@@ -73,7 +90,6 @@ $(document).ready(function() {
       addKeyboard    : true,                     // use left,right,up,down,pageUp,pageDown,home, or end to change current page
       pageKeyStep    : 10                        // page step to use for pageUp and pageDown
     });
-  
     //add tablesorter to the tables
     $("#"+$(el).attr('id'))
       .tablesorter({
@@ -94,7 +110,15 @@ $(document).ready(function() {
     placeholder: "Select",
     allowClear: true
   } );
-
+  $('.select2-search__field').attr('aria-label', 'select with search');
+  $('.select2-selection__rendered').attr('aria-label', 'select2-selection__rendered');
+  $('.select2-selection--multiple').attr({
+    'aria-label': 'select2-selection--multiple',
+    'role': 'list'
+  });
+  $('.select2-selection--single').attr({
+    'role': 'list'
+  });
   // optional functionality (can be removed if needed) - dynamic styling of the sections
 
   // style border for preferred names and identities

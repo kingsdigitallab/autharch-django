@@ -1,3 +1,3 @@
 <a href="{{ link }}" class="checkbox-anchor">
-  <input type="checkbox" aria-label="{{ label }}"{% if selected %} checked="checked"{% endif %}/>{{ label }} ({{ count }})
+  <input type="checkbox" aria-label="{{ label }}"{% if selected %} checked="checked"{% endif %} onclick='window.location.assign("{{ link }}")'/>{{ label }} ({{ count }})
 </a>

@@ -58,6 +58,12 @@
     {% block content %}
     {% endblock content %}
     {% endblock main %}
+    {% block footer %}
+    <footer>
+      <p><a href="{% url 'editor:accessibility-statement' %}">Accessibility statement</a></p>
+      <p>Designed, developed and maintained by <a href="https://www.kdl.kcl.ac.uk/">King's Digital Lab</a></p>
+    </footer>
+    {% endblock footer %}
     {% block end_js %}
     <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery.richtext.min.js' %}"></script>

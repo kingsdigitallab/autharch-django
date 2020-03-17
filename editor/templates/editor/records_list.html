@@ -88,7 +88,7 @@
         <td>{{ result.writers_display|default_if_none:"" }}</td>
         <td>{{ result.archival_level }}</td>
         <td>{{ result.publication_status }}</td>
-        <td>{{ result.modified }}</td>
+        <td data-date="{{ result.modified.isoformat }}">{{ result.modified }}</td>
       </tr>
       {% endfor %}
     </tbody>

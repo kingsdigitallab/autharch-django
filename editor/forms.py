@@ -22,6 +22,7 @@ from .models import EditorProfile
 RICHTEXT_ATTRS = {
     'class': 'richtext',
     'rows': 8,
+    'aria-label': 'richtext field'
 }
 
 ENTITY_SEARCH_INPUT_ATTRS = {
@@ -38,12 +39,13 @@ RECORD_SEARCH_INPUT_ATTRS = {
 
 SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
-    'placeholder': 'Search our catalogue',
+    'placeholder': 'Search catalogue',
     'type': 'search',
 }
 
 SEARCH_SELECT_ATTRS = {
     'class': 'select-with-search',
+    'aria-label': 'select-with-search'
 }
 
 

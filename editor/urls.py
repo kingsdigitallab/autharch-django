@@ -1,5 +1,6 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path, reverse_lazy
+from django.views.generic import TemplateView
 
 from . import views
 
@@ -7,6 +8,7 @@ from . import views
 app_name = 'editor'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
+    path('accessibility-statement/', TemplateView.as_view(template_name="editor/accessibility_statement.html"), name='accessibility-statement'),
     path('account/login/',
          auth_views.LoginView.as_view(
              template_name='editor/login.html'
@@ -34,6 +36,7 @@ urlpatterns = [
              template_name='editor/password_reset_complete.html'
          ),
          name='password_reset_complete'),
+     
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/new_user/', views.user_create, name='user-create'),
     path('entities/', views.EntityListView.as_view(), name='entities-list'),
