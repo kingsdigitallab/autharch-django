@@ -418,6 +418,7 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'physical_description': forms.Textarea(),
             'project': forms.HiddenInput(),
             'provenance': forms.Textarea(attrs={'rows': 4}),
+            'record_type': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'rights_declaration': forms.Textarea(),
             'start_date': HTML5DateInput(),
             'transcription': forms.Textarea(attrs=RICHTEXT_ATTRS),
