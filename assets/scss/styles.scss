@@ -548,9 +548,8 @@ header {
     color: $danger !important;
 }
 .select2-container--default, .select2-container {
-    // width: -moz-available !important;
-    // width: -webkit-fill-available !important;
-    // width: fill-available !important;
+    width: -webkit-fill-available !important;
+    max-width: 500px;
     .select2-selection--single, .select2-selection--multiple {
         border: 1px solid $input;
         min-height: 40px;
@@ -568,6 +567,9 @@ header {
     .select2-selection__rendered {
         padding-top: 5px;
         white-space: normal !important;
+        li {
+            margin-bottom: 0px;
+        }
     }
     .select2-search {
         padding-top: 7px;
