@@ -61,15 +61,17 @@
     {% block footer %}
     <footer>
       <p><a href="{% url 'editor:accessibility-statement' %}">Accessibility statement</a></p>
-      <p>Designed, developed and maintained by <a href="https://www.kdl.kcl.ac.uk/">King's Digital Lab</a></p>
+      <p>© {% now "Y" %} Designed, developed and maintained by <a href="https://www.kdl.kcl.ac.uk/">King's Digital Lab</a></p>
     </footer>
     {% endblock footer %}
     {% block end_js %}
     <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery.richtext.min.js' %}"></script>
     <script src="{% static 'js/select2/select2.min.js' %}"></script>
+    <script src="{% static 'js/sugar/sugar.min.js' %}"></script>
     <script src="{% static 'js/tablesorter/jquery.tablesorter.js' %}"></script>
     <script src="{% static 'js/tablesorter/jquery.tablesorter.widgets.js' %}"></script>
+    <script src="{% static 'js/tablesorter/parser-date.js' %}"></script>
     <script src="{% static 'js/tablesorter/pager-custom-controls.js' %}"></script>
     <script src="{% static 'js/tablesorter/addons/pager/jquery.tablesorter.pager.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>

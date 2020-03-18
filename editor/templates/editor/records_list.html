@@ -77,7 +77,7 @@
         <th scope="col" data-label="Writer">Writer</th>
         <th scope="col" data-label="Level">Level</th>
         <th scope="col" data-label="Publication status">Publication status</th>
-        <th scope="col" data-label="Updated">Updated</th>
+        <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
       </tr>
     </thead>
     <tbody>
@@ -88,7 +88,7 @@
         <td>{{ result.writers_display|default_if_none:"" }}</td>
         <td>{{ result.archival_level }}</td>
         <td>{{ result.publication_status }}</td>
-        <td data-date="{{ result.modified.isoformat }}">{{ result.modified }}</td>
+        <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
       </tr>
       {% endfor %}
     </tbody>

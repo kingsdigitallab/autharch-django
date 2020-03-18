@@ -26,6 +26,7 @@ class AutocompleteMixin:
             'data-ajax--url': self.get_url(),
             'data-allow-clear': json.dumps(not self.is_required),
             'data-placeholder': 'Search UKAT terms',
+            'aria-label': 'select with search'
         })
         return attrs
 

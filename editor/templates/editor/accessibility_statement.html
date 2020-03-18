@@ -1,7 +1,55 @@
 {% extends "./base.html" %}
 
 {% block main %}
-<main>
-  In progress...
+<main class="accessibility-page">
+    {% block page_header %}
+    <div id="page-header">
+        <h1>Accessibility statement</h1>
+    </div>
+    {% endblock page_header %}
+    {% block content %}
+    <p>The GPP editing interface allows storing and modifying the Georgian Papers records.</p>
+
+    <p>This interface was developed by <a href="https://www.kdl.kcl.ac.uk/" class="dotted-underline">King's Digital Lab</a> (KDL). We want as many people as possible to be able to use this website. For example, that means you should be able to:</p>
+    <ul>
+        <li>change colours, contrast levels and fonts;</li>
+        <li>zoom in up to 300% without the text spilling off the screen;</li>
+        <li>navigate most of the website using just a keyboard;</li>
+        <li>navigate most of the website using speech recognition software;</li>
+        <li>listen to most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver).</li>
+    </ul>
+    <p>We have also made the website text as simple as possible to understand.</p>
+    <p><a href="https://mcmw.abilitynet.org.uk/" class="dotted-underline">AbilityNet</a> has advice on making your device easier to use if you have a disability.</p>
+
+    <h2>How accessible this website is</h2>
+    <p>This website is fully compliant with the <a href="https://www.w3.org/TR/WCAG21/" class="dotted-underline">Web Content Accessibility Guidelines version 2.1 AA standard</a>.</p>
+
+    <h2>What to do if you cannot access parts of this website</h2>
+    <p>If you need information on this website in a different format, such as an accessible PDF, large print, easy read, audio recording or braille, please email <a href="mailto:kdl-info@kcl.ac.uk" class="dotted-underline">kdl-info@kcl.ac.uk</a>. We'll consider your request and get back to you in 15 days.</p>
+
+    <h2>Enforcement procedure</h2>
+    <p>The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you are not happy with how we respond to your complaint, <a href="https://www.equalityadvisoryservice.com/" class="dotted-underline">contact the Equality Advisory and Support Service (EASS)</a>.</p>
+
+    <h2>Technical information about this website's accessibility</h2>
+    <p>This website is fully compliant with the <a href="https://www.w3.org/TR/WCAG21/" class="dotted-underline">Web Content Accessibility Guidelines version 2.1 AA standard</a>.</p>
+    <p>King’s Digital Lab is committed to making its websites accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018. If you find any problems not listed on this page or think we are not meeting accessibility requirements, please contact <a href="mailto:kdl-info@kcl.ac.uk" class="dotted-underline">kdl-info@kcl.ac.uk</a>.</p>
+
+    <h2>How we tested this website</h2>
+    <p>This website was last tested on March, 18th 2020. The test was carried out by King’s Digital Lab.</p>
+    <p>We tested:</p>
+    <ul>
+        <li>the ‘My Dashboard’ page;</li>
+        <li>the ‘Entities’ page and its subpages;</li>
+        <li>the ‘Archival records’ page and its subpages;</li>
+        <li>the ‘Account control’ page;</li>
+        <li>the ’Login’ page;</li>
+        <li>the ‘Password reset’ page and associated subpages.</li>
+    </ul>
+    <p>We used <a href="https://siteimprove.com/en/core-platform/integrations/browser-extensions/" class="dotted-underline">Siteimprove Accessibility Checker plugin</a> to assess compliance with WCAG.</p>
+
+    <p>This statement was prepared and last updated on 18 March 2020.</p> 
+
+    <p>This page is based on the <a href="https://www.gov.uk/government/publications/sample-accessibility-statement/sample-accessibility-statement-for-a-fictional-public-sector-website" class="dotted-underline">sample template provided by gov.uk</a>.</p>
+    {% endblock content%}
 </main>
 {% endblock main %}

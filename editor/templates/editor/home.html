@@ -27,18 +27,18 @@
           <th scope="col" data-label="Record type">Record type</th>
           <th scope="col" data-label="Type/level">Type/level</th>
           <th scope="col" data-label="Publication status">Publication status</th>
-          <th scope="col" data-label="Updated">Updated</th>
+          <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
         </tr>
       </thead>
       <tbody>
         {% for result in object_list %}
         <tr>
           {% if result.model_name == 'entity' %}
-          <td><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a></td>
+          <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a></td>
           <td>Entity</td>
           <td>{{ result.entity_type }}</td>
           {% else %}
-          <td><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+          <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
           <td>Archival Record</td>
           <td>{{ result.archival_level }}</td>
           {% endif %}
@@ -83,30 +83,30 @@
       <table id="modified-table" class="tablesorter">
         <thead>
           <tr>
-            <th scope="col" data-label="Title" class="filter-match">Title</th>
-            <th scope="col" data-label="Record type" class="filter-match">Record type</th>
-            <th scope="col" data-label="Type/level" class="filter-match">Type/level</th>
-            <th scope="col" data-label="Publication status" class="filter-match">Publication status</th>
-            <th scope="col" data-label="Updated" class="filter-match">Updated</th>
+            <th scope="col" data-label="Title">Title</th>
+            <th scope="col" data-label="Record type">Record type</th>
+            <th scope="col" data-label="Type/level">Type/level</th>
+            <th scope="col" data-label="Publication status">Publication status</th>
+            <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
           </tr>
         </thead>
         <tbody>
           {% for record in recently_modified_records %}
           <tr>
-            <td><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
+            <td class="description"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
             <td>Archival Record</td>
             <td>{{ record.archival_level }}</td>
             <td>{{ record.publication_status }}</td>
-            <td data-date="{{ record.modified.isoformat }}">{{ record.modified }}</td>
+            <td data-text="{{ record.modified.isoformat }}">{{ result.modified }}</td>
           </tr>
           {% endfor %}
           {% for entity in recently_modified_entities %}
           <tr>
-            <td><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
+            <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
             <td>Entity</td>
             <td>{{ entity.entity_type }}</td>
             <td>{{ entity.control.publication_status }}</td>
-            <td data-date="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>
+            <td data-text="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -152,26 +152,26 @@
               <th scope="col" data-label="Record type">Record type</th>
               <th scope="col" data-label="Type/level">Type/level</th>
               <th scope="col" data-label="Publication status">Publication status</th>
-              <th scope="col" data-label="Updated">Updated</th>
+              <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
             </tr>
           </thead>
           <tbody>
             {% for record in unpublished_records %}
             <tr>
-              <td><a href="{% url 'editor:record-edit' record_id=record.pk %}" class="deleted">{{ record }}</a></td>
+              <td class="description"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
               <td>Archival Record</td>
               <td>{{ record.archival_level }}</td>
               <td>{{ record.publication_status }}</td>
-              <td data-date="{{ record.modified.isoformat }}">{{ record.modified }}</td>
+              <td data-text="{{ record.modified.isoformat }}">{{ record.modified.isoformat }}</td>
             </tr>
             {% endfor %}
             {% for entity in unpublished_entities %}
             <tr>
-              <td><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
+              <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
               <td>Entity</td>
               <td>{{ entity.entity_type }}</td>
               <td>{{ entity.control.publication_status }}</td>
-              <td data-date="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>
+              <td data-text="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>
             </tr>
             {% endfor %}
           </tbody>

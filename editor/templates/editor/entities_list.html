@@ -46,7 +46,7 @@
         <th scope="col" data-label="Title">Title</th>
         <th scope="col" data-label="Type">Type</th>
         <th scope="col" data-label="Publication status">Publication status</th>
-        <th scope="col" data-label="Updated">Updated</th>
+        <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
       </tr>
     </thead>
     <tbody>
@@ -55,7 +55,7 @@
         <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
         <td>{{ result.entity_type }}</td>
         <td>{{ result.publication_status }}</td>
-        <td data-date="{{ result.modified.isoformat }}">{{ result.modified }}</td>
+        <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
       </tr>
       {% endfor %}
     </tbody>

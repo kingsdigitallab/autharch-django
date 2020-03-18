@@ -85,24 +85,53 @@
           {% for form in all_users_formset %}
           <tr data-form-type="user">
             <td>
-              <span class="delete-form-field none">{{ form.DELETE.as_widget }}</span>
+              <span class="delete-form-field none">
+                <label>
+                  <span hidden>Delete widget</span>
+                  {{ form.DELETE.as_widget }}
+                </label>
+              </span>
               {% render_field form.id %}
-              {{ form.username }}{{ form.username.errors }}
+              <label>
+                <span hidden>Username</span>
+                {{ form.username }}
+              </label>
+              {{ form.username.errors }}
             </td>
-            <td>{{ form.first_name }}{{ form.first_name.errors }}</td>
-            <td>{{ form.last_name }}{{ form.last_name.errors }}</td>
-            <td>{{ form.email }}{{ form.email.errors }}</td>
             <td>
-              {% with profile=form.formsets.editor_profile %}
-              {{ profile.management_form }}
-              {% render_field profile.forms.0.id %}
-              {{ profile.forms.0.role }}
-              {% endwith %}
+              <label>
+                <span hidden>First name</span>
+                {{ form.first_name }}
+              </label>
+              {{ form.first_name.errors }}
+            </td>
+            <td>
+              <label>
+                <span hidden>Last name</span>
+                {{ form.last_name }}
+              </label>
+              {{ form.last_name.errors }}
+            </td>
+            <td>
+              <label>
+                <span hidden>Email</span>
+                {{ form.email }}
+              </label>{{ form.email.errors }}
+            </td>
+            <td>
+                {% with profile=form.formsets.editor_profile %}
+                {{ profile.management_form }}
+                {% render_field profile.forms.0.id %}
+                <label>
+                    <span hidden>Permission level</span>
+                  {{ profile.forms.0.role }}
+                </label>
+                {% endwith %}
             </td>
             <td class="button-cell">
-              <input type="checkbox" id="delete-user-{{ forloop.counter0 }}" class="none"/>
               <label for="delete-user-{{ forloop.counter0 }}" class="delete-user" onclick="deleteRow(this)">
-                <span hidden>Delete user</span>
+                  <span hidden>Delete user</span>
+                  <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
               </label>
               <!-- <button aria-label="delete user" class="button-link danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i>Delete user</button> -->
             </td>
