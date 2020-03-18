@@ -268,7 +268,7 @@ def entity_create(request):
             language = Language.objects.filter(name_en='English').first()
             script = Script.objects.get(name='Latin')
             ms = MaintenanceStatus.objects.get(title='new')
-            ps = PublicationStatus.objects.get(title='inprocess')
+            ps = PublicationStatus.objects.get(title='inProcess')
             control = Control(entity=entity, language=language, script=script,
                               maintenance_status=ms, publication_status=ps)
             control.save()
