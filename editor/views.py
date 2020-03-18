@@ -147,16 +147,21 @@ class HomeView(UserPassesTestMixin, SearchView):
         context['unpublished_records'] = records
         return context
 
+    def _get_ids_from_version_for_user(self, model, user):
+        versions = Version.objects.get_for_model(model).filter(
+            revision__user=user)
+        return [version.object_id for version in versions]
+
     def _get_recently_modified(self, user):
         """Return the archival records and entities most recently modified by
         `user`."""
-        entity_versions = Version.objects.get_for_model(Entity).filter(
-            revision__user=user)
-        record_versions = Version.objects.get_for_model(ArchivalRecord).filter(
-            revision__user=user)
-        entity_ids = [version.object_id for version in entity_versions]
-        record_ids = [version.object_id for version in record_versions]
+        entity_ids = self._get_ids_from_version_for_user(Entity, user)
         entities = Entity.objects.filter(id__in=entity_ids)
+        collection_ids = self._get_ids_from_version_for_user(Collection, user)
+        file_ids = self._get_ids_from_version_for_user(File, user)
+        item_ids = self._get_ids_from_version_for_user(Item, user)
+        series_ids = self._get_ids_from_version_for_user(Series, user)
+        record_ids = collection_ids + file_ids + item_ids + series_ids
         records = ArchivalRecord.objects.filter(id__in=record_ids)
         return entities, records
 
