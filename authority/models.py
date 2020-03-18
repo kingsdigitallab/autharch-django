@@ -4,8 +4,8 @@ from django.db import models
 from django.utils import timezone
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (
-    EntityRelationType, EntityType, Function,
-    MaintenanceStatus, NamePartType, PublicationStatus, ResourceRelationType
+    EntityRelationType, EntityType, Function, MaintenanceStatus, NamePartType,
+    PublicationStatus, ResourceRelationType
 )
 from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
@@ -183,7 +183,6 @@ class NamePart(TimeStampedModel):
 class Description(DateRangeMixin, TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='descriptions')
-    function = models.ManyToManyField(Function, blank=True)
 
 
 @reversion.register()

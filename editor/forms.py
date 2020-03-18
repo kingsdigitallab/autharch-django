@@ -17,6 +17,7 @@ from jargon.models import EntityType, NamePartType
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
+from .widgets import FunctionSelect, HTML5DateInput
 
 
 RICHTEXT_ATTRS = {
@@ -47,11 +48,6 @@ SEARCH_SELECT_ATTRS = {
     'class': 'select-with-search',
     'aria-label': 'select-with-search'
 }
-
-
-class HTML5DateInput(forms.DateInput):
-
-    input_type = 'date'
 
 
 class ContainerModelForm(forms.ModelForm):
@@ -133,6 +129,7 @@ class FunctionEditInlineForm(forms.ModelForm):
         widgets = {
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
+            'title': FunctionSelect(),
         }
 
 

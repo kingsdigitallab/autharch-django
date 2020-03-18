@@ -1,5 +1,7 @@
-# from django.urls import include, path
+from django.urls import path
 # from rest_framework.routers import DefaultRouter
+
+from . import views
 
 # from .views import (PublicationStatusViewSet, ReferenceSourceViewSet,
 #                     RepositoryViewSet)
@@ -9,6 +11,9 @@
 # router.register(r'referencesources', ReferenceSourceViewSet)
 # router.register(r'repositories', RepositoryViewSet)
 
+app_name = 'jargon'
 urlpatterns = [
-    # path('', include(router.urls))
+    path('jargon_function_autocomplete/',
+         views.FunctionAutocompleteJsonView.as_view(),
+         name='jargon_function_autocomplete'),
 ]

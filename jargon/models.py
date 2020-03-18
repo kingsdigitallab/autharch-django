@@ -34,6 +34,16 @@ class EntityType(BaseJargonModel):
 
 
 class Function(BaseJargonModel):
+
+    alt_labels = models.TextField(blank=True)
+    broader = models.ManyToManyField(
+        'self', blank=True, related_name='narrower', symmetrical=False)
+    related = models.ManyToManyField(
+        'self', blank=True, related_name='reverse_related', symmetrical=False)
+    schemes = models.ManyToManyField(
+        'self', blank=True, related_name='in_scheme', symmetrical=False)
+    is_term = models.BooleanField(default=True)
+
     class Meta:
         verbose_name = 'EAC: Function'
 

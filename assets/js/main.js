@@ -8,6 +8,8 @@ $(document).ready(function() {
     });
   };
 
+  initAutocompleteWidgets();
+
   // In order to not cause problems with client-side form validation
   // when required fields are hidden, remove the required attribute
   // from all form controls in the logging dialogue, to be added back
@@ -358,6 +360,7 @@ function addEmptyForm(formType, context) {
   // The management form for the formset of the new form must have its
   // TOTAL_FORMS value incremented by 1 to account for the new form.
   totalControl.attr("value", newFormPrefixNumber + 1);
+  initAutocompleteWidgets();
 }
 
 /**
@@ -429,6 +432,18 @@ function deleteRow(el) {
   // Find and toggle the DELETE checkbox for the form.
   let deleteField = $(el).closest("[data-form-type]").find("[class~='delete-form-field']").children("[name$='DELETE']").first();
   deleteField.prop("checked", !deleteField.prop("checked"));
+}
+
+
+/**
+ * Initialise all autocomplete widgets except ones in an empty
+ * template form.
+ *
+ * Multiple initialisations of the same widgets does not appear to
+ * cause problems.
+ */
+function initAutocompleteWidgets() {
+  $('.autocomplete').not('[name*=__prefix__]').select2();
 }
 
 
