@@ -8,7 +8,9 @@ from . import views
 app_name = 'editor'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
-    path('accessibility-statement/', TemplateView.as_view(template_name="editor/accessibility_statement.html"), name='accessibility-statement'),
+    path('accessibility-statement/', TemplateView.as_view(
+        template_name="editor/accessibility_statement.html"),
+        name='accessibility-statement'),
     path('account/login/',
          auth_views.LoginView.as_view(
              template_name='editor/login.html'
@@ -36,7 +38,6 @@ urlpatterns = [
              template_name='editor/password_reset_complete.html'
          ),
          name='password_reset_complete'),
-     
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/new_user/', views.user_create, name='user-create'),
     path('entities/', views.EntityListView.as_view(), name='entities-list'),
@@ -48,7 +49,7 @@ urlpatterns = [
     path('entities/new/', views.entity_create, name='entity-create'),
     path('records/', views.RecordListView.as_view(), name='records-list'),
     path('records/<int:record_id>/', views.record_edit, name='record-edit'),
-    path('records/<int:record_id>/', views.record_delete,
+    path('records/<int:record_id>/delete/', views.record_delete,
          name='record-delete'),
     path('records/<int:record_id>/history/', views.record_history,
          name='record-history'),

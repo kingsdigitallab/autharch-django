@@ -302,6 +302,12 @@ def entity_delete(request, entity_id):
         reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                            collaborative_workspace_editor_type=editor_type)
         entity.is_deleted = True
+        control = entity.control
+        control.publication_status = PublicationStatus.objects.get(
+            title='inProcess')
+        control.maintenance_status = MaintenanceStatus.objects.get(
+            title='deleted')
+        control.save()
         entity.save()
         return redirect('editor:entities-list')
     return redirect('editor:entity-edit', entity_id=entity_id)
@@ -369,6 +375,10 @@ def record_delete(request, record_id):
         reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                            collaborative_workspace_editor_type=editor_type)
         record.is_deleted = True
+        record.publication_status = PublicationStatus.objects.get(
+            title='inProcess')
+        record.maintenance_status = MaintenanceStatus.objects.get(
+            title='deleted')
         record.save()
         return redirect('editor:records-list')
     return redirect('editor:record-edit', record_id=record_id)
