@@ -52,5 +52,13 @@
     "modified": "2020-02-21T14:38:58.747Z",
     "title": "updated"
   }
+},
+  "model": "jargon.editingeventtype",
+  "pk": 7,
+  "fields": {
+    "created": "2020-02-21T14:38:58.746Z",
+    "modified": "2020-02-21T14:38:58.747Z",
+    "title": "unknown"
+  }
 }
 ]
