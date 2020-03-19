@@ -1,6 +1,6 @@
 from archival.models import (
     ArchivalRecord, ArchivalRecordImage, ArchivalRecordSet, Collection,
-    File, Item, Organisation, Reference, Series, Subject, Project)
+    File, Item, Organisation, Reference, Series, Project)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -192,11 +192,6 @@ class OrganisationAdmin(admin.ModelAdmin):
 class ReferenceAdmin(admin.ModelAdmin):
     autocomplete_fields = ['source']
     search_fields = ['source__title', 'unitid']
-
-
-@admin.register(Subject)
-class SubjectAdmin(admin.ModelAdmin):
-    search_fields = ['title']
 
 
 @admin.register(Project)

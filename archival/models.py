@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models
 from geonames_place.models import Place
 from jargon.models import (
-    MaintenanceStatus, Publication, PublicationStatus, RecordType,
+    Function, MaintenanceStatus, Publication, PublicationStatus, RecordType,
     ReferenceSource, Repository
 )
 from languages_plus.models import Language
@@ -30,14 +30,6 @@ class Reference(models.Model):
 
     def __str__(self):
         return '{}: {}'.format(self.source, self.unitid)
-
-
-class Subject(models.Model):
-    """TODO: UKAT"""
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
 
 
 class Organisation(models.Model):
@@ -108,7 +100,8 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     extent = models.CharField(max_length=1024, null=True,
                               help_text=constants.EXTENT_HELP)
 
-    subjects = models.ManyToManyField(Subject, blank=True)
+    subjects = models.ManyToManyField(Function, blank=True,
+                                      related_name='record_subjects')
     persons_as_subjects = models.ManyToManyField(Entity, blank=True)
     related_entities = models.ManyToManyField(Entity, blank=True,
                                               related_name='related_entities')
