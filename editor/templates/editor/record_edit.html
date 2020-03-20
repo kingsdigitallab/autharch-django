@@ -5,27 +5,32 @@
 {% block main %}
 <main>
   {% block page_header %}
-  <div id="page-header" class="header-fixed">
-    <div id="status-bar">
-      <ul>
-        <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
-        <li>Maintenance status: <span class="highlight">{{ record.maintenance_status }}</span></li>
-        <li>Last edited: <span class="highlight">{{ last_revision.user }}</span></li>
-        <li><span class="highlight">{{ last_revision.date_created }}</span></li>
-      </ul>
-      <a href="{% url 'editor:record-history' record_id=record.pk %}">
-        <i class="far fa-clock"></i>
-        <span class="dotted-underline">History</span>
-      </a>
+  <div class="header-fixed">
+    <div class="status-bar">
+      <input type="checkbox" id="document-status-checkbox" class="none" value="Document status" aria-label="document-status"/>
+      <label class="mobile-only-1020" for="document-status-checkbox">Status</label>
+      <div class="mobile-hide-1020">
+        <ul>
+          <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
+          <li>Maintenance status: <span class="highlight">{{ record.maintenance_status }}</span></li>
+          <li>Last edited: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
+        </ul>
+        <a href="{% url 'editor:record-history' record_id=record.pk %}">
+          <i class="far fa-clock"></i>
+          <span class="dotted-underline">History</span>
+        </a>
+      </div>
     </div>
-    <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
-    <input type="submit" value="Save" form="record-form" class="save"/>
+    <div class="action-buttons">
+        <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)"></button>
+        <input type="submit" value="Save" form="record-form" class="save"/>
+    </div>
   </div>
   {% endblock page_header %}
 
   {% block content %}
-  <div id="form-header">
-    <div id="breadcrumbs">
+  <div class="form-header">
+    <div class="breadcrumbs">
       <ul>
         <li><a href="{% url 'editor:home' %}">HOME</a></li>
         <li><a href="{% url 'editor:records-list' %}" class="dotted-underline">ARCHIVAL RECORDS</a></li>

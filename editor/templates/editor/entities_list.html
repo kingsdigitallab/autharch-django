@@ -3,31 +3,31 @@
 {% block main %}
 <main>
   {% block page_header %}
-  <div id="page-header">
+  <div class="page-header">
     <h1>Entities ({{ object_list.count }})</h1>
     <form action="." class="search" method="get">
-        <label>
-          <span hidden>Search</span>
-          {{ form.q }}
-        </label>
-        <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
-      </form>
-      <div class="filter-block">
-        <input type="checkbox" class="none" id="filter" value="Filter">
-        <label for="filter" class="filter-button"><span hidden>Filter</span></label>
-        <div class="filters-hidden">
-          <a href="." class="dotted-underline clear-filters active">Clear filters</a>
-              <div>
-                <fieldset class="filter-list">
-                  <legend>Document level</legend>
-                  {% for entity_type in facets.fields.entity_type %}
-                  {% render_facet entity_type %}
-                  {% endfor %}
-                </fieldset>
-              </div>
-          </div>
-      </div>
-    <a href="{% url 'editor:entity-create' %}" class="create">Create new entity</a>
+      <label>
+        <span hidden>Search</span>
+        {{ form.q }}
+      </label>
+      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+    </form>
+    <div class="filter-block">
+      <input type="checkbox" class="none" id="filter" value="Filter">
+      <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+      <div class="filters-hidden">
+        <a href="." class="dotted-underline clear-filters active">Clear filters</a>
+            <div>
+              <fieldset class="filter-list">
+                <legend>Document level</legend>
+                {% for entity_type in facets.fields.entity_type %}
+                {% render_facet entity_type %}
+                {% endfor %}
+              </fieldset>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'editor:entity-create' %}" class="create"><span hidden>New entity</span></a>
   </div>
   {% endblock page_header %}
 

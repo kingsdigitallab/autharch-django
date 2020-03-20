@@ -72,7 +72,7 @@ body {
 .flex {
     display: flex !important;
     align-items: center !important;
-    // flex-wrap: wrap;
+    flex-wrap: wrap;
     > *:not(:last-child) {
         margin-right: 30px;
         // margin-bottom: 10px;
@@ -128,6 +128,10 @@ body {
     border-left-color: $primary !important;
 }
 
+.mobile-only-1020 {
+    display: none;
+}
+
 .clear-border {
     border: 1px solid #BABABA !important;
 }
@@ -140,7 +144,7 @@ button, a, .create, .link, input[type=submit], input[type=button], span[role=but
     }
 }
 
-input:not(.search-button):not(.select2-search__field), select, textarea, .richText-editor, .select2-selection, .openseadragon-canvas {
+input:not(.search-button):not(.select2-search__field):not(.icon-only), select, textarea, .richText-editor, .select2-selection, .openseadragon-canvas {
     &:focus {
         outline: none;
         box-shadow: 0 0 0 1px $dark-grey !important;
@@ -216,6 +220,11 @@ span[role=button] {
         // margin-right: -1px;
         max-width: max-content;
         .icon-only:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline: none;
+            text-decoration: none !important;
             color: $light-grey;
         }
     }
@@ -229,20 +238,32 @@ span[role=button] {
 .danger {
     @include button($danger);
     .fas {
-        margin-right: 10px;
+        margin-right: 7px;
     }
 }
 
 .danger-clear {
-    border: 1px solid $danger;
     color: $danger;
     background-color: transparent;
+    display: inline-block;
+    cursor: pointer;
+    &:before {
+        content: "\f2ed";
+        font-family: $fontawesome;
+        margin-right: 7px;
+    }
+    &:after {
+        content: "Delete";
+    }
     .fas {
         margin-right: 10px;
     }
     &:focus {
         outline: none;
         box-shadow: 0px 0px 1px darken($danger, 20%);
+    }
+    &:hover {
+        color: darken($danger, 5%);
     }
 }
 
@@ -298,7 +319,8 @@ span[role=button] {
     &:hover, &:focus {
         -moz-box-shadow: none !important;
         -webkit-box-shadow: none !important;
-        box-shadow: none;
+        box-shadow: none !important;
+        outline: none;
     }
     .fa-question-circle {
         font-size: 16px;
@@ -337,7 +359,7 @@ span[role=button] {
             box-shadow: none !important;
         }
         .icon-only:focus {
-            color: darken($add, 15%);
+            text-decoration: underline;
         }
     }
 
@@ -458,11 +480,6 @@ header {
         width: 100%;
         // display: flex;
         // align-items: center;
-        a {
-            &:hover, &:focus {
-                background-color: darken($primary, 20%);
-            }
-        }
         img {
             width: 100%;
         }
@@ -615,7 +632,8 @@ main {
         }
     }
 
-    #page-header {
+    // header for the list pages
+    .page-header {
         display: grid;
         grid-template-columns: auto 1fr auto auto;
         grid-column-gap: 10px;
@@ -625,15 +643,23 @@ main {
         :not(:first-child) {
             justify-self: right;
         }
-        #status-bar {
-            @include inline-list("|");
-            font-size: 14px;
-        }
         .create {
+            display: inline-block;
             margin-left: 20px;
+            cursor: pointer;
+            &:before {
+                content: "\f067";
+                font-weight: 300;
+                font-family: $fontawesome;
+                margin-right: 10px;
+            }
+            &:after {
+                content: "New entity";
+            }
         }
     }
     
+    // header for the single entity/record pages
     .header-fixed {
         background-color: white;
         border-bottom: 1px solid $medium-grey;
@@ -644,7 +670,18 @@ main {
         z-index: 9;
         margin-left: 250px;
         padding: 10px 40px;
+        .status-bar {
+            @include inline-list("|");
+            font-size: 1em;
+            float: left;
+            margin-top: 10px;
+            margin-top: 0.5em;
+        }
+        .action-buttons {
+            float: right;
+        }
     }
+
     .filter-block {
         position: relative;
         //to prevent the search bar from taking up the filter button space once filters are expanded.
@@ -853,9 +890,9 @@ main {
         margin-top: 40px;
     }
 
-    #form-header{
+    .form-header{
         margin-top: 70px;
-        #breadcrumbs {
+        .breadcrumbs {
             font-size: 13px;
             margin: 20px 0px;
             @include inline-list("\f0da");
@@ -1003,6 +1040,9 @@ main {
                     button {
                         margin-left: 2em;
                     }
+                    .button-link {
+                        white-space: pre-wrap;
+                    }
                     input[type=checkbox]:checked + label {
                         color: $save;
                         &:before {
@@ -1119,7 +1159,7 @@ main {
             }
             &[type=radio], &[type=checkbox] {
                 margin: 0px;
-                margin-right: 10px;
+                margin-right: 5px;
                 width: max-content;
             }
         }
@@ -1546,7 +1586,7 @@ main {
 footer {
     @include lighten($light-grey);
     margin: 0;
-    padding: 20px 40px;
+    padding: 1em 2em;
     text-align: right;
     a {
         border-bottom: 1px dotted #BABABA;
@@ -1578,15 +1618,14 @@ footer {
     }   
 }
 
-  @keyframes opacityChange {
+@keyframes opacityChange {
     from {
         opacity: 0;
     }
     to {
         opacity: 1;
     }
-  }
-
+}
 
 @media only screen and (max-width: 1280px), screen and (max-height: 460px) {
     body {
@@ -1636,20 +1675,13 @@ footer {
         margin-top: 80px;
         margin-left: 0px !important;
         padding: 0px 30px 30px 30px;
-        #page-header {
-            // display: flex;
-            // flex-wrap: wrap;
-            // justify-content: space-between;
-            // display: grid;
-            // grid-template-columns: auto 1fr auto auto;
-        }
-        #form-header {
-            margin-top: 140px;
-        }
         .header-fixed {
             margin-top: 60px;
             margin-left:0px;
-            padding: 10px;
+            padding: 0.7em 2em;
+        }
+        .form-header {
+            margin-top: 150px;
         }
         .filter-block {
             .filters-hidden {
@@ -1660,21 +1692,47 @@ footer {
 }
 
 @media only screen and (max-width: 1020px) {
-    
+    .mobile-hide-1020 {
+        display: none;
+        animation: opacityChange 0.7s;
+    }
     main {
-        #page-header {
-            .filter {
-                margin-bottom: 10px;
-            }
-            #status-bar {
-                margin-bottom: 10px;
+        .header-fixed {
+            .status-bar {
+                label.mobile-only-1020 {
+                    display: block;
+                    color: $primary;
+                    cursor: pointer;
+                    &:after {
+                        content:'\f078';
+                        font-family: $fontawesome;
+                        font-weight: 600;
+                        margin-left: 10px;
+                        font-size: 14px;
+                        right: 0;
+                    }
+                }
+                input[type=checkbox]:checked + label.mobile-only-1020 {
+                    &:after {
+                        content:'\f077';
+                    }
+                    + .mobile-hide-1020 {
+                        display: block;
+                        margin-bottom: 1em;
+                    }
+                }
             }
         }
-        table {
-            .button-link {
-                white-space: pre-wrap;
+        .form-header {
+            .breadcrumbs ul {
+                display: block;
             }
         }
+        // table {
+        //     .button-link {
+        //         white-space: pre-wrap;
+        //     }
+        // }
         .user-control {
             display: block;
             #user-details, #change-password {
@@ -1697,35 +1755,50 @@ footer {
         }
     }
     main {
-        #pagination {
-            ul {
-                @include hidden();
-            }
-        }
-        .two-column-table {
+        .page-header, .two-column-table {
             display: block;
         }
-        
+        .page-header {
+            .search {
+                margin-top: 2em;
+            }
+        }
     }
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 620px) {
     main {
-        #form-header{
-            margin-top: 200px;
+        .header-fixed {
+            top: auto;
+            bottom: 0;
+            border-top: 1px solid $medium-grey;
+            box-shadow: 0px 0px 3px $medium-grey;
+            .status-bar {
+                ul {
+                    display: block;
+                }
+            }
         }
+        .form-header {
+            margin-top: 70px;
+        }
+    }
+    footer {
+        padding-bottom: 70px;
     }
 }
 
 @media only screen and (max-width: 520px) {
+    .icon-only {
+        margin-left: 0px;
+    }
     header {
         #logo {
             @include hidden();
         }
     }
     main {
-        #page-header {
-            display: block;
+        .page-header {
             .create {
                 margin-left: 0px;
                 display: block;

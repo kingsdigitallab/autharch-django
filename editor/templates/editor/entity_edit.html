@@ -3,28 +3,32 @@
 {% block main %}
 <main>
   {% block page_header %}
-  <div id="page-header" class="header-fixed">
-    <div id="status-bar">
-      <ul>
-        <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
-        <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li>
-        <li>Last edited: <span class="highlight">{{ last_revision.user }}</span></li>
-        <li><span class="highlight">{{ last_revision.date_created }}</span></li>
-      </ul>
-      <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
-        <i class="far fa-clock"></i>
-        <span class="dotted-underline">History</span>
-      </a>
+  <div class="header-fixed">
+    <div class="status-bar">
+      <input type="checkbox" id="document-status-checkbox" class="none" value="Document status" aria-label="document-status"/>
+      <label class="mobile-only-1020" for="document-status-checkbox">Status</label>
+      <div class="mobile-hide-1020">
+        <ul>
+          <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
+          <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li>
+          <li>Updated: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
+        </ul>
+        <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
+          <i class="far fa-clock"></i>
+          <span class="dotted-underline">History</span>
+        </a>
+      </div>
     </div>
-    <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>
-    <input type="submit" value="Save" form="record-form" class="save"/>
-    <a href="{% url 'editor:entity-create' %}" class="create" title="Create new entity"><i class="fas fa-plus"></i></a>
+    <div class="action-buttons">
+        <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)"></button>
+        <input type="submit" value="Save" form="record-form" class="save"/>
+    </div>
   </div>
   {% endblock page_header %}
 
   {% block content %}
-  <div id="form-header">
-    <div id="breadcrumbs">
+  <div class="form-header">
+    <div class="breadcrumbs">
       <ul>
         <li><a href="{% url 'editor:home' %}">HOME</a></li>
         <li><a href="{% url 'editor:entities-list' %}" class="dotted-underline">ENTITIES</a></li>
@@ -46,9 +50,6 @@
   </div>
   <form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
     {% csrf_token %}
-    <!-- <div class="flex">
-      {% render_field form.entity_type %}
-    </div> -->
     <div class="form-section formset">
       {% with identities=form.formsets.identities %}
       <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }})

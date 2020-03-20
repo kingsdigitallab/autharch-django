@@ -3,9 +3,7 @@
 {% block main %}
 <main>
   {% block page_header %}
-  <div id="page-header">
     <h1>Account Control Panel</h1>
-  </div>
   {% endblock page_header %}
 
   {% block content %}
@@ -133,7 +131,6 @@
                   <span hidden>Delete user</span>
                   <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
               </label>
-              <!-- <button aria-label="delete user" class="button-link danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i>Delete user</button> -->
             </td>
           </tr>
           {% endfor %}
