@@ -636,12 +636,18 @@ main {
     .page-header {
         display: grid;
         grid-template-columns: auto 1fr auto auto;
-        grid-column-gap: 10px;
+        grid-column-gap: 0px;
         align-items: center;
         margin-bottom: 2em;
         // position: relative;
         :not(:first-child) {
             justify-self: right;
+        }
+        h1 {
+            margin-right: 1em;
+        }
+        .filter-block {
+            margin-left: 1em;
         }
         .create {
             display: inline-block;
