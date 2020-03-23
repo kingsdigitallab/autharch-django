@@ -447,7 +447,7 @@ function deleteRow(el) {
     $(el).next('button').remove();
   }
   // Find and toggle the DELETE checkbox for the form.
-  let deleteField = $(el).closest("[data-form-type]").find("[class~='delete-form-field']").children("[name$='DELETE']").first();
+  let deleteField = $(el).closest("[data-form-type]").find("[class~='delete-form-field']").find("[name$='DELETE']").first();
   deleteField.prop("checked", !deleteField.prop("checked"));
 }
 
