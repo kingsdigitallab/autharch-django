@@ -12,6 +12,7 @@ from media.models import Media
 from model_utils.models import TimeStampedModel
 from polymorphic.managers import PolymorphicManager
 from polymorphic.models import PolymorphicModel
+from script_codes.models import Script
 
 from . import constants
 
@@ -133,6 +134,10 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
         MaintenanceStatus, on_delete=models.PROTECT)
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
+    language = models.ForeignKey(Language, on_delete=models.PROTECT,
+                                 related_name='record_control_languages')
+    script = models.ForeignKey(Script, on_delete=models.PROTECT,
+                               related_name='record_control_scripts')
 
     sources = models.TextField(blank=True, null=True)
 
