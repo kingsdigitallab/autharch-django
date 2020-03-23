@@ -176,7 +176,7 @@ input[type=search]::-webkit-search-decoration {
 .search {
     position: relative;
     max-width: 700px;
-    min-width: 280px;
+    // min-width: 280px;
     input[type=search] {
         font-family: "Roboto", sans-serif;
         -webkit-border-radius: 30px;
@@ -618,7 +618,7 @@ main {
             margin: 0em 0em 1em 0em;
             font-weight: 500;
             &:not(:first-of-type) {
-                margin: 3em 0em 1em 0em;
+                margin: 4em 0em 1em 0em;
             }
         }
         .pager {
@@ -635,7 +635,7 @@ main {
     // header for the list pages
     .page-header {
         display: grid;
-        grid-template-columns: auto 1fr auto auto;
+        grid-template-columns: auto 1fr;
         grid-column-gap: 0px;
         align-items: center;
         margin-bottom: 2em;
@@ -646,21 +646,27 @@ main {
         h1 {
             margin-right: 1em;
         }
-        .filter-block {
-            margin-left: 1em;
-        }
-        .create {
-            display: inline-block;
-            margin-left: 20px;
-            cursor: pointer;
-            &:before {
-                content: "\f067";
-                font-weight: 300;
-                font-family: $fontawesome;
-                margin-right: 10px;
+        .search-filter {
+            display: grid;
+            grid-template-columns: 3fr auto auto;
+            align-items: center;
+            width: 100%;
+            .filter-block {
+                margin-left: 1em;
             }
-            &:after {
-                content: "New entity";
+            .create {
+                display: inline-block;
+                margin-left: 20px;
+                cursor: pointer;
+                &:before {
+                    content: "\f067";
+                    font-weight: 300;
+                    font-family: $fontawesome;
+                    margin-right: 10px;
+                }
+                &:after {
+                    content: "New entity";
+                }
             }
         }
     }
@@ -749,7 +755,7 @@ main {
                 height:85vh;
                 margin-top: 10px;
                 margin-bottom: 20px;
-                overflow-y: scroll;
+                overflow-y: auto;
                 border-bottom: 1px solid $light-grey;
                 .filter-list {
                     border: none;
@@ -799,7 +805,7 @@ main {
     }
     
     .form-page {
-        height: 80vh;
+        height: 85vh;
         margin: auto;
         display: flex;
         flex-direction: column;
@@ -928,12 +934,16 @@ main {
             color: $danger;
         }
     }
-
-    table {
+    .table-container {
         width: 100%;
+        overflow-x: auto;
+    }
+    table {
         // margin-top: 20px;
         border-collapse: collapse;
         font-size: 13px;
+        min-width: 600px;
+        width: 99.9%;
 
         //tablesorter styling
         &.tablesorter-default .header,
@@ -1678,9 +1688,12 @@ footer {
     }
     main {
         box-sizing: border-box; 
-        margin-top: 80px;
         margin-left: 0px !important;
         padding: 0px 30px 30px 30px;
+        &:not(.no-sidebar) {
+            margin-left: 250px;
+            margin-top: 80px;
+        }
         .header-fixed {
             margin-top: 60px;
             margin-left:0px;
@@ -1692,6 +1705,20 @@ footer {
         .filter-block {
             .filters-hidden {
                 margin-top: 60px;
+                div {
+                    height:80vh;
+                }
+            }
+        }
+        table {
+            tbody td {
+                &.button-cell {
+                    .delete-user {
+                        &:after {
+                            content: "";
+                        }   
+                    }
+                }
             }
         }
     }
@@ -1761,12 +1788,47 @@ footer {
         }
     }
     main {
-        .page-header, .two-column-table {
+        .two-column-table {
             display: block;
         }
         .page-header {
-            .search {
-                margin-top: 2em;
+            display: block;
+            .search-filter {
+                .filter-block {
+                    min-width: 65px;
+                    .filters-hidden {
+                        div {
+                            height:70vh;
+                        }
+                    }
+                    input[type=checkbox]:not(:checked) + label.filter-button {
+                        &:before {
+                            content: "\f0b0";
+                            font-family: $fontawesome;
+                            font-weight: 300;
+                            margin-right: 0px;
+                            color: $primary;
+                        }
+                        &:after {
+                            content: "";
+                        }
+                    }
+                    input[type=checkbox]:checked + label.filter-button {
+                        &:before {
+                            content: "";
+                            margin-right: 0px;
+                        }
+                    } 
+                }
+                .create {
+                    display: block;
+                    &:before {
+                        margin-right: 0px;
+                    }
+                    &:after {
+                        content: "";
+                    }
+                }
             }
         }
     }
@@ -1805,10 +1867,21 @@ footer {
     }
     main {
         .page-header {
-            .create {
-                margin-left: 0px;
-                display: block;
-                text-align: center;
+            .search-filter {
+                grid-template-columns: 1fr auto;
+                .filter-block {
+                    .filters-hidden {
+                        width: 80%;
+                        margin-top: 60px;
+                        div {
+                            height:80vh;
+                        }
+                    }
+                }
+                .create {
+                    grid-column-start: 2;
+                    margin-top: 1em;
+                }
             }
         }
         .grid {
@@ -1833,6 +1906,12 @@ footer {
                         padding: 15px;
                     } 
                 }
+            }
+        }
+        .pager .page-list {
+            margin-top: 2em;
+            button {
+                padding: 5px 15px;
             }
         }
     }

@@ -63,79 +63,80 @@
     {% endif %}
     {% endfor %}
     {% endfor %}
-
     <form action="." method="post">
       {% csrf_token %}
       {{ all_users_formset.management_form }}
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th scope="col">Username</th>
-            <th scope="col">First name</th>
-            <th scope="col">Last name</th>
-            <th scope="col">Email address</th>
-            <th scope="col">Permission level</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for form in all_users_formset %}
-          <tr data-form-type="user">
-            <td>
-              <span class="delete-form-field none">
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th scope="col">Username</th>
+              <th scope="col">First name</th>
+              <th scope="col">Last name</th>
+              <th scope="col">Email address</th>
+              <th scope="col">Permission level</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for form in all_users_formset %}
+            <tr data-form-type="user">
+              <td>
+                <span class="delete-form-field none">
+                  <label>
+                    <span hidden>Delete widget</span>
+                    {{ form.DELETE.as_widget }}
+                  </label>
+                </span>
+                {% render_field form.id %}
                 <label>
-                  <span hidden>Delete widget</span>
-                  {{ form.DELETE.as_widget }}
+                  <span hidden>Username</span>
+                  {{ form.username }}
                 </label>
-              </span>
-              {% render_field form.id %}
-              <label>
-                <span hidden>Username</span>
-                {{ form.username }}
-              </label>
-              {{ form.username.errors }}
-            </td>
-            <td>
-              <label>
-                <span hidden>First name</span>
-                {{ form.first_name }}
-              </label>
-              {{ form.first_name.errors }}
-            </td>
-            <td>
-              <label>
-                <span hidden>Last name</span>
-                {{ form.last_name }}
-              </label>
-              {{ form.last_name.errors }}
-            </td>
-            <td>
-              <label>
-                <span hidden>Email</span>
-                {{ form.email }}
-              </label>{{ form.email.errors }}
-            </td>
-            <td>
-                {% with profile=form.formsets.editor_profile %}
-                {{ profile.management_form }}
-                {% render_field profile.forms.0.id %}
+                {{ form.username.errors }}
+              </td>
+              <td>
                 <label>
-                    <span hidden>Permission level</span>
-                  {{ profile.forms.0.role }}
+                  <span hidden>First name</span>
+                  {{ form.first_name }}
                 </label>
-                {% endwith %}
-            </td>
-            <td class="button-cell">
-              <label for="delete-user-{{ forloop.counter0 }}" class="delete-user" onclick="deleteRow(this)">
-                  <span hidden>Delete user</span>
-                  <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
-              </label>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+                {{ form.first_name.errors }}
+              </td>
+              <td>
+                <label>
+                  <span hidden>Last name</span>
+                  {{ form.last_name }}
+                </label>
+                {{ form.last_name.errors }}
+              </td>
+              <td>
+                <label>
+                  <span hidden>Email</span>
+                  {{ form.email }}
+                </label>{{ form.email.errors }}
+              </td>
+              <td>
+                  {% with profile=form.formsets.editor_profile %}
+                  {{ profile.management_form }}
+                  {% render_field profile.forms.0.id %}
+                  <label>
+                      <span hidden>Permission level</span>
+                    {{ profile.forms.0.role }}
+                  </label>
+                  {% endwith %}
+              </td>
+              <td class="button-cell">
+                <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
+                <label for="delete-user-{{ forloop.counter0 }}" class="delete-user" onclick="deleteRow(this)">
+                    <span hidden>Delete user</span>
+                </label>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
       <a href="{% url 'editor:user-create' %}" aria-label="add user" class="create linked-button"><i class="fal fa-plus"></i>Add user</a>
       <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
     </form>

@@ -5,29 +5,31 @@
   {% block page_header %}
   <div class="page-header">
     <h1>Entities ({{ object_list.count }})</h1>
-    <form action="." class="search" method="get">
-      <label>
-        <span hidden>Search</span>
-        {{ form.q }}
-      </label>
-      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
-    </form>
-    <div class="filter-block">
-      <input type="checkbox" class="none" id="filter" value="Filter">
-      <label for="filter" class="filter-button"><span hidden>Filter</span></label>
-      <div class="filters-hidden">
-        <a href="." class="dotted-underline clear-filters active">Clear filters</a>
-            <div>
-              <fieldset class="filter-list">
-                <legend>Document level</legend>
-                {% for entity_type in facets.fields.entity_type %}
-                {% render_facet entity_type %}
-                {% endfor %}
-              </fieldset>
+    <div class="search-filter">
+      <form action="." class="search" method="get">
+          <label>
+            <span hidden>Search</span>
+            {{ form.q }}
+          </label>
+          <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+        </form>
+        <div class="filter-block">
+          <input type="checkbox" class="none" id="filter" value="Filter">
+          <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+          <div class="filters-hidden">
+            <a href="." class="dotted-underline clear-filters active">Clear filters</a>
+                <div>
+                  <fieldset class="filter-list">
+                    <legend>Document level</legend>
+                    {% for entity_type in facets.fields.entity_type %}
+                    {% render_facet entity_type %}
+                    {% endfor %}
+                  </fieldset>
+                </div>
             </div>
         </div>
+        <a href="{% url 'editor:entity-create' %}" class="create"><span hidden>New entity</span></a>
     </div>
-    <a href="{% url 'editor:entity-create' %}" class="create"><span hidden>New entity</span></a>
   </div>
   {% endblock page_header %}
 
@@ -40,26 +42,28 @@
         <a href="." class="dotted-underline clear-filters">Clear all filters</a>
     </div>
   {% endif %}
-  <table id="records-table" class="tablesorter">
-    <thead>
-      <tr>
-        <th scope="col" data-label="Title">Title</th>
-        <th scope="col" data-label="Type">Type</th>
-        <th scope="col" data-label="Publication status">Publication status</th>
-        <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for result in object_list %}
-      <tr>
-        <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
-        <td>{{ result.entity_type }}</td>
-        <td>{{ result.publication_status }}</td>
-        <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-container">
+    <table id="records-table" class="tablesorter">
+        <thead>
+          <tr>
+            <th scope="col" data-label="Title">Title</th>
+            <th scope="col" data-label="Type">Type</th>
+            <th scope="col" data-label="Publication status">Publication status</th>
+            <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in object_list %}
+          <tr>
+            <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+            <td>{{ result.entity_type }}</td>
+            <td>{{ result.publication_status }}</td>
+            <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
   {% if object_list.count > 10 %}
   <div id="records-table_pager_info" class="pager">
     <div class="page-size">

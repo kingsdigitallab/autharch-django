@@ -80,7 +80,7 @@ $(document).ready(function() {
   $('table').each(function(i, el) {
     $.tablesorter.customPagerControls({
       table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
-      pager          : $("#"+$(el).next('.pager').attr('id')),                   // pager wrapper (string or jQuery object)
+      pager          : $("#"+$(el).parent(".table-container").next('.pager').attr('id')),                   // pager wrapper (string or jQuery object)
       pageSize       : '.page-size a',                // container for page sizes
       currentPage    : '.page-list a',               // container for page selectors
       ends           : 2,                        // number of pages to show of either end
@@ -102,7 +102,7 @@ $(document).ready(function() {
           }
       })
       .tablesorterPager({
-        container: $("#"+$(el).next('.pager').attr('id')),
+        container: $("#"+$(el).parent(".table-container").next('.pager').attr('id')),
         size: 10
       });
   });

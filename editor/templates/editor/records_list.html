@@ -5,55 +5,57 @@
   {% block page_header %}
   <div class="page-header">
     <h1>Archival records ({{ object_list.count }})</h1>
-    <form action="." class="search" method="get">
-      <label>
-        <span hidden>Search</span>
-        {{ form.q }}
-      </label>
-      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
-    </form>
-    <div class="filter-block">
-      <input type="checkbox" class="none" id="filter" aria-label="Filter">
-      <label for="filter" class="filter-button"><span hidden>Filter</span></label>
-      <div class="filters-hidden">
-        <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
-          <div>
-            <!-- should be sorted alphabetically -->
-            <fieldset class="filter-list">
-              <legend>Document level</legend>
-              {% for archival_level in facets.fields.archival_level %}
-              {% render_facet archival_level %}
-              {% endfor %}
-            </fieldset>
-            <fieldset class="filter-list">
-              <legend>Writer</legend>
-              {% for writer in facets.fields.writers %}
-              {% render_facet writer %}
-              {% endfor %}
-            </fieldset>
-            <fieldset class="filter-list">
-              <legend>Addressee</legend>
-              {% for addressee in facets.fields.addressees %}
-              {% render_facet addressee %}
-              {% endfor %}
-            </fieldset>
-            <fieldset class="filter-list">
-              <legend>Creation year</legend>
-              <!--<label>
-                  <input type="number" name="y" value="{{ y }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
-              </label>-->
-              {% for date in facets.fields.dates %}
-              {% render_facet date %}
-              {% endfor %}
-            </fieldset>
-            <fieldset class="filter-list">
-              <legend>Language</legend>
-              {% for language in facets.fields.languages %}
-              {% render_facet language %}
-              {% endfor %}
-            </fieldset>
+    <div class="search-filter">
+      <form action="." class="search" method="get">
+          <label>
+            <span hidden>Search</span>
+            {{ form.q }}
+          </label>
+          <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+        </form>
+        <div class="filter-block">
+          <input type="checkbox" class="none" id="filter" aria-label="Filter">
+          <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+          <div class="filters-hidden">
+            <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
+              <div>
+                <!-- should be sorted alphabetically -->
+                <fieldset class="filter-list">
+                  <legend>Document level</legend>
+                  {% for archival_level in facets.fields.archival_level %}
+                  {% render_facet archival_level %}
+                  {% endfor %}
+                </fieldset>
+                <fieldset class="filter-list">
+                  <legend>Writer</legend>
+                  {% for writer in facets.fields.writers %}
+                  {% render_facet writer %}
+                  {% endfor %}
+                </fieldset>
+                <fieldset class="filter-list">
+                  <legend>Addressee</legend>
+                  {% for addressee in facets.fields.addressees %}
+                  {% render_facet addressee %}
+                  {% endfor %}
+                </fieldset>
+                <fieldset class="filter-list">
+                  <legend>Creation year</legend>
+                  <!--<label>
+                      <input type="number" name="y" value="{{ y }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
+                  </label>-->
+                  {% for date in facets.fields.dates %}
+                  {% render_facet date %}
+                  {% endfor %}
+                </fieldset>
+                <fieldset class="filter-list">
+                  <legend>Language</legend>
+                  {% for language in facets.fields.languages %}
+                  {% render_facet language %}
+                  {% endfor %}
+                </fieldset>
+              </div>
           </div>
-      </div>
+        </div>
     </div>
     <span></span>
   </div>
@@ -69,30 +71,31 @@
       <a href="." class="dotted-underline clear-filters">Clear all filters</a>  
     </div>
   {% endif %}
- 
-  <table id="records-list-table" class="tablesorter">
-    <thead>
-      <tr>
-        <th scope="col" data-label="Title">Title</th>
-        <th scope="col" data-label="Writer">Writer</th>
-        <th scope="col" data-label="Level">Level</th>
-        <th scope="col" data-label="Publication status">Publication status</th>
-        <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for result in object_list %}
-      <tr>
-        <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
-        <!-- display writers as a string compiled out of all writers listed in the document. -->
-        <td>{{ result.writers_display|default_if_none:"" }}</td>
-        <td>{{ result.archival_level }}</td>
-        <td>{{ result.publication_status }}</td>
-        <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-container">
+    <table id="records-list-table" class="tablesorter">
+        <thead>
+          <tr>
+            <th scope="col" data-label="Title">Title</th>
+            <th scope="col" data-label="Writer">Writer</th>
+            <th scope="col" data-label="Level">Level</th>
+            <th scope="col" data-label="Publication status">Publication status</th>
+            <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in object_list %}
+          <tr>
+            <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+            <!-- display writers as a string compiled out of all writers listed in the document. -->
+            <td>{{ result.writers_display|default_if_none:"" }}</td>
+            <td>{{ result.archival_level }}</td>
+            <td>{{ result.publication_status }}</td>
+            <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
   {% if object_list.count > 10 %}
   <div id="records-list-table_pager_info" class="pager">
     <div class="page-size">
