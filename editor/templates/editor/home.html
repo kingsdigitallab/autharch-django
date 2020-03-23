@@ -39,10 +39,12 @@
             <tr>
               {% if result.model_name == 'entity' %}
               <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a></td>
-              <td>Entity | {{ result.entity_type }}</td>
+              <td>Entity</td>
+              <td>{{ result.entity_type }}</td>
               {% else %}
               <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
-              <td>Archival Record | {{ result.archival_level }}</td>
+              <td>Archival Record</td>
+              <td>{{ result.archival_level }}</td>
               {% endif %}
               <td>{{ result.publication_status }}</td>
               <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
