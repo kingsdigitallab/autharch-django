@@ -105,6 +105,23 @@ $(document).ready(function() {
         container: $("#"+$(el).parent(".table-container").next('.pager').attr('id')),
         size: 10
       });
+    var rowsPerPage = $("#"+$(el).attr('id')).find("tbody > tr").filter(function() {
+      return $(this).css('display') !== 'none';
+    }).length;
+    var label = 0;
+    if (rowsPerPage <= 10) {
+      label = 10;
+    }
+    else if (rowsPerPage <= 25) {
+      label = 25;
+    }
+    else if (rowsPerPage <= 50) {
+      label = 50;
+    }
+    else {
+      label = 100;
+    }
+    $("#"+$(el).attr('id')).parent('.table-container').next(".pager").find("a[data-label='"+label+"']").addClass("current");
   });
 
   // add search bar to the select dropdown
