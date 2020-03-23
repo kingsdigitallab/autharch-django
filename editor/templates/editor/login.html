@@ -6,8 +6,14 @@
   <div class="form-page">
     <h1>Login</h1>
 
-    {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+    {% if form.errors and not form.non_field_errors %}
+    <p>Please correct the error below.</p>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
     {% endif %}
 
     <form action="{% url 'editor:login' %}" method="post" class="one-column">
