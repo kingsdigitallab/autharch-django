@@ -9,34 +9,36 @@
   <form action="{% url 'editor:revert' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="redirect_url" value="{{ edit_url }}"/>
-    <table>
-      <thead>
-        <tr>
-          <th>Updated</th>
-          <th>User</th>
-          <th>Status</th>
-          <th>Logged comment</th>
-          <th>Changes</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for version in versions %}
-        <tr>
-          {% with revision=version.revision %}
-          <td>{{ revision.date_created }}</td>
-          <td>{{ revision.user }}</td>
-          <td>Publication status: {{ publication_status }}<br>
-            Maintenance status: {{ maintenance_status }}<br>
-            Editing event type: {{ revision.revision_metadata.editing_event_type }}</td>
-          <td class="wide">{{ revision.comment }}</td>
-          <td class="wide">QAZ</td>
-          <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Reset</button></td>
-          {% endwith %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Updated</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Logged comment</th>
+            <th>Changes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for version in versions %}
+          <tr>
+            {% with revision=version.revision %}
+            <td>{{ revision.date_created }}</td>
+            <td>{{ revision.user }}</td>
+            <td>Publication status: {{ publication_status }}<br>
+              Maintenance status: {{ maintenance_status }}<br>
+              Editing event type: {{ revision.revision_metadata.editing_event_type }}</td>
+            <td class="wide">{{ revision.comment }}</td>
+            <td class="wide">QAZ</td>
+            <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Reset</button></td>
+            {% endwith %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </form>
   {% endblock content %}
 </main>
