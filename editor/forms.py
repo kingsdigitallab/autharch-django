@@ -32,6 +32,12 @@ ENTITY_SEARCH_INPUT_ATTRS = {
     'type': 'search',
 }
 
+DELETED_SEARCH_INPUT_ATTRS = {
+    'aria-label': 'Search',
+    'placeholder': 'Search deleted objects',
+    'type': 'search',
+}
+
 RECORD_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
     'placeholder': 'Search archival records',
@@ -631,6 +637,11 @@ class EntityFacetedSearchForm(FacetedSearchForm):
                         widget=forms.TextInput(
                             attrs=ENTITY_SEARCH_INPUT_ATTRS))
 
+class DeletedFacetedSearchForm(FacetedSearchForm):
+
+    q = forms.CharField(required=False, label='Search',
+                        widget=forms.TextInput(
+                            attrs=DELETED_SEARCH_INPUT_ATTRS))
 
 class SearchForm(haystack.forms.SearchForm):
 

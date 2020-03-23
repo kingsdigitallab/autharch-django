@@ -53,5 +53,6 @@ urlpatterns = [
          name='record-delete'),
     path('records/<int:record_id>/history/', views.record_history,
          name='record-history'),
+    path('deleted/', views.DeletedListView.as_view(), name='deleted-list'),
     path('revert/', views.revert, name='revert'),
 ]

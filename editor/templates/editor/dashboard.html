@@ -3,7 +3,7 @@
 {% block main %}
 <main>
   {% block page_header %}
-    <h1>Account Control Panel</h1>
+    <h1>Account control panel</h1>
   {% endblock page_header %}
 
   {% block content %}
@@ -11,6 +11,9 @@
   <div class="user-control">
     <div id="user-details">
       <h2>Personal details</h2>
+      <div class="success-notification">
+          <h4>Your personal details were successfuly saved.</h4>
+        </div>
       <form action="." method="post" class="two-column-table">
         {% csrf_token %}
         <div>
@@ -26,6 +29,9 @@
     </div>
     <div id="change-password">
         <h2>Change password</h2>
+        <div class="success-notification">
+          <h4>Your password was successfuly changed.</h4>
+        </div>
         <form action="." method="post" class="two-column-table">
           {% csrf_token %}
           {% if password_form.errors %}
@@ -51,7 +57,9 @@
   {% if all_users_formset %}
   <div class="admin">
     <h2>Admin table</h2>
-
+    <div class="success-notification">
+        <h4>Your updates were successfuly saved.</h4>
+      </div>
     {% for error_dict in all_users_formset.errors %}
     {% for key, msgs in error_dict.items %}
     {% if key == "__all__" %}

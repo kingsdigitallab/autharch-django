@@ -24,7 +24,7 @@ from jargon.models import (
 
 from .forms import (
     ArchivalRecordFacetedSearchForm, EditorProfileForm, EntityCreateForm,
-    EntityEditForm, EntityFacetedSearchForm, LogForm, PasswordChangeForm,
+    EntityEditForm, EntityFacetedSearchForm, DeletedFacetedSearchForm, LogForm, PasswordChangeForm,
     SearchForm, UserCreateForm, UserEditForm, UserForm,
     get_archival_record_edit_form_for_subclass
 )
@@ -197,6 +197,22 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     def test_func(self):
         return is_user_editor_plus(self.request.user)
 
+#todo
+class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
+
+    template_name = 'editor/deleted_list.html'
+    form_class = DeletedFacetedSearchForm
+    facet_fields = ['entity_type']
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['current_section'] = 'deleted'
+        context['facets'] = self._merge_facets(context['facets'],
+                                               self.request.GET.copy())
+        return context
+
+    def test_func(self):
+        return is_user_editor_plus(self.request.user)
 
 class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
