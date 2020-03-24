@@ -172,7 +172,7 @@ $(document).ready(function() {
   $('.filter-list').each(function() {
     if ($(this).children("a").length > 5) {
       $(this).children("a").slice(5, $(this).children("a").length).hide();
-      $(this).append(`<button class="button-link show-more" onclick="toggleFilters('`+$(this).attr('id')+`')"><i class="far fa-plus"></i> Show all</button>`);
+      $(this).append(`<button class="button-link show-more" onclick="toggleFilters('`+$(this).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+$(this).children("a").length+`)</button>`);
     }
   });
 
@@ -182,11 +182,11 @@ function toggleFilters(el) {
   $('#'+el).children(".show-more").remove();
   if ($('#'+el).children("a[style='display: none;']").length) {
     $('#'+el).children("a").show();
-    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Hide all</button>`);
+    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Hide all (`+ $('#'+el).children("a").length +`)</button>`);
   }
   else {
     $('#'+el).children("a").slice(5, $('#'+el).children("a").length).hide();
-    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-plus"></i> Show all</button>`);
+    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+ $('#'+el).children("a").length +`)</button>`);
   }
 }
 
