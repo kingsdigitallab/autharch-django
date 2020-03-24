@@ -66,6 +66,9 @@
       <h4>Your updates were successfuly saved.</h4>
     </div>
     {% endif %}
+
+    {% if all_users_formset.errors or all_users_formset.non_form_errors %}
+    <div class="error-notification">
     {% for error_dict in all_users_formset.errors %}
     {% for key, msgs in error_dict.items %}
     {% if key == "__all__" %}
@@ -77,6 +80,12 @@
     {% endif %}
     {% endfor %}
     {% endfor %}
+    {% for error in all_users_formset.non_form_errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
+    </div>
+    {% endif %}
+
     <form action="." method="post">
       {% csrf_token %}
       {{ all_users_formset.management_form }}

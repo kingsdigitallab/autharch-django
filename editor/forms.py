@@ -7,6 +7,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 import haystack.forms
 
+from geonames_place.widgets import PlaceSelect
+
 from archival.models import Collection, File, Item, Series
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
@@ -119,6 +121,7 @@ class EventEditInlineForm(forms.ModelForm):
         widgets = {
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
+            'place': PlaceSelect(),
         }
 
 
@@ -507,6 +510,21 @@ class LogForm(forms.Form):
 
 # User dashboard forms.
 
+class BaseUserFormset(forms.BaseModelFormSet):
+
+    def clean(self):
+        # Check that not all admin users are being deleted.
+        if any(self.errors):
+            return
+        admin_remaining = False
+        for form in self.forms:
+            if form.formsets['editor_profile'].cleaned_data[0]['role'] == \
+               EditorProfile.ADMIN and not form.cleaned_data['DELETE']:
+                admin_remaining = True
+        if not admin_remaining:
+            raise forms.ValidationError('There must always be one admin user.')
+
+
 class EditorProfileForm(forms.Form):
 
     # There is a problem I haven't been able to understand or fix with
@@ -637,11 +655,13 @@ class EntityFacetedSearchForm(FacetedSearchForm):
                         widget=forms.TextInput(
                             attrs=ENTITY_SEARCH_INPUT_ATTRS))
 
+
 class DeletedFacetedSearchForm(FacetedSearchForm):
 
     q = forms.CharField(required=False, label='Search',
                         widget=forms.TextInput(
                             attrs=DELETED_SEARCH_INPUT_ATTRS))
+
 
 class SearchForm(haystack.forms.SearchForm):
 

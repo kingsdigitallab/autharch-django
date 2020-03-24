@@ -23,10 +23,11 @@ from jargon.models import (
     MaintenanceStatus, PublicationStatus)
 
 from .forms import (
-    ArchivalRecordFacetedSearchForm, EditorProfileForm, EntityCreateForm,
-    EntityEditForm, EntityFacetedSearchForm, DeletedFacetedSearchForm,
-    LogForm, PasswordChangeForm, SearchForm, UserCreateForm, UserEditForm,
-    UserForm, get_archival_record_edit_form_for_subclass
+    ArchivalRecordFacetedSearchForm, BaseUserFormset, EditorProfileForm,
+    EntityCreateForm, EntityEditForm, EntityFacetedSearchForm,
+    DeletedFacetedSearchForm, LogForm, PasswordChangeForm, SearchForm,
+    UserCreateForm, UserEditForm, UserForm,
+    get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile, RevisionMetadata
 
@@ -240,7 +241,7 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 def account_control(request):
     user = request.user
     AllUsersFormSet = modelformset_factory(
-        User, extra=0, can_delete=True, form=UserForm)
+        User, extra=0, can_delete=True, form=UserForm, formset=BaseUserFormset)
     user_form = UserEditForm(instance=user)
     password_form = PasswordChangeForm(user=user)
     all_users_formset = None
@@ -269,14 +270,14 @@ def account_control(request):
                 all_users_formset.save()
                 return redirect(redirect_url + '?saved_all_users=true')
     context = {
-        'current_section': 'account',
         'all_users_formset': all_users_formset,
-        'user': user,
-        'user_form': user_form,
+        'current_section': 'account',
         'password_form': password_form,
         'saved_all_users': saved_all_users,
         'saved_password': saved_password,
         'saved_user': saved_user,
+        'user': user,
+        'user_form': user_form,
     }
     return render(request, 'editor/account_control.html', context)
 
