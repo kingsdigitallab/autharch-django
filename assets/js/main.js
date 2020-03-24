@@ -169,7 +169,29 @@ $(document).ready(function() {
     $('.clear-filters').removeClass('active');
   }
 
+  $('.filter-list').each(function() {
+    if ($(this).children("a").length > 5) {
+      $(this).children("a").slice(5, $(this).children("a").length).hide();
+      $(this).append(`<button class="button-link show-more" onclick="showMoreFilters('`+$(this).attr('id')+`')"><i class="far fa-plus"></i> Show more</button>`);
+    }
+  });
+
 });
+
+function showMoreFilters(el) {
+  var currentlyDisplayed = $('#'+el).children("a[style!='display: none;']").length;
+  $('#'+el).children("a").slice(currentlyDisplayed, currentlyDisplayed+5).show();
+  if (!$('#'+el).children("a[style='display: none;']").length) {
+    $('#'+el).children(".show-more").remove();
+    $('#'+el).append(`<button class="button-link show-more" onclick="showLessFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Show less</button>`);
+  }
+}
+
+function showLessFilters(el) {
+  $('#'+el).children("a").slice(5, $('#'+el).children("a").length).hide();
+  $('#'+el).children(".show-more").remove();
+  $('#'+el).append(`<button class="button-link show-more" onclick="showMoreFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-plus"></i> Show more</button>`);
+}
 
 function toggleHelpText(el, help_text) {
   if ($(el).siblings('p.additional-info').length) {
@@ -184,7 +206,6 @@ function toggleHelpText(el, help_text) {
     $(el).text("");
   }
 }
-
 
 //start MODAL TEMPLATES
 

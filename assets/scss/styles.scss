@@ -341,11 +341,6 @@ span[role=button] {
     max-width: max-content;
     &.danger {
         color: $danger;
-        &:hover, &:focus {
-            -moz-box-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            box-shadow: none;
-        }
         .icon-only:focus {
             color: darken($danger, 5%);
         }
@@ -353,11 +348,6 @@ span[role=button] {
 
     &.create {
         color: darken($add, 5%);
-        &:hover, &:focus {
-            -moz-box-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            box-shadow: none !important;
-        }
         .icon-only:focus {
             text-decoration: underline;
         }
@@ -365,10 +355,17 @@ span[role=button] {
 
     &.save {
         color: $save;
+    }
+
+    &.show-more {
+        float:right;
+        color: $add;
+        text-decoration: underline;
+        .far {
+            font-weight: 300;
+        }
         &:hover, &:focus {
-            -moz-box-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            box-shadow: none !important;
+            color: darken($add, 10%);
         }
     }
 
@@ -382,9 +379,11 @@ span[role=button] {
     //     font-weight: 700;
     // }
     &:hover, &:focus {
-        text-decoration: underline;
         cursor: pointer;
-        
+        text-decoration: underline;
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none;
     }
 }
 
@@ -760,7 +759,7 @@ main {
                 margin-top: 10px;
                 margin-bottom: 20px;
                 overflow-y: auto;
-                border-bottom: 1px solid $light-grey;
+                border-bottom: 1px solid $medium-grey;
                 .filter-list {
                     border: none;
                     padding-left: 0px;
@@ -1721,7 +1720,7 @@ footer {
             .filters-hidden {
                 margin-top: 60px;
                 div {
-                    height:80vh;
+                    height: 75vh;
                 }
             }
         }

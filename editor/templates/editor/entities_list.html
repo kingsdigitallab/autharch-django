@@ -19,7 +19,7 @@
           <div class="filters-hidden">
             <a href="." class="dotted-underline clear-filters active">Clear filters</a>
                 <div>
-                  <fieldset class="filter-list">
+                  <fieldset class="filter-list" id="document-level-filter">
                     <legend>Document level</legend>
                     {% for entity_type in facets.fields.entity_type %}
                     {% render_facet entity_type %}

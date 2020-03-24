@@ -20,25 +20,25 @@
             <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
               <div>
                 <!-- should be sorted alphabetically -->
-                <fieldset class="filter-list">
+                <fieldset class="filter-list" id="document-level-filter">
                   <legend>Document level</legend>
                   {% for archival_level in facets.fields.archival_level %}
                   {% render_facet archival_level %}
                   {% endfor %}
                 </fieldset>
-                <fieldset class="filter-list">
+                <fieldset class="filter-list" id="writer-filter">
                   <legend>Writer</legend>
                   {% for writer in facets.fields.writers %}
                   {% render_facet writer %}
                   {% endfor %}
                 </fieldset>
-                <fieldset class="filter-list">
+                <fieldset class="filter-list" id="addressee-filter">
                   <legend>Addressee</legend>
                   {% for addressee in facets.fields.addressees %}
                   {% render_facet addressee %}
                   {% endfor %}
                 </fieldset>
-                <fieldset class="filter-list">
+                <fieldset class="filter-list" id="year-filter">
                   <legend>Creation year</legend>
                   <!--<label>
                       <input type="number" name="y" value="{{ y }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
@@ -47,7 +47,7 @@
                   {% render_facet date %}
                   {% endfor %}
                 </fieldset>
-                <fieldset class="filter-list">
+                <fieldset class="filter-list" id="language-filter">
                   <legend>Language</legend>
                   {% for language in facets.fields.languages %}
                   {% render_facet language %}
