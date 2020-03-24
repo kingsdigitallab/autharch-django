@@ -105,6 +105,7 @@ $(document).ready(function() {
         container: $("#"+$(el).parent(".table-container").next('.pager').attr('id')),
         size: 10
       });
+
     var rowsPerPage = $("#"+$(el).attr('id')).find("tbody > tr").filter(function() {
       return $(this).css('display') !== 'none';
     }).length;

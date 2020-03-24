@@ -7,7 +7,7 @@
     {% if query %}
       <h1>Search results</h1>
       {% else %}
-      <h1>My Dashboard</h1>
+      <h1>Dashboard</h1>
     {% endif%}
     <form class="search">
       <label>
@@ -148,7 +148,7 @@
     
     {% if unpublished_records is not None %}
     <!-- should be available for moderators and admins. Moderators should be able to approve the records for publication and admins should be able to publish them. -->
-      <h2>Records for publication ({{unpublished_entities.count|add:unpublished_records.count}})</h2>
+      <h2>Records for approval/publication ({{unpublished_entities.count|add:unpublished_records.count}})</h2>
       <div class="table-container">
         <table id="publication-table" class="tablesorter">
             <thead>

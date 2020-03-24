@@ -393,9 +393,9 @@ span[role=button] {
     -moz-border-radius: 0px;
     border-radius: 0px;
     margin-bottom: 0px;
-    &:after {
-        content: "LOGOUT";
-    }
+    // &:after {
+    //     content: "Logout";
+    // }
 }
 
 a {
@@ -469,13 +469,14 @@ header {
     background: $primary url('/static/images/background-header.svg') no-repeat bottom;
     background-size: 100%;
     height: 100vh;
-    width: 250px;
+    width: 230px;
     position: fixed;
     left: 0;
     -moz-box-shadow: 1px 0px 3px $medium-grey;
     -webkit-box-shadow: 1px 0px 3px $medium-grey;
     box-shadow: 1px 0px 3px $medium-grey;
     z-index: 10;
+    overflow: hidden;
     #logo {
         width: 100%;
         // display: flex;
@@ -494,35 +495,28 @@ header {
     }
     #menu-links, #menu-account {
         color: white;
-        a {
-            color: inherit;
-            text-decoration: none;
-            &:focus {
-                outline: none;
-                background-color: lighten($light-grey, 4%);
-                color: $primary;
-            }
-        }
-        h4 {
-            font-size: 14px;
-            margin-top: 10px;
-            margin-bottom: 0px;
-        }
         .link {
             max-height: 120px;
             text-align: center;
             a {
+                color: inherit;
+                text-decoration: none;
                 padding: 20px;
                 display: flex;
                 align-items: center;
                 justify-content: start;
                 h4 {
+                    font-size: 14px;
+                    margin-top: 10px;
+                    margin-bottom: 0px;
                     font-weight: 400;
                     margin: 0;
                 }
-                // &:focus {
-                //     text-decoration: underline;
-                // }
+                &:focus {
+                    outline: none;
+                    background-color: lighten($light-grey, 4%);
+                    color: $primary;
+                }
             }
             &.active {
                 color: $primary;
@@ -553,16 +547,15 @@ header {
         bottom: 0;
         width: 100%;
         #logout {
-            cursor: pointer;
+            // cursor: pointer;
             background-color: $danger;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            border: none;
-            font-size: 14px;
-            display: block;
-            box-sizing: border-box;
+            // color: white;
+            // padding: 20px;
+            // text-align: center;
+            // width: 100%;
+            // border: none;
+            // font-size: 14px;
+            // box-sizing: border-box;
             &:hover, &:focus {
                 @include darken($danger);
             }
@@ -618,7 +611,7 @@ main {
     box-sizing: border-box;
     min-height: 84vh;
     &:not(.no-sidebar) {
-        margin-left: 250px;
+        margin-left: 230px;
     }
 
     .home {
@@ -691,7 +684,7 @@ main {
         left: 0;
         right: 0;
         z-index: 9;
-        margin-left: 250px;
+        margin-left: 230px;
         padding: 10px 40px;
         .status-bar {
             @include inline-list("|");
@@ -1687,10 +1680,10 @@ footer {
         }
         #menu-account {
             #logout {
-                &:after {
-                    font-family: $fontawesome;
-                    content: "\f2f5";
-                    font-weight: 300;
+                h4 {
+                    @include hidden;
+                }
+                .far {
                     margin: 0px 5px;
                 }
             }
@@ -1848,6 +1841,13 @@ footer {
                     }
                 }
             }
+        }
+    }
+}
+@media only screen and (max-width: 700px) {
+    .fieldset-body {
+        .flex {
+            display: block !important;
         }
     }
 }

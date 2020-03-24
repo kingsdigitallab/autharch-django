@@ -25,36 +25,41 @@
         <div class="link{% if current_section == 'home' %} active{% endif %}">
           <a href="{% url 'editor:home' %}">
             <i class="fal fa-home"></i>
-            <h4>MY DASHBOARD</h4>
+            <h4>Dashboard</h4>
           </a>
         </div>
         <div class="link{% if current_section == 'entities' %} active{% endif %}">
           <a href="{% url 'editor:entities-list' %}">
             <i class="fal fa-users"></i>
-            <h4>ENTITIES</h4>
+            <h4>Entities</h4>
           </a>
         </div>
         <div class="link{% if current_section == 'records' %} active{% endif %}">
           <a href="{% url 'editor:records-list' %}">
             <i class="fal fa-archive"></i>
-            <h4>ARCHIVAL RECORDS</h4>
+            <h4>Archival records</h4>
           </a>
         </div>
         <div class="link{% if current_section == 'deleted' %} active{% endif %}">
           <a href="{% url 'editor:deleted-list' %}">
             <i class="far fa-trash-alt"></i>
-            <h4>DELETED</h4>
+            <h4>Deleted</h4>
           </a>
         </div>
       </div>
       <div id="menu-account">
         <div class="link{% if current_section == 'account' %} active{% endif %}">
-          <a href="{% url 'editor:dashboard' %}">
+          <a href="{% url 'editor:account-control' %}">
             <i class="fal fa-user"></i>
-            <h4>ACCOUNT CONTROL</h4>
+            <h4>Account control</h4>
           </a>
         </div>
-        <a href="{% url 'editor:logout' %}" class="button" id="logout"><span hidden>Logout</span></a>
+        <div class="link">
+          <a href="{% url 'editor:logout' %}" id="logout">
+            <i class="far fa-sign-out-alt"></i>
+            <h4>Logout</h4>
+          </a>
+        </div>
       </div>
     </header>
     {% endblock %}

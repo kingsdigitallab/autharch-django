@@ -10,7 +10,7 @@
       <div class="mobile-hide-1020">
         <ul>
           <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
-          <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li>
+          <!-- <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li> -->
           <li>Updated: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
         </ul>
         <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
@@ -30,8 +30,8 @@
   <div class="form-header">
     <div class="breadcrumbs">
       <ul>
-        <li><a href="{% url 'editor:home' %}">HOME</a></li>
-        <li><a href="{% url 'editor:entities-list' %}" class="dotted-underline">ENTITIES</a></li>
+        <li><a href="{% url 'editor:home' %}">Home</a></li>
+        <li><a href="{% url 'editor:entities-list' %}" class="dotted-underline">Entities</a></li>
         <li>{{ entity|truncatewords:30 }}</li>
       </ul>
     </div>

@@ -12,7 +12,7 @@
       <div class="mobile-hide-1020">
         <ul>
           <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
-          <li>Maintenance status: <span class="highlight">{{ record.maintenance_status }}</span></li>
+          <!-- <li>Maintenance status: <span class="highlight">{{ record.maintenance_status }}</span></li> -->
           <li>Last edited: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
         </ul>
         <a href="{% url 'editor:record-history' record_id=record.pk %}">
@@ -32,8 +32,8 @@
   <div class="form-header">
     <div class="breadcrumbs">
       <ul>
-        <li><a href="{% url 'editor:home' %}">HOME</a></li>
-        <li><a href="{% url 'editor:records-list' %}" class="dotted-underline">ARCHIVAL RECORDS</a></li>
+        <li><a href="{% url 'editor:home' %}">Home</a></li>
+        <li><a href="{% url 'editor:records-list' %}" class="dotted-underline">Archival records</a></li>
         <li>{{ record|truncatewords:15 }}</li>
       </ul>
     </div>

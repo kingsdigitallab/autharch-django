@@ -12,7 +12,7 @@
 
     {% if form.non_field_errors %}
     {% for error in form.non_field_errors %}
-    <p>{{ error }}</p>
+    <p class="error-notification">{{ error }}</p>
     {% endfor %}
     {% endif %}
 

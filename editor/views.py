@@ -237,7 +237,7 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
 
 @user_passes_test(is_user_editor_plus)
-def dashboard(request):
+def account_control(request):
     user = request.user
     AllUsersFormSet = modelformset_factory(
         User, extra=0, can_delete=True, form=UserForm)
@@ -250,7 +250,7 @@ def dashboard(request):
     if user.editor_profile.role == EditorProfile.ADMIN:
         all_users_formset = AllUsersFormSet()
     if request.method == 'POST':
-        redirect_url = reverse('editor:dashboard')
+        redirect_url = reverse('editor:account-control')
         if request.POST.get('user_submit') is not None:
             user_form = UserEditForm(request.POST, instance=user)
             if user_form.is_valid():
@@ -278,7 +278,7 @@ def dashboard(request):
         'saved_password': saved_password,
         'saved_user': saved_user,
     }
-    return render(request, 'editor/dashboard.html', context)
+    return render(request, 'editor/account_control.html', context)
 
 
 @user_passes_test(is_user_editor_plus)
@@ -487,7 +487,7 @@ def user_create(request):
             role = profile_form.cleaned_data['role']
             profile = EditorProfile(user=user, role=role)
             profile.save()
-            return redirect('editor:dashboard')
+            return redirect('editor:account-control')
     else:
         user_form = UserCreateForm()
         profile_form = EditorProfileForm()
