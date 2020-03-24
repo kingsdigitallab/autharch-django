@@ -6,8 +6,8 @@
   <div class="header-fixed">
     <div class="status-bar">
       <input type="checkbox" id="document-status-checkbox" class="none" value="Document status" aria-label="document-status"/>
-      <label class="mobile-only-1020" for="document-status-checkbox">Status</label>
-      <div class="mobile-hide-1020">
+      <label class="mobile-only" for="document-status-checkbox">Status</label>
+      <div class="mobile-hide">
         <ul>
           <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
           <!-- <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li> -->
@@ -32,7 +32,6 @@
       <ul>
         <li><a href="{% url 'editor:home' %}">Home</a></li>
         <li><a href="{% url 'editor:entities-list' %}" class="dotted-underline">Entities</a></li>
-        <li>{{ entity|truncatewords:30 }}</li>
       </ul>
     </div>
 

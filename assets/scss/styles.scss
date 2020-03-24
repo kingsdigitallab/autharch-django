@@ -49,7 +49,7 @@ $fontawesome: 'Font Awesome 5 Pro';
         li {
             list-style: none;
             margin: 0px 0px 5px 0px;
-            &:not(:last-child):after {
+            &:after {
                 content: $value;
                 margin: 0px 10px;
                 color: $medium-grey;
@@ -128,7 +128,7 @@ body {
     border-left-color: $primary !important;
 }
 
-.mobile-only-1020 {
+.mobile-only {
     display: none;
 }
 
@@ -469,7 +469,7 @@ header {
     background: $primary url('/static/images/background-header.svg') no-repeat bottom;
     background-size: 100%;
     height: 100vh;
-    width: 230px;
+    width: 210px;
     position: fixed;
     left: 0;
     -moz-box-shadow: 1px 0px 3px $medium-grey;
@@ -611,7 +611,7 @@ main {
     box-sizing: border-box;
     min-height: 84vh;
     &:not(.no-sidebar) {
-        margin-left: 230px;
+        margin-left: 210px;
     }
 
     .home {
@@ -684,7 +684,7 @@ main {
         left: 0;
         right: 0;
         z-index: 9;
-        margin-left: 230px;
+        margin-left: 210px;
         padding: 10px 40px;
         .status-bar {
             @include inline-list("|");
@@ -1646,7 +1646,7 @@ footer {
     }
 }
 
-@media only screen and (max-width: 1280px), screen and (max-height: 540px) {
+@media only screen and (max-width: 1080px), screen and (max-height: 540px) {
     body {
         display: block;
     }
@@ -1702,6 +1702,18 @@ footer {
             margin-left:0px;
             padding: 0.7em 2em;
         }
+        // table {
+        //     .button-link {
+        //         white-space: pre-wrap;
+        //     }
+        // }
+        .user-control {
+            display: block;
+            #user-details, #change-password {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        } 
         .form-header {
             margin-top: 150px;
         }
@@ -1726,59 +1738,6 @@ footer {
         }
     }
 }
-
-@media only screen and (max-width: 1020px) {
-    .mobile-hide-1020 {
-        display: none;
-        animation: opacityChange 0.7s;
-    }
-    main {
-        .header-fixed {
-            .status-bar {
-                label.mobile-only-1020 {
-                    display: block;
-                    color: $primary;
-                    cursor: pointer;
-                    font-size: 14px;
-                    &:after {
-                        content:'\f078';
-                        font-family: $fontawesome;
-                        font-weight: 600;
-                        margin-left: 10px;
-                        font-size: 14px;
-                        right: 0;
-                    }
-                }
-                input[type=checkbox]:checked + label.mobile-only-1020 {
-                    &:after {
-                        content:'\f077';
-                    }
-                    + .mobile-hide-1020 {
-                        display: block;
-                        margin-bottom: 1em;
-                    }
-                }
-            }
-        }
-        .form-header {
-            .breadcrumbs ul {
-                display: block;
-            }
-        }
-        // table {
-        //     .button-link {
-        //         white-space: pre-wrap;
-        //     }
-        // }
-        .user-control {
-            display: block;
-            #user-details, #change-password {
-                width: 100%;
-                box-sizing: border-box;
-            }
-        } 
-    }
-}
 @media only screen and (max-width: 970px) {
     header {
         h4 {
@@ -1792,6 +1751,10 @@ footer {
    }
 }
 @media only screen and (max-width: 880px) {
+    .mobile-hide {
+        display: none;
+        animation: opacityChange 0.7s;
+    }
     main {
         .two-column-table {
             display: block;
@@ -1838,6 +1801,33 @@ footer {
                     }
                     &:after {
                         content: "";
+                    }
+                }
+            }
+        }
+        .header-fixed {
+            .status-bar {
+                label.mobile-only {
+                    display: block;
+                    color: $primary;
+                    cursor: pointer;
+                    font-size: 14px;
+                    &:after {
+                        content:'\f078';
+                        font-family: $fontawesome;
+                        font-weight: 600;
+                        margin-left: 10px;
+                        font-size: 14px;
+                        right: 0;
+                    }
+                }
+                input[type=checkbox]:checked + label.mobile-only {
+                    &:after {
+                        content:'\f077';
+                    }
+                    + .mobile-hide {
+                        display: block;
+                        margin-bottom: 1em;
                     }
                 }
             }
