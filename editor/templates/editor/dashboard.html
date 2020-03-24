@@ -11,9 +11,11 @@
   <div class="user-control">
     <div id="user-details">
       <h2>Personal details</h2>
+      {% if saved_user %}
       <div class="success-notification">
-          <h4>Your personal details were successfuly saved.</h4>
-        </div>
+        <h4>Your personal details were successfuly saved.</h4>
+      </div>
+      {% endif %}
       <form action="." method="post" class="two-column-table">
         {% csrf_token %}
         <div>
@@ -28,10 +30,12 @@
       </form>
     </div>
     <div id="change-password">
-        <h2>Change password</h2>
-        <div class="success-notification">
-          <h4>Your password was successfuly changed.</h4>
-        </div>
+      <h2>Change password</h2>
+      {% if saved_password %}
+      <div class="success-notification">
+        <h4>Your password was successfuly changed.</h4>
+      </div>
+      {% endif %}
         <form action="." method="post" class="two-column-table">
           {% csrf_token %}
           {% if password_form.errors %}
@@ -57,9 +61,11 @@
   {% if all_users_formset %}
   <div class="admin">
     <h2>Admin table</h2>
+    {% if saved_all_users %}
     <div class="success-notification">
-        <h4>Your updates were successfuly saved.</h4>
-      </div>
+      <h4>Your updates were successfuly saved.</h4>
+    </div>
+    {% endif %}
     {% for error_dict in all_users_formset.errors %}
     {% for key, msgs in error_dict.items %}
     {% if key == "__all__" %}

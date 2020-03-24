@@ -24,9 +24,9 @@ from jargon.models import (
 
 from .forms import (
     ArchivalRecordFacetedSearchForm, EditorProfileForm, EntityCreateForm,
-    EntityEditForm, EntityFacetedSearchForm, DeletedFacetedSearchForm, LogForm, PasswordChangeForm,
-    SearchForm, UserCreateForm, UserEditForm, UserForm,
-    get_archival_record_edit_form_for_subclass
+    EntityEditForm, EntityFacetedSearchForm, DeletedFacetedSearchForm,
+    LogForm, PasswordChangeForm, SearchForm, UserCreateForm, UserEditForm,
+    UserForm, get_archival_record_edit_form_for_subclass
 )
 from .models import EditorProfile, RevisionMetadata
 
@@ -197,7 +197,8 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     def test_func(self):
         return is_user_editor_plus(self.request.user)
 
-#todo
+
+# todo
 class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/deleted_list.html'
@@ -213,6 +214,7 @@ class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     def test_func(self):
         return is_user_editor_plus(self.request.user)
+
 
 class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
@@ -242,32 +244,39 @@ def dashboard(request):
     user_form = UserEditForm(instance=user)
     password_form = PasswordChangeForm(user=user)
     all_users_formset = None
+    saved_user = request.GET.get('saved_user', False)
+    saved_password = request.GET.get('saved_password', False)
+    saved_all_users = request.GET.get('saved_all_users', False)
     if user.editor_profile.role == EditorProfile.ADMIN:
         all_users_formset = AllUsersFormSet()
     if request.method == 'POST':
+        redirect_url = reverse('editor:dashboard')
         if request.POST.get('user_submit') is not None:
             user_form = UserEditForm(request.POST, instance=user)
             if user_form.is_valid():
                 user_form.save()
-                return redirect('editor:dashboard')
+                return redirect(redirect_url + '?saved_user=true')
         elif request.POST.get('password_submit') is not None:
             password_form = PasswordChangeForm(data=request.POST, user=user)
             if password_form.is_valid():
                 password_form.save()
-                return redirect('editor:dashboard')
+                return redirect(redirect_url + '?saved_password=true')
         elif (user.editor_profile.role == EditorProfile.ADMIN and
               request.POST.get('all_users_submit') is not None):
             # Changing editor profile role or deleting user.
             all_users_formset = AllUsersFormSet(request.POST)
             if all_users_formset.is_valid():
                 all_users_formset.save()
-                return redirect('editor:dashboard')
+                return redirect(redirect_url + '?saved_all_users=true')
     context = {
         'current_section': 'account',
         'all_users_formset': all_users_formset,
         'user': user,
         'user_form': user_form,
-        'password_form': password_form
+        'password_form': password_form,
+        'saved_all_users': saved_all_users,
+        'saved_password': saved_password,
+        'saved_user': saved_user,
     }
     return render(request, 'editor/dashboard.html', context)
 
@@ -335,6 +344,7 @@ def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     if entity.is_deleted:
         return redirect('editor:entity-history', entity_id=entity_id)
+    saved = request.GET.get('saved', False)
     if request.method == 'POST':
         form = EntityEditForm(request.POST, instance=entity)
         log_form = LogForm(request.POST)
@@ -345,7 +355,9 @@ def entity_edit(request, entity_id):
             reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                                collaborative_workspace_editor_type=editor_type)
             form.save()
-            return redirect('editor:entity-edit', entity_id=entity_id)
+            url = reverse('editor:entity-edit',
+                          kwargs={'entity_id': entity_id}) + '?saved=true'
+            return redirect(url)
     else:
         form = EntityEditForm(instance=entity)
         log_form = LogForm()
@@ -357,6 +369,7 @@ def entity_edit(request, entity_id):
         'form': form,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
+        'saved': saved,
     }
     return render(request, 'editor/entity_edit.html', context)
 
@@ -406,6 +419,7 @@ def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     if record.is_deleted:
         return redirect('editor:record-history', record_id=record_id)
+    saved = request.GET.get('saved', False)
     editor_role = request.user.editor_profile.role
     form_class = get_archival_record_edit_form_for_subclass(record)
     if request.method == 'POST':
@@ -419,7 +433,9 @@ def record_edit(request, record_id):
             reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                                collaborative_workspace_editor_type=editor_type)
             form.save()
-            return redirect('editor:record-edit', record_id=record_id)
+            url = reverse('editor:record-edit',
+                          kwargs={'record_id': record_id}) + 'saved=true'
+            return redirect(url)
     else:
         form = form_class(editor_role=editor_role, instance=record)
         log_form = LogForm()
@@ -432,6 +448,7 @@ def record_edit(request, record_id):
         'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
         'record': record,
+        'saved': saved,
     }
     return render(request, 'editor/record_edit.html', context)
 
