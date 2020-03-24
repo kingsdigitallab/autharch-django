@@ -1,10 +1,8 @@
 {{ object.title }}
+{{ object.description }}
 {% for creator in object.creators.all %}
 {{ creator }}
 {% endfor %}
 {% for person in object.persons_as_relations.all %}
 {{ person }}
-{% endfor %}
-{% for language in object.languages.all %}
-{{ language }}
 {% endfor %}

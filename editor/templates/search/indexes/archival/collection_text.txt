@@ -1,4 +1,2 @@
 {{ object.title }}
-{% for language in object.languages.all %}
-{{ language }}
-{% endfor %}
+{{ object.description }}

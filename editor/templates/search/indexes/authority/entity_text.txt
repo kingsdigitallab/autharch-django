@@ -1,3 +1,17 @@
 {% for name in object.get_all_name_entries %}
 {{ name }}
 {% endfor %}
+{% for identity in object.identities.all %}
+{{ identity.get_date }}
+{% for description in identity.descriptions.all %}
+{% for local_description in description.objects.all %}
+{{ local_description.gender }}
+{% endfor %}
+{% for biography in description.biography_history.all %}
+{{ biography.abstract }}
+{{ biography.content }}
+{{ biography.structure_or_genealogy }}
+{{ biography.sources }}
+{% endfor %}
+{% endfor %}
+{% endfor %}
