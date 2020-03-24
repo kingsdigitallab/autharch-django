@@ -359,6 +359,7 @@ span[role=button] {
 
     &.show-more {
         float:right;
+        margin-right: 20px;
         color: $add;
         text-decoration: underline;
         .far {
