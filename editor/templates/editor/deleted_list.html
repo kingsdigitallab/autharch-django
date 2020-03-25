@@ -20,7 +20,7 @@
             <a href="." class="dotted-underline clear-filters active">Clear filters</a>
                 <div>
                     <fieldset class="filter-list">
-                    <legend>Document level</legend>
+                    <legend>Entity type</legend>
                     {% for entity_type in facets.fields.entity_type %}
                     {% render_facet entity_type %}
                     {% endfor %}
@@ -54,8 +54,14 @@
         <tbody>
           {% for result in object_list %}
           <tr>
+            {% if result.model_name == 'entity' %}
             <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
             <td>{{ result.entity_type }}</td>
+            {% else %}
+            <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+            <td>Archival Record</td>
+            <td>{{ result.archival_level }}</td>
+            {% endif %}
             <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
             <td>QAZ</td>
           </tr>

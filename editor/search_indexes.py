@@ -54,6 +54,7 @@ class CollectionIndex(indexes.SearchIndex, indexes.Indexable,
     archival_level = indexes.CharField(model_attr='archival_level',
                                        faceted=True)
     publication_status = indexes.CharField(model_attr='publication_status')
+    maintenance_status = indexes.CharField(model_attr='maintenance_status')
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
     modified = indexes.DateTimeField(model_attr='modified')
@@ -69,6 +70,7 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     archival_level = indexes.CharField(model_attr='archival_level',
                                        faceted=True)
     publication_status = indexes.CharField(model_attr='publication_status')
+    maintenance_status = indexes.CharField(model_attr='maintenance_status')
     addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
@@ -87,6 +89,7 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     archival_level = indexes.CharField(model_attr='archival_level',
                                        faceted=True)
     publication_status = indexes.CharField(model_attr='publication_status')
+    maintenance_status = indexes.CharField(model_attr='maintenance_status')
     addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
@@ -103,6 +106,7 @@ class SeriesIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     archival_level = indexes.CharField(model_attr='archival_level',
                                        faceted=True)
     publication_status = indexes.CharField(model_attr='publication_status')
+    maintenance_status = indexes.CharField(model_attr='maintenance_status')
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
     modified = indexes.DateTimeField(model_attr='modified')
@@ -118,6 +122,7 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     entity_type = indexes.CharField(model_attr='entity_type__title',
                                     faceted=True)
     publication_status = indexes.CharField()
+    maintenance_status = indexes.CharField()
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
 
@@ -126,6 +131,12 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_description(self, obj):
         return str(obj)
+
+    def prepare_maintenance_status(self, obj):
+        try:
+            return obj.control.maintenance_status.title
+        except AttributeError:
+            return ''
 
     def prepare_publication_status(self, obj):
         try:

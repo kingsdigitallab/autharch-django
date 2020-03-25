@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -83,6 +84,8 @@ class FacetMixin:
         selected_facets = self._split_selected_facets(
             query_dict.getlist('selected_facets'))
         selected = []
+        if not facets.get('fields'):
+            return facets
         for facet, values in facets['fields'].items():
             # Some facet field values are a model object ID, so get
             # a display string for them.
@@ -133,7 +136,9 @@ class FacetMixin:
 class HomeView(UserPassesTestMixin, SearchView):
 
     template_name = 'editor/home.html'
-    queryset = SearchQuerySet().models(Collection, Entity, File, Item, Series)
+    queryset = SearchQuerySet().models(
+        Collection, Entity, File, Item, Series).exclude(
+            maintenance_status='deleted')
     form_class = SearchForm
 
     def get_context_data(self, *args, **kwargs):
@@ -172,9 +177,10 @@ class HomeView(UserPassesTestMixin, SearchView):
         if user.editor_profile.role == EditorProfile.ADMIN:
             entities = Entity.objects.exclude(
                 control__publication_status__title='published').exclude(
-                    is_deleted=True)
+                    control__maintenance_status='deleted')
             records = ArchivalRecord.objects.exclude(
-                publication_status__title='published').exclude(is_deleted=True)
+                publication_status__title='published').exclude(
+                    maintenance_status='deleted')
         return entities, records
 
     def test_func(self):
@@ -184,7 +190,8 @@ class HomeView(UserPassesTestMixin, SearchView):
 class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/entities_list.html'
-    queryset = SearchQuerySet().models(Entity)
+    queryset = SearchQuerySet().models(Entity).exclude(
+        maintenance_status='deleted')
     form_class = EntityFacetedSearchForm
     facet_fields = ['entity_type']
 
@@ -199,11 +206,13 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         return is_user_editor_plus(self.request.user)
 
 
-# todo
 class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/deleted_list.html'
     form_class = DeletedFacetedSearchForm
+    queryset = SearchQuerySet().models(
+        Collection, Entity, File, Item, Series).filter(
+            maintenance_status='deleted')
     facet_fields = ['entity_type']
 
     def get_context_data(self, *args, **kwargs):
@@ -220,7 +229,8 @@ class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/records_list.html'
-    queryset = SearchQuerySet().models(Collection, File, Item, Series)
+    queryset = SearchQuerySet().models(Collection, File, Item, Series).exclude(
+        maintenance_status='deleted')
     form_class = ArchivalRecordFacetedSearchForm
     facet_fields = ['addressees', 'archival_level', 'dates', 'languages',
                     'writers']
@@ -319,15 +329,19 @@ def entity_create(request):
 @create_revision()
 def entity_delete(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
-    if entity.is_deleted:
+    # Can't delete a deleted record.
+    if entity.is_deleted():
         return redirect('editor:entity-history', entity_id=entity_id)
+    # Editors may only delete inProcess entities.
+    if entity.control.publication_status.title != 'inProcess' and \
+       request.user.editor_profile.role == EditorProfile.EDITOR:
+        return HttpResponseForbidden()
     if request.POST.get('DELETE') == 'DELETE':
         reversion.set_comment('Deleted entity.')
         event_type = EditingEventType.objects.get(title='deleted')
         editor_type = CWEditorType.objects.get(title='human')
         reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                            collaborative_workspace_editor_type=editor_type)
-        entity.is_deleted = True
         control = entity.control
         control.publication_status = PublicationStatus.objects.get(
             title='inProcess')
@@ -343,8 +357,12 @@ def entity_delete(request, entity_id):
 @create_revision()
 def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
-    if entity.is_deleted:
+    editor_role = request.user.editor_profile.role
+    if entity.is_deleted() and editor_role == EditorProfile.EDITOR:
         return redirect('editor:entity-history', entity_id=entity_id)
+    if entity.control.publication_status.title != 'inProcess' and \
+       editor_role == EditorProfile.EDITOR:
+        return HttpResponseForbidden()
     saved = request.GET.get('saved', False)
     if request.method == 'POST':
         form = EntityEditForm(request.POST, instance=entity)
@@ -396,15 +414,19 @@ def entity_history(request, entity_id):
 @require_POST
 def record_delete(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
-    if record.is_deleted:
+    # Can't delete a deleted record.
+    if record.is_deleted():
         return redirect('editor:record-history', record_id=record_id)
+    # Editors may only delete inProcess records.
+    if record.publication_status.title != 'inProcess' and \
+       request.user.editor_profile.role == EditorProfile.EDITOR:
+        raise HttpResponseForbidden()
     if request.POST.get('DELETE') == 'DELETE':
         reversion.set_comment('Deleted archival record.')
         event_type = EditingEventType.objects.get(title='deleted')
         editor_type = CWEditorType.objects.get(title='human')
         reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                            collaborative_workspace_editor_type=editor_type)
-        record.is_deleted = True
         record.publication_status = PublicationStatus.objects.get(
             title='inProcess')
         record.maintenance_status = MaintenanceStatus.objects.get(
@@ -418,10 +440,13 @@ def record_delete(request, record_id):
 @create_revision()
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
-    if record.is_deleted:
-        return redirect('editor:record-history', record_id=record_id)
-    saved = request.GET.get('saved', False)
     editor_role = request.user.editor_profile.role
+    if record.is_deleted() and editor_role == EditorProfile.EDITOR:
+        return redirect('editor:record-history', record_id=record_id)
+    if record.publication_status.title != 'inProcess' and \
+       editor_role == EditorProfile.EDITOR:
+        return HttpResponseForbidden()
+    saved = request.GET.get('saved', False)
     form_class = get_archival_record_edit_form_for_subclass(record)
     if request.method == 'POST':
         form = form_class(request.POST, editor_role=editor_role,
