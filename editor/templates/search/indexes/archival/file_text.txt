@@ -1,5 +1,6 @@
 {{ object.title }}
 {{ object.description }}
+{{ object.creation_dates }}
 {% for creator in object.creators.all %}
 {{ creator }}
 {% endfor %}
