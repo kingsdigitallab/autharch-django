@@ -15,7 +15,7 @@ from authority.models import (
     LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
     NamePart, Place, Relation, Resource, Source
 )
-from jargon.models import EntityType, NamePartType
+from jargon.models import EntityType, NamePartType, PublicationStatus
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
@@ -234,10 +234,19 @@ class BiographyHistoryEditInlineForm(forms.ModelForm):
 
 class ControlEditInlineForm(ContainerModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.Meta.editor_role == EditorProfile.EDITOR:
+            in_process_status = PublicationStatus.objects.get(
+                title='inProcess')
+            self.fields['publication_status'].widget = forms.Select(
+                choices=[(in_process_status.pk, 'inProcess')])
+            self.fields['publication_status'].disabled = True
+
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
         data = kwargs.get('data')
-        SourceFormset = forms.models.inlineformset_factory(
+        SourceFormset = inlineformset_factory(
             Control, Source, form=SourceEditInlineForm, extra=0)
         formsets['sources'] = SourceFormset(
             data, instance=self.instance, prefix=self.prefix + '-source')
@@ -255,39 +264,39 @@ class DescriptionEditInlineForm(ContainerModelForm):
         data = kwargs.get('data')
         instance = self.instance
         prefix = self.prefix
-        PlaceFormset = forms.models.inlineformset_factory(
+        PlaceFormset = inlineformset_factory(
             Description, Place, form=PlaceEditInlineForm, extra=0)
         formsets['places'] = PlaceFormset(
             data, instance=instance, prefix=prefix + '-place')
-        EventFormset = forms.models.inlineformset_factory(
+        EventFormset = inlineformset_factory(
             Description, Event, form=EventEditInlineForm, extra=0)
         formsets['events'] = EventFormset(
             data, instance=instance, prefix=prefix + '-event')
-        FunctionFormset = forms.models.inlineformset_factory(
+        FunctionFormset = inlineformset_factory(
             Description, Function, form=FunctionEditInlineForm, extra=0)
         formsets['functions'] = FunctionFormset(
             data, instance=instance, prefix=prefix + '-function')
-        LanguageScriptFormset = forms.models.inlineformset_factory(
+        LanguageScriptFormset = inlineformset_factory(
             Description, LanguageScript, form=LanguageScriptEditInlineForm,
             extra=0)
         formsets['language_scripts'] = LanguageScriptFormset(
             data, instance=instance, prefix=prefix + '-language_script')
-        BiographyHistoryFormset = forms.models.inlineformset_factory(
+        BiographyHistoryFormset = inlineformset_factory(
             Description, BiographyHistory, form=BiographyHistoryEditInlineForm,
             extra=0)
         formsets['biography_histories'] = BiographyHistoryFormset(
             data, instance=instance, prefix=prefix + '-biography_history')
-        LocalDescriptionFormset = forms.models.inlineformset_factory(
+        LocalDescriptionFormset = inlineformset_factory(
             Description, LocalDescription, form=LocalDescriptionEditInlineForm,
             extra=0)
         formsets['local_descriptions'] = LocalDescriptionFormset(
             data, instance=instance, prefix=prefix + '-local_description')
         if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
-            MandateFormset = forms.models.inlineformset_factory(
+            MandateFormset = inlineformset_factory(
                 Description, Mandate, form=MandateEditInlineForm, extra=0)
             formsets['mandates'] = MandateFormset(
                 data, instance=instance, prefix=prefix + '-mandate')
-            LegalStatusFormset = forms.models.inlineformset_factory(
+            LegalStatusFormset = inlineformset_factory(
                 Description, LegalStatus, form=LegalStatusEditInlineForm,
                 extra=0)
             formsets['legal_statuses'] = LegalStatusFormset(
@@ -341,12 +350,12 @@ class IdentityEditInlineForm(ContainerModelForm):
             validate_max=True)
         formsets['descriptions'] = DescriptionFormset(
             data, instance=self.instance, prefix=self.prefix + '-description')
-        RelationFormset = forms.models.inlineformset_factory(
+        RelationFormset = inlineformset_factory(
             Identity, Relation, exclude=[], form=RelationEditInlineForm,
             extra=0)
         formsets['relations'] = RelationFormset(
             data, instance=self.instance, prefix=self.prefix + '-relation')
-        ResourceFormset = forms.models.inlineformset_factory(
+        ResourceFormset = inlineformset_factory(
             Identity, Resource, exclude=[], form=ResourceEditInlineForm,
             extra=0)
         formsets['resources'] = ResourceFormset(
@@ -406,6 +415,11 @@ class ArchivalRecordEditForm(forms.ModelForm):
                 self.fields[field].disabled = True
             except KeyError:
                 pass
+        if editor_role == EditorProfile.EDITOR:
+            in_process_status = PublicationStatus.objects.get(
+                title='inProcess')
+            self.fields['publication_status'].widget = forms.Select(
+                choices=[(in_process_status.pk, 'inProcess')])
 
     class Meta:
         exclude = []
@@ -465,6 +479,7 @@ class EntityEditForm(ContainerModelForm):
     disabled_fields = ['entity_type']
 
     def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
+        self._editor_role = editor_role
         super().__init__(*args, **kwargs)
         for field in self.disabled_fields:
             self.fields[field].disabled = True
@@ -480,9 +495,9 @@ class EntityEditForm(ContainerModelForm):
             extra=0, entity_type=entity_type)
         formsets['identities'] = IdentityFormset(*args, instance=self.instance,
                                                  prefix='identity')
-        ControlFormset = forms.models.inlineformset_factory(
+        ControlFormset = inlineformset_factory(
             Entity, Control, exclude=[], form=ControlEditInlineForm, extra=1,
-            max_num=1, validate_max=True)
+            max_num=1, validate_max=True, editor_role=self._editor_role)
         formsets['control'] = ControlFormset(*args, instance=self.instance,
                                              prefix='control')
         return formsets
@@ -564,7 +579,7 @@ class UserCreateForm(forms.ModelForm):
 
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
-        EditorProfileFormset = forms.models.inlineformset_factory(
+        EditorProfileFormset = inlineformset_factory(
             User, EditorProfile, exclude=[], form=EditorProfileEditInlineForm,
             extra=1, max_num=1, validate_max=True)
         formsets['editor_profile'] = EditorProfileFormset(
@@ -614,7 +629,7 @@ class UserForm(ContainerModelForm):
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
         data = kwargs.get('data')
-        EditorProfileFormset = forms.models.inlineformset_factory(
+        EditorProfileFormset = inlineformset_factory(
             User, EditorProfile, exclude=[], form=EditorProfileEditInlineForm,
             extra=0)
         formsets['editor_profile'] = EditorProfileFormset(
@@ -714,14 +729,14 @@ def get_archival_record_edit_form_for_subclass(instance):
 
 
 # Replacements for Django forms functions for creating model formsets,
-# since we need to pass information on an Entity down to the nested
-# inline forms.
+# since we need to pass information on an Entity or the editing user
+# down to the nested inline forms.
 
 def modelform_factory(model, form=forms.models.ModelForm, fields=None,
                       exclude=None, formfield_callback=None, widgets=None,
                       localized_fields=None, labels=None, help_texts=None,
                       error_messages=None, field_classes=None,
-                      entity_type=None):
+                      editor_role=None, entity_type=None):
     """Return a ModelForm containing form fields for the given model."""
     # Create the inner Meta class. FIXME: ideally, we should be able to
     # construct a ModelForm without creating and passing in a temporary
@@ -745,6 +760,8 @@ def modelform_factory(model, form=forms.models.ModelForm, fields=None,
         attrs['error_messages'] = error_messages
     if field_classes is not None:
         attrs['field_classes'] = field_classes
+    if editor_role is not None:
+        attrs['editor_role'] = editor_role
     if entity_type is not None:
         attrs['entity_type'] = entity_type
 
@@ -782,7 +799,7 @@ def modelformset_factory(model, form=forms.models.ModelForm,
                          validate_max=False, localized_fields=None,
                          labels=None, help_texts=None, error_messages=None,
                          min_num=None, validate_min=False, field_classes=None,
-                         entity_type=None):
+                         editor_role=None, entity_type=None):
     """Return a FormSet class for the given Django model class."""
     meta = getattr(form, 'Meta', None)
     if (getattr(meta, 'fields', fields) is None and
@@ -797,7 +814,8 @@ def modelformset_factory(model, form=forms.models.ModelForm,
         formfield_callback=formfield_callback, widgets=widgets,
         localized_fields=localized_fields, labels=labels,
         help_texts=help_texts, error_messages=error_messages,
-        field_classes=field_classes, entity_type=entity_type)
+        field_classes=field_classes, editor_role=editor_role,
+        entity_type=entity_type)
     FormSet = forms.formsets.formset_factory(
         form, formset, extra=extra, min_num=min_num, max_num=max_num,
         can_order=can_order, can_delete=can_delete, validate_min=validate_min,
@@ -814,7 +832,8 @@ def inlineformset_factory(parent_model, model, form=forms.models.ModelForm,
                           validate_max=False, localized_fields=None,
                           labels=None, help_texts=None, error_messages=None,
                           min_num=None, validate_min=False,
-                          field_classes=None, entity_type=None):
+                          field_classes=None, editor_role=None,
+                          entity_type=None):
     """Return an ``InlineFormSet`` for the given kwargs."""
     fk = forms.models._get_foreign_key(parent_model, model, fk_name=fk_name)
     # enforce a max_num=1 when the foreign key to the parent model is unique.
@@ -839,6 +858,7 @@ def inlineformset_factory(parent_model, model, form=forms.models.ModelForm,
         'help_texts': help_texts,
         'error_messages': error_messages,
         'field_classes': field_classes,
+        'editor_role': editor_role,
         'entity_type': entity_type,
     }
     FormSet = modelformset_factory(model, **kwargs)

@@ -357,10 +357,10 @@ def entity_delete(request, entity_id):
 @create_revision()
 def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
+    editor_role = request.user.editor_profile.role
     # For the simplified editing workflow, Editors can edit objects
     # regardless of their publication or maintenance status.
     #
-    # editor_role = request.user.editor_profile.role
     # if entity.is_deleted() and editor_role == EditorProfile.EDITOR:
     #     return redirect('editor:entity-history', entity_id=entity_id)
     # if entity.control.publication_status.title != 'inProcess' and \
@@ -369,7 +369,8 @@ def entity_edit(request, entity_id):
     saved = request.GET.get('saved', False)
     form_errors = []
     if request.method == 'POST':
-        form = EntityEditForm(request.POST, instance=entity)
+        form = EntityEditForm(request.POST, editor_role=editor_role,
+                              instance=entity)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
             reversion.set_comment(log_form.cleaned_data['comment'])
@@ -384,7 +385,7 @@ def entity_edit(request, entity_id):
         else:
             form_errors = assemble_form_errors(form)
     else:
-        form = EntityEditForm(instance=entity)
+        form = EntityEditForm(editor_role=editor_role, instance=entity)
         log_form = LogForm()
     context = {
         'current_section': 'entities',
