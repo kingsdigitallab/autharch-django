@@ -65,7 +65,6 @@ body {
     font-family: $font-primary;
     line-height: 1.4em;
     margin: 0;
-    // display: flex;
     width: 100%;
 }
 
@@ -75,7 +74,6 @@ body {
     // flex-wrap: wrap;
     > *:not(:last-child) {
         margin-right: 30px;
-        // margin-bottom: 10px;
     }
 }
 
@@ -161,8 +159,8 @@ button, .create, input[type=submit] {
     border-radius: 30px;
 }
 
-input[type=submit], .save {
-    max-width: max-content;
+input[type=submit]:not(.search-button), .save {
+    min-width: 100px;
 }
 
 input[type=search] {
@@ -213,12 +211,16 @@ span[role=button] {
     &.linked-button {
         display: flex;
         align-items: center;
+        justify-content: center;
         margin-left: auto;
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
         margin-top: 0px;
-        // margin-right: -1px;
-        max-width: max-content;
+        max-width: 160px;
+        .icon-only {
+            padding: 0px 5px 0px 0px;
+            font-size: 13px;
+        }
         .icon-only:focus {
             -moz-box-shadow: none !important;
             -webkit-box-shadow: none !important;
@@ -276,7 +278,7 @@ span[role=button] {
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     border-radius: 30px;
-    max-width: max-content;
+    // max-width: max-content;
     .fas, .fal {
         margin-right: 10px;
     }
@@ -338,7 +340,7 @@ span[role=button] {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
-    max-width: max-content;
+    // max-width: max-content;
     &.danger {
         color: $danger;
         .icon-only:focus {
@@ -393,9 +395,6 @@ span[role=button] {
     -moz-border-radius: 0px;
     border-radius: 0px;
     margin-bottom: 0px;
-    // &:after {
-    //     content: "Logout";
-    // }
 }
 
 a {
@@ -422,7 +421,6 @@ h1 {
 
 h2 {
     font-size: 16px;
-    // color: $primary;
     margin-top: 0px;
     margin-bottom: 15px;
 }
@@ -439,7 +437,6 @@ h4 {
 p {
     font-size: 14px;
     line-height: 1.4em;
-
     &.additional-info {
         font-family: $font-primary;
         background-color: white;
@@ -478,9 +475,7 @@ header {
     z-index: 10;
     overflow: hidden;
     #logo {
-        width: 100%;
-        // display: flex;
-        // align-items: center;
+        // width: 100%;
         img {
             width: 100%;
         }
@@ -547,17 +542,10 @@ header {
         bottom: 0;
         width: 100%;
         #logout {
-            // cursor: pointer;
             background-color: $danger;
-            // color: white;
-            // padding: 20px;
-            // text-align: center;
-            // width: 100%;
-            // border: none;
-            // font-size: 14px;
-            // box-sizing: border-box;
             &:hover, &:focus {
                 @include darken($danger);
+                color: white;
             }
         }
     }
@@ -605,7 +593,6 @@ header {
 }
 
 main {
-    // width: 100%;
     position: relative;
     padding: 20px 40px 40px 40px;
     box-sizing: border-box;
@@ -640,7 +627,6 @@ main {
         grid-column-gap: 0px;
         align-items: center;
         margin-bottom: 2em;
-        // position: relative;
         :not(:first-child) {
             justify-self: right;
         }
@@ -755,7 +741,6 @@ main {
             background-color: white;
             box-shadow: -1px 0px 3px $medium-grey;
             div {
-                // max-height: 75vh;
                 height:85vh;
                 margin-top: 10px;
                 margin-bottom: 20px;
@@ -1095,7 +1080,7 @@ main {
             // width: 100%;
             // overflow: hidden;
             justify-content: center;
-            label, input, select, textarea {
+            label, input:not([type=button]):not([type=radio]):not([type=checkbox]), select, textarea {
                 // width: -moz-available;
                 // width: -webkit-fill-available;
                 // width: fill-available;
@@ -1118,7 +1103,6 @@ main {
         }
         input[type=submit] {
             grid-column-start: 2;
-            width: 150px;
             justify-self: end;
             margin-top: 20px;
         }
@@ -1173,19 +1157,12 @@ main {
             padding: 10px;
             border: 1px solid $input;
             line-height: 1.4em;
-            
-            // margin-right: 20px;
             &[type=date] {
                 margin-right: 5px;
-                width: max-content;
-            }
-            &[type=button] {
-                width: max-content;
             }
             &[type=radio], &[type=checkbox] {
                 margin: 0px;
                 margin-right: 5px;
-                width: max-content;
             }
         }
         select, .select2-selection--single {
@@ -1347,7 +1324,7 @@ main {
                         height: auto;
                     }
                     h3:first-child {
-                        margin-top: 0px;
+                        margin-top: 10px;
                     }
                     h3:not(:first-child) {
                         margin-top: 40px;
@@ -1472,7 +1449,6 @@ main {
                     margin-left: auto;
                 }
                 input[type=submit]:not(:only-child) {
-                    width: max-content;
                     &:not(:last-child) {
                         margin-right: 50px;
                     }
@@ -1495,7 +1471,10 @@ main {
             color: darken($danger, 10%);
         }
         p {
-            margin-bottom: 0px;
+            margin: 0px;
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
         }
     }
 
@@ -1544,7 +1523,7 @@ main {
             background-color: white;
             display: flex;
             box-shadow: 0px 2px 2px $medium-grey;
-            width: max-content;
+            max-width: 473px;
             margin: 1em auto 0px auto;
             -webkit-border-radius: 30px;
             -moz-border-radius: 30px;
@@ -1646,6 +1625,18 @@ footer {
     }
 }
 
+@media only screen and (max-width: 1250px) {
+    main {
+        .user-control {
+            display: block;
+            #user-details, #change-password {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        } 
+    }
+}
+
 @media only screen and (max-width: 1080px), screen and (max-height: 540px) {
     body {
         display: block;
@@ -1658,7 +1649,6 @@ footer {
         height: 60px;
         top: 0;
         #logo {
-            width: max-content;
             overflow: hidden;
             a {
                 line-height: 0px;
@@ -1670,7 +1660,8 @@ footer {
         }
         #menu-links, #menu-account {
             position: relative;
-            width: max-content;
+            width: auto;
+            white-space: nowrap;
             margin-top: 0px;
             display: flex;
         }
@@ -1707,13 +1698,6 @@ footer {
         //         white-space: pre-wrap;
         //     }
         // }
-        .user-control {
-            display: block;
-            #user-details, #change-password {
-                width: 100%;
-                box-sizing: border-box;
-            }
-        } 
         .form-header {
             margin-top: 150px;
         }
@@ -1761,6 +1745,9 @@ footer {
             #openseadragon1 {
                 height: 300px;
                 margin-bottom: 1em;
+            }
+            input[type=submit] {
+                margin-left: calc(100% - 100px);
             }
         }
         .page-header {
@@ -1835,9 +1822,34 @@ footer {
     }
 }
 @media only screen and (max-width: 700px) {
-    .fieldset-body {
-        .flex {
-            display: block !important;
+    main {
+        form {
+            .form-section {
+                fieldset {
+                    .fieldset-header {
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        box-sizing: border-box;
+                        height: auto;
+                        min-height: 60px;
+                        h4 {
+                            font-size: 14px;
+                            margin-right: 60px;
+                        }
+                    }
+                    .fieldset-body {
+                        .formset {
+                            > .flex {
+                                display: block !important;
+                            }
+                        }
+                        &.expand {
+                            padding: 15px;
+                        }
+                    } 
+                }
+            }
         }
     }
 }
@@ -1900,29 +1912,12 @@ footer {
             display: block;
 
         }
-        form {
-            .form-section {
-                fieldset {
-                    .fieldset-header {
-                        display: flex;
-                        align-items: center;
-                        flex-wrap: wrap;
-                        box-sizing: border-box;
-                        height: max-content;
-                        min-height: 60px;
-                        h3 {
-                            font-size: 14px;
-                            margin-right: 60px;
-                        }
-                    }
-                   .fieldset-body.expand {
-                        padding: 15px;
-                    } 
-                }
-            }
-        }
         .pager .page-list {
+            max-width: 234px;
             margin-top: 2em;
+            .pagecount a:not(.current){
+                display: none;
+            }
             button {
                 padding: 5px 15px;
             }

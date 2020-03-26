@@ -178,32 +178,6 @@ $(document).ready(function() {
 
 });
 
-function toggleFilters(el) {
-  $('#'+el).children(".show-more").remove();
-  if ($('#'+el).children("a[style='display: none;']").length) {
-    $('#'+el).children("a").show();
-    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Hide all (`+ $('#'+el).children("a").length +`)</button>`);
-  }
-  else {
-    $('#'+el).children("a").slice(5, $('#'+el).children("a").length).hide();
-    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+ $('#'+el).children("a").length +`)</button>`);
-  }
-}
-
-function toggleHelpText(el, help_text) {
-  if ($(el).siblings('p.additional-info').length) {
-    // change icon to 'question mark'
-    $(el).text("");
-    $(el).siblings('p.additional-info').remove();
-  }
-  else {
-    var position = $(el).position();
-    $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
-    // change icon to 'close'
-    $(el).text("");
-  }
-}
-
 //start MODAL TEMPLATES
 
 // update entity name part fields if the 'Royal name' checkbox is checked
@@ -237,7 +211,7 @@ function editValue(val) {
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h2>Find place</h2>
-                                    <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
+                                    <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
                                 </div>
                                 <div class="modal-body">
                                     <form action="" method="" id="edit-place">
@@ -301,7 +275,7 @@ function alertPopup(msg) {
   $('main').append(`<div class="modal active">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
+                                        <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
                                     </div>
                                     <div class="modal-body">
                                         <p>`+ msg +`</p>
@@ -321,10 +295,31 @@ function toggleTab(el) {
   $(el).toggleClass('active');
 }
 
-function closeBlock(el) {
-  $('.'+el).removeClass('active');
+function toggleFilters(el) {
+  $('#'+el).children(".show-more").remove();
+  if ($('#'+el).children("a[style='display: none;']").length) {
+    $('#'+el).children("a").show();
+    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Hide</button>`);
+  }
+  else {
+    $('#'+el).children("a").slice(5, $('#'+el).children("a").length).hide();
+    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+ $('#'+el).children("a").length +`)</button>`);
+  }
 }
 
+function toggleHelpText(el, help_text) {
+  if ($(el).siblings('p.additional-info').length) {
+    // change icon to 'question mark'
+    $(el).text("");
+    $(el).siblings('p.additional-info').remove();
+  }
+  else {
+    var position = $(el).position();
+    $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
+    // change icon to 'close'
+    $(el).text("");
+  }
+}
 
 /**
  * Create confirmation modal dialogue with form to delete the current

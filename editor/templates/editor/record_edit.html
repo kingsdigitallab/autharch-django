@@ -134,7 +134,7 @@
         <h2>DESCRIPTION</h2>
         <fieldset id="description">
           <div class="fieldset-header">
-            <h4>{{ record.title }}</h4>
+            <h4>{{ record.title | truncatewords:30 }}</h4>
             <div>
               <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
             </div>
@@ -247,7 +247,7 @@
           <div class="modal-header">
             <h2>Log comments</h2>
             <!-- <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" /> -->
-            <input type="button" class="icon-only" aria-label="close" onclick="closeBlock('modal')" value="&#xf00d;" />
+            <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
           </div>
           <div class="modal-body">
             <div class="two-column-table">
