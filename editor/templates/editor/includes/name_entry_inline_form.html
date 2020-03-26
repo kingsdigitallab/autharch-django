@@ -11,7 +11,6 @@
     <div class="flex">
       <div>
         {% render_field form.id %}
-        <!-- {% render_field form.authorised_form %} -->
         <label>
             {{ form.authorised_form }}
             {{ form.authorised_form.label }}
@@ -27,6 +26,7 @@
     {% render_form_delete_widget form.DELETE %}
     <div class="two-column-table">
       <div class="formset">
+        {{ form.is_royal_name }} {{ form.is_royal_name.label }}
         {% with name_parts=form.formsets.name_parts %}
         <div class="management_form">
           {{ name_parts.management_form }}

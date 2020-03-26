@@ -7,7 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 import haystack.forms
 
-from geonames_place.widgets import PlaceSelect
+# from geonames_place.widgets import PlaceSelect
 
 from archival.models import Collection, File, Item, Series
 from authority.models import (
@@ -121,7 +121,7 @@ class EventEditInlineForm(forms.ModelForm):
         widgets = {
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
-            'place': PlaceSelect(),
+            # 'place': PlaceSelect(),
         }
 
 
@@ -464,7 +464,7 @@ class EntityEditForm(ContainerModelForm):
 
     disabled_fields = ['entity_type']
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.disabled_fields:
             self.fields[field].disabled = True
@@ -670,6 +670,26 @@ class SearchForm(haystack.forms.SearchForm):
 
     def no_query_found(self):
         return self.searchqueryset.all()
+
+
+def assemble_form_errors(form):
+    """Return a list of error dictionaries for `form` and any formset
+    descendants it has."""
+    def assemble_formset_errors(errors, formset):
+        if formset.total_error_count():
+            errors.extend(formset.errors)
+        for form in formset.forms:
+            for formset in form.formsets.values():
+                errors = assemble_formset_errors(errors, formset)
+        return errors
+
+    errors = []
+    if form.errors:
+        errors.append(form.errors)
+    if hasattr(form, 'formsets'):
+        for formset in form.formsets.values():
+            errors = assemble_formset_errors(errors, formset)
+    return errors
 
 
 def get_archival_record_edit_form_for_subclass(instance):

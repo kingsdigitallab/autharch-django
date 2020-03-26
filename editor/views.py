@@ -27,8 +27,8 @@ from .forms import (
     ArchivalRecordFacetedSearchForm, BaseUserFormset, EditorProfileForm,
     EntityCreateForm, EntityEditForm, EntityFacetedSearchForm,
     DeletedFacetedSearchForm, LogForm, PasswordChangeForm, SearchForm,
-    UserCreateForm, UserEditForm, UserForm,
-    get_archival_record_edit_form_for_subclass
+    UserCreateForm, UserEditForm, UserForm, assemble_form_errors,
+    get_archival_record_edit_form_for_subclass,
 )
 from .models import EditorProfile, RevisionMetadata
 
@@ -357,13 +357,17 @@ def entity_delete(request, entity_id):
 @create_revision()
 def entity_edit(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
-    editor_role = request.user.editor_profile.role
-    if entity.is_deleted() and editor_role == EditorProfile.EDITOR:
-        return redirect('editor:entity-history', entity_id=entity_id)
-    if entity.control.publication_status.title != 'inProcess' and \
-       editor_role == EditorProfile.EDITOR:
-        return HttpResponseForbidden()
+    # For the simplified editing workflow, Editors can edit objects
+    # regardless of their publication or maintenance status.
+    #
+    # editor_role = request.user.editor_profile.role
+    # if entity.is_deleted() and editor_role == EditorProfile.EDITOR:
+    #     return redirect('editor:entity-history', entity_id=entity_id)
+    # if entity.control.publication_status.title != 'inProcess' and \
+    #    editor_role == EditorProfile.EDITOR:
+    #     return HttpResponseForbidden()
     saved = request.GET.get('saved', False)
+    form_errors = []
     if request.method == 'POST':
         form = EntityEditForm(request.POST, instance=entity)
         log_form = LogForm(request.POST)
@@ -377,6 +381,8 @@ def entity_edit(request, entity_id):
             url = reverse('editor:entity-edit',
                           kwargs={'entity_id': entity_id}) + '?saved=true'
             return redirect(url)
+        else:
+            form_errors = assemble_form_errors(form)
     else:
         form = EntityEditForm(instance=entity)
         log_form = LogForm()
@@ -385,6 +391,7 @@ def entity_edit(request, entity_id):
         'delete_url': reverse('editor:entity-delete',
                               kwargs={'entity_id': entity_id}),
         'entity': entity,
+        'form_errors': form_errors,
         'form': form,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
@@ -441,11 +448,14 @@ def record_delete(request, record_id):
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     editor_role = request.user.editor_profile.role
-    if record.is_deleted() and editor_role == EditorProfile.EDITOR:
-        return redirect('editor:record-history', record_id=record_id)
-    if record.publication_status.title != 'inProcess' and \
-       editor_role == EditorProfile.EDITOR:
-        return HttpResponseForbidden()
+    # For the simplified editing workflow, Editors can edit objects
+    # regardless of their publication or maintenance status.
+    #
+    # if record.is_deleted() and editor_role == EditorProfile.EDITOR:
+    #     return redirect('editor:record-history', record_id=record_id)
+    # if record.publication_status.title != 'inProcess' and \
+    #    editor_role == EditorProfile.EDITOR:
+    #     return HttpResponseForbidden()
     saved = request.GET.get('saved', False)
     form_class = get_archival_record_edit_form_for_subclass(record)
     if request.method == 'POST':

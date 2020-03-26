@@ -1,7 +1,8 @@
-import reversion
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (
     EntityRelationType, EntityType, Function, MaintenanceStatus, NamePartType,
@@ -9,6 +10,7 @@ from jargon.models import (
 )
 from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
+import reversion
 from script_codes.models import Script
 
 from . import constants
@@ -154,6 +156,7 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
 
     display_name = models.CharField(max_length=2048)
     authorised_form = models.BooleanField()
+    is_royal_name = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Name entries'
@@ -161,6 +164,18 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
     def __str__(self):
         return self.display_name or ', '.join(['{}: {}'.format(
             p.name_part_type, p.part) for p in self.parts.all()])
+
+    def clean(self):
+        # A royal name must have at least a "forename" name part
+        # and a "properTitle" name part.
+        if self.is_royal_name:
+            forename_type = NamePartType.objects.get(title='forename')
+            proper_title_type = NamePartType.objects.get(title='properTitle')
+            if not self.parts.filter(name_part_type=forename_type) and \
+               not self.parts.filter(name_part_type=proper_title_type):
+                raise ValidationError(
+                    'A royal name must contain a "forename" part and a '
+                    '"properTitle" part.')
 
 
 @reversion.register()
