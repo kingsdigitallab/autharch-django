@@ -23,7 +23,7 @@ def render_facet(facet):
 
 
 @register.inclusion_tag('editor/includes/form_field.html')
-def render_field(form_field):
+def render_field(form_field, form_id=None):
     """Renders the form field `form_field`, including label, widget, and
     error messages.
 
@@ -34,16 +34,17 @@ def render_field(form_field):
     """
     if form_field == '':
         return {'render': False}
+    attrs = {
+        'aria-label': 'input field'
+    }
+    if form_id:
+        attrs['form'] = form_id
     if form_field.errors:
-        widget = form_field.as_widget(attrs={
-            'class': ' '.join((form_field.css_classes(), 'error'))
-        })
-    else:
-        widget = form_field.as_widget(attrs={
-            'aria-label': 'input field'
-        })
+        attrs['class'] = ' '.join((form_field.css_classes(), 'error'))
+    widget = form_field.as_widget(attrs=attrs)
     return {
         'errors': form_field.errors,
+        'form_id': form_id,
         'help_text': form_field.help_text,
         'is_hidden': form_field.is_hidden,
         'label': form_field.label,
