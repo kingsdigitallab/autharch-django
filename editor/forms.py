@@ -688,22 +688,31 @@ class SearchForm(haystack.forms.SearchForm):
 
 
 def assemble_form_errors(form):
-    """Return a list of error dictionaries for `form` and any formset
-    descendants it has."""
-    def assemble_formset_errors(errors, formset):
-        if formset.total_error_count():
-            errors.extend(formset.errors)
-        for form in formset.forms:
+    """Return a dictionary of errors for `form` and any formset
+    descendants it has.
+
+    The dictionary has keys for field errors and non-field
+    errors. Field errors is a Boolean indicating whether there are any
+    field errors anywhere. Non-field errors are a list of error
+    strings.
+
+    """
+    def add_form_errors(errors, form):
+        for field, field_errors in form.errors.items():
+            if field == '__all__':
+                errors['non_field'].extend(field_errors)
+            else:
+                errors['field'] = True
+        if hasattr(form, 'formsets'):
             for formset in form.formsets.values():
-                errors = assemble_formset_errors(errors, formset)
+                for form in formset.forms:
+                    errors = add_form_errors(errors, form)
         return errors
 
-    errors = []
-    if form.errors:
-        errors.append(form.errors)
-    if hasattr(form, 'formsets'):
-        for formset in form.formsets.values():
-            errors = assemble_formset_errors(errors, formset)
+    errors = {'field': False, 'non_field': []}
+    errors = add_form_errors(errors, form)
+    if not(errors['field'] or errors['non_field']):
+        errors = {}
     return errors
 
 

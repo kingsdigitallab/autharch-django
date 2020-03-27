@@ -37,12 +37,14 @@
 
     {% if form_errors %}
     <div class="error-notification">
-      {% for formset in form_errors %}
-      {% for field, errors in formset.items %}
-      <p>{% if field != '__all__' %}{{ field }}: {% endif %}
-        {% for error in errors %}{{ error }} {% endfor %}</p>
+      <h4>Errors</h4>
+      {% for error in form_errors.non_field %}
+      <p>{{ error }}</p>
       {% endfor %}
-      {% endfor %}
+      {% if form_errors.field %}
+      <p>There are field-specific errors; please check the form and correct.</p>
+      {% endif %}
+      <h4>
     </div>
     {% endif %}
 
