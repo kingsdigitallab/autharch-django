@@ -48,7 +48,7 @@
             <th scope="col" data-label="Title">Title</th>
             <th scope="col" data-label="Type">Type/level</th>
             <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
-            <th scope="col" data-label="Deleted by">Deleted by</th>
+            <th scope="col" data-label="Last modified by">Last modified by</th>
           </tr>
         </thead>
         <tbody>
@@ -59,11 +59,10 @@
             <td>{{ result.entity_type }}</td>
             {% else %}
             <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
-            <td>Archival Record</td>
-            <td>{{ result.archival_level }}</td>
+            <td>Archival Record / {{ result.archival_level }}</td>
             {% endif %}
             <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
-            <td>QAZ</td>
+            <td>{% get_last_modifier result.model_name result.pk %}</td>
           </tr>
           {% endfor %}
         </tbody>

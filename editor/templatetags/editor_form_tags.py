@@ -1,7 +1,28 @@
 from django import template
 
+from reversion.models import Version
+
+from archival.models import Collection, File, Item, Series
+from authority.models import Entity
+
 
 register = template.Library()
+
+
+@register.simple_tag()
+def get_last_modifier(model_name, obj_id):
+    """Returns the user of the most recent Revision for the object specified
+    by `model_name` and `obj_id`."""
+    models = {
+        'collection': Collection,
+        'entity': Entity,
+        'file': File,
+        'item': Item,
+        'series': Series,
+    }
+    model = models[model_name]
+    version = Version.objects.get_for_object_reference(model, obj_id)[0]
+    return version.revision.user
 
 
 @register.inclusion_tag('editor/includes/form_facet.html')
