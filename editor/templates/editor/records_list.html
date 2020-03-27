@@ -12,13 +12,15 @@
             {{ form.q }}
           </label>
           <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
-        </form>
         <div class="filter-block">
           <input type="checkbox" class="none" id="filter" aria-label="Filter">
           <label for="filter" class="filter-button"><span hidden>Filter</span></label>
           <div class="filters-hidden">
             <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
-              <div>
+            <div>
+              <fieldset class="filter-list">
+                {% render_field form.year %}
+              </fieldset>
                 <!-- should be sorted alphabetically -->
                 <fieldset class="filter-list" id="document-level-filter">
                   <legend>Document level</legend>
@@ -56,6 +58,7 @@
               </div>
           </div>
         </div>
+      </form>
     </div>
   </div>
   {% endblock page_header %}

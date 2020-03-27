@@ -232,8 +232,7 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     queryset = SearchQuerySet().models(Collection, File, Item, Series).exclude(
         maintenance_status='deleted')
     form_class = ArchivalRecordFacetedSearchForm
-    facet_fields = ['addressees', 'archival_level', 'dates', 'languages',
-                    'writers']
+    facet_fields = ['addressees', 'archival_level', 'languages', 'writers']
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

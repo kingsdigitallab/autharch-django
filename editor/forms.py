@@ -662,6 +662,16 @@ class ArchivalRecordFacetedSearchForm(FacetedSearchForm):
     q = forms.CharField(required=False, label='Search',
                         widget=forms.TextInput(
                             attrs=RECORD_SEARCH_INPUT_ATTRS))
+    year = forms.IntegerField(required=False, label='Document year')
+
+    def search(self):
+        sqs = super().search()
+        if not self.is_valid():
+            return self.no_query_found()
+        year = self.cleaned_data['year']
+        if year:
+            sqs = sqs.filter(dates=year)
+        return sqs
 
 
 class EntityFacetedSearchForm(FacetedSearchForm):
