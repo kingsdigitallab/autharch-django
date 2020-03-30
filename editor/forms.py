@@ -7,7 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 import haystack.forms
 
-# from geonames_place.widgets import PlaceSelect
+from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import Collection, File, Item, Series
 from authority.models import (
@@ -121,7 +121,7 @@ class EventEditInlineForm(forms.ModelForm):
         widgets = {
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
-            # 'place': PlaceSelect(),
+            'place': PlaceSelect(),
         }
 
 
@@ -192,6 +192,9 @@ class PlaceEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = Place
+        widgets = {
+            'place': PlaceSelect(),
+        }
 
 
 class RelationEditInlineForm(forms.ModelForm):
@@ -199,6 +202,9 @@ class RelationEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = Relation
+        widgets = {
+            'place': PlaceSelect(),
+        }
 
 
 class ResourceEditInlineForm(forms.ModelForm):
@@ -427,6 +433,7 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'references': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'administrative_history': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'arrangement': forms.Textarea(),
+            'creation_places': PlaceSelectMultiple(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'end_date': HTML5DateInput(),
             'languages': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
@@ -439,6 +446,8 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'persons_as_subjects': forms.SelectMultiple(
                 attrs=SEARCH_SELECT_ATTRS),
             'physical_description': forms.Textarea(),
+            'places_as_relations': PlaceSelectMultiple(),
+            'places_as_subjects': PlaceSelectMultiple(),
             'project': forms.HiddenInput(),
             'provenance': forms.Textarea(attrs={'rows': 4}),
             'record_type': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),

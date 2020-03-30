@@ -5,7 +5,7 @@ django-compressor
 django-cors-headers
 django-extensions
 django-filter
-django-geonames-place
+django-geonames-place>=0.6.0
 django-haystack
 django-kdl-ldap
 django-kdl-wagtail

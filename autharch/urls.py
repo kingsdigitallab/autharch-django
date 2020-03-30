@@ -25,6 +25,7 @@ urlpatterns = [
     path('documents/', include('wagtail.documents.urls')),
 
     path('editor/', include('editor.urls')),
+    path('geonames/', include('geonames_place.urls')),
 
     path('api/_docs/', include_docs_urls(
         title='AuthArch API Documentation', permission_classes=[])),

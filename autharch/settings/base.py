@@ -339,6 +339,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+# Geonames.
+GEONAMES_MAX_RESULTS = 20
+
 
 # Haystack.
 HAYSTACK_CONNECTIONS = {
