@@ -15,7 +15,7 @@
   "fields": {
     "created": "2019-01-17T14:40:27.862Z",
     "modified": "2019-01-17T14:40:27.862Z",
-    "title": "preTitle",
+    "title": "pre-title",
     "entity_type": "PE"
   }
 },
@@ -55,7 +55,7 @@
   "fields": {
     "created": "2019-01-17T14:40:27.903Z",
     "modified": "2019-01-17T14:40:27.903Z",
-    "title": "ordinalNumber",
+    "title": "ordinal number",
     "entity_type": "PE"
   }
 },
@@ -65,7 +65,7 @@
   "fields": {
     "created": "2019-01-17T14:40:27.908Z",
     "modified": "2019-01-17T14:40:27.915Z",
-    "title": "properTitle",
+    "title": "proper title",
     "entity_type": "PE"
   }
 },
@@ -75,7 +75,7 @@
   "fields": {
     "created": "2019-01-17T14:40:27.920Z",
     "modified": "2019-01-17T14:40:27.921Z",
-    "title": "relationshipSovereign",
+    "title": "relationship to sovereign",
     "entity_type": "PE"
   }
 },
@@ -85,7 +85,7 @@
   "fields": {
     "created": "2019-01-17T14:40:27.928Z",
     "modified": "2019-01-17T14:40:27.928Z",
-    "title": "body",
+    "title": "corporate body name",
     "entity_type": "CB"
   }
 },
@@ -95,7 +95,7 @@
   "fields": {
     "created": "2019-01-17T14:40:27.933Z",
     "modified": "2019-01-17T14:40:27.934Z",
-    "title": "authority",
+    "title": "name of jurisdiction or territorial authority",
     "entity_type": "CB"
   }
 },
@@ -105,7 +105,7 @@
   "fields": {
     "created": "2019-01-17T14:40:27.941Z",
     "modified": "2019-01-17T14:40:27.941Z",
-    "title": "subordBody",
+    "title": "name of subordinate body",
     "entity_type": "CB"
   }
 }
