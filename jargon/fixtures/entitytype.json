@@ -17,13 +17,4 @@
     "title": "corporateBody"
   }
 },
-{
-  "model": "jargon.entitytype",
-  "pk": 3,
-  "fields": {
-    "created": "2019-01-17T14:28:28.024Z",
-    "modified": "2019-01-17T14:28:28.039Z",
-    "title": "family"
-  }
-}
 ]
