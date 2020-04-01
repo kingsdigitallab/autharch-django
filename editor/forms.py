@@ -671,7 +671,7 @@ class ArchivalRecordFacetedSearchForm(FacetedSearchForm):
     q = forms.CharField(required=False, label='Search',
                         widget=forms.TextInput(
                             attrs=RECORD_SEARCH_INPUT_ATTRS))
-    year = forms.IntegerField(required=False, label='Document year')
+    year = forms.IntegerField(required=False, label='Creation year')
 
     def search(self):
         sqs = super().search()

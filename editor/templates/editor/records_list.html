@@ -41,15 +41,6 @@
                   {% render_facet addressee %}
                   {% endfor %}
                 </fieldset>
-                <fieldset class="filter-list" id="year-filter">
-                  <legend>Creation year</legend>
-                  <!--<label>
-                      <input type="number" name="y" value="{{ y }}" class="year-search-field" placeholder="yyyy" aria-label="year search bar" min="1100" max="2050">
-                  </label>-->
-                  {% for date in facets.fields.dates %}
-                  {% render_facet date %}
-                  {% endfor %}
-                </fieldset>
                 <fieldset class="filter-list" id="language-filter">
                   <legend>Language</legend>
                   {% for language in facets.fields.languages %}
