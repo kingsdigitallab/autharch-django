@@ -69,6 +69,9 @@ body {
 }
 
 .flex {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: -webkit-flex !important;
     display: flex !important;
     align-items: center !important;
     // flex-wrap: wrap;
@@ -167,9 +170,15 @@ input[type=search] {
     -webkit-appearance: textfield;
 }
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 input[type=search]::-webkit-search-decoration {
     -webkit-appearance: none;
 }
+
 
 .search {
     position: relative;
@@ -181,7 +190,7 @@ input[type=search]::-webkit-search-decoration {
         -moz-border-radius: 30px;
         border-radius: 30px;
         font-size: 14px;
-        padding: 10px 10px 10px 20px;
+        padding: 10px 40px 10px 20px;
         border: 1px solid $medium-grey;
         width: 100%;
         height: 40px;
@@ -209,6 +218,9 @@ span[role=button] {
 .create {
     @include button($add);
     &.linked-button {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -752,7 +764,7 @@ main {
                     &:not(:last-of-type) {
                         margin-bottom: 10px;
                     }
-                    legend {
+                    legend, label {
                         font-size: 14px;
                         font-weight: 500;
                         color: black;
@@ -765,6 +777,18 @@ main {
                     }
                     .year-search-field {
                         max-width: 140px;
+                    }
+                    input[type=number] {
+                        font-family: "Roboto", sans-serif;
+                        -webkit-border-radius: 5px;
+                        -moz-border-radius: 5px;
+                        border-radius: 5px;
+                        font-size: 14px;
+                        padding: 10px;
+                        border: 1px solid
+                        #707070;
+                        line-height: 1.4em;
+                        width: 40px;
                     }
                 }
             }
@@ -797,6 +821,9 @@ main {
     .form-page {
         height: 85vh;
         margin: auto;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -805,6 +832,9 @@ main {
         form {
             > div:last-of-type {
                 margin-top: 2em;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -872,6 +902,9 @@ main {
     }
 
     .user-control {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
         display: flex;
         #user-details, #change-password {
             width: 50%;
@@ -1169,7 +1202,7 @@ main {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%238C98F2'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%238C98F2'><polygon points='0,0 100,0 50,50'/></svg>");
             background-size: 12px;
             background-repeat: no-repeat;
         }
@@ -1232,6 +1265,9 @@ main {
             }
         }
         .create {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
             display: flex;
             justify-content: flex-end;
             align-items: center;
@@ -1277,6 +1313,9 @@ main {
                             border-radius: 0px;
                             height: 100%;
                             width: 60px;
+                            display: -webkit-box;
+                            display: -ms-flexbox;
+                            display: -webkit-flex;
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -1408,6 +1447,9 @@ main {
             right: 0;
             bottom: 0;
             z-index: 11;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1424,6 +1466,9 @@ main {
                 margin: 10px;
             }
             .modal-header {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -1443,6 +1488,9 @@ main {
                 }
             }
             .modal-footer {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
                 display: flex;
                 input[type=submit]:only-child {
                     margin-right: 0px;
@@ -1521,6 +1569,9 @@ main {
         }
         .page-list {
             background-color: white;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
             display: flex;
             box-shadow: 0px 2px 2px $medium-grey;
             max-width: max-content;
@@ -1565,6 +1616,9 @@ main {
             }
             .pagecount {
                 margin: 0px 10px;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -1644,6 +1698,9 @@ footer {
     header {
         background: $primary url('/static/images/background-header.svg') no-repeat bottom right;
         position: fixed;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
         display: flex;
         width: 100%;
         height: 60px;
@@ -1663,6 +1720,9 @@ footer {
             width: auto;
             white-space: nowrap;
             margin-top: 0px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
             display: flex;
         }
         #menu-account {
@@ -1827,6 +1887,9 @@ footer {
             .form-section {
                 fieldset {
                     .fieldset-header {
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: -webkit-flex;
                         display: flex;
                         align-items: center;
                         flex-wrap: wrap;
