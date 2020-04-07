@@ -121,6 +121,9 @@ class Command(BaseCommand):
         ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
         obj.maintenance_status = ms
 
+        obj.language = self.language
+        obj.script = self.script
+
         obj.save()
 
         source, _ = ReferenceSource.objects.get_or_create(title='RA')
