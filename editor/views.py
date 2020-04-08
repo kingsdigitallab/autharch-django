@@ -177,10 +177,10 @@ class HomeView(UserPassesTestMixin, SearchView):
         if user.editor_profile.role == EditorProfile.ADMIN:
             entities = Entity.objects.exclude(
                 control__publication_status__title='published').exclude(
-                    control__maintenance_status='deleted')
+                    control__maintenance_status__title='deleted')
             records = ArchivalRecord.objects.exclude(
                 publication_status__title='published').exclude(
-                    maintenance_status='deleted')
+                    maintenance_status__title='deleted')
         return entities, records
 
     def test_func(self):
