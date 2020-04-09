@@ -225,13 +225,13 @@ $(document).ready(function() {
   $( "#year-range-filter > #end" ).val( $( "#year-range" ).slider( "values", 1 ));
   $( "#year-range-filter > #start" ).on('keyup change', function(el) {
     var endYear = parseInt($( "#year-range-filter > #end" ).val());
-    if ($(el.target).val() >= minValue && $(el.target).val() < endYear) {
+    if ($(el.target).val() >= minValue && $(el.target).val() <= endYear) {
       $( "#year-range" ).slider("values", 0, $(el.target).val());
     }
   });
   $( "#year-range-filter > #end" ).on('keyup change', function(el) {
     var startYear = parseInt($( "#year-range-filter > #start" ).val());
-    if ($(el.target).val() > startYear && $(el.target).val() <= maxValue) {
+    if ($(el.target).val() >= startYear && $(el.target).val() <= maxValue) {
       $( "#year-range" ).slider("values", 1, $(el.target).val());
     }
   });

@@ -167,7 +167,7 @@ input, button {
 }
 
 input[type=submit]:not(.search-button), .save {
-    min-width: 100px;
+    min-width: 80px;
 }
 
 input[type=search] {
@@ -795,15 +795,20 @@ main {
                         border: 1px solid $medium-grey;
                         line-height: 1.4em;
                     }
+                    input[type=submit] {
+                        width: 80px;
+                        display: inline-block;
+                        margin-left: 10px;
+                    }
                     input[type=number] {
-                        width: 100px;
+                        width: 80px;
                     }
                     input[type=text] {
                         margin-bottom: 0.7em;
                         width: 100%;
                     }
                     #year-range {
-                        margin: 10px 10px 0px 10px;
+                        margin: 0px 10px 10px 10px;
                     }
                 }
             }
