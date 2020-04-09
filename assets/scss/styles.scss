@@ -759,7 +759,7 @@ main {
             overflow: scroll;
             background-color: white;
             box-shadow: -1px 0px 3px $medium-grey;
-            div {
+            .filters {
                 height:85vh;
                 margin-top: 10px;
                 margin-bottom: 20px;
@@ -801,6 +801,9 @@ main {
                     input[type=text] {
                         margin-bottom: 0.7em;
                         width: 100%;
+                    }
+                    #year-range {
+                        margin: 10px 10px 0px 10px;
                     }
                 }
             }
@@ -972,6 +975,11 @@ main {
     .table-container {
         width: 100%;
         overflow-x: auto;
+        .admin-table {
+            input[type=text] {
+                width: 100%;
+            }
+        }
     }
     table {
         // margin-top: 20px;
@@ -1776,7 +1784,7 @@ footer {
         .filter-block {
             .filters-hidden {
                 margin-top: 60px;
-                div {
+                .filters {
                     height: 75vh;
                 }
             }
@@ -1844,7 +1852,7 @@ footer {
                 .filter-block {
                     min-width: 65px;
                     .filters-hidden {
-                        div {
+                        .filters {
                             height:75vh;
                         }
                     }
@@ -1988,7 +1996,7 @@ footer {
                     .filters-hidden {
                         width: 80%;
                         margin-top: 60px;
-                        div {
+                        .filters {
                             height:80vh;
                         }
                     }

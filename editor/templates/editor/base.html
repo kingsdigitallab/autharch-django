@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'scss/richtext.min.css' %}">
     <link rel="stylesheet" href="{% static 'scss/all.min.css' %}" />
     <link rel="stylesheet" href="{% static 'scss/select2.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'scss/jquery-ui.css' %}"></script>
     {% compress css %}
     <link rel="stylesheet" href="{% static 'scss/styles.scss' %}" type="text/x-scss" />
     {% endcompress %}
@@ -77,7 +78,8 @@
     {% endblock footer %}
     {% block end_js %}
     <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'js/jquery.richtext.min.js' %}"></script>
+    <script src="{% static 'js/richtext/jquery.richtext.min.js' %}"></script>
+    <script src="{% static 'js/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'js/select2/select2.min.js' %}"></script>
     <script src="{% static 'js/sugar/sugar.min.js' %}"></script>
     <script src="{% static 'js/tablesorter/jquery.tablesorter.js' %}"></script>
