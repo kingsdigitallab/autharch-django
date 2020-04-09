@@ -59,7 +59,11 @@ $(document).ready(function() {
       id: "richText-" + index
     });
   });
+
+  // add aria-labels to richtext areas
   $('.richtext').attr('aria-label', 'richtext editor');
+
+  // add unique id to toolbar elements
   $('.richText-toolbar').each(function(i) {
     $(this).find('li').each(function(j) {
       var updatedId = $(this).find("[for^=richText-]").attr('id')+'-'+i+'-'+j;
@@ -77,6 +81,8 @@ $(document).ready(function() {
       });
     });
   });
+
+  // add pagination to all tables
   $('table').each(function(i, el) {
     $.tablesorter.customPagerControls({
       table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
@@ -106,6 +112,7 @@ $(document).ready(function() {
         size: 10
       });
 
+    //  make sure that corrent 'rows per page' number is active
     var rowsPerPage = $("#"+$(el).attr('id')).find("tbody > tr").filter(function() {
       return $(this).css('display') !== 'none';
     }).length;
@@ -130,6 +137,7 @@ $(document).ready(function() {
     placeholder: "Select",
     allowClear: true
   } );
+  //add aria-label to select2 input
   $('.select2-search__field').attr('aria-label', 'select with search');
   $('.select2-selection__rendered').attr('aria-label', 'select2-selection__rendered');
   $('.select2-selection--multiple').attr({
@@ -139,12 +147,11 @@ $(document).ready(function() {
   $('.select2-selection--single').attr({
     'role': 'list'
   });
-  // optional functionality (can be removed if needed) - dynamic styling of the sections
 
+  // optional functionality (can be removed if needed) - dynamic styling of the sections
   // style border for preferred names and identities
   $( "fieldset:has(input[name*='preferred']:checked)").addClass('border-left');
   $( "fieldset:has(input[name*='authorised']:checked)").addClass('border-left');
-
   $('body').on('click', 'input[name*="preferred"]', function (el) {
     $('input[name*="preferred"]:checked').prop('checked', false);
     $(el.target).parents('fieldset').first().find('input[name*="preferred"]').prop('checked', true);
@@ -163,17 +170,41 @@ $(document).ready(function() {
     }
   });
   
+  // add clear all filters button when one of the facet options is selected
   if ($('.checkbox-anchor').children('input[type=checkbox]:checked').length > 0) {
     $('.clear-filters').addClass('active');
   } else {
     $('.clear-filters').removeClass('active');
   }
 
+  // reduce the filter list size by adding the show all button
   $('.filter-list').each(function() {
     if ($(this).children("a").length > 5) {
       $(this).children("a").slice(5, $(this).children("a").length).hide();
       $(this).append(`<button class="button-link show-more" onclick="toggleFilters('`+$(this).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+$(this).children("a").length+`)</button>`);
     }
+  });
+
+  $('.instant-search').on('focus', function (el) {
+    var filterOptions = $(el.target).siblings('.checkbox-anchor');
+    $(el.target).on('keyup change', function () {
+      var query = $(el.target).val().toLowerCase();
+      if (query == '') {
+        filterOptions.slice(0, 5).show();
+        filterOptions.slice(6, filterOptions.length).hide();
+      }
+      else {
+        filterOptions.each(function() {
+          var option = $(this).text().toLowerCase();
+          if (option.includes(query)) {
+            $(this).show();
+          }
+          else{
+            $(this).hide();
+          }
+        });
+      }
+    })  
   });
 
 });
@@ -295,6 +326,7 @@ function toggleTab(el) {
   $(el).toggleClass('active');
 }
 
+// show more/less facet options
 function toggleFilters(el) {
   $('#'+el).children(".show-more").remove();
   if ($('#'+el).children("a[style='display: none;']").length) {
@@ -307,6 +339,7 @@ function toggleFilters(el) {
   }
 }
 
+// hide/show help text on single entity and archival records pages
 function toggleHelpText(el, help_text) {
   if ($(el).siblings('p.additional-info').length) {
     // change icon to 'question mark'

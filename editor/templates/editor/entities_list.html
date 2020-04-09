@@ -21,6 +21,9 @@
                 <div>
                   <fieldset class="filter-list" id="document-level-filter">
                     <legend>Document level</legend>
+                    {% if facets.fields.entity_type|length > 7 %}
+                      <input type="text" name="search-entityType" aria-label="search entity type" class="instant-search" placeholder="Search entity type" onfocus="this.placeholder=''" onblur="this.placeholder='Search archival level'"/>
+                    {% endif %}
                     {% for entity_type in facets.fields.entity_type %}
                     {% render_facet entity_type %}
                     {% endfor %}

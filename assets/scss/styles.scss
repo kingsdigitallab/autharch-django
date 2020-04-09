@@ -162,6 +162,10 @@ button, .create, input[type=submit] {
     border-radius: 30px;
 }
 
+input, button {
+    box-sizing: border-box;
+}
+
 input[type=submit]:not(.search-button), .save {
     min-width: 100px;
 }
@@ -781,17 +785,22 @@ main {
                     .year-search-field {
                         max-width: 140px;
                     }
-                    input[type=number] {
+                    input[type=number], input[type=text] {
                         font-family: "Roboto", sans-serif;
                         -webkit-border-radius: 5px;
                         -moz-border-radius: 5px;
                         border-radius: 5px;
                         font-size: 14px;
-                        padding: 10px;
-                        border: 1px solid
-                        #707070;
+                        padding: 5px 10px;
+                        border: 1px solid $medium-grey;
                         line-height: 1.4em;
-                        width: 40px;
+                    }
+                    input[type=number] {
+                        width: 100px;
+                    }
+                    input[type=text] {
+                        margin-bottom: 0.7em;
+                        width: 100%;
                     }
                 }
             }
