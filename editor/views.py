@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.db.models import Max, Min
 from django.forms import modelformset_factory
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
@@ -237,10 +238,21 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['current_section'] = 'records'
+        context['end_year'] = self.request.GET.get('end_year')
         context['facets'] = self._merge_facets(context['facets'],
                                                self.request.GET.copy())
+        context['start_year'] = self.request.GET.get('start_year')
         context['writer_manager'] = Entity.objects
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        years = ArchivalRecord.objects.aggregate(Min('start_date'),
+                                                 Max('end_date'))
+        min_year = years['start_date__min'].year
+        max_year = max(min_year, years['end_date__max'].year)
+        kwargs.update({'min_year': min_year, 'max_year': max_year})
+        return kwargs
 
     def test_func(self):
         return is_user_editor_plus(self.request.user)

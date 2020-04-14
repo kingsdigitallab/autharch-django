@@ -17,16 +17,12 @@
           <input type="checkbox" class="none" id="filter" aria-label="Filter">
           <label for="filter" class="filter-button"><span hidden>Filter</span></label>
           <div class="filters-hidden">
-            <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
+            <a href="." class="dotted-underline clear-filters aoctive">Clear all filters</a>
             <div class="filters">
-              <fieldset class="filter-list" id="year-filter">
-                {% render_field form.year "record-search-form" %}
-              </fieldset>
               <fieldset class="filter-list" id="year-range-filter">
                 <legend>Creation year range</legend>
                 <div id="year-range"></div>
-                <input type="number" id="start" aria-label="start year"> - 
-                <input type="number" id="end" aria-label="end year">
+                {{ form.start_year }} – {{ form.end_year }}
                 <input type="submit" value="Filter" class="create" form="record-search-form">              
               </fieldset>
                 <!-- should be sorted alphabetically -->
@@ -74,12 +70,18 @@
   {% endblock page_header %}
 
   {% block content %}
-  {% if facets.selected %}
+  {% if facets.selected or start_year or end_year %}
     <div class="selected-facets">
       <h4>Selected filters</h4>
       {% for selected_facet in facets.selected %}
         {% render_facet selected_facet %}
-      {% endfor %}  
+      {% endfor %}
+      {% if start_year %}
+      Start year: {{ start_year }}
+      {% endif %}
+      {% if end_year %}
+      End year: {{ end_year }}
+      {% endif %}
       <a href="." class="dotted-underline clear-filters">Clear all filters</a>  
     </div>
   {% endif %}

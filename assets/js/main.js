@@ -208,29 +208,28 @@ $(document).ready(function() {
     })  
   });
 
-  // TODO - min and max should come from the year values in the database
-  var minValue = 1600
-  var maxValue = 2000
+  var minValue = Number($("#id_start_year").attr("min"));
+  var maxValue = Number($("#id_end_year").attr("max"));
   $( "#year-range" ).slider({
       range: true,
       min: minValue,
       max: maxValue,
       values: [ minValue, maxValue],
       slide: function( event, ui ) {
-        $( "#year-range-filter > #start" ).val(ui.values[ 0 ]);
-        $( "#year-range-filter > #end" ).val(ui.values[ 1 ]);
+        $( "#year-range-filter > #id_start_year" ).val(ui.values[ 0 ]);
+        $( "#year-range-filter > #id_end_year" ).val(ui.values[ 1 ]);
       }
   });
-  $( "#year-range-filter > #start" ).val( $( "#year-range" ).slider( "values", 0 ));
-  $( "#year-range-filter > #end" ).val( $( "#year-range" ).slider( "values", 1 ));
-  $( "#year-range-filter > #start" ).on('keyup change', function(el) {
-    var endYear = parseInt($( "#year-range-filter > #end" ).val());
+  $( "#year-range-filter > #id_start_year" ).val( $( "#year-range" ).slider( "values", 0 ));
+  $( "#year-range-filter > #id_end_year" ).val( $( "#year-range" ).slider( "values", 1 ));
+  $( "#year-range-filter > #id_start_year" ).on('keyup change', function(el) {
+    var endYear = parseInt($( "#year-range-filter > #id_end_year" ).val());
     if ($(el.target).val() >= minValue && $(el.target).val() <= endYear) {
       $( "#year-range" ).slider("values", 0, $(el.target).val());
     }
   });
-  $( "#year-range-filter > #end" ).on('keyup change', function(el) {
-    var startYear = parseInt($( "#year-range-filter > #start" ).val());
+  $( "#year-range-filter > #id_end_year" ).on('keyup change', function(el) {
+    var startYear = parseInt($( "#year-range-filter > #id_start_year" ).val());
     if ($(el.target).val() >= startYear && $(el.target).val() <= maxValue) {
       $( "#year-range" ).slider("values", 1, $(el.target).val());
     }

@@ -46,6 +46,16 @@ RECORD_SEARCH_INPUT_ATTRS = {
     'type': 'search',
 }
 
+RECORD_SEARCH_START_YEAR_INPUT_ATTRS = {
+    'aria-label': 'Start year',
+    'form': 'record-search-form',
+}
+
+RECORD_SEARCH_END_YEAR_INPUT_ATTRS = {
+    'aria-label': 'End year',
+    'form': 'record-search-form',
+}
+
 SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
     'placeholder': 'Search catalogue',
@@ -561,9 +571,6 @@ class EditorProfileForm(forms.Form):
 
 class EditorProfileEditInlineForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def has_changed(self):
         return bool(self.changed_data)
 
@@ -671,15 +678,30 @@ class ArchivalRecordFacetedSearchForm(FacetedSearchForm):
     q = forms.CharField(required=False, label='Search',
                         widget=forms.TextInput(
                             attrs=RECORD_SEARCH_INPUT_ATTRS))
-    year = forms.IntegerField(required=False, label='Creation year')
+    start_year = forms.IntegerField(
+        required=False, label='Creation start year', widget=forms.NumberInput(
+            attrs=RECORD_SEARCH_START_YEAR_INPUT_ATTRS))
+    end_year = forms.IntegerField(
+        required=False, label='Creation end year', widget=forms.NumberInput(
+            attrs=RECORD_SEARCH_END_YEAR_INPUT_ATTRS))
+
+    def __init__(self, *args, min_year=0, max_year=2040, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['start_year'].widget.attrs['min'] = min_year
+        self.fields['start_year'].widget.attrs['max'] = max_year
+        self.fields['end_year'].widget.attrs['min'] = min_year
+        self.fields['end_year'].widget.attrs['max'] = max_year
 
     def search(self):
         sqs = super().search()
         if not self.is_valid():
             return self.no_query_found()
-        year = self.cleaned_data['year']
-        if year:
-            sqs = sqs.filter(dates=year)
+        start_year = self.cleaned_data['start_year']
+        end_year = self.cleaned_data['end_year']
+        if start_year:
+            sqs = sqs.filter(dates__gte=start_year)
+        if end_year:
+            sqs = sqs.filter(dates__lte=end_year)
         return sqs
 
 
