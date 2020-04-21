@@ -53,6 +53,7 @@
     "title": "updated"
   }
 },
+{
   "model": "jargon.editingeventtype",
   "pk": 7,
   "fields": {
