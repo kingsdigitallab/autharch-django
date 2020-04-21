@@ -384,6 +384,8 @@ def entity_edit(request, entity_id):
                               instance=entity)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
+            entity.control.maintenance_status = MaintenanceStatus.objects.get(
+                title='revised')
             reversion.set_comment(log_form.cleaned_data['comment'])
             event_type = EditingEventType.objects.get(title='revised')
             editor_type = CWEditorType.objects.get(title='human')
@@ -475,6 +477,8 @@ def record_edit(request, record_id):
                           instance=record)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
+            record.maintenance_status = MaintenanceStatus.objects.get(
+                title='revised')
             reversion.set_comment(log_form.cleaned_data['comment'])
             event_type = EditingEventType.objects.get(title='revised')
             editor_type = CWEditorType.objects.get(title='human')
@@ -482,7 +486,7 @@ def record_edit(request, record_id):
                                collaborative_workspace_editor_type=editor_type)
             form.save()
             url = reverse('editor:record-edit',
-                          kwargs={'record_id': record_id}) + 'saved=true'
+                          kwargs={'record_id': record_id}) + '?saved=true'
             return redirect(url)
     else:
         form = form_class(editor_role=editor_role, instance=record)

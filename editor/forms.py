@@ -253,6 +253,7 @@ class ControlEditInlineForm(ContainerModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['maintenance_status'].disabled = True
         if self.Meta.editor_role == EditorProfile.EDITOR:
             in_process_status = PublicationStatus.objects.get(
                 title='inProcess')
@@ -407,20 +408,21 @@ class ArchivalRecordEditForm(forms.ModelForm):
     """
 
     disabled_fields = {
-        EditorProfile.ADMIN: [],
+        EditorProfile.ADMIN: ['maintenance_status'],
         EditorProfile.MODERATOR: [
             'arrangement', 'cataloguer', 'copyright_status',
-            'description_date', 'extent', 'physical_description', 'provenance',
-            'publication_permission', 'rcin', 'record_type', 'references',
-            'repository', 'rights_declaration',
-            'rights_declaration_abbreviation', 'rights_declaration_citation',
-            'withheld'
+            'description_date', 'extent', 'maintenance_status',
+            'physical_description', 'provenance', 'publication_permission',
+            'rcin', 'record_type', 'references', 'repository',
+            'rights_declaration', 'rights_declaration_abbreviation',
+            'rights_declaration_citation', 'withheld'
         ],
         EditorProfile.EDITOR: [
             'arrangement', 'cataloguer', 'copyright_status',
-            'description_date', 'extent', 'physical_description', 'provenance',
-            'publication_permission', 'publication_status', 'rcin',
-            'record_type', 'references', 'repository', 'rights_declaration',
+            'description_date', 'extent', 'maintenance_status',
+            'physical_description', 'provenance', 'publication_permission',
+            'publication_status', 'rcin', 'record_type', 'references',
+            'repository', 'rights_declaration',
             'rights_declaration_abbreviation', 'rights_declaration_citation',
             'withheld'
         ],
