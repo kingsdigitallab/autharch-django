@@ -89,6 +89,9 @@
     <form action="." method="post">
       {% csrf_token %}
       {{ all_users_formset.management_form }}
+      {% if all_users_formset|length > 5 %}
+      <input name="all_users_submit" aria-label="save admin table" type="submit" class="save none save-admin-table" value="Save admin table" />
+      {% endif %}
       <div class="table-container">
         <table class="admin-table">
           <thead>
@@ -161,7 +164,7 @@
         </table>
       </div>
       <a href="{% url 'editor:user-create' %}" aria-label="add user" class="create linked-button"><i class="fal fa-plus"></i>Add user</a>
-      <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
+      <input name="all_users_submit" aria-label="save admin table" type="submit" class="save none save-admin-table" value="Save admin table" />
     </form>
   </div>
   {% endif %}

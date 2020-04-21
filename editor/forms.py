@@ -214,6 +214,7 @@ class RelationEditInlineForm(forms.ModelForm):
         model = Relation
         widgets = {
             'place': PlaceSelect(),
+            # 'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS)
         }
 
 
@@ -271,6 +272,9 @@ class ControlEditInlineForm(ContainerModelForm):
     class Meta:
         exclude = []
         model = Control
+        widgets = {
+            'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS)
+        }
 
 
 class DescriptionEditInlineForm(ContainerModelForm):
@@ -461,7 +465,6 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'project': forms.HiddenInput(),
             'provenance': forms.Textarea(attrs={'rows': 4}),
             'record_type': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
-            'rights_declaration': forms.Textarea(),
             'start_date': HTML5DateInput(),
             'subjects': FunctionSelect(),
             'transcription': forms.Textarea(attrs=RICHTEXT_ATTRS),

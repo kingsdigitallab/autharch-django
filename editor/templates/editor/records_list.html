@@ -73,17 +73,23 @@
   {% if facets.selected or start_year or end_year %}
     <div class="selected-facets">
       <h4>Selected filters</h4>
-      {% for selected_facet in facets.selected %}
-        {% render_facet selected_facet %}
-      {% endfor %}
-      {% if start_year %}
-      Start year: {{ start_year }}
-      {% endif %}
-      {% if end_year %}
-      End year: {{ end_year }}
-      {% endif %}
-      <a href="." class="dotted-underline clear-filters">Clear all filters</a>  
+      <p>
+        {% for selected_facet in facets.selected %}
+          {% render_facet selected_facet %}
+        {% endfor %}
+        {% if start_year %}
+        Start year: {{ start_year }}
+        {% endif %}
+        {% if end_year %}
+        End year: {{ end_year }}
+        {% endif %}
+        <!-- OL: Year range: {{ start_year }}-{{ end_year }} ?-->
+        <a href="." class="dotted-underline clear-filters">Clear all filters</a>
+      </p>  
     </div>
+  {% endif %}
+  {% if query %}
+    <h2>Search results for "{{query}}" <a href="." class="dotted-underline clear-filters active margin-left">Clear search</a></h2>
   {% endif %}
   <div class="table-container">
     <table id="records-list-table" class="tablesorter">

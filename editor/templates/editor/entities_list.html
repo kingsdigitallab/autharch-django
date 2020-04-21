@@ -7,31 +7,31 @@
     <h1>People and corporate bodies ({{ object_list.count }})</h1>
     <div class="search-filter">
       <form action="." class="search" method="get">
-          <label>
-            <span hidden>Search</span>
-            {{ form.q }}
-          </label>
-          <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
-        </form>
-        <div class="filter-block">
-          <input type="checkbox" class="none" id="filter" value="Filter">
-          <label for="filter" class="filter-button"><span hidden>Filter</span></label>
-          <div class="filters-hidden">
-            <a href="." class="dotted-underline clear-filters active">Clear filters</a>
-                <div>
-                  <fieldset class="filter-list" id="document-level-filter">
-                    <legend>Document level</legend>
-                    {% if facets.fields.entity_type|length > 7 %}
-                      <input type="text" name="search-entityType" aria-label="search entity type" class="instant-search" placeholder="Search entity type" onfocus="this.placeholder=''" onblur="this.placeholder='Search archival level'"/>
-                    {% endif %}
-                    {% for entity_type in facets.fields.entity_type %}
-                    {% render_facet entity_type %}
-                    {% endfor %}
-                  </fieldset>
-                </div>
+        <label>
+          <span hidden>Search</span>
+          {{ form.q }}
+        </label>
+        <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+      </form>
+      <div class="filter-block">
+        <input type="checkbox" class="none" id="filter" value="Filter">
+        <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+        <div class="filters-hidden">
+          <a href="." class="dotted-underline clear-filters active">Clear filters</a>
+            <div class="filters">
+              <fieldset class="filter-list" id="document-level-filter">
+                <legend>Document level</legend>
+                {% if facets.fields.entity_type|length > 7 %}
+                  <input type="text" name="search-entityType" aria-label="search entity type" class="instant-search" placeholder="Search entity type" onfocus="this.placeholder=''" onblur="this.placeholder='Search archival level'"/>
+                {% endif %}
+                {% for entity_type in facets.fields.entity_type %}
+                {% render_facet entity_type %}
+                {% endfor %}
+              </fieldset>
             </div>
-        </div>
-        <a href="{% url 'editor:entity-create' %}" class="create"><span hidden>New entity</span></a>
+          </div>
+      </div>
+      <a href="{% url 'editor:entity-create' %}" class="create"><span hidden>New entity</span></a>
     </div>
   </div>
   {% endblock page_header %}
@@ -44,6 +44,9 @@
         {% endfor %}
         <a href="." class="dotted-underline clear-filters">Clear all filters</a>
     </div>
+  {% endif %}
+  {% if query %}
+    <h2>Search results for "{{query}}" <a href="." class="dotted-underline clear-filters active margin-left">Clear search</a></h2>
   {% endif %}
   <div class="table-container">
     <table id="records-table" class="tablesorter">
@@ -68,30 +71,30 @@
       </table>
   </div>
   {% if object_list.count > 10 %}
-  <div id="records-table_pager_info" class="pager">
-    <div class="page-size">
-      <p>
-        rows per page:
-        <a href="#" data-label="10">10</a> 
-        {% if object_list.count > 25 %}
-          | <a href="#" data-label="25">25</a>
-          {% if object_list.count > 50 %}
-          | <a href="#" data-label="50">50</a>
-            {% if object_list.count > 100 %}
-            |  <a href="#" data-label="100">100</a>
+    <div id="records-table_pager_info" class="pager">
+      <div class="page-size">
+        <p>
+          rows per page:
+          <a href="#" data-label="10">10</a> 
+          {% if object_list.count > 25 %}
+            | <a href="#" data-label="25">25</a>
+            {% if object_list.count > 50 %}
+            | <a href="#" data-label="50">50</a>
+              {% if object_list.count > 100 %}
+              |  <a href="#" data-label="100">100</a>
+              {% endif %}
             {% endif %}
           {% endif %}
-        {% endif %}
-      </p>
+        </p>
+      </div>
+      <div class="page-list">
+        <button class="first"><i class="fal fa-step-backward"></i></button>
+        <button class="prev"><i class="fal fa-caret-left"></i></button>
+        <span class="pagecount"></span>
+        <button class="next"><i class="fal fa-caret-right"></i></button>
+        <button class="last"><i class="fal fa-step-forward"></i></button>
+      </div>
     </div>
-    <div class="page-list">
-      <button class="first"><i class="fal fa-step-backward"></i></button>
-      <button class="prev"><i class="fal fa-caret-left"></i></button>
-      <span class="pagecount"></span>
-      <button class="next"><i class="fal fa-caret-right"></i></button>
-      <button class="last"><i class="fal fa-step-forward"></i></button>
-    </div>
-  </div>
   {% endif %}
   {% endblock content %}
 </main>
