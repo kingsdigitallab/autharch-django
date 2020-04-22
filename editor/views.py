@@ -63,8 +63,8 @@ class FacetMixin:
         return link, False
 
     def _create_unapply_link(self, value_data, query_dict, facet):
-        """Return a link to apply the facet value in `value_data` and True to
-        indicate that the facet is selected."""
+        """Return a link to unapply the facet value in `value_data` and True
+        to indicate that the facet is selected."""
         qd = query_dict.copy()
         value = value_data[0]
         facets = qd.getlist('selected_facets')
@@ -235,6 +235,20 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     form_class = ArchivalRecordFacetedSearchForm
     facet_fields = ['addressees', 'archival_level', 'languages', 'writers']
 
+    def _create_unapply_year_link(self, query_dict):
+        """Return a link to unapply the start and end year 'facet'."""
+        qd = query_dict.copy()
+        if 'start_year' in qd:
+            del qd['start_year']
+        if 'end_year' in qd:
+            del qd['end_year']
+        link = qd.urlencode()
+        if link:
+            link = '?{}'.format(link)
+        else:
+            link = '.'
+        return link
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['current_section'] = 'records'
@@ -243,6 +257,8 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
                                                self.request.GET.copy())
         context['start_year'] = self.request.GET.get('start_year')
         context['writer_manager'] = Entity.objects
+        context['year_remove_link'] = self._create_unapply_year_link(
+            self.request.GET)
         return context
 
     def get_form_kwargs(self):

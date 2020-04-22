@@ -77,15 +77,13 @@
         {% for selected_facet in facets.selected %}
           {% render_facet selected_facet %}
         {% endfor %}
-        {% if start_year %}
-        Start year: {{ start_year }}
+        {% if start_year or end_year %}
+        <a href="{{ year_remove_link }}" class="checkbox-anchor">
+          <input type="checkbox" aria-label="" checked="checked" onclick='window.location.assign("{{ year_remove_link }}")'/>Year range: {{ start_year }}–{{ end_year }}
+        </a>
         {% endif %}
-        {% if end_year %}
-        End year: {{ end_year }}
-        {% endif %}
-        <!-- OL: Year range: {{ start_year }}-{{ end_year }} ?-->
         <a href="." class="dotted-underline clear-filters">Clear all filters</a>
-      </p>  
+      </p>
     </div>
   {% endif %}
   {% if query %}
