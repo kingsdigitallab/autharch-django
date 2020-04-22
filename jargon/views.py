@@ -5,7 +5,8 @@ from django.views.generic.list import BaseListView
 
 from rest_framework import viewsets
 
-from .models import Function, PublicationStatus, ReferenceSource, Repository
+from .models import (Function, Gender, PublicationStatus, ReferenceSource,
+                     Repository)
 from .serializers import (PublicationStatusSerializer,
                           ReferenceSourceSerializer, RepositorySerializer)
 
@@ -49,7 +50,56 @@ class FunctionAutocompleteJsonView(BaseListView):
         qs = Function.objects.get_queryset().filter(is_term=True)
         for bit in self.term.split():
             qs = qs.filter(Q(title__icontains=bit) |
-                           Q(alt_labels__icontains=bit))
+                           Q(alt_labels__icontains=bit) |
+                           Q(broader__title__icontains=bit) |
+                           Q(related__title__icontains=bit) |
+                           Q(narrower__title__icontains=bit))
+        return qs.distinct().order_by('title')
+
+
+class GenderAutocompleteJsonView(BaseListView):
+
+    """View to provide autocompletion search results for Function objects.
+
+    Adapted from django.contrib.admin.views.autocomplete and
+    django.contrib.admin.options.
+
+    """
+
+    paginate_by = 20
+
+    def get(self, request, *args, **kwargs):
+        """Return a JsonResponse with search results of the form:
+
+        {
+            results: [{id: "123", text: "foo"}],
+            pagination: {more: true}
+        }
+
+        """
+        self.term = request.GET.get('term', '')
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        return JsonResponse({
+            'results': [
+                {'id': str(obj.pk), 'text': str(obj)}
+                for obj in context['object_list']
+            ],
+            'pagination': {'more': context['page_obj'].has_next()},
+        })
+
+    def get_paginator(self, queryset, per_page, orphans=0,
+                      allow_empty_first_page=True):
+        return Paginator(queryset, per_page, orphans, allow_empty_first_page)
+
+    def get_queryset(self):
+        qs = Gender.objects.get_queryset()
+        for bit in self.term.split():
+            qs = qs.filter(Q(title__icontains=bit) |
+                           Q(alt_labels__icontains=bit) |
+                           Q(broader__title__icontains=bit) |
+                           Q(related__title__icontains=bit) |
+                           Q(narrower__title__icontains=bit))
         return qs.distinct().order_by('title')
 
 

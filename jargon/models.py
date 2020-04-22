@@ -48,6 +48,16 @@ class Function(BaseJargonModel):
         verbose_name = 'EAC: Function'
 
 
+class Gender(BaseJargonModel):
+
+    alt_labels = models.TextField(blank=True)
+    uri = models.URLField(blank=True)
+    broader = models.ManyToManyField(
+        'self', blank=True, related_name='narrower', symmetrical=False)
+    related = models.ManyToManyField(
+        'self', blank=True, related_name='reverse_related', symmetrical=False)
+
+
 class MaintenanceStatus(BaseJargonModel):
     class Meta:
         verbose_name = 'EAC: Name authority file status'

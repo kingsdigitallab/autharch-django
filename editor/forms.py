@@ -19,7 +19,7 @@ from jargon.models import EntityType, NamePartType, PublicationStatus
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
-from .widgets import FunctionSelect, HTML5DateInput
+from .widgets import FunctionSelect, GenderSelect, HTML5DateInput
 
 
 RICHTEXT_ATTRS = {
@@ -183,6 +183,7 @@ class LocalDescriptionEditInlineForm(forms.ModelForm):
         widgets = {
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
+            'gender': GenderSelect(),
         }
 
 

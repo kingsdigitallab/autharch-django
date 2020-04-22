@@ -16,4 +16,7 @@ urlpatterns = [
     path('jargon_function_autocomplete/',
          views.FunctionAutocompleteJsonView.as_view(),
          name='jargon_function_autocomplete'),
+    path('jargon_gender_autocomplete/',
+         views.GenderAutocompleteJsonView.as_view(),
+         name='jargon_gender_autocomplete'),
 ]

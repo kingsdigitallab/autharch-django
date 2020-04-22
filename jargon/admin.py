@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.db import models
 from jargon.models import (
     CollaborativeWorkspaceEditorType, EditingEventType, EntityRelationType,
-    EntityType, Function, MaintenanceStatus, NamePartType, Publication,
-    PublicationStatus, RecordType, ReferenceSource, Repository,
+    EntityType, Function, Gender, MaintenanceStatus, NamePartType,
+    Publication, PublicationStatus, RecordType, ReferenceSource, Repository,
     ResourceRelationType
 )
 
@@ -23,6 +23,7 @@ admin.site.register(EditingEventType, BaseJargonAdmin)
 admin.site.register(EntityRelationType, BaseJargonAdmin)
 admin.site.register(EntityType, BaseJargonAdmin)
 admin.site.register(Function, BaseJargonAdmin)
+admin.site.register(Gender, BaseJargonAdmin)
 admin.site.register(MaintenanceStatus, BaseJargonAdmin)
 admin.site.register(NamePartType, BaseJargonAdmin)
 admin.site.register(Publication, BaseJargonAdmin)

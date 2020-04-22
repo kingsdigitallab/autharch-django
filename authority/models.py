@@ -5,8 +5,8 @@ from django.utils import timezone
 
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (
-    EntityRelationType, EntityType, Function, MaintenanceStatus, NamePartType,
-    PublicationStatus, ResourceRelationType
+    EntityRelationType, EntityType, Function, Gender, MaintenanceStatus,
+    NamePartType, PublicationStatus, ResourceRelationType
 )
 from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
@@ -244,7 +244,8 @@ class Event(DateRangeMixin, TimeStampedModel):
 class LocalDescription(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='local_descriptions')
-    gender = models.CharField(max_length=256, help_text=constants.GENDER_HELP)
+    gender = models.ForeignKey(Gender, help_text=constants.GENDER_HELP,
+                               on_delete=models.CASCADE)
     notes = models.TextField(verbose_name='Descriptive notes', blank=True)
     citation = models.TextField(blank=True)
 
@@ -298,7 +299,6 @@ class Relation(DateRangeMixin, TimeStampedModel):
     place = models.ForeignKey(
         GeoPlace, verbose_name="Place related to relationship", blank=True,
         null=True, on_delete=models.CASCADE)
-    notes = models.TextField()
 
 
 @reversion.register()

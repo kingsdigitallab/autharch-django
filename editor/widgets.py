@@ -25,7 +25,6 @@ class AutocompleteMixin:
             'data-ajax--type': 'GET',
             'data-ajax--url': self.get_url(),
             'data-allow-clear': json.dumps(not self.is_required),
-            'data-placeholder': 'Search UKAT terms',
             'aria-label': 'select with search'
         })
         return attrs
@@ -61,8 +60,22 @@ class AutocompleteMixin:
 
 class FunctionSelect(AutocompleteMixin, forms.Select):
 
+    def build_attrs(self, base_attrs, extra_attrs=None):
+        attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
+        attrs.update({'data-placeholder': 'Search UKAT terms'})
+
     def get_url(self):
         return reverse('jargon:jargon_function_autocomplete')
+
+
+class GenderSelect(AutocompleteMixin, forms.Select):
+
+    def build_attrs(self, base_attrs, extra_attrs=None):
+        attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
+        attrs.update({'data-placeholder': 'Search Homosaurus terms'})
+
+    def get_url(self):
+        return reverse('jargon:jargon_gender_autocomplete')
 
 
 class HTML5DateInput(forms.DateInput):
