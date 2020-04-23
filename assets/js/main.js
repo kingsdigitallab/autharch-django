@@ -238,7 +238,9 @@ $(document).ready(function() {
 
   // enable Save admin table button once one of the input fields is clicked
   $('.admin-table').find('label').on('click', function() {
-    $('.save-admin-table').removeClass('none');
+    if ($('.save-admin-table').hasClass('none')) {
+      $('.save-admin-table').removeClass('none');
+    }
   });
 
 });
@@ -422,6 +424,7 @@ function addEmptyForm(formType, context) {
   let newFormPrefixName = generateNewFormPrefix(totalControl, "name", newFormPrefixNumber);
   let newFormPrefixId = generateNewFormPrefix(totalControl, "id", newFormPrefixNumber);
   let prefixLength = "__prefix__".length;
+  console.log(newControls);
   newControls.each(function(index) {
     $(this).attr("name", function(i, val) {
       return newFormPrefixName + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
@@ -429,6 +432,11 @@ function addEmptyForm(formType, context) {
     $(this).attr("id", function(i, val) {
       return newFormPrefixId + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
     });
+    if ($(this).is("[data-select2-id]")) {
+      $(this).attr("data-select2-id", function(i, val) {
+        return newFormPrefixId + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
+      });
+    }
   });
   // The management form for the formset of the new form must have its
   // TOTAL_FORMS value incremented by 1 to account for the new form.
