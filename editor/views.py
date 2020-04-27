@@ -265,8 +265,12 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         kwargs = super().get_form_kwargs()
         years = ArchivalRecord.objects.aggregate(Min('start_date'),
                                                  Max('end_date'))
-        min_year = years['start_date__min'].year
-        max_year = max(min_year, years['end_date__max'].year)
+        if (years['start_date__min'] and years['end_date__max']):
+            min_year = years['start_date__min'].year
+            max_year = max(min_year, years['end_date__max'].year)
+        else:
+            min_year = None
+            max_year = None
         kwargs.update({'min_year': min_year, 'max_year': max_year})
         return kwargs
 

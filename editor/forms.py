@@ -67,6 +67,11 @@ SEARCH_SELECT_ATTRS = {
     'aria-label': 'select-with-search'
 }
 
+SEARCH_SELECT_ATTRS_DYNAMIC = {
+    'class': 'select-with-search-dynamic',
+    'aria-label': 'select-with-search'
+}
+
 
 class ContainerModelForm(forms.ModelForm):
 
@@ -215,7 +220,7 @@ class RelationEditInlineForm(forms.ModelForm):
         model = Relation
         widgets = {
             'place': PlaceSelect(),
-            # 'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS)
+            'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC)
         }
 
 

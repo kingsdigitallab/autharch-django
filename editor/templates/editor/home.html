@@ -28,7 +28,6 @@
           <thead>
             <tr>
               <th scope="col" data-label="Title">Title</th>
-              <th scope="col" data-label="Record type">Record type</th>
               <th scope="col" data-label="Type/level">Type/level</th>
               <th scope="col" data-label="Publication status">Publication status</th>
               <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
@@ -38,15 +37,17 @@
             {% for result in object_list %}
             <tr>
               {% if result.model_name == 'entity' %}
-              <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a></td>
-              <td>Entity</td>
+              <td class="description entity"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description }}</a></td>
               <td>{{ result.entity_type }}</td>
               {% else %}
-              <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
-              <td>Archival Record</td>
+              <td class="description archival-record"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
               <td>{{ result.archival_level }}</td>
               {% endif %}
-              <td>{{ result.publication_status }}</td>
+              <td>{{ result.publication_status }}
+                {% if result.maintenance_status.title == "deleted" %}
+                  <br>(deleted)
+                {% endif %}
+              </td>
               <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
             </tr>
             {% endfor %}
@@ -98,17 +99,27 @@
           <tbody>
             {% for record in recently_modified_records %}
             <tr>
-              <td class="description"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
-              <td>Archival Record | {{ record.archival_level }}</td>
-              <td>{{ record.publication_status }}</td>
+              <td class="description archival-record"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
+              <td>{{ record.archival_level }}</td>
+              <td>
+                {{ record.publication_status }}
+                {% if record.maintenance_status.title == "deleted" %}
+                  <br>(deleted)
+                {% endif %}
+              </td>
               <td data-text="{{ record.modified.isoformat }}">{{ record.modified }}</td>
             </tr>
             {% endfor %}
             {% for entity in recently_modified_entities %}
             <tr>
-              <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
-              <td>Entity | {{ entity.entity_type }}</td>
-              <td>{{ entity.control.publication_status }}</td>
+              <td class="description entity"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
+              <td>{{ entity.entity_type }}</td>
+              <td>
+                {{ entity.control.publication_status }}
+                {% if entity.control.maintenance_status.title == "deleted" %}
+                 <br>(deleted)
+                {% endif %}
+              </td>
               <td data-text="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>
             </tr>
             {% endfor %}
@@ -143,10 +154,13 @@
         {% endif %}
       </div>
       {% else %}
-      <p>You don't have recently modified records</p>
+      <div class="empty-block">
+        <p>You don't have recently modified records.</p>
+        <p>Browse <a href="{% url 'editor:entities-list' %}" class="dotted-underline">People and corporate bodies</a> and <a href="{% url 'editor:records-list' %}" class="dotted-underline">Archival records</a>.</p>
+      </div>
     {% endif %}
     
-    {% if unpublished_records is not None %}
+    {% if unpublished_records is not None or unpublished_entities is not None %}
     <!-- should be available for moderators and admins. Moderators should be able to approve the records for publication and admins should be able to publish them. -->
       <h2>Records for approval/publication ({{unpublished_entities.count|add:unpublished_records.count}})</h2>
       <div class="table-container">
@@ -162,16 +176,16 @@
             <tbody>
               {% for record in unpublished_records %}
               <tr>
-                <td class="description"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
-                <td>Archival Record | {{ record.archival_level }}</td>
+                <td class="description archival-record"><a href="{% url 'editor:record-edit' record_id=record.pk %}">{{ record }}</a></td>
+                <td>{{ record.archival_level }}</td>
                 <td>{{ record.publication_status }}</td>
                 <td data-text="{{ record.modified.isoformat }}">{{ record.modified.isoformat }}</td>
               </tr>
               {% endfor %}
               {% for entity in unpublished_entities %}
               <tr>
-                <td class="description"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
-                <td>Entity | {{ entity.entity_type }}</td>
+                <td class="description entity"><a href="{% url 'editor:entity-edit' entity_id=entity.pk %}">{{ entity }}</a></td>
+                <td>{{ entity.entity_type }}</td>
                 <td>{{ entity.control.publication_status }}</td>
                 <td data-text="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>
               </tr>

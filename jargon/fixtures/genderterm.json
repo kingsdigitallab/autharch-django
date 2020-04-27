@@ -1,6 +1,6 @@
 [
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 1,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -11,7 +11,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 2,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -22,7 +22,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 3,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -33,7 +33,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 4,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -44,7 +44,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 5,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -55,7 +55,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 6,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -66,7 +66,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 7,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -77,7 +77,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 8,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -88,7 +88,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 9,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -99,7 +99,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 10,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -110,7 +110,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 11,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -121,7 +121,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 12,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -132,7 +132,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 13,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -143,7 +143,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 14,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -154,7 +154,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 15,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -165,7 +165,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 16,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -176,7 +176,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 17,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -187,7 +187,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 18,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -198,7 +198,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 19,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -209,7 +209,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 20,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -220,7 +220,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 21,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -231,7 +231,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 22,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -242,7 +242,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 23,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -253,7 +253,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 24,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -264,7 +264,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 25,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -275,7 +275,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 26,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -286,7 +286,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 27,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -297,7 +297,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 28,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -308,7 +308,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 29,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -319,7 +319,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 30,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -330,7 +330,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 31,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -341,7 +341,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 32,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -352,7 +352,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 33,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -363,7 +363,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 34,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -374,7 +374,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 35,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -385,7 +385,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 36,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -396,7 +396,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 37,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -407,7 +407,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 38,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -418,7 +418,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 39,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -429,7 +429,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 40,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -440,7 +440,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 41,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -451,7 +451,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 42,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -462,7 +462,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 43,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -473,7 +473,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 44,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -484,7 +484,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 45,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -495,7 +495,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 46,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -506,7 +506,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 47,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -517,7 +517,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 48,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -528,7 +528,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 49,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -539,7 +539,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 50,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -550,7 +550,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 51,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -561,7 +561,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 52,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -572,7 +572,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 53,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -583,7 +583,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 54,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -594,7 +594,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 55,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -605,7 +605,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 56,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -616,7 +616,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 57,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -627,7 +627,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 58,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -638,7 +638,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 59,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -649,7 +649,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 60,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -660,7 +660,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 61,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -671,7 +671,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 62,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -682,7 +682,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 63,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -693,7 +693,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 64,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -704,7 +704,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 65,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -715,7 +715,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 66,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -726,7 +726,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 67,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -737,7 +737,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 68,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -748,7 +748,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 69,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -759,7 +759,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 70,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -770,7 +770,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 71,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -781,7 +781,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 72,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -792,7 +792,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 73,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -803,7 +803,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 74,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -814,7 +814,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 75,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -825,7 +825,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 76,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -836,7 +836,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 77,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -847,7 +847,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 78,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -858,7 +858,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 79,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -869,7 +869,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 80,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -880,7 +880,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 81,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -891,7 +891,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 82,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -902,7 +902,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 83,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -913,7 +913,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 84,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -924,7 +924,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 85,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -935,7 +935,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 86,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -946,7 +946,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 87,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -957,7 +957,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 88,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -968,7 +968,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 89,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -979,7 +979,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 90,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -990,7 +990,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 91,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -1001,7 +1001,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 92,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",
@@ -1012,7 +1012,7 @@
     }
   },
   {
-    "model": "jargon.genderterms",
+    "model": "jargon.gender",
     "pk": 93,
     "fields": {
       "created": "2020-04-22T00:43:09.262953+00:00",

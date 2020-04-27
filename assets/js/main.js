@@ -424,7 +424,6 @@ function addEmptyForm(formType, context) {
   let newFormPrefixName = generateNewFormPrefix(totalControl, "name", newFormPrefixNumber);
   let newFormPrefixId = generateNewFormPrefix(totalControl, "id", newFormPrefixNumber);
   let prefixLength = "__prefix__".length;
-  console.log(newControls);
   newControls.each(function(index) {
     $(this).attr("name", function(i, val) {
       return newFormPrefixName + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
@@ -432,10 +431,11 @@ function addEmptyForm(formType, context) {
     $(this).attr("id", function(i, val) {
       return newFormPrefixId + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
     });
-    if ($(this).is("[data-select2-id]")) {
-      $(this).attr("data-select2-id", function(i, val) {
-        return newFormPrefixId + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
-      });
+    if ($(this).hasClass("select-with-search-dynamic")) {
+      $(this).select2( {
+        placeholder: "Select",
+        allowClear: true
+      } );
     }
   });
   // The management form for the formset of the new form must have its

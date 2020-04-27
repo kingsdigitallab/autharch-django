@@ -61,7 +61,7 @@
         <tbody>
           {% for result in object_list %}
           <tr>
-            <td class="description"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+            <td class="description entity"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
             <td>{{ result.entity_type }}</td>
             <td>{{ result.publication_status }}</td>
             <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>

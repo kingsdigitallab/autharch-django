@@ -19,12 +19,14 @@
           <div class="filters-hidden">
             <a href="." class="dotted-underline clear-filters aoctive">Clear all filters</a>
             <div class="filters">
-              <fieldset class="filter-list" id="year-range-filter">
-                <legend>Creation year range</legend>
-                <div id="year-range"></div>
-                {{ form.start_year }} – {{ form.end_year }}
-                <input type="submit" value="Filter" class="create" form="record-search-form">              
-              </fieldset>
+                {% if min_year != None and max_year != None %}
+                <fieldset class="filter-list" id="year-range-filter">
+                  <legend>Creation year range</legend>
+                  <div id="year-range"></div>
+                  {{ form.start_year }} – {{ form.end_year }}
+                  <input type="submit" value="Filter" class="create" form="record-search-form">              
+                </fieldset>
+                {% endif %}
                 <!-- should be sorted alphabetically -->
                 <fieldset class="filter-list" id="document-level-filter">
                   <legend>Document level</legend>
@@ -103,7 +105,7 @@
         <tbody>
           {% for result in object_list %}
           <tr>
-            <td class="description"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+            <td class="description archival-record"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
             <!-- display writers as a string compiled out of all writers listed in the document. -->
             <td>{{ result.writers_display|default_if_none:"" }}</td>
             <td>{{ result.archival_level }}</td>
