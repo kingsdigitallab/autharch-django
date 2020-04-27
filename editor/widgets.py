@@ -63,6 +63,7 @@ class FunctionSelect(AutocompleteMixin, forms.Select):
     def build_attrs(self, base_attrs, extra_attrs=None):
         attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
         attrs.update({'data-placeholder': 'Search UKAT terms'})
+        return attrs
 
     def get_url(self):
         return reverse('jargon:jargon_function_autocomplete')
@@ -73,6 +74,7 @@ class GenderSelect(AutocompleteMixin, forms.Select):
     def build_attrs(self, base_attrs, extra_attrs=None):
         attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
         attrs.update({'data-placeholder': 'Search Homosaurus terms'})
+        return attrs
 
     def get_url(self):
         return reverse('jargon:jargon_gender_autocomplete')
