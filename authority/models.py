@@ -170,12 +170,12 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
         # and a "properTitle" name part.
         if self.is_royal_name:
             forename_type = NamePartType.objects.get(title='forename')
-            proper_title_type = NamePartType.objects.get(title='properTitle')
+            proper_title_type = NamePartType.objects.get(title='proper title')
             if not self.parts.filter(name_part_type=forename_type) and \
                not self.parts.filter(name_part_type=proper_title_type):
                 raise ValidationError(
                     'A royal name must contain a "forename" part and a '
-                    '"properTitle" part.')
+                    '"proper title" part.')
 
 
 @reversion.register()
