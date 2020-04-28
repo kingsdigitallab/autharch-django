@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('authority', '0078_nameentry_is_royal_name'),
+        ('jargon', '0026_auto_20200422_0340'),
     ]
 
     operations = [
