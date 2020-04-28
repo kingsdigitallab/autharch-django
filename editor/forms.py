@@ -186,6 +186,7 @@ class LocalDescriptionEditInlineForm(forms.ModelForm):
             'display_date': 'Display date gender used',
         }
         widgets = {
+            'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
             'gender': GenderSelect(),
