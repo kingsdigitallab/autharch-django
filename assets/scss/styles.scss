@@ -1163,6 +1163,9 @@ main {
         p {
             margin-bottom: 15px;
         }
+        .openseadragon-container {
+            min-height: 500px;
+        }
         div {
             // width: 100%;
             // overflow: hidden;
@@ -1278,15 +1281,6 @@ main {
             .richText-help-popup {
                 overflow: scroll;
             }
-            .richText-toolbar ul li a{
-                border-right: 1px solid $input;
-                border-bottom: 1px solid $input;
-                font-size: 12px;
-                padding: 5px 12px;
-                &:hover, &:focus {
-                    background-color: $light-grey;
-                }
-            }
             .richText-toolbar {
                 border-bottom: 1px solid $input;
                 .fa-repeat:before {
@@ -1294,6 +1288,19 @@ main {
                 }
                 ul li {
                     margin-bottom:0;
+                    a   {
+                        border-right: 1px solid $input;
+                        border-bottom: 1px solid $input;
+                        font-size: 12px;
+                        padding: 5px 12px;
+                        &:hover, &:focus {
+                            background-color: $light-grey;
+                        }
+                        &.richText-btn-icon {
+                            font-weight: bold;
+                            font-size: 14px;
+                        }
+                    }
                 }
             }
             .richText-editor {

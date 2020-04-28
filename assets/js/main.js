@@ -82,6 +82,16 @@ $(document).ready(function() {
     });
   });
 
+  //TRANSCRIPTIONS
+  // add aria-labels to richtext areas
+  $('.richtext-transcription').attr('aria-label', 'richtext transcription editor');
+
+  $('.richtext-transcription').each(function(index) {
+    $(this).richTextTranscriptions({
+      id: "richText-transcription-" + index
+    });
+  });
+
   // add pagination to all tables
   $('table').each(function(i, el) {
     $.tablesorter.customPagerControls({

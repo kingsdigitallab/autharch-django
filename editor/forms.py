@@ -477,7 +477,8 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'start_date': HTML5DateInput(),
             'subjects': FunctionSelect(),
             'transcription': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'uuid': forms.HiddenInput()
+            'uuid': forms.HiddenInput(),
+            'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS)
         }
 
 
