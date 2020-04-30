@@ -51,7 +51,7 @@ class LanguageScriptMixin(models.Model):
         abstract = True
 
 
-@reversion.register()
+@reversion.register(follow=['control', 'identities'])
 class Entity(TimeStampedModel, DateRangeMixin):
     entity_type = models.ForeignKey(EntityType, on_delete=models.CASCADE)
     project = models.ForeignKey(
@@ -128,7 +128,8 @@ class Entity(TimeStampedModel, DateRangeMixin):
         return self.control.maintenance_status.title == 'deleted'
 
 
-@reversion.register()
+@reversion.register(follow=['descriptions', 'name_entries', 'relations',
+                            'resources'])
 class Identity(DateRangeMixin, TimeStampedModel):
     entity = models.ForeignKey(
         Entity, on_delete=models.CASCADE, related_name='identities')
@@ -149,7 +150,7 @@ class Identity(DateRangeMixin, TimeStampedModel):
         return self.name_entries.order_by('-authorised_form').first()
 
 
-@reversion.register()
+@reversion.register(follow=['parts'])
 class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='name_entries')
@@ -189,7 +190,9 @@ class NamePart(TimeStampedModel):
         return '{}: {}'.format(self.name_part_type, self.part)
 
 
-@reversion.register()
+@reversion.register(follow=['biography_history', 'events', 'functions',
+                            'languages_scripts', 'legal_statuses',
+                            'local_descriptions', 'mandates', 'places'])
 class Description(DateRangeMixin, TimeStampedModel):
     identity = models.ForeignKey(
         Identity, on_delete=models.CASCADE, related_name='descriptions')
@@ -314,7 +317,7 @@ class Resource(TimeStampedModel):
     notes = models.TextField(null=True)
 
 
-@reversion.register()
+@reversion.register(follow=['sources'])
 class Control(LanguageScriptMixin, TimeStampedModel):
     entity = models.OneToOneField(Entity, on_delete=models.CASCADE,
                                   related_name="control")

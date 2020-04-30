@@ -545,7 +545,7 @@ def record_history(request, record_id):
 def revert(request):
     revision_id = request.POST.get('revision_id')
     revision = get_object_or_404(Revision, pk=revision_id)
-    revision.revert()
+    revision.revert(delete=True)
     return redirect(request.POST.get('redirect_url'))
 
 
