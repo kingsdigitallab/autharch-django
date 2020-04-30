@@ -160,8 +160,8 @@ $(document).ready(function() {
 
   // optional functionality (can be removed if needed) - dynamic styling of the sections
   // style border for preferred names and identities
-  $( "fieldset:has(input[name*='preferred']:checked)").addClass('border-left');
-  $( "fieldset:has(input[name*='authorised']:checked)").addClass('border-left');
+  $("fieldset:has(input[name*='preferred']:checked)").addClass('border-left');
+  $("fieldset:has(input[name*='authorised']:checked)").addClass('border-left');
   $('body').on('click', 'input[name*="preferred"]', function (el) {
     $('input[name*="preferred"]:checked').prop('checked', false);
     $(el.target).parents('fieldset').first().find('input[name*="preferred"]').prop('checked', true);

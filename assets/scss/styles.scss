@@ -1308,13 +1308,6 @@ main {
                 box-sizing: border-box;
                 font-family: $font-primary;
                 color:black;
-                .tei-body {
-                    .richtext-editor-newLine {
-                        font-size: 12px;
-                        margin-right: 20px;
-                        background-color: $light-grey;
-                    }
-                }
             }
             input {
                 box-sizing: border-box;
@@ -1496,6 +1489,47 @@ main {
                         }
                         .richText-editor {
                             height: 50vh;
+                            min-height: 500px;
+                            .tei-body {
+                                .richtext-editor-newLine {
+                                    font-size: 12px;
+                                    margin-right: 20px;
+                                    background-color: $light-grey;
+                                }
+                                .tei-add {
+                                    background-color: lighten($save, 42%);
+                                    text-decoration: none;
+                                    // &:before {
+                                    //     content: '\f067';
+                                    //     font-family: $fontawesome;
+                                    //     margin-right: 0px;
+                                    //     margin-left: 5px;
+                                    //     font-weight: 300;
+                                    //     color: darken($save, 10%);
+                                    //     font-size: 11px;
+                                    // }
+                                }
+                                .tei-del {
+                                    background-color: lighten($danger, 56%);
+                                    // &:before {
+                                    //     content: '\f068';
+                                    //     font-family: $fontawesome;
+                                    //     margin-right: 0px;
+                                    //     margin-left: 5px;
+                                    //     font-weight: 300;
+                                    //     color: darken($danger, 10%);
+                                    //     font-size: 11px;
+                                    // }
+                                }
+                                .tei-pb {
+                                    &:before {
+                                        content: 'Page Break: ';
+                                        font-size: 10px;
+                                        vertical-align: center;
+                                        color: $dark-grey;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

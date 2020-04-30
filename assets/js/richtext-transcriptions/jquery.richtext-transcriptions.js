@@ -8,112 +8,107 @@
             
             // text formatting
             inserted: true,
+            deleted: true,
             underline: true,
-            bold: true,
-            italic: true,
+            // bold: true,
+            // italic: true,
 
             // text alignment
-            leftAlign: true,
-            centerAlign: true,
-            rightAlign: true,
-            justify: true,
+            // leftAlign: true,
+            // centerAlign: true,
+            // rightAlign: true,
+            // justify: true,
 
             // lists
             ol: true,
             ul: true,
 
             // title
-            heading: true,
+            // heading: true,
 
             // fonts
             // OL fonts: false,
             // OL fontSize: false,
-            fontList: [],
-            fontColor: false,
+            // fontList: [],
+            // fontColor: false,
 
             // uploads
-            imageUpload: false,
-            fileUpload: false,
+            // OL imageUpload: false,
+            // OL fileUpload: false,
 
             // media
-            videoEmbed: false,
+            // OL videoEmbed: false,
 
             // link
-            urls: false,
+            // OL urls: false,
 
             // tables
-            table: true,
+            // OL table: true,
 
             // code
             removeStyles: true,
 
             // colors
-            colors: [],
+            // OL colors: [],
 
             // dropdowns
-            fileHTML: '',
-            imageHTML: '',
+            // OL fileHTML: '',
+            // OL imageHTML: '',
 
             // translations
             translations: {
                 'title': 'Title',
-                'white': 'White',
-                'black': 'Black',
-                'brown': 'Brown',
-                'beige': 'Beige',
-                'darkBlue': 'Dark Blue',
-                'blue': 'Blue',
-                'lightBlue': 'Light Blue',
-                'darkRed': 'Dark Red',
-                'red': 'Red',
-                'darkGreen': 'Dark Green',
-                'green': 'Green',
-                'purple': 'Purple',
-                'darkTurquois': 'Dark Turquois',
-                'turquois': 'Turquois',
-                'darkOrange': 'Dark Orange',
-                'orange': 'Orange',
-                'yellow': 'Yellow',
-                'imageURL': 'Image URL',
-                'fileURL': 'File URL',
-                'linkText': 'Link text',
-                'url': 'URL',
-                'size': 'Size',
-                'responsive': 'Responsive',
-                'text': 'Text',
-                'openIn': 'Open in',
-                'sameTab': 'Same tab',
-                'newTab': 'New tab',
-                'align': 'Align',
-                'left': 'Left',
-                'justify': 'Justify',
-                'center': 'Center',
-                'right': 'Right',
-                'rows': 'Rows',
-                'columns': 'Columns',
-                'add': 'Add',
-                'pleaseEnterURL': 'Please enter an URL',
-                'videoURLnotSupported': 'Video URL not supported',
-                'pleaseSelectImage': 'Please select an image',
-                'pleaseSelectFile': 'Please select a file',
-                'bold': 'Bold',
+                // 'white': 'White',
+                // 'black': 'Black',
+                // 'brown': 'Brown',
+                // 'beige': 'Beige',
+                // 'darkBlue': 'Dark Blue',
+                // 'blue': 'Blue',
+                // 'lightBlue': 'Light Blue',
+                // 'darkRed': 'Dark Red',
+                // 'red': 'Red',
+                // 'darkGreen': 'Dark Green',
+                // 'green': 'Green',
+                // 'purple': 'Purple',
+                // 'darkTurquois': 'Dark Turquois',
+                // 'turquois': 'Turquois',
+                // 'darkOrange': 'Dark Orange',
+                // 'orange': 'Orange',
+                // 'yellow': 'Yellow',
+                // 'imageURL': 'Image URL',
+                // 'fileURL': 'File URL',
+                // 'linkText': 'Link text',
+                // 'url': 'URL',
+                // 'size': 'Size',
+                // 'responsive': 'Responsive',
+                // 'text': 'Text',
+                // 'openIn': 'Open in',
+                // 'sameTab': 'Same tab',
+                // 'newTab': 'New tab',
+                // 'align': 'Align',
+                // 'left': 'Left',
+                // 'justify': 'Justify',
+                // 'center': 'Center',
+                // 'right': 'Right',
+                // 'rows': 'Rows',
+                // 'columns': 'Columns',
+                // 'add': 'Add',
+                // 'videoURLnotSupported': 'Video URL not supported',
+                // 'pleaseSelectImage': 'Please select an image',
+                // 'pleaseSelectFile': 'Please select a file',
+                // 'bold': 'Bold',
                 'inserted': 'Inserted',
+                'deleted': 'Inserted',
                 'italic': 'Italic',
                 'underline': 'Underline',
-                'alignLeft': 'Align left',
-                'alignCenter': 'Align centered',
-                'alignRight': 'Align right',
+                // 'alignLeft': 'Align left',
+                // 'alignCenter': 'Align centered',
+                // 'alignRight': 'Align right',
                 'addOrderedList': 'Add ordered list',
                 'addUnorderedList': 'Add unordered list',
-                'addHeading': 'Add Heading/title',
-                'addFont': 'Add font',
-                'addFontColor': 'Add font color',
-                'addFontSize' : 'Add font size',
-                'addImage': 'Add image',
-                'addVideo': 'Add video',
-                'addFile': 'Add file',
-                'addURL': 'Add URL',
-                'addTable': 'Add table',
+                // 'addHeading': 'Add Heading/title',
+                // 'addFont': 'Add font',
+                // 'addTable': 'Add table',
                 'removeStyles': 'Remove styles',
                 'undo': 'Undo',
                 'redo': 'Redo',
@@ -121,7 +116,7 @@
             },
 
             // privacy
-            youtubeCookies: false,
+            // youtubeCookies: false,
 
             // dev settings
             useSingleQuotes: false,
@@ -142,46 +137,47 @@
             $toolbarList = $('<ul />'),
             $toolbarElement = $('<li />'),
 
-            $btnUnderline = $('<a />', {class: "richText-btn", "data-command": "underline", "title": settings.translations.underline, html: '<span class="fa fa-underline"></span>'}), // underline
             $btnInserted = $('<a />', {class: "richText-btn richText-btn-icon", "data-command": "inserted", "title": settings.translations.inserted, html: '<span title="inserted text">ins</span>'}), // inserted
-            $btnBold = $('<a />', {class: "richText-btn", "data-command": "bold", "title": settings.translations.bold, html: '<span class="fa fa-bold"></span>'}), // bold
-            $btnItalic = $('<a />', {class: "richText-btn", "data-command": "italic", "title": settings.translations.italic, html: '<span class="fa fa-italic"></span>'}), // italic
-            $btnJustify = $('<a />', {class: "richText-btn", "data-command": "justifyFull", "title": settings.translations.justify, html: '<span class="fa fa-align-justify"></span>'}), // left align
-            $btnLeftAlign = $('<a />', {class: "richText-btn", "data-command": "justifyLeft", "title": settings.translations.alignLeft, html: '<span class="fa fa-align-left"></span>'}), // left align
-            $btnCenterAlign = $('<a />', {class: "richText-btn", "data-command": "justifyCenter", "title": settings.translations.alignCenter, html: '<span class="fa fa-align-center"></span>'}), // centered
-            $btnRightAlign = $('<a />', {class: "richText-btn", "data-command": "justifyRight", "title": settings.translations.alignRight, html: '<span class="fa fa-align-right"></span>'}), // right align
+            $btnDeleted = $('<a />', {class: "richText-btn richText-btn-icon", "data-command": "deleted", "title": settings.translations.deleted, html: '<span title="deleted text">del</span>'}), // deleted
+            $btnUnderline = $('<a />', {class: "richText-btn", "data-command": "underline", "title": settings.translations.underline, html: '<span class="fa fa-underline"></span>'}), // underline
+            // OL $btnBold = $('<a />', {class: "richText-btn", "data-command": "bold", "title": settings.translations.bold, html: '<span class="fa fa-bold"></span>'}), // bold
+            // ol $btnItalic = $('<a />', {class: "richText-btn", "data-command": "italic", "title": settings.translations.italic, html: '<span class="fa fa-italic"></span>'}), // italic
+            // OL $btnJustify = $('<a />', {class: "richText-btn", "data-command": "justifyFull", "title": settings.translations.justify, html: '<span class="fa fa-align-justify"></span>'}), // left align
+            // OL $btnLeftAlign = $('<a />', {class: "richText-btn", "data-command": "justifyLeft", "title": settings.translations.alignLeft, html: '<span class="fa fa-align-left"></span>'}), // left align
+            // OL $btnCenterAlign = $('<a />', {class: "richText-btn", "data-command": "justifyCenter", "title": settings.translations.alignCenter, html: '<span class="fa fa-align-center"></span>'}), // centered
+            // OL $btnRightAlign = $('<a />', {class: "richText-btn", "data-command": "justifyRight", "title": settings.translations.alignRight, html: '<span class="fa fa-align-right"></span>'}), // right align
             $btnOL = $('<a />', {class: "richText-btn", "data-command": "insertOrderedList", "title": settings.translations.addOrderedList, html: '<span class="fa fa-list-ol"></span>'}), // ordered list
             $btnUL = $('<a />', {class: "richText-btn", "data-command": "insertUnorderedList", "title": settings.translations.addUnorderedList, html: '<span class="fa fa-list"></span>'}), // unordered list
-            $btnHeading = $('<a />', {class: "richText-btn", "title": settings.translations.addHeading, html: '<span class="fa fa-header fa-heading"></span>'}), // title/header
-            $btnTable = $('<a />', {class: "richText-btn", "title": settings.translations.addTable, html: '<span class="fa fa-table"></span>'}), // table
-            $btnRemoveStyles = $('<a />', {class: "richText-btn", "data-command": "removeFormat", "title": settings.translations.removeStyles, html: '<span class="fa fa-recycle"></span>'}), // clean up styles
-            
+            $btnRemoveStyles = $('<a />', {class: "richText-btn", "data-command": "removeFormat", "title": settings.translations.removeStyles, html: '<span class="fa fa-recycle"></span>'}) // clean up styles
+
+            // OL $btnHeading = $('<a />', {class: "richText-btn", "title": settings.translations.addHeading, html: '<span class="fa fa-header fa-heading"></span>'}), // title/header
+            // OL $btnTable = $('<a />', {class: "richText-btn", "title": settings.translations.addTable, html: '<span class="fa fa-table"></span>'}), // table
             // OL $btnFont = $('<a />', {class: "richText-btn", "title": settings.translations.addFont, html: '<span class="fa fa-font"></span>'}), // font color
-            $btnFontColor = $('<a />', {class: "richText-btn", "title": settings.translations.addFontColor, html: '<span class="fa fa-paint-brush"></span>'}), // font color
+            // OL $btnFontColor = $('<a />', {class: "richText-btn", "title": settings.translations.addFontColor, html: '<span class="fa fa-paint-brush"></span>'}), // font color
             // OL $btnFontSize = $('<a />', {class: "richText-btn", "title": settings.translations.addFontSize, html: '<span class="fa fa-text-height"></span>'}), // font color
-            $btnImageUpload = $('<a />', {class: "richText-btn", "title": settings.translations.addImage, html: '<span class="fa fa-image"></span>'}), // image
-            $btnVideoEmbed = $('<a />', {class: "richText-btn", "title": settings.translations.addVideo, html: '<span class="fa fa-video-camera fa-video"></span>'}), // video
-            $btnFileUpload = $('<a />', {class: "richText-btn", "title": settings.translations.addFile, html: '<span class="fa fa-file-text-o far fa-file-alt"></span>'}), // file
-            $btnURLs = $('<a />', {class: "richText-btn", "title": settings.translations.addURL, html: '<span class="fa fa-link"></span>'}) // urls/links
+            // OL $btnImageUpload = $('<a />', {class: "richText-btn", "title": settings.translations.addImage, html: '<span class="fa fa-image"></span>'}), // image
+            // OL $btnVideoEmbed = $('<a />', {class: "richText-btn", "title": settings.translations.addVideo, html: '<span class="fa fa-video-camera fa-video"></span>'}), // video
+            // OL $btnFileUpload = $('<a />', {class: "richText-btn", "title": settings.translations.addFile, html: '<span class="fa fa-file-text-o far fa-file-alt"></span>'}), // file
+            // OL $btnURLs = $('<a />', {class: "richText-btn", "title": settings.translations.addURL, html: '<span class="fa fa-link"></span>'}) // urls/links
 
         
         /* prepare toolbar dropdowns */
-        var $dropdownOuter = $('<div />', {class: "richText-dropdown-outer"});
-        var $dropdownClose = $('<span />', {class: "richText-dropdown-close", html: '<span title="' + settings.translations.close + '"><span class="fa fa-times"></span></span>'});
-        var $dropdownList = $('<ul />', {class: "richText-dropdown"}), // dropdown lists
-            $dropdownBox = $('<div />', {class: "richText-dropdown"}), // dropdown boxes / custom dropdowns
-            $form = $('<div />', {class: "richText-form"}), // symbolic form
-            $formItem = $('<div />', {class: 'richText-form-item'}), // form item
-            $formLabel = $('<label />'), // form label
-            $formInput = $('<input />', {type: "text"}), //form input field
-            $formInputFile = $('<input />', {type: "file"}), // form file input field
-            $formInputSelect = $('<select />'),
-            $formButton = $('<button />', {text: settings.translations.add, class: "btn"}); // button
+        // var $dropdownOuter = $('<div />', {class: "richText-dropdown-outer"});
+        // var $dropdownClose = $('<span />', {class: "richText-dropdown-close", html: '<span title="' + settings.translations.close + '"><span class="fa fa-times"></span></span>'});
+        // var $dropdownList = $('<ul />', {class: "richText-dropdown"}), // dropdown lists
+        //     $dropdownBox = $('<div />', {class: "richText-dropdown"}), // dropdown boxes / custom dropdowns
+        //     $form = $('<div />', {class: "richText-form"}), // symbolic form
+        //     $formItem = $('<div />', {class: 'richText-form-item'}), // form item
+        //     $formLabel = $('<label />'), // form label
+        //     $formInput = $('<input />', {type: "text"}), //form input field
+        //     $formInputFile = $('<input />', {type: "file"}), // form file input field
+        //     $formInputSelect = $('<select />'),
+        //     $formButton = $('<button />', {text: settings.translations.add, class: "btn"}); // button
 
         /* internal settings */
         var savedSelection; // caret position/selection
         var editorID = "richText-" + Math.random().toString(36).substring(7);
-        var ignoreSave = false, $resizeImage = null;
+        // var ignoreSave = false, $resizeImage = null;
 
         /* prepare editor history */
         var history = [];
@@ -190,165 +186,12 @@
         historyPosition[editorID] = 0;
 
         /* list dropdown for titles */
-        var $titles = $dropdownList.clone();
-        $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h1">' + settings.translations.title + ' #1</a>'}));
-        $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h2">' + settings.translations.title + ' #2</a>'}));
-        $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h3">' + settings.translations.title + ' #3</a>'}));
-        $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h4">' + settings.translations.title + ' #4</a>'}));
-        $btnHeading.append($dropdownOuter.clone().append($titles.prepend($dropdownClose.clone())));
-
-        /* list dropdown for fonts */
-        var fonts = settings.fontList;
-        var $fonts = $dropdownList.clone();
-        for(var i = 0; i < fonts.length; i++) {
-            $fonts.append($('<li />', {html: '<a style="font-family:' + fonts[i] + ';" data-command="fontName" data-option="' + fonts[i] + '">' + fonts[i] + '</a>'}));
-        }
-        // OL $btnFont.append($dropdownOuter.clone().append($fonts.prepend($dropdownClose.clone())));
-
-        /* list dropdown for font sizes */
-        var fontSizes = [24,18,16,14,12];
-        var $fontSizes = $dropdownList.clone();
-        for(var i = 0; i < fontSizes.length; i++) {
-            $fontSizes.append($('<li />', {html: '<a style="font-size:' + fontSizes[i] + 'px;" data-command="fontSize" data-option="' + fontSizes[i] + '">' + settings.translations.text  + ' ' + fontSizes[i] + 'px</a>'}));
-        }
-        // ol $btnFontSize.append($dropdownOuter.clone().append($fontSizes.prepend($dropdownClose.clone())));
-
-        /* font colors */
-        var $fontColors = $dropdownList.clone();
-        $fontColors.html(loadColors("forecolor"));
-        $btnFontColor.append($dropdownOuter.clone().append($fontColors.prepend($dropdownClose.clone())));
-
-
-        /* background colors */
-        //var $bgColors = $dropdownList.clone();
-        //$bgColors.html(loadColors("hiliteColor"));
-        //$btnBGColor.append($dropdownOuter.clone().append($bgColors));
-
-        /* box dropdown for links */
-        var $linksDropdown = $dropdownBox.clone();
-        var $linksForm = $form.clone().attr("id", "richText-URL").attr("data-editor", editorID);
-        $linksForm.append(
-            $formItem.clone()
-                .append($formLabel.clone().text(settings.translations.url).attr("for", "url"))
-                .append($formInput.clone().attr("id", "url"))
-               );
-        $linksForm.append(
-            $formItem.clone()
-                .append($formLabel.clone().text(settings.translations.text).attr("for", "urlText"))
-                .append($formInput.clone().attr("id", "urlText"))
-               );
-        $linksForm.append(
-            $formItem.clone()
-                .append($formLabel.clone().text(settings.translations.openIn).attr("for", "openIn"))
-                .append(
-                    $formInputSelect
-                        .clone().attr("id", "openIn")
-                        .append($("<option />", {value: '_self', text: settings.translations.sameTab}))
-                        .append($("<option />", {value: '_blank', text: settings.translations.newTab}))
-                    )
-               );
-        $linksForm.append( $formItem.clone().append($formButton.clone()) );
-        $linksDropdown.append($linksForm);
-        $btnURLs.append($dropdownOuter.clone().append($linksDropdown.prepend($dropdownClose.clone())));
-
-        /* box dropdown for video embedding */
-        var $videoDropdown = $dropdownBox.clone();
-        var $videoForm = $form.clone().attr("id", "richText-Video").attr("data-editor", editorID);
-        $videoForm.append(
-            $formItem.clone()
-                .append($formLabel.clone().text(settings.translations.url).attr("for", "videoURL"))
-                .append($formInput.clone().attr("id", "videoURL"))
-            );
-        $videoForm.append(
-            $formItem.clone()
-                .append($formLabel.clone().text(settings.translations.size).attr("for", "size"))
-                .append(
-                        $formInputSelect
-                            .clone().attr("id", "size")
-                            .append($("<option />", {value: 'responsive', text: settings.translations.responsive}))
-                            .append($("<option />", {value: '640x360', text: '640x360'}))
-                            .append($("<option />", {value: '560x315', text: '560x315'}))
-                            .append($("<option />", {value: '480x270', text: '480x270'}))
-                            .append($("<option />", {value: '320x180', text: '320x180'}))
-                        )
-                   );
-        $videoForm.append( $formItem.clone().append($formButton.clone()) );
-        $videoDropdown.append($videoForm);
-        $btnVideoEmbed.append($dropdownOuter.clone().append($videoDropdown.prepend($dropdownClose.clone())));
-
-        /* box dropdown for image upload/image selection */
-        var $imageDropdown = $dropdownBox.clone();
-        var $imageForm = $form.clone().attr("id", "richText-Image").attr("data-editor", editorID);
-
-        if(settings.imageHTML 
-            && ($(settings.imageHTML).find('#imageURL').length > 0 || $(settings.imageHTML).attr("id") === "imageURL")) {
-            // custom image form
-            $imageForm.html(settings.imageHTML);
-        } else {
-            // default image form
-            $imageForm.append(
-                $formItem.clone()
-                    .append($formLabel.clone().text(settings.translations.imageURL).attr("for", "imageURL"))
-                    .append($formInput.clone().attr("id", "imageURL"))
-                   );
-            $imageForm.append(
-                $formItem.clone()
-                    .append($formLabel.clone().text(settings.translations.align).attr("for", "align"))
-                    .append(
-                        $formInputSelect
-                            .clone().attr("id", "align")
-                            .append($("<option />", {value: 'left', text: settings.translations.left}))
-                            .append($("<option />", {value: 'center', text: settings.translations.center}))
-                            .append($("<option />", {value: 'right', text: settings.translations.right}))
-                        )
-                   );
-        }
-        $imageForm.append( $formItem.clone().append($formButton.clone()) );
-        $imageDropdown.append($imageForm);
-        $btnImageUpload.append($dropdownOuter.clone().append($imageDropdown.prepend($dropdownClose.clone())));
-
-        /* box dropdown for file upload/file selection */
-        var $fileDropdown = $dropdownBox.clone();
-        var $fileForm = $form.clone().attr("id", "richText-File").attr("data-editor", editorID);
-
-        if(settings.fileHTML 
-            && ($(settings.fileHTML).find('#fileURL').length > 0 || $(settings.fileHTML).attr("id") === "fileURL")) {
-            // custom file form
-            $fileForm.html(settings.fileHTML);
-        } else {
-            // default file form
-            $fileForm.append(
-                $formItem.clone()
-                    .append($formLabel.clone().text(settings.translations.fileURL).attr("for", "fileURL"))
-                    .append($formInput.clone().attr("id", "fileURL"))
-                );
-            $fileForm.append(
-                $formItem.clone()
-                    .append($formLabel.clone().text(settings.translations.linkText).attr("for", "fileText"))
-                    .append($formInput.clone().attr("id", "fileText"))
-                );
-        }
-        $fileForm.append( $formItem.clone().append($formButton.clone()) );
-        $fileDropdown.append($fileForm);
-        $btnFileUpload.append($dropdownOuter.clone().append($fileDropdown.prepend($dropdownClose.clone())));
-
-        /* box dropdown for tables */
-        var $tableDropdown = $dropdownBox.clone();
-        var $tableForm = $form.clone().attr("id", "richText-Table").attr("data-editor", editorID);
-        $tableForm.append(
-            $formItem.clone()
-                .append($formLabel.clone().text(settings.translations.rows).attr("for", "tableRows"))
-                .append($formInput.clone().attr("id", "tableRows").attr("type", "number"))
-            );
-        $tableForm.append(
-            $formItem.clone()
-                .append($formLabel.clone().text(settings.translations.columns).attr("for", "tableColumns"))
-                .append($formInput.clone().attr("id", "tableColumns").attr("type", "number"))
-            );
-        $tableForm.append( $formItem.clone().append($formButton.clone()) );
-        $tableDropdown.append($tableForm);
-        $btnTable.append($dropdownOuter.clone().append($tableDropdown.prepend($dropdownClose.clone())));
-
+        // var $titles = $dropdownList.clone();
+        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h1">' + settings.translations.title + ' #1</a>'}));
+        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h2">' + settings.translations.title + ' #2</a>'}));
+        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h3">' + settings.translations.title + ' #3</a>'}));
+        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h4">' + settings.translations.title + ' #4</a>'}));
+        // $btnHeading.append($dropdownOuter.clone().append($titles.prepend($dropdownClose.clone())));
 
         /* initizalize editor */
         function init() {
@@ -406,32 +249,35 @@
             $toolbar.append($toolbarList);
 
             /* text formatting */
-            if(settings.underline === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnUnderline));
-            }
             if(settings.inserted === true) {
                 $toolbarList.append($toolbarElement.clone().append($btnInserted));
             }
-            if(settings.bold === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnBold));
+            if(settings.deleted === true) {
+                $toolbarList.append($toolbarElement.clone().append($btnDeleted));
             }
-            if(settings.italic === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnItalic));
+            if(settings.underline === true) {
+                $toolbarList.append($toolbarElement.clone().append($btnUnderline));
             }
+            // if(settings.bold === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnBold));
+            // }
+            // if(settings.italic === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnItalic));
+            // }
 
             /* align */
-            if(settings.leftAlign === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnLeftAlign));
-            }
-            if(settings.centerAlign === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnCenterAlign));
-            }
-            if(settings.rightAlign === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnRightAlign));
-            }
-            if(settings.justify === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnJustify));
-            }
+            // if(settings.leftAlign === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnLeftAlign));
+            // }
+            // if(settings.centerAlign === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnCenterAlign));
+            // }
+            // if(settings.rightAlign === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnRightAlign));
+            // }
+            // if(settings.justify === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnJustify));
+            // }
 
             /* lists */
             if(settings.ol === true) {
@@ -449,37 +295,37 @@
             //     $toolbarList.append($toolbarElement.clone().append($btnFontSize));
             // }
 
-            /* heading */
-            if(settings.heading === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnHeading));
-            }
+            // /* heading */
+            // if(settings.heading === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnHeading));
+            // }
 
-            /* colors */
-            if(settings.fontColor === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnFontColor));
-            }
+            // /* colors */
+            // if(settings.fontColor === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnFontColor));
+            // }
 
             /* uploads */
-            if(settings.imageUpload === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnImageUpload));
-            }
-            if(settings.fileUpload === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnFileUpload));
-            }
+            // if(settings.imageUpload === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnImageUpload));
+            // }
+            // if(settings.fileUpload === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnFileUpload));
+            // }
 
             /* media */
-            if(settings.videoEmbed === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnVideoEmbed));
-            }
+            // if(settings.videoEmbed === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnVideoEmbed));
+            // }
 
-            /* urls */
-            if(settings.urls === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnURLs));
-            }
+            // /* urls */
+            // if(settings.urls === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnURLs));
+            // }
 
-            if(settings.table === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnTable));
-            }
+            // if(settings.table === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnTable));
+            // }
 
             /* removeStyles */
             if(settings.removeStyles === true) {
@@ -623,39 +469,39 @@
         });
 
         // opening / closing toolbar dropdown
-        $(document).on("click", function(event) {
-            var $clickedElement = $(event.target);
+        // $(document).on("click", function(event) {
+        //     var $clickedElement = $(event.target);
 
-            if($clickedElement.parents('.richText-toolbar').length === 0) {
-                // element not in toolbar
-                // ignore
-            } else if($clickedElement.hasClass("richText-dropdown-outer")) {
-                // closing dropdown by clicking inside the editor
-                $clickedElement.parent('a').parent('li').removeClass("is-selected");
-            } else if($clickedElement.find(".richText").length > 0) {
-                // closing dropdown by clicking outside of the editor
-                $('.richText-toolbar li').removeClass("is-selected");
-            } else if($clickedElement.parent().hasClass("richText-dropdown-close")) {
-                // closing dropdown by clicking on the close button
-                $('.richText-toolbar li').removeClass("is-selected");
-            } else if($clickedElement.hasClass("richText-btn") && $(event.target).children('.richText-dropdown-outer').length > 0) {
-                // opening dropdown by clicking on toolbar button
-                $clickedElement.parent('li').addClass("is-selected");
+        //     if($clickedElement.parents('.richText-toolbar').length === 0) {
+        //         // element not in toolbar
+        //         // ignore
+        //     } else if($clickedElement.hasClass("richText-dropdown-outer")) {
+        //         // closing dropdown by clicking inside the editor
+        //         $clickedElement.parent('a').parent('li').removeClass("is-selected");
+        //     } else if($clickedElement.find(".richText").length > 0) {
+        //         // closing dropdown by clicking outside of the editor
+        //         $('.richText-toolbar li').removeClass("is-selected");
+        //     } else if($clickedElement.parent().hasClass("richText-dropdown-close")) {
+        //         // closing dropdown by clicking on the close button
+        //         $('.richText-toolbar li').removeClass("is-selected");
+        //     } else if($clickedElement.hasClass("richText-btn") && $(event.target).children('.richText-dropdown-outer').length > 0) {
+        //         // opening dropdown by clicking on toolbar button
+        //         $clickedElement.parent('li').addClass("is-selected");
 
-                if($clickedElement.children('.fa,svg').hasClass("fa-link")) {
-                    // put currently selected text in URL form to replace it
-                    restoreSelection(editorID, false, true);
-                    var selectedText = getSelectedText();
-                    $clickedElement.find("input#urlText").val('');
-                    $clickedElement.find("input#url").val('');
-                    if(selectedText) {
-                        $clickedElement.find("input#urlText").val(selectedText);
-                    }
-                } else if($clickedElement.hasClass("fa-image")) {
-                    // image
-                }
-            }
-        });
+        //         if($clickedElement.children('.fa,svg').hasClass("fa-link")) {
+        //             // put currently selected text in URL form to replace it
+        //             restoreSelection(editorID, false, true);
+        //             var selectedText = getSelectedText();
+        //             $clickedElement.find("input#urlText").val('');
+        //             $clickedElement.find("input#url").val('');
+        //             if(selectedText) {
+        //                 $clickedElement.find("input#urlText").val(selectedText);
+        //             }
+        //         } else if($clickedElement.hasClass("fa-image")) {
+        //             // image
+        //         }
+        //     }
+        // });
 
         // Executing editor commands
         $(document).on("click", ".richText-toolbar a[data-command]", function(event) {
@@ -737,32 +583,20 @@
             doRestore(editorID);
             // Temporarily enable designMode so that
             // document.execCommand() will work
-            // document.designMode = "ON";
+            document.designMode = "ON";
             // Execute the command
             if(command === "heading" && getSelectedText()) {
                 // IE workaround
                 pasteHTMLAtCaret('<' + option + '>' + getSelectedText() + '</' + option + '>');
             } else if(command === "inserted" && getSelectedText()) {
-                var selection = getSelectedText();
-                // console.log(selection);
-                //will make text jump on a new line but will add ins tag
-                // var html = "<ins class='tei-add'>" + selection + "</ins>";
-                // check for duplicates
-                var sel = window.getSelection();
-                const html = document.createElement('ins');
-                html.setAttribute('class', 'tei-add');
-                html.textContent = sel.toString();
-                const range = sel.getRangeAt(0);
-                range.deleteContents();
-                range.insertNode(html);
-                //if precedes with a paragraph on a new line
-                
-                
+                insertTEI(command);
+            } else if(command === "deleted" && getSelectedText()) {
+                insertTEI(command);
             } else {
                 document.execCommand(command, false, option);
             }
             // Disable designMode
-            // document.designMode = "OFF";
+            document.designMode = "OFF";
         }
 
 
@@ -989,72 +823,72 @@
          * @param {Window} win - Active window context.
          * @param {Event} e - jQuery Event object for the keydown that fired.
          */
-        function tabifyEditableTable(win, e) {
+        // function tabifyEditableTable(win, e) {
 
-            if (e.keyCode !== 9) {
-                return false;
-            }
+        //     if (e.keyCode !== 9) {
+        //         return false;
+        //     }
 
-            var sel;
-            if (win.getSelection) {
-                sel = win.getSelection();
-                if (sel.rangeCount > 0) {
+        //     var sel;
+        //     if (win.getSelection) {
+        //         sel = win.getSelection();
+        //         if (sel.rangeCount > 0) {
 
-                    var textNode = null,
-                        direction = null;
+        //             var textNode = null,
+        //                 direction = null;
 
-                    if (!e.shiftKey) {
-                        direction = "next";
-                        textNode = (sel.focusNode.nodeName === "TD") 
-                            ? (sel.focusNode.nextSibling != null) 
-                                ? sel.focusNode.nextSibling 
-                                : (sel.focusNode.parentNode.nextSibling != null) 
-                                    ? sel.focusNode.parentNode.nextSibling.childNodes[0] 
-                                    : null 
-                                : (sel.focusNode.parentNode.nextSibling != null) 
-                                ? sel.focusNode.parentNode.nextSibling 
-                                : (sel.focusNode.parentNode.parentNode.nextSibling != null) 
-                            ? sel.focusNode.parentNode.parentNode.nextSibling.childNodes[0] 
-                            : null;
-                    } else {
-                        direction = "previous";
-                        textNode = (sel.focusNode.nodeName === "TD") 
-                            ? (sel.focusNode.previousSibling != null) 
-                                ? sel.focusNode.previousSibling 
-                                : (sel.focusNode.parentNode.previousSibling != null) 
-                                    ? sel.focusNode.parentNode.previousSibling.childNodes[sel.focusNode.parentNode.previousSibling.childNodes.length - 1] 
-                                    : null 
-                                : (sel.focusNode.parentNode.previousSibling != null) 
-                            ? sel.focusNode.parentNode.previousSibling 
-                            : (sel.focusNode.parentNode.parentNode.previousSibling != null) 
-                        ? sel.focusNode.parentNode.parentNode.previousSibling.childNodes[sel.focusNode.parentNode.parentNode.previousSibling.childNodes.length - 1] 
-                        : null;
-                    }
+        //             if (!e.shiftKey) {
+        //                 direction = "next";
+        //                 textNode = (sel.focusNode.nodeName === "TD") 
+        //                     ? (sel.focusNode.nextSibling != null) 
+        //                         ? sel.focusNode.nextSibling 
+        //                         : (sel.focusNode.parentNode.nextSibling != null) 
+        //                             ? sel.focusNode.parentNode.nextSibling.childNodes[0] 
+        //                             : null 
+        //                         : (sel.focusNode.parentNode.nextSibling != null) 
+        //                         ? sel.focusNode.parentNode.nextSibling 
+        //                         : (sel.focusNode.parentNode.parentNode.nextSibling != null) 
+        //                     ? sel.focusNode.parentNode.parentNode.nextSibling.childNodes[0] 
+        //                     : null;
+        //             } else {
+        //                 direction = "previous";
+        //                 textNode = (sel.focusNode.nodeName === "TD") 
+        //                     ? (sel.focusNode.previousSibling != null) 
+        //                         ? sel.focusNode.previousSibling 
+        //                         : (sel.focusNode.parentNode.previousSibling != null) 
+        //                             ? sel.focusNode.parentNode.previousSibling.childNodes[sel.focusNode.parentNode.previousSibling.childNodes.length - 1] 
+        //                             : null 
+        //                         : (sel.focusNode.parentNode.previousSibling != null) 
+        //                     ? sel.focusNode.parentNode.previousSibling 
+        //                     : (sel.focusNode.parentNode.parentNode.previousSibling != null) 
+        //                 ? sel.focusNode.parentNode.parentNode.previousSibling.childNodes[sel.focusNode.parentNode.parentNode.previousSibling.childNodes.length - 1] 
+        //                 : null;
+        //             }
 
-                    if (textNode != null) {
-                        sel.collapse(textNode, Math.min(textNode.length, sel.focusOffset + 1));
-                        if (textNode.textContent != null) {
-                            sel.selectAllChildren(textNode);
-                        }
-                        e.preventDefault();
-                        return true;
-                    } else if(textNode === null && direction === "next" && sel.focusNode.nodeName === "TD") {
-                        // add new row on TAB if arrived at the end of the row
-                        var $table = $(sel.focusNode).parents("table");
-                        var cellsPerLine = $table.find("tr").first().children("td").length;
-                        var $tr = $("<tr />");
-                        var $td = $("<td />");
-                        for(var i = 1; i <= cellsPerLine; i++) {
-                            $tr.append($td.clone());
-                        }
-                        $table.append($tr);
-                        // simulate tabing through table
-                        tabifyEditableTable(window, {keyCode: 9, shiftKey: false, preventDefault: function(){}});
-                    }
-                }
-            }
-            return false;
-        }
+        //             if (textNode != null) {
+        //                 sel.collapse(textNode, Math.min(textNode.length, sel.focusOffset + 1));
+        //                 if (textNode.textContent != null) {
+        //                     sel.selectAllChildren(textNode);
+        //                 }
+        //                 e.preventDefault();
+        //                 return true;
+        //             } else if(textNode === null && direction === "next" && sel.focusNode.nodeName === "TD") {
+        //                 // add new row on TAB if arrived at the end of the row
+        //                 var $table = $(sel.focusNode).parents("table");
+        //                 var cellsPerLine = $table.find("tr").first().children("td").length;
+        //                 var $tr = $("<tr />");
+        //                 var $td = $("<td />");
+        //                 for(var i = 1; i <= cellsPerLine; i++) {
+        //                     $tr.append($td.clone());
+        //                 }
+        //                 $table.append($tr);
+        //                 // simulate tabing through table
+        //                 tabifyEditableTable(window, {keyCode: 9, shiftKey: false, preventDefault: function(){}});
+        //             }
+        //         }
+        //     }
+        //     return false;
+        // }
 
         /**
          * Returns the text from the current selection
@@ -1168,7 +1002,7 @@
         }
 
         /**
-         * Undo
+         * Redo
          * @param $editor
          */
         function redo($editor) {
@@ -1189,6 +1023,51 @@
         function doRestore(id) {
             if(savedSelection) {
                 restoreSelection((id ? id : savedSelection.editorID));
+            }
+        }
+
+
+        /**
+         * 
+         * @param {string} $command 
+         */
+        function insertTEI(command) {
+            var sel, tagName, className;
+            switch (command) {
+                case 'inserted':
+                    tagName = 'ins';
+                    className = 'tei-add';
+                    break;
+                case 'deleted':
+                    tagName = 'del';
+                    className = 'tei-del';
+                    break;
+                case 'unclear':
+                    tagName = 'span';
+                    className = 'tei-unclear';
+                    break;
+                default:
+                    break;
+            }
+            // if tei-add then remove tei-del wrapper and vice versa
+            if (window.getSelection) {
+                sel = window.getSelection();
+                var el = sel.getRangeAt(0).extractContents();
+                console.log(el.toString());
+                const html = document.createElement(tagName);
+                html.setAttribute('class', className);
+                html.appendChild(el);
+                $(html).children('.'+className).each(function() {
+                    // TODO - TO FIX (element is duplicated rather than removed and an original element is preserved)
+                    $(this).replaceWith($(this).contents());
+                    $(this).siblings('.'+className).remove();
+                });
+                const range = sel.getRangeAt(0);
+                range.insertNode(html);
+            }
+            else if (document.selection && document.selection.type !== "Control") {
+                // IE < 9
+                document.selection.createRange().pasteHTML(html);
             }
         }
 
@@ -1264,43 +1143,43 @@
         }
 
 
-        /**
-         * Load colors for font or background
-         * @param {string} command Command
-         * @returns {string}
-         * @private
-         */
-        function loadColors(command) {
-            var colors = [];
-            var result = '';
+        // /**
+        //  * Load colors for font or background
+        //  * @param {string} command Command
+        //  * @returns {string}
+        //  * @private
+        //  */
+        // function loadColors(command) {
+        //     var colors = [];
+        //     var result = '';
 
-            colors["#FFFFFF"] = settings.translations.white;
-            colors["#000000"] = settings.translations.black;
-            colors["#7F6000"] = settings.translations.brown;
-            colors["#938953"] = settings.translations.beige;
-            colors["#1F497D"] = settings.translations.darkBlue;
-            colors["blue"] = settings.translations.blue;
-            colors["#4F81BD"] = settings.translations.lightBlue;
-            colors["#953734"] = settings.translations.darkRed;
-            colors["red"] = settings.translations.red;
-            colors["#4F6128"] = settings.translations.darkGreen;
-            colors["green"] = settings.translations.green;
-            colors["#3F3151"] = settings.translations.purple;
-            colors["#31859B"] = settings.translations.darkTurquois;
-            colors["#4BACC6"] = settings.translations.turquois;
-            colors["#E36C09"] = settings.translations.darkOrange;
-            colors["#F79646"] = settings.translations.orange;
-            colors["#FFFF00"] = settings.translations.yellow;
+        //     colors["#FFFFFF"] = settings.translations.white;
+        //     colors["#000000"] = settings.translations.black;
+        //     colors["#7F6000"] = settings.translations.brown;
+        //     colors["#938953"] = settings.translations.beige;
+        //     colors["#1F497D"] = settings.translations.darkBlue;
+        //     colors["blue"] = settings.translations.blue;
+        //     colors["#4F81BD"] = settings.translations.lightBlue;
+        //     colors["#953734"] = settings.translations.darkRed;
+        //     colors["red"] = settings.translations.red;
+        //     colors["#4F6128"] = settings.translations.darkGreen;
+        //     colors["green"] = settings.translations.green;
+        //     colors["#3F3151"] = settings.translations.purple;
+        //     colors["#31859B"] = settings.translations.darkTurquois;
+        //     colors["#4BACC6"] = settings.translations.turquois;
+        //     colors["#E36C09"] = settings.translations.darkOrange;
+        //     colors["#F79646"] = settings.translations.orange;
+        //     colors["#FFFF00"] = settings.translations.yellow;
 
-            if(settings.colors && settings.colors.length > 0) {
-                colors = settings.colors;
-            }
+        //     if(settings.colors && settings.colors.length > 0) {
+        //         colors = settings.colors;
+        //     }
 
-            for (var i in colors) {
-                result += '<li class="inline"><a data-command="' + command + '" data-option="' + i + '" style="text-align:left;" title="' + colors[i] + '"><span class="box-color" style="background-color:' + i + '"></span></a></li>';
-            }
-            return result;
-        }
+        //     for (var i in colors) {
+        //         result += '<li class="inline"><a data-command="' + command + '" data-option="' + i + '" style="text-align:left;" title="' + colors[i] + '"><span class="box-color" style="background-color:' + i + '"></span></a></li>';
+        //     }
+        //     return result;
+        // }
 
 
         /**
@@ -1415,28 +1294,28 @@
         /**
          * Fix the first line as by default the first line has no tag container
          */
-        function fixFirstLine() {
-            if($editor && !$editor.find(".richText-editor").html()) {
-                // set first line with the right tags
-                if(settings.useParagraph !== false) {
-                    $editor.find(".richText-editor").html('<p><br></p>');
-                } else {
-                    $editor.find(".richText-editor").html('<div><br></div>');
-                }
-            } else {
-                // replace tags, to force <div> or <p> tags and fix issues
-                if(settings.useParagraph !== false) {
-                    $editor.find(".richText-editor").find('div:not(.videoEmbed)').replaceWith(function() {
-                        return $('<p />', {html: $(this).html()});
-                    });
-                } else {
-                    $editor.find(".richText-editor").find('p').replaceWith(function() {
-                        return $('<div />', {html: $(this).html()});
-                    });
-                }
-            }
-            updateTextarea();
-        }
+        // function fixFirstLine() {
+        //     if($editor && !$editor.find(".richText-editor").html()) {
+        //         // set first line with the right tags
+        //         if(settings.useParagraph !== false) {
+        //             $editor.find(".richText-editor").html('<p><br></p>');
+        //         } else {
+        //             $editor.find(".richText-editor").html('<div><br></div>');
+        //         }
+        //     } else {
+        //         // replace tags, to force <div> or <p> tags and fix issues
+        //         if(settings.useParagraph !== false) {
+        //             $editor.find(".richText-editor").find('div:not(.videoEmbed)').replaceWith(function() {
+        //                 return $('<p />', {html: $(this).html()});
+        //             });
+        //         } else {
+        //             $editor.find(".richText-editor").find('p').replaceWith(function() {
+        //                 return $('<div />', {html: $(this).html()});
+        //             });
+        //         }
+        //     }
+        //     updateTextarea();
+        // }
 
         return $(this);
     };
