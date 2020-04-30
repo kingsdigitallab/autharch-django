@@ -97,6 +97,7 @@
                 'pleaseSelectImage': 'Please select an image',
                 'pleaseSelectFile': 'Please select a file',
                 'bold': 'Bold',
+                'inserted': 'Inserted',
                 'italic': 'Italic',
                 'underline': 'Underline',
                 'alignLeft': 'Align left',
@@ -485,8 +486,17 @@
                 $toolbarList.append($toolbarElement.clone().append($btnRemoveStyles));
             }
 
-            // set current textarea value to editor
-            $editorView.html($inputElement.val());
+            // update inserted element to add pseudo-content for line breaks
+            // convert a string from the input element to an HTML object 
+            var htmlObject = $.parseHTML($inputElement.val());
+            $(htmlObject).find('br[class="tei-lb"]').each(function() {
+                $(this).after(' ');
+            });
+            $(htmlObject).children().each(function() {
+                $(this).prepend(' ');
+            });
+            // set an updated textarea value to editor
+            $editorView.html(htmlObject);
 
             $editor.append($toolbar);
             $editor.append($editorView);
@@ -532,7 +542,8 @@
             }
 
             // fix the first line
-            fixFirstLine();
+            // OL - commented out; need to test the editor based on the inputted content
+            // fixFirstLine();
 
             // save history
             history[editorID].push($editor.find("textarea").val());
@@ -543,25 +554,6 @@
 
 
         /** EVENT HANDLERS */
-
-        // Help popup - OL help popup is not needed for the custom editor
-        // $editor.find(".richText-help").on("click", function() {
-        //     var $editor = $(this).parents(".richText");
-        //     if($editor) {
-        //         var $outer = $('<div />', {class: 'richText-help-popup', style: 'position:absolute;top:0;right:0;bottom:0;left:0;background-color: rgba(0,0,0,0.3);'});
-        //         var $inner = $('<div />', {style: 'position:relative;margin:60px auto;padding:20px;background-color:#FAFAFA;width:70%;font-family:Calibri,Verdana,Helvetica,sans-serif;font-size:small;'});
-        //         var $content = $('<div />', {html: '<span id="closeHelp" style="display:block;position:absolute;top:0;right:0;padding:10px;cursor:pointer;" title="' + settings.translations.close + '"><span class="fa fa-times"></span></span>'});
-        //         $content.append('<h3 style="margin:0;">RichText</h3>');
-        //         $content.append('<hr><br>Powered by <a href="https://github.com/webfashionist/RichText" target="_blank">webfashionist/RichText</a> (Github) <br>License: <a href="https://github.com/webfashionist/RichText/blob/master/LICENSE" target="_blank">AGPL-3.0</a>');
-
-        //         $outer.append($inner.append($content));
-        //         $editor.append($outer);
-
-        //         $outer.on("click", "#closeHelp", function() {
-        //             $(this).parents('.richText-help-popup').remove();
-        //         });
-        //     }
-        // });
 
         // undo / redo
         $(document).on("click", ".richText-undo, .richText-redo", function(e) {
@@ -583,7 +575,8 @@
                 tabifyEditableTable(window, e);
                 return false;
             }
-            fixFirstLine();
+            // OL - commented out as the method wraps p and br tags with divs
+            // fixFirstLine();
             updateTextarea();
             doSave($(this).attr("id"));
             updateMaxLength($(this).attr('id'));
@@ -610,48 +603,6 @@
                 'left': positionX
             });
 
-            //OL - we are not embedding links or images
-            // if($target.prop("tagName") === "A") {
-            //     // edit URL
-            //     e.preventDefault();
-
-            //     $list.append($li.clone().html('<span class="fa fa-link"></span>'));
-            //     $target.parents('.richText').append($list);
-            //     $list.find('.fa-link').on('click', function() {
-            //         $('.list-rightclick.richText-list').remove();
-            //         $target.addClass('richText-editNode');
-            //         var $popup = $toolbar.find('#richText-URL');
-            //         $popup.find('input#url').val($target.attr('href'));
-            //         $popup.find('input#urlText').val($target.text());
-            //         $popup.find('select#openIn').val($target.attr('target'));
-            //         $toolbar.find('.richText-btn').children('.fa-link').parents('li').addClass('is-selected');
-            //     });
-
-            //     return false;
-            // } else if($target.prop("tagName") === "IMG") {
-            //     // edit image
-            //     e.preventDefault();
-
-            //     $list.append($li.clone().html('<span class="fa fa-image"></span>'));
-            //     $target.parents('.richText').append($list);
-            //     $list.find('.fa-image').on('click', function() {
-            //         var align;
-            //         if($target.parent('div').length > 0 && $target.parent('div').attr('style') === 'text-align:center;') {
-            //             align = 'center';
-            //         } else {
-            //             align = $target.attr('align');
-            //         }
-            //         $('.list-rightclick.richText-list').remove();
-            //         $target.addClass('richText-editNode');
-            //         var $popup = $toolbar.find('#richText-Image');
-            //         $popup.find('input#imageURL').val($target.attr('src'));
-            //         $popup.find('select#align').val(align);
-            //         $toolbar.find('.richText-btn').children('.fa-image').parents('li').addClass('is-selected');
-            //     });
-
-            //     return false;
-            // }
-
         });
 
         // Saving changes from textarea to editor
@@ -670,342 +621,6 @@
             var editorID = $(this).attr("id");
             doSave(editorID);
         });
-
-        // embedding video; OL - we don't need to embed a video
-        // $(document).on("click", "#richText-Video button.btn", function(event) {
-        //     event.preventDefault();
-        //     var $button = $(this);
-        //     var $form = $button.parent('.richText-form-item').parent('.richText-form');
-        //     if($form.attr("data-editor") === editorID) {
-        //         // only for the currently selected editor
-        //         var url = $form.find('input#videoURL').val();
-        //         var size = $form.find('select#size').val();
-
-        //         if(!url) {
-        //             // no url set
-        //             $form.prepend($('<div />', {style: 'color:red;display:none;', class: 'form-item is-error', text: settings.translations.pleaseEnterURL}));
-        //             $form.children('.form-item.is-error').slideDown();
-        //             setTimeout(function() {
-        //                 $form.children('.form-item.is-error').slideUp(function () {
-        //                     $(this).remove();
-        //                 });
-        //             }, 5000);
-        //         } else {
-        //             // write html in editor
-        //             var html = '';
-        //             html = getVideoCode(url, size);
-        //             if(!html) {
-        //                 $form.prepend($('<div />', {style: 'color:red;display:none;', class: 'form-item is-error', text: settings.translations.videoURLnotSupported}));
-        //                 $form.children('.form-item.is-error').slideDown();
-        //                 setTimeout(function() {
-        //                     $form.children('.form-item.is-error').slideUp(function () {
-        //                         $(this).remove();
-        //                     });
-        //                 }, 5000);
-        //             } else {
-        //                 if(settings.useSingleQuotes === true) {
-
-        //                 } else {
-
-        //                 }
-        //                 restoreSelection(editorID, true);
-        //                 pasteHTMLAtCaret(html);
-        //                 updateTextarea();
-        //                 // reset input values
-        //                 $form.find('input#videoURL').val('');
-        //                 $('.richText-toolbar li.is-selected').removeClass("is-selected");
-        //             }
-        //         }
-        //     }
-        // });
-
-        // Resize images; OL - we don't need to add images
-        // $(document).on('mousedown', function(e) {
-        //     var $target = $(e.target);
-        //     if(!$target.hasClass('richText-list') && $target.parents('.richText-list').length === 0) {
-        //         // remove context menu
-        //         $('.richText-list.list-rightclick').remove();
-        //         if(!$target.hasClass('richText-form') && $target.parents('.richText-form').length === 0) {
-        //             $('.richText-editNode').each(function () {
-        //                 var $this = $(this);
-        //                 $this.removeClass('richText-editNode');
-        //                 if ($this.attr('class') === '') {
-        //                     $this.removeAttr('class');
-        //                 }
-        //             });
-        //         }
-        //     }
-        //     if($target.prop("tagName") === "IMG" && $target.parents("#" + editorID)) {
-        //         startX = e.pageX;
-        //         startY = e.pageY;
-        //         startW = $target.innerWidth();
-        //         startH = $target.innerHeight();
-
-        //         var left = $target.offset().left;
-        //         var right = $target.offset().left + $target.innerWidth();
-        //         var bottom = $target.offset().top + $target.innerHeight();
-        //         var top = $target.offset().top;
-        //         var resize = false;
-        //         $target.css({'cursor' : 'default'});
-
-        //         if(startY <= bottom && startY >= bottom-20 && startX >= right-20 && startX <= right) {
-        //             // bottom right corner
-        //             $resizeImage = $target;
-        //             $resizeImage.css({'cursor' : 'nwse-resize'});
-        //             resize = true;
-        //         }
-
-        //         if((resize === true || $resizeImage) && !$resizeImage.data("width")) {
-        //             // set initial image size and prevent dragging image while resizing
-        //             $resizeImage.data("width", $target.parents("#" + editorID).innerWidth());
-        //             $resizeImage.data("height", $target.parents("#" + editorID).innerHeight()*3);
-        //             e.preventDefault();
-        //         } else if(resize === true || $resizeImage) {
-        //             // resizing active, prevent other events
-        //             e.preventDefault();
-        //         } else {
-        //             // resizing disabled, allow dragging image
-        //             $resizeImage = null;
-        //         }
-                
-        //     }
-        // });
-        // $(document)
-        //     .mouseup(function(){
-        //         if($resizeImage) {
-        //             $resizeImage.css({'cursor' : 'default'});
-        //         }
-        //         $resizeImage = null;
-        //     })
-        //     .mousemove(function(e){
-        //         if($resizeImage!==null){
-        //             var maxWidth = $resizeImage.data('width');
-        //             var currentWidth = $resizeImage.width();
-        //             var maxHeight = $resizeImage.data('height');
-        //             var currentHeight = $resizeImage.height();
-        //             if((startW + e.pageX-startX) <= maxWidth && (startH + e.pageY-startY) <= maxHeight) {
-        //                 // only resize if new size is smaller than the original image size
-        //                 $resizeImage.innerWidth (startW + e.pageX-startX); // only resize width to adapt height proportionally
-        //                 // $box.innerHeight(startH + e.pageY-startY);
-        //                 updateTextarea();
-        //             } else if((startW + e.pageX-startX) <= currentWidth && (startH + e.pageY-startY) <= currentHeight) {
-        //                 // only resize if new size is smaller than the previous size
-        //                 $resizeImage.innerWidth (startW + e.pageX-startX); // only resize width to adapt height proportionally
-        //                 updateTextarea();
-        //             }
-        //         }
-            // });
-
-        // adding URL; OL - we don't need to add URLs
-        // $(document).on("click", "#richText-URL button.btn", function(event) {
-        //     event.preventDefault();
-        //     var $button = $(this);
-        //     var $form = $button.parent('.richText-form-item').parent('.richText-form');
-        //     if($form.attr("data-editor") === editorID) {
-        //         // only for currently selected editor
-        //         var url = $form.find('input#url').val();
-        //         var text = $form.find('input#urlText').val();
-        //         var target = $form.find('#openIn').val();
-
-        //         // set default values
-        //         if(!target) {
-        //             target = '_self';
-        //         }
-        //         if(!text) {
-        //             text = url;
-        //         }
-        //         if(!url) {
-        //             // no url set
-        //             $form.prepend($('<div />', {style: 'color:red;display:none;', class: 'form-item is-error', text: settings.translations.pleaseEnterURL}));
-        //             $form.children('.form-item.is-error').slideDown();
-        //             setTimeout(function() {
-        //                 $form.children('.form-item.is-error').slideUp(function () {
-        //                     $(this).remove();
-        //                 });
-        //             }, 5000);
-        //         } else {
-        //             // write html in editor
-        //             var html = '';
-        //             if(settings.useSingleQuotes === true) {
-        //                 html = "<a href='" + url + "' target='" + target + "'>" + text + "</a>";
-        //             } else {
-        //                 html = '<a href="' + url + '" target="' + target + '">' + text + '</a>';
-        //             }
-        //             restoreSelection(editorID, false, true);
-
-        //             var $editNode = $('.richText-editNode');
-        //             if($editNode.length > 0 && $editNode.prop("tagName") === "A") {
-        //                 $editNode.attr("href", url);
-        //                 $editNode.attr("target", target);
-        //                 $editNode.text(text);
-        //                 $editNode.removeClass('richText-editNode');
-        //                 if($editNode.attr('class') === '') {
-        //                     $editNode.removeAttr('class');
-        //                 }
-        //             } else {
-        //                 pasteHTMLAtCaret(html);
-        //             }
-        //             // reset input values
-        //             $form.find('input#url').val('');
-        //             $form.find('input#urlText').val('');
-        //             $('.richText-toolbar li.is-selected').removeClass("is-selected");
-        //         }
-        //     }
-        // });
-
-        // adding image; we don't need to add images
-        // $(document).on("click", "#richText-Image button.btn", function(event) {
-        //     event.preventDefault();
-        //     var $button = $(this);
-        //     var $form = $button.parent('.richText-form-item').parent('.richText-form');
-        //     if($form.attr("data-editor") === editorID) {
-        //         // only for currently selected editor
-        //         var url = $form.find('#imageURL').val();
-        //         var align = $form.find('select#align').val();
-
-        //         // set default values
-        //         if(!align) {
-        //             align = 'center';
-        //         }
-        //         if(!url) {
-        //             // no url set
-        //             $form.prepend($('<div />', {style: 'color:red;display:none;', class: 'form-item is-error', text: settings.translations.pleaseSelectImage}));
-        //             $form.children('.form-item.is-error').slideDown();
-        //             setTimeout(function() {
-        //                 $form.children('.form-item.is-error').slideUp(function () {
-        //                     $(this).remove();
-        //                 });
-        //             }, 5000);
-        //         } else {
-        //             // write html in editor
-        //             var html = '';
-        //             if(settings.useSingleQuotes === true) {
-        //                 if(align === "center") {
-        //                     html = "<div style='text-align:center;'><img src='" + url + "'></div>";
-        //                 } else {
-        //                     html = "<img src='" + url + "' align='" + align + "'>";
-        //                 }
-        //             } else {
-        //                 if(align === "center") {
-        //                     html = '<div style="text-align:center;"><img src="' + url + '"></div>';
-        //                 } else {
-        //                     html = '<img src="' + url + '" align="' + align + '">';
-        //                 }
-        //             }
-        //             restoreSelection(editorID, true);
-        //             var $editNode = $('.richText-editNode');
-        //             if($editNode.length > 0 && $editNode.prop("tagName") === "IMG") {
-        //                 $editNode.attr("src", url);
-        //                 if($editNode.parent('div').length > 0 && $editNode.parent('div').attr('style') === 'text-align:center;' && align !== 'center') {
-        //                     $editNode.unwrap('div');
-        //                     $editNode.attr('align', align);
-        //                 } else if(($editNode.parent('div').length === 0 || $editNode.parent('div').attr('style') !== 'text-align:center;') && align === 'center' ) {
-        //                     $editNode.wrap('<div style="text-align:center;"></div>');
-        //                     $editNode.removeAttr('align');
-        //                 } else {
-        //                     $editNode.attr('align', align);
-        //                 }
-        //                 $editNode.removeClass('richText-editNode');
-        //                 if($editNode.attr('class') === '') {
-        //                     $editNode.removeAttr('class');
-        //                 }
-        //             } else {
-        //                 pasteHTMLAtCaret(html);
-        //             }
-        //             // reset input values
-        //             $form.find('input#imageURL').val('');
-        //             $('.richText-toolbar li.is-selected').removeClass("is-selected");
-        //         }
-        //     }
-        // });
-
-        // adding file; OL - we don't need to add files
-        // $(document).on("click", "#richText-File button.btn", function(event) {
-        //     event.preventDefault();
-        //     var $button = $(this);
-        //     var $form = $button.parent('.richText-form-item').parent('.richText-form');
-        //     if($form.attr("data-editor") === editorID) {
-        //         // only for currently selected editor
-        //         var url = $form.find('#fileURL').val();
-        //         var text = $form.find('#fileText').val();
-
-        //         // set default values
-        //         if(!text) {
-        //             text = url;
-        //         }
-        //         if(!url) {
-        //             // no url set
-        //             $form.prepend($('<div />', {style: 'color:red;display:none;', class: 'form-item is-error', text: settings.translations.pleaseSelectFile}));
-        //             $form.children('.form-item.is-error').slideDown();
-        //             setTimeout(function() {
-        //                 $form.children('.form-item.is-error').slideUp(function () {
-        //                     $(this).remove();
-        //                 });
-        //             }, 5000);
-        //         } else {
-        //             // write html in editor
-        //             var html = '';
-        //             if(settings.useSingleQuotes === true) {
-        //                 html = "<a href='" + url + "' target='_blank'>" + text + "</a>";
-        //             } else {
-        //                 html = '<a href="' + url + '" target="_blank">' + text + '</a>';
-        //             }
-        //             restoreSelection(editorID, true);
-        //             pasteHTMLAtCaret(html);
-        //             // reset input values
-        //             $form.find('input#fileURL').val('');
-        //             $form.find('input#fileText').val('');
-        //             $('.richText-toolbar li.is-selected').removeClass("is-selected");
-        //         }
-        //     }
-        // });
-
-
-        // adding table; OL - we don't need to add tables
-        // $(document).on("click", "#richText-Table button.btn", function(event) {
-        //     event.preventDefault();
-        //     var $button = $(this);
-        //     var $form = $button.parent('.richText-form-item').parent('.richText-form');
-        //     if($form.attr("data-editor") === editorID) {
-        //         // only for currently selected editor
-        //         var rows = $form.find('input#tableRows').val();
-        //         var columns = $form.find('input#tableColumns').val();
-
-        //         // set default values
-        //         if(!rows || rows <= 0) {
-        //             rows = 2;
-        //         }
-        //         if(!columns || columns <= 0) {
-        //             columns = 2;
-        //         }
-                
-        //         // generate table
-        //         var html = '';
-        //         if(settings.useSingleQuotes === true) {
-        //             html = "<table class='table-1'><tbody>";
-        //         } else {
-        //             html = '<table class="table-1"><tbody>';
-        //         }
-        //         for(var i = 1; i <= rows; i++) {
-        //             // start new row
-        //             html += '<tr>';
-        //             for(var n = 1; n <= columns; n++) {
-        //                 // start new column in row
-        //                 html += '<td> </td>';
-        //             }
-        //             html += '</tr>';
-        //         }
-        //         html += '</tbody></table>';
-
-        //         // write html in editor
-        //         restoreSelection(editorID, true);
-        //         pasteHTMLAtCaret(html);
-        //         // reset input values
-        //         $form.find('input#tableColumns').val('');
-        //         $form.find('input#tableRows').val('');
-        //         $('.richText-toolbar li.is-selected').removeClass("is-selected");
-        //     }
-        // });
 
         // opening / closing toolbar dropdown
         $(document).on("click", function(event) {
@@ -1129,27 +744,23 @@
                 pasteHTMLAtCaret('<' + option + '>' + getSelectedText() + '</' + option + '>');
             } else if(command === "inserted" && getSelectedText()) {
                 var selection = getSelectedText();
-                var html = "<ins class='tei-add'>" + selection + "</ins>";
-                pasteHTMLAtCaret(html);
-                // var sel = window.getSelection();
-                // if (sel.rangeCount) {
-                //     const html = document.createElement('ins');
-                //     html.setAttribute('class', 'tei-add');
-                //     html.textContent = sel.toString();
-                //     const range = sel.getRangeAt(0);
-                //     range.deleteContents();
-                //     range.insertNode(html);
-                // }
+                // console.log(selection);
+                //will make text jump on a new line but will add ins tag
+                // var html = "<ins class='tei-add'>" + selection + "</ins>";
+                // check for duplicates
+                var sel = window.getSelection();
+                const html = document.createElement('ins');
+                html.setAttribute('class', 'tei-add');
+                html.textContent = sel.toString();
+                const range = sel.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(html);
+                //if precedes with a paragraph on a new line
+                
+                
             } else {
                 document.execCommand(command, false, option);
             }
-            // OL - not needed to specify the font-size
-            // else if(command === "fontSize" && parseInt(option) > 0) {
-            //     var selection = getSelectedText();
-            //     selection = (selection + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + '<br>' + '$2');
-            //     var html = (settings.useSingleQuotes ? "<span style='font-size:" + option + "px;'>" + selection + "</span>" : '<span style="font-size:' + option + 'px;">' + selection + '</span>');
-            //     pasteHTMLAtCaret(html);
-            // } 
             // Disable designMode
             // document.designMode = "OFF";
         }
@@ -1454,7 +1065,9 @@
             var range;
             if (window.getSelection) {  // all browsers, except IE before version 9
                 range = window.getSelection();
-                return range.toString() ? range.toString() : range.focusNode.nodeValue;
+                if(range.toString().length > 0) {
+                    return range.toString() ? range.toString() : range.focusNode.nodeValue;
+                }
             } else  if (document.selection.createRange) { // Internet Explorer
                 range = document.selection.createRange();
                 return range.text;
@@ -1591,6 +1204,7 @@
                 // IE9 and non-IE
                 sel = window.getSelection();
                 if (sel.getRangeAt && sel.rangeCount) {
+                    
                     range = sel.getRangeAt(0);
                     range.deleteContents();
 
@@ -1603,7 +1217,7 @@
                     while ( (node = el.firstChild) ) {
                         lastNode = frag.appendChild(node);
                     }
-                    range.insertNode(frag);
+                    range.insertNode(lastNode);
 
                     // Preserve the selection
                     if (lastNode) {
@@ -1797,107 +1411,6 @@
                 field.focus();
             }
         }
-
-
-        /**
-         * Get video embed code from URL
-         * @param {string} url Video URL
-         * @param {string} size Size in the form of widthxheight
-         * @return {string|boolean}
-         * @private
-         **/
-        function getVideoCode(url, size) {
-            var video = getVideoID(url);
-            var responsive = false, success = false;
-
-            if(!video) {
-                // video URL not supported
-                return false;
-            }
-
-            if(!size) {
-                size = "640x360";
-                size = size.split("x");
-            } else if(size !== "responsive") {
-                size = size.split("x");
-            } else {
-                responsive = true;
-                size = "640x360";
-                size = size.split("x");
-            }
-
-            var html = '<br><br>';
-            if(responsive === true) {
-                html += '<div class="videoEmbed" style="position:relative;height:0;padding-bottom:56.25%">';
-            }
-            var allowfullscreen = 'webkitallowfullscreen mozallowfullscreen allowfullscreen';
-
-            if(video.platform === "YouTube") {
-                var youtubeDomain = (settings.youtubeCookies ? 'www.youtube.com' : 'www.youtube-nocookie.com');
-                html += '<iframe src="https://' + youtubeDomain + '/embed/' + video.id + '?ecver=2" width="' + size[0] + '" height="' + size[1] + '" frameborder="0"' + (responsive === true ? ' style="position:absolute;width:100%;height:100%;left:0"' : '') + ' ' + allowfullscreen + '></iframe>';
-                success = true;
-            } else if(video.platform === "Vimeo") {
-                html += '<iframe src="https://player.vimeo.com/video/' + video.id + '" width="' + size[0] + '" height="' + size[1] + '" frameborder="0"' + (responsive === true ? ' style="position:absolute;width:100%;height:100%;left:0"' : '') + ' ' + allowfullscreen + '></iframe>';
-                success = true;
-            } else if(video.platform === "Facebook") {
-                html += '<iframe src="https://www.facebook.com/plugins/video.php?href=' + encodeURI(url) + '&show_text=0&width=' + size[0] + '" width="' + size[0] + '" height="' + size[1] + '" style="' + (responsive === true ? 'position:absolute;width:100%;height:100%;left:0;border:none;overflow:hidden"' : 'border:none;overflow:hidden') + '" scrolling="no" frameborder="0" allowTransparency="true" ' + allowfullscreen + '></iframe>';
-                success = true;
-            } else if(video.platform === "Dailymotion") {
-                html += '<iframe frameborder="0" width="' + size[0] + '" height="' + size[1] + '" src="//www.dailymotion.com/embed/video/' + video.id + '"' + (responsive === true ? ' style="position:absolute;width:100%;height:100%;left:0"' : '') + ' ' + allowfullscreen + '></iframe>';
-                success = true;
-            }
-
-            if(responsive === true) {
-                html += '</div>';
-            }
-            html += '<br><br>';
-
-            if(success) {
-                return html;
-            }
-            return false;
-        }
-
-        /**
-         * Returns the unique video ID
-         * @param {string} url
-         * return {object|boolean}
-         **/
-        function getVideoID(url) {
-            var vimeoRegExp = /(?:http?s?:\/\/)?(?:www\.)?(?:vimeo\.com)\/?(.+)/;
-            var youtubeRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            var facebookRegExp = /(?:http?s?:\/\/)?(?:www\.)?(?:facebook\.com)\/.*\/videos\/[0-9]+/;
-            var dailymotionRegExp = /(?:http?s?:\/\/)?(?:www\.)?(?:dailymotion\.com)\/video\/([a-zA-Z0-9]+)/;
-            var youtubeMatch = url.match(youtubeRegExp);
-            var vimeoMatch = url.match(vimeoRegExp);
-            var facebookMatch = url.match(facebookRegExp);
-            var dailymotionMatch = url.match(dailymotionRegExp);
-
-            if (youtubeMatch && youtubeMatch[2].length === 11) {
-                return {
-                    "platform": "YouTube", 
-                    "id": youtubeMatch[2]
-                };
-            } else if(vimeoMatch && vimeoMatch[1]) {
-                return {
-                    "platform": "Vimeo",
-                    "id": vimeoMatch[1]
-                };
-            } else if(facebookMatch && facebookMatch[0]) {
-                return {
-                    "platform": "Facebook",
-                    "id" : facebookMatch[0]
-                };
-            } else if(dailymotionMatch && dailymotionMatch[1]) {
-                return {
-                    "platform": "Dailymotion",
-                    "id" : dailymotionMatch[1]
-                };
-            }
-
-            return false;
-        }
-
 
         /**
          * Fix the first line as by default the first line has no tag container

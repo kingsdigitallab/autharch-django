@@ -1308,6 +1308,13 @@ main {
                 box-sizing: border-box;
                 font-family: $font-primary;
                 color:black;
+                .tei-body {
+                    .richtext-editor-newLine {
+                        font-size: 12px;
+                        margin-right: 20px;
+                        background-color: $light-grey;
+                    }
+                }
             }
             input {
                 box-sizing: border-box;
