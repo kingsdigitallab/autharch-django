@@ -4,7 +4,7 @@
 {% for identity in object.identities.all %}
 {{ identity.get_date }}
 {% for description in identity.descriptions.all %}
-{% for local_description in description.objects.all %}
+{% for local_description in description.local_descriptions.all %}
 {{ local_description.gender }}
 {% endfor %}
 {% for biography in description.biography_history.all %}
