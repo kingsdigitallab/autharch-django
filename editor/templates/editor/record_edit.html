@@ -22,8 +22,8 @@
       </div>
     </div>
     <div class="action-buttons">
-        <button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)"></button>
-        <input type="submit" value="Save" form="record-form" class="save"/>
+      {% if not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)"></button>{% endif %}
+      <input type="submit" value="{% if is_deleted %}Restore{% else %}Save{% endif %}" form="record-form" class="save"/>
     </div>
   </div>
   {% endblock page_header %}
@@ -33,7 +33,7 @@
     <div class="breadcrumbs">
       <ul>
         <li><a href="{% url 'editor:home' %}">Home</a></li>
-        <li><a href="{% url 'editor:records-list' %}" class="dotted-underline">Archival records</a></li>
+        <li>{% if current_section == 'records' %}<a href="{% url 'editor:records-list' %}" class="dotted-underline">Archival records</a>{% else %}<a href="{% url 'editor:deleted-list' %}" class="dotted-underline">Deleted</a>{% endif %}</li>
       </ul>
     </div>
 

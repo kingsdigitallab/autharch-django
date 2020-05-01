@@ -402,6 +402,12 @@ def entity_edit(request, entity_id):
     #     return HttpResponseForbidden()
     saved = request.GET.get('saved', False)
     form_errors = []
+    current_section = 'entities'
+    is_deleted = False
+    if entity.control.maintenance_status == MaintenanceStatus.objects.get(
+            title='deleted'):
+        is_deleted = True
+        current_section = 'deleted'
     if request.method == 'POST':
         form = EntityEditForm(request.POST, editor_role=editor_role,
                               instance=entity)
@@ -424,12 +430,13 @@ def entity_edit(request, entity_id):
         form = EntityEditForm(editor_role=editor_role, instance=entity)
         log_form = LogForm()
     context = {
-        'current_section': 'entities',
+        'current_section': current_section,
         'delete_url': reverse('editor:entity-delete',
                               kwargs={'entity_id': entity_id}),
         'entity': entity,
         'form_errors': form_errors,
         'form': form,
+        'is_deleted': is_deleted,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
         'saved': saved,
@@ -494,6 +501,12 @@ def record_edit(request, record_id):
     #    editor_role == EditorProfile.EDITOR:
     #     return HttpResponseForbidden()
     saved = request.GET.get('saved', False)
+    current_section = 'records'
+    is_deleted = False
+    if record.maintenance_status == MaintenanceStatus.objects.get(
+            title='deleted'):
+        current_section = 'deleted'
+        is_deleted = True
     form_class = get_archival_record_edit_form_for_subclass(record)
     if request.method == 'POST':
         form = form_class(request.POST, editor_role=editor_role,
@@ -515,11 +528,12 @@ def record_edit(request, record_id):
         form = form_class(editor_role=editor_role, instance=record)
         log_form = LogForm()
     context = {
-        'current_section': 'records',
+        'current_section': current_section,
         'delete_url': reverse('editor:record-delete',
                               kwargs={'record_id': record_id}),
         'form': form,
         'images': record.transcription_images.all(),
+        'is_deleted': is_deleted,
         'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
         'record': record,
