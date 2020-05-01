@@ -19,13 +19,22 @@
         <div class="filters-hidden">
           <a href="." class="dotted-underline clear-filters active">Clear filters</a>
             <div class="filters">
-              <fieldset class="filter-list" id="document-level-filter">
-                <legend>Document level</legend>
+              <fieldset class="filter-list" id="entity-type-filter">
+                <legend>Entity type</legend>
                 {% if facets.fields.entity_type|length > 7 %}
-                  <input type="text" name="search-entityType" aria-label="search entity type" class="instant-search" placeholder="Search entity type" onfocus="this.placeholder=''" onblur="this.placeholder='Search archival level'"/>
+                  <input type="text" name="search-entityType" aria-label="search entity type" class="instant-search" placeholder="Search entity type" onfocus="this.placeholder=''" onblur="this.placeholder='Search entity type'"/>
                 {% endif %}
                 {% for entity_type in facets.fields.entity_type %}
                 {% render_facet entity_type %}
+                {% endfor %}
+              </fieldset>
+              <fieldset class="filter-list" id="related-entities-filter">
+                <legend>Related entities</legend>
+                {% if facets.fields.related_entities|length > 7 %}
+                <input type="text" name="search-relatedEntities" aria-label="search related entities" class="instant-search" placeholder="Search related entities" onfocus="this.placeholder=''" onblur="this.placeholder='Search related entities'"/>
+                {% endif %}
+                {% for related_entity in facets.fields.related_entities %}
+                {% render_facet related_entity %}
                 {% endfor %}
               </fieldset>
             </div>

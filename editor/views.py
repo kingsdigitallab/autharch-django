@@ -97,6 +97,9 @@ class FacetMixin:
             elif facet == 'writers':
                 ids = [value[0] for value in values]
                 display_values = Entity.objects.filter(id__in=ids)
+            elif facet == 'related_entities':
+                ids = [value[0] for value in values]
+                display_values = Entity.objects.filter(id__in=ids)
             new_values = []
             for value_data in values:
                 if value_data[0] in selected_facets.get(facet, []):
@@ -194,7 +197,7 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     queryset = SearchQuerySet().models(Entity).exclude(
         maintenance_status='deleted')
     form_class = EntityFacetedSearchForm
-    facet_fields = ['entity_type']
+    facet_fields = ['entity_type', 'related_entities']
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

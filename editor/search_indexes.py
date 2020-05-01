@@ -1,7 +1,7 @@
 from haystack import indexes
 
 from archival.models import Collection, File, Item, Series
-from authority.models import Entity
+from authority.models import Entity, Relation
 
 
 # The polymorphic ArchivalRecord model subclasses must have their own
@@ -125,6 +125,7 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     maintenance_status = indexes.CharField()
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
+    related_entities = indexes.MultiValueField(faceted=True)
 
     def get_model(self):
         return Entity
@@ -143,3 +144,7 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.control.publication_status.title
         except AttributeError:
             return ''
+
+    def prepare_related_entities(self, obj):
+        return [relation.related_entity.pk for relation in
+                Relation.objects.filter(identity__entity=obj)]
