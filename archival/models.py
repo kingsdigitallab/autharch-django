@@ -40,7 +40,7 @@ class Organisation(models.Model):
         return self.title
 
 
-@reversion.register()
+@reversion.register(follow=['transcription_images', 'transcription_texts'])
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
     rcin = models.CharField('RCIN', max_length=256, blank=True, null=True)
@@ -170,7 +170,7 @@ class ArchivalRecordSet(TimeStampedModel):
         return self.archival_records.count()
 
 
-@reversion.register()
+@reversion.register(follow=['archivalrecord_ptr'])
 class Collection(ArchivalRecord):
     administrative_history = models.TextField(
         help_text=constants.ADMINISTRATIVE_HISTORY_HELP)
@@ -189,7 +189,7 @@ class SeriesBase(models.Model):
         abstract = True
 
 
-@reversion.register()
+@reversion.register(follow=['archivalrecord_ptr'])
 class Series(ArchivalRecord, SeriesBase):
     parent_collection = models.ForeignKey(
         Collection, blank=True, null=True, on_delete=models.CASCADE)
@@ -228,7 +228,7 @@ class FileBase(models.Model):
         return self.title
 
 
-@reversion.register()
+@reversion.register(follow=['archivalrecord_ptr'])
 class File(ArchivalRecord, SeriesBase, FileBase):
     parent_series = models.ForeignKey(
         Series, blank=True, null=True, on_delete=models.CASCADE)
@@ -251,7 +251,7 @@ class File(ArchivalRecord, SeriesBase, FileBase):
         return self.title
 
 
-@reversion.register()
+@reversion.register(follow=['archivalrecord_ptr'])
 class Item(ArchivalRecord, SeriesBase, FileBase):
     parent_series = models.ForeignKey(
         Series, blank=True, null=True, on_delete=models.CASCADE)
@@ -275,8 +275,20 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
         return self.title
 
 
-class ArchivalRecordImage(models.Model):
+@reversion.register()
+class ArchivalRecordTranscription(models.Model):
+    record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
+                               related_name='transcription_texts')
+    transcription = models.TextField(blank=True)
+    order = models.PositiveIntegerField()
 
+    class Meta:
+        ordering = ['order']
+        unique_together = (('record', 'order'),)
+
+
+@reversion.register()
+class ArchivalRecordImage(models.Model):
     record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
                                related_name='transcription_images')
     image = models.ImageField(upload_to='ar_transcription_images/')
