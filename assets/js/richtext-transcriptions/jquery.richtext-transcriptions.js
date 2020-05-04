@@ -10,113 +10,42 @@
             inserted: true,
             deleted: true,
             underline: true,
-            // bold: true,
-            // italic: true,
-
-            // text alignment
-            // leftAlign: true,
-            // centerAlign: true,
-            // rightAlign: true,
-            // justify: true,
+            pageBreak: true,
 
             // lists
             ol: true,
             ul: true,
 
-            // title
-            // heading: true,
-
-            // fonts
-            // OL fonts: false,
-            // OL fontSize: false,
-            // fontList: [],
-            // fontColor: false,
-
-            // uploads
-            // OL imageUpload: false,
-            // OL fileUpload: false,
-
-            // media
-            // OL videoEmbed: false,
-
-            // link
-            // OL urls: false,
-
-            // tables
-            // OL table: true,
-
             // code
             removeStyles: true,
-
-            // colors
-            // OL colors: [],
-
-            // dropdowns
-            // OL fileHTML: '',
-            // OL imageHTML: '',
 
             // translations
             translations: {
                 'title': 'Title',
-                // 'white': 'White',
-                // 'black': 'Black',
-                // 'brown': 'Brown',
-                // 'beige': 'Beige',
-                // 'darkBlue': 'Dark Blue',
-                // 'blue': 'Blue',
-                // 'lightBlue': 'Light Blue',
-                // 'darkRed': 'Dark Red',
-                // 'red': 'Red',
-                // 'darkGreen': 'Dark Green',
-                // 'green': 'Green',
-                // 'purple': 'Purple',
-                // 'darkTurquois': 'Dark Turquois',
-                // 'turquois': 'Turquois',
-                // 'darkOrange': 'Dark Orange',
-                // 'orange': 'Orange',
-                // 'yellow': 'Yellow',
-                // 'imageURL': 'Image URL',
-                // 'fileURL': 'File URL',
-                // 'linkText': 'Link text',
-                // 'url': 'URL',
-                // 'size': 'Size',
-                // 'responsive': 'Responsive',
-                // 'text': 'Text',
-                // 'openIn': 'Open in',
-                // 'sameTab': 'Same tab',
-                // 'newTab': 'New tab',
-                // 'align': 'Align',
-                // 'left': 'Left',
-                // 'justify': 'Justify',
-                // 'center': 'Center',
-                // 'right': 'Right',
-                // 'rows': 'Rows',
-                // 'columns': 'Columns',
-                // 'add': 'Add',
-                // 'videoURLnotSupported': 'Video URL not supported',
-                // 'pleaseSelectImage': 'Please select an image',
-                // 'pleaseSelectFile': 'Please select a file',
-                // 'bold': 'Bold',
                 'inserted': 'Inserted',
                 'deleted': 'Inserted',
                 'italic': 'Italic',
                 'underline': 'Underline',
-                // 'alignLeft': 'Align left',
-                // 'alignCenter': 'Align centered',
-                // 'alignRight': 'Align right',
                 'addOrderedList': 'Add ordered list',
                 'addUnorderedList': 'Add unordered list',
-                // 'addHeading': 'Add Heading/title',
-                // 'addFont': 'Add font',
-                // 'addTable': 'Add table',
                 'removeStyles': 'Remove styles',
                 'undo': 'Undo',
                 'redo': 'Redo',
                 'close': 'Close'
             },
 
-            // privacy
-            // youtubeCookies: false,
+            teiTags: {
+                'inserted': {
+                    'tag': 'ins',
+                    'class': 'tei-add',
+                    'conflict': 'del'
+                },
+                'deleted': {
+                    'tag': 'del',
+                    'class': 'tei-del',
+                    'conflict': 'ins'
+                }
+            },
 
             // dev settings
             useSingleQuotes: false,
@@ -126,6 +55,8 @@
             class: "",
             useParagraph: false,
             maxlength: 0
+
+            // colors, dropdowns, tables, links, media, uploads, fonts, title, privacy
 
         }, options );
 
@@ -137,42 +68,49 @@
             $toolbarList = $('<ul />'),
             $toolbarElement = $('<li />'),
 
-            $btnInserted = $('<a />', {class: "richText-btn richText-btn-icon", "data-command": "inserted", "title": settings.translations.inserted, html: '<span title="inserted text">ins</span>'}), // inserted
-            $btnDeleted = $('<a />', {class: "richText-btn richText-btn-icon", "data-command": "deleted", "title": settings.translations.deleted, html: '<span title="deleted text">del</span>'}), // deleted
-            $btnUnderline = $('<a />', {class: "richText-btn", "data-command": "underline", "title": settings.translations.underline, html: '<span class="fa fa-underline"></span>'}), // underline
-            // OL $btnBold = $('<a />', {class: "richText-btn", "data-command": "bold", "title": settings.translations.bold, html: '<span class="fa fa-bold"></span>'}), // bold
-            // ol $btnItalic = $('<a />', {class: "richText-btn", "data-command": "italic", "title": settings.translations.italic, html: '<span class="fa fa-italic"></span>'}), // italic
-            // OL $btnJustify = $('<a />', {class: "richText-btn", "data-command": "justifyFull", "title": settings.translations.justify, html: '<span class="fa fa-align-justify"></span>'}), // left align
-            // OL $btnLeftAlign = $('<a />', {class: "richText-btn", "data-command": "justifyLeft", "title": settings.translations.alignLeft, html: '<span class="fa fa-align-left"></span>'}), // left align
-            // OL $btnCenterAlign = $('<a />', {class: "richText-btn", "data-command": "justifyCenter", "title": settings.translations.alignCenter, html: '<span class="fa fa-align-center"></span>'}), // centered
-            // OL $btnRightAlign = $('<a />', {class: "richText-btn", "data-command": "justifyRight", "title": settings.translations.alignRight, html: '<span class="fa fa-align-right"></span>'}), // right align
-            $btnOL = $('<a />', {class: "richText-btn", "data-command": "insertOrderedList", "title": settings.translations.addOrderedList, html: '<span class="fa fa-list-ol"></span>'}), // ordered list
-            $btnUL = $('<a />', {class: "richText-btn", "data-command": "insertUnorderedList", "title": settings.translations.addUnorderedList, html: '<span class="fa fa-list"></span>'}), // unordered list
-            $btnRemoveStyles = $('<a />', {class: "richText-btn", "data-command": "removeFormat", "title": settings.translations.removeStyles, html: '<span class="fa fa-recycle"></span>'}) // clean up styles
-
-            // OL $btnHeading = $('<a />', {class: "richText-btn", "title": settings.translations.addHeading, html: '<span class="fa fa-header fa-heading"></span>'}), // title/header
-            // OL $btnTable = $('<a />', {class: "richText-btn", "title": settings.translations.addTable, html: '<span class="fa fa-table"></span>'}), // table
-            // OL $btnFont = $('<a />', {class: "richText-btn", "title": settings.translations.addFont, html: '<span class="fa fa-font"></span>'}), // font color
-            // OL $btnFontColor = $('<a />', {class: "richText-btn", "title": settings.translations.addFontColor, html: '<span class="fa fa-paint-brush"></span>'}), // font color
-            // OL $btnFontSize = $('<a />', {class: "richText-btn", "title": settings.translations.addFontSize, html: '<span class="fa fa-text-height"></span>'}), // font color
-            // OL $btnImageUpload = $('<a />', {class: "richText-btn", "title": settings.translations.addImage, html: '<span class="fa fa-image"></span>'}), // image
-            // OL $btnVideoEmbed = $('<a />', {class: "richText-btn", "title": settings.translations.addVideo, html: '<span class="fa fa-video-camera fa-video"></span>'}), // video
-            // OL $btnFileUpload = $('<a />', {class: "richText-btn", "title": settings.translations.addFile, html: '<span class="fa fa-file-text-o far fa-file-alt"></span>'}), // file
-            // OL $btnURLs = $('<a />', {class: "richText-btn", "title": settings.translations.addURL, html: '<span class="fa fa-link"></span>'}) // urls/links
-
-        
-        /* prepare toolbar dropdowns */
-        // var $dropdownOuter = $('<div />', {class: "richText-dropdown-outer"});
-        // var $dropdownClose = $('<span />', {class: "richText-dropdown-close", html: '<span title="' + settings.translations.close + '"><span class="fa fa-times"></span></span>'});
-        // var $dropdownList = $('<ul />', {class: "richText-dropdown"}), // dropdown lists
-        //     $dropdownBox = $('<div />', {class: "richText-dropdown"}), // dropdown boxes / custom dropdowns
-        //     $form = $('<div />', {class: "richText-form"}), // symbolic form
-        //     $formItem = $('<div />', {class: 'richText-form-item'}), // form item
-        //     $formLabel = $('<label />'), // form label
-        //     $formInput = $('<input />', {type: "text"}), //form input field
-        //     $formInputFile = $('<input />', {type: "file"}), // form file input field
-        //     $formInputSelect = $('<select />'),
-        //     $formButton = $('<button />', {text: settings.translations.add, class: "btn"}); // button
+            $btnInserted = $('<a />', {
+                class: "richText-btn richText-btn-icon", 
+                "data-command": "inserted", 
+                "title": settings.translations.inserted, 
+                html: '<span title="inserted text">ins</span>'
+            }), // inserted
+            $btnDeleted = $('<a />', {
+                class: "richText-btn richText-btn-icon", 
+                "data-command": "deleted", 
+                "title": settings.translations.deleted, 
+                html: '<span title="deleted text">del</span>'
+            }), // deleted
+            $btnPagebreak = $('<a />', {
+                class: "richText-btn richText-btn-icon", 
+                "data-command": "pagebreak", 
+                "title": settings.translations.pageBreak, 
+                html: '<span title="page break">pb</span>',
+                onclick: function() {
+                }
+            }), // pagebreak
+            $btnUnderline = $('<a />', {
+                class: "richText-btn", 
+                "data-command": "underline", 
+                "title": settings.translations.underline, 
+                html: '<span class="fa fa-underline"></span>'}), // underline
+            $btnOL = $('<a />', {
+                class: "richText-btn", 
+                "data-command": "insertOrderedList", 
+                "title": settings.translations.addOrderedList, 
+                html: '<span class="fa fa-list-ol"></span>'
+            }), // ordered list
+            $btnUL = $('<a />', {
+                class: "richText-btn", 
+                "data-command": "insertUnorderedList", 
+                "title": settings.translations.addUnorderedList, 
+                html: '<span class="fa fa-list"></span>'
+            }), // unordered list
+            $btnRemoveStyles = $('<a />', {
+                class: "richText-btn", 
+                "data-command": "removeFormat", 
+                "title": settings.translations.removeStyles, 
+                html: '<span class="fa fa-recycle"></span>'
+            }) // clean up styles
 
         /* internal settings */
         var savedSelection; // caret position/selection
@@ -185,23 +123,15 @@
         var historyPosition = [];
         historyPosition[editorID] = 0;
 
-        /* list dropdown for titles */
-        // var $titles = $dropdownList.clone();
-        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h1">' + settings.translations.title + ' #1</a>'}));
-        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h2">' + settings.translations.title + ' #2</a>'}));
-        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h3">' + settings.translations.title + ' #3</a>'}));
-        // $titles.append($('<li />', {html: '<a data-command="formatBlock" data-option="h4">' + settings.translations.title + ' #4</a>'}));
-        // $btnHeading.append($dropdownOuter.clone().append($titles.prepend($dropdownClose.clone())));
-
         /* initizalize editor */
         function init() {
             var value, attributes, attributes_html = '';
 
             if(settings.useParagraph !== false) {
-                // set default tag when pressing ENTER to <p> instead of <div>
-                document.execCommand("DefaultParagraphSeparator", false, 'p');
+                // set default tag when pressing ENTER to <br> instead of <div>
+                // TODO add class
+                document.execCommand("DefaultParagraphSeparator", false, 'br');
             }
-
 
             // reformat $inputElement to textarea
             if($inputElement.prop("tagName") === "TEXTAREA") {
@@ -255,29 +185,12 @@
             if(settings.deleted === true) {
                 $toolbarList.append($toolbarElement.clone().append($btnDeleted));
             }
+            // if(settings.pageBreak === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnPagebreak));
+            // }
             if(settings.underline === true) {
                 $toolbarList.append($toolbarElement.clone().append($btnUnderline));
             }
-            // if(settings.bold === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnBold));
-            // }
-            // if(settings.italic === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnItalic));
-            // }
-
-            /* align */
-            // if(settings.leftAlign === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnLeftAlign));
-            // }
-            // if(settings.centerAlign === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnCenterAlign));
-            // }
-            // if(settings.rightAlign === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnRightAlign));
-            // }
-            // if(settings.justify === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnJustify));
-            // }
 
             /* lists */
             if(settings.ol === true) {
@@ -287,54 +200,18 @@
                 $toolbarList.append($toolbarElement.clone().append($btnUL));
             }
 
-            /* fonts */
-            // OL if(settings.fonts === true && settings.fontList.length > 0) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnFont));
-            // }
-            // OL if(settings.fontSize === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnFontSize));
-            // }
-
-            // /* heading */
-            // if(settings.heading === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnHeading));
-            // }
-
-            // /* colors */
-            // if(settings.fontColor === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnFontColor));
-            // }
-
-            /* uploads */
-            // if(settings.imageUpload === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnImageUpload));
-            // }
-            // if(settings.fileUpload === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnFileUpload));
-            // }
-
-            /* media */
-            // if(settings.videoEmbed === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnVideoEmbed));
-            // }
-
-            // /* urls */
-            // if(settings.urls === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnURLs));
-            // }
-
-            // if(settings.table === true) {
-            //     $toolbarList.append($toolbarElement.clone().append($btnTable));
-            // }
-
             /* removeStyles */
-            if(settings.removeStyles === true) {
-                $toolbarList.append($toolbarElement.clone().append($btnRemoveStyles));
-            }
+            // if(settings.removeStyles === true) {
+            //     $toolbarList.append($toolbarElement.clone().append($btnRemoveStyles));
+            // }
 
-            // update inserted element to add pseudo-content for line breaks
             // convert a string from the input element to an HTML object 
-            var htmlObject = $.parseHTML($inputElement.val());
+            var htmlObject = $.parseHTML($inputElement.val())[1];
+            // make sure the inserted content is for TEI
+            if (!$(htmlObject).hasClass('tei-body')) {
+                // add the 'tei-body' class to the wrapper tag
+                $(htmlObject).addClass('tei-body');
+            }
             $(htmlObject).find('br[class="tei-lb"]').each(function() {
                 $(this).after(' ');
             });
@@ -354,7 +231,6 @@
                 $('<div />', {class: 'richText-toolbar'})
                     .append($('<a />', {class: 'richText-undo is-disabled', html: '<span class="fa fa-undo"></span>', 'title': settings.translations.undo}))
                     .append($('<a />', {class: 'richText-redo is-disabled', html: '<span class="fa fa-repeat fa-redo"></span>', 'title': settings.translations.redo}))
-                    // OL .append($('<a />', {class: 'richText-help', html: '<span class="fa fa-question-circle"></span>'}))
             );
 
             if(settings.maxlength > 0) {
@@ -439,7 +315,7 @@
 
             var $target = $(e.target);
             var $richText = $target.parents('.richText');
-            var $toolbar = $richText.find('.richText-toolbar');
+            // var $toolbar = $richText.find('.richText-toolbar');
 
             var positionX = e.pageX - $richText.offset().left;
             var positionY = e.pageY - $richText.offset().top;
@@ -467,41 +343,6 @@
             var editorID = $(this).attr("id");
             doSave(editorID);
         });
-
-        // opening / closing toolbar dropdown
-        // $(document).on("click", function(event) {
-        //     var $clickedElement = $(event.target);
-
-        //     if($clickedElement.parents('.richText-toolbar').length === 0) {
-        //         // element not in toolbar
-        //         // ignore
-        //     } else if($clickedElement.hasClass("richText-dropdown-outer")) {
-        //         // closing dropdown by clicking inside the editor
-        //         $clickedElement.parent('a').parent('li').removeClass("is-selected");
-        //     } else if($clickedElement.find(".richText").length > 0) {
-        //         // closing dropdown by clicking outside of the editor
-        //         $('.richText-toolbar li').removeClass("is-selected");
-        //     } else if($clickedElement.parent().hasClass("richText-dropdown-close")) {
-        //         // closing dropdown by clicking on the close button
-        //         $('.richText-toolbar li').removeClass("is-selected");
-        //     } else if($clickedElement.hasClass("richText-btn") && $(event.target).children('.richText-dropdown-outer').length > 0) {
-        //         // opening dropdown by clicking on toolbar button
-        //         $clickedElement.parent('li').addClass("is-selected");
-
-        //         if($clickedElement.children('.fa,svg').hasClass("fa-link")) {
-        //             // put currently selected text in URL form to replace it
-        //             restoreSelection(editorID, false, true);
-        //             var selectedText = getSelectedText();
-        //             $clickedElement.find("input#urlText").val('');
-        //             $clickedElement.find("input#url").val('');
-        //             if(selectedText) {
-        //                 $clickedElement.find("input#urlText").val(selectedText);
-        //             }
-        //         } else if($clickedElement.hasClass("fa-image")) {
-        //             // image
-        //         }
-        //     }
-        // });
 
         // Executing editor commands
         $(document).on("click", ".richText-toolbar a[data-command]", function(event) {
@@ -556,7 +397,7 @@
                         formatText('formatBlock', 'div', id);
                     }
                     // clean up empty tags, which can be created while replacing formatting or when copy-pasting from other tools
-                    $editor.find('div:empty,p:empty,li:empty,h1:empty,h2:empty,h3:empty,h4:empty,h5:empty,h6:empty').remove();
+                    $editor.find('div:empty,p:empty,li:empty,h1:empty,h2:empty,h3:empty,h4:empty,h5:empty,h6:empty,del:empty,ins:empty').remove();
                     $editor.find('h1,h2,h3,h4,h5,h6').unwrap('h1,h2,h3,h4,h5,h6');
                 }
             }
@@ -582,21 +423,14 @@
             // restore selection from before clicking on any button
             doRestore(editorID);
             // Temporarily enable designMode so that
-            // document.execCommand() will work
-            document.designMode = "ON";
             // Execute the command
             if(command === "heading" && getSelectedText()) {
                 // IE workaround
                 pasteHTMLAtCaret('<' + option + '>' + getSelectedText() + '</' + option + '>');
-            } else if(command === "inserted" && getSelectedText()) {
-                insertTEI(command);
-            } else if(command === "deleted" && getSelectedText()) {
-                insertTEI(command);
             } else {
-                document.execCommand(command, false, option);
+                insertTEI(command);
             }
-            // Disable designMode
-            document.designMode = "OFF";
+            
         }
 
 
@@ -819,78 +653,6 @@
         */
 
         /**
-         * Enables tabbing/shift-tabbing between contentEditable table cells
-         * @param {Window} win - Active window context.
-         * @param {Event} e - jQuery Event object for the keydown that fired.
-         */
-        // function tabifyEditableTable(win, e) {
-
-        //     if (e.keyCode !== 9) {
-        //         return false;
-        //     }
-
-        //     var sel;
-        //     if (win.getSelection) {
-        //         sel = win.getSelection();
-        //         if (sel.rangeCount > 0) {
-
-        //             var textNode = null,
-        //                 direction = null;
-
-        //             if (!e.shiftKey) {
-        //                 direction = "next";
-        //                 textNode = (sel.focusNode.nodeName === "TD") 
-        //                     ? (sel.focusNode.nextSibling != null) 
-        //                         ? sel.focusNode.nextSibling 
-        //                         : (sel.focusNode.parentNode.nextSibling != null) 
-        //                             ? sel.focusNode.parentNode.nextSibling.childNodes[0] 
-        //                             : null 
-        //                         : (sel.focusNode.parentNode.nextSibling != null) 
-        //                         ? sel.focusNode.parentNode.nextSibling 
-        //                         : (sel.focusNode.parentNode.parentNode.nextSibling != null) 
-        //                     ? sel.focusNode.parentNode.parentNode.nextSibling.childNodes[0] 
-        //                     : null;
-        //             } else {
-        //                 direction = "previous";
-        //                 textNode = (sel.focusNode.nodeName === "TD") 
-        //                     ? (sel.focusNode.previousSibling != null) 
-        //                         ? sel.focusNode.previousSibling 
-        //                         : (sel.focusNode.parentNode.previousSibling != null) 
-        //                             ? sel.focusNode.parentNode.previousSibling.childNodes[sel.focusNode.parentNode.previousSibling.childNodes.length - 1] 
-        //                             : null 
-        //                         : (sel.focusNode.parentNode.previousSibling != null) 
-        //                     ? sel.focusNode.parentNode.previousSibling 
-        //                     : (sel.focusNode.parentNode.parentNode.previousSibling != null) 
-        //                 ? sel.focusNode.parentNode.parentNode.previousSibling.childNodes[sel.focusNode.parentNode.parentNode.previousSibling.childNodes.length - 1] 
-        //                 : null;
-        //             }
-
-        //             if (textNode != null) {
-        //                 sel.collapse(textNode, Math.min(textNode.length, sel.focusOffset + 1));
-        //                 if (textNode.textContent != null) {
-        //                     sel.selectAllChildren(textNode);
-        //                 }
-        //                 e.preventDefault();
-        //                 return true;
-        //             } else if(textNode === null && direction === "next" && sel.focusNode.nodeName === "TD") {
-        //                 // add new row on TAB if arrived at the end of the row
-        //                 var $table = $(sel.focusNode).parents("table");
-        //                 var cellsPerLine = $table.find("tr").first().children("td").length;
-        //                 var $tr = $("<tr />");
-        //                 var $td = $("<td />");
-        //                 for(var i = 1; i <= cellsPerLine; i++) {
-        //                     $tr.append($td.clone());
-        //                 }
-        //                 $table.append($tr);
-        //                 // simulate tabing through table
-        //                 tabifyEditableTable(window, {keyCode: 9, shiftKey: false, preventDefault: function(){}});
-        //             }
-        //         }
-        //     }
-        //     return false;
-        // }
-
-        /**
          * Returns the text from the current selection
          * @private
          * @return {string|boolean}
@@ -1031,43 +793,44 @@
          * 
          * @param {string} $command 
          */
-        function insertTEI(command) {
-            var sel, tagName, className;
-            switch (command) {
-                case 'inserted':
-                    tagName = 'ins';
-                    className = 'tei-add';
-                    break;
-                case 'deleted':
-                    tagName = 'del';
-                    className = 'tei-del';
-                    break;
-                case 'unclear':
-                    tagName = 'span';
-                    className = 'tei-unclear';
-                    break;
-                default:
-                    break;
+        function insertTEI(command) { 
+            if (settings.teiTags[command]) {
+                var sel;
+                var tagName = settings.teiTags[command].tag;
+                var className = settings.teiTags[command].class;
+                // TODO if tei-add then remove tei-del wrapper and vice versa
+                if (window.getSelection) {
+                    sel = window.getSelection();
+                    var el = sel.getRangeAt(0).cloneContents();
+                    // check parents - check if the tag already wraps the selected text; if so, untag
+                    if (sel.getRangeAt(0).commonAncestorContainer.className == className) {
+                        // TODO - unwrap
+                    } else {
+                        const html = document.createElement(tagName);
+                        html.setAttribute('class', className);
+                        html.appendChild(el);
+                        // check children - make sure the tag is not duplicated in inside the selected tag
+                        $(html).children('.'+className).each(function() {
+                            $(this).replaceWith($(this).contents());
+                        });
+                        // make sure there are no empty tags remaining
+                        $editor.find('div:empty,p:empty,li:empty,h1:empty,h2:empty,h3:empty,h4:empty,h5:empty,h6:empty,del:empty,ins:empty').remove();
+                        const range = sel.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(html);
+                    }
+                }
+                else if (document.selection && document.selection.type !== "Control") {
+                    // IE < 9
+                    document.selection.createRange().pasteHTML(html);
+                }
             }
-            // if tei-add then remove tei-del wrapper and vice versa
-            if (window.getSelection) {
-                sel = window.getSelection();
-                var el = sel.getRangeAt(0).extractContents();
-                console.log(el.toString());
-                const html = document.createElement(tagName);
-                html.setAttribute('class', className);
-                html.appendChild(el);
-                $(html).children('.'+className).each(function() {
-                    // TODO - TO FIX (element is duplicated rather than removed and an original element is preserved)
-                    $(this).replaceWith($(this).contents());
-                    $(this).siblings('.'+className).remove();
-                });
-                const range = sel.getRangeAt(0);
-                range.insertNode(html);
-            }
-            else if (document.selection && document.selection.type !== "Control") {
-                // IE < 9
-                document.selection.createRange().pasteHTML(html);
+            else {
+                // document.execCommand() will work
+                document.designMode = "ON";
+                document.execCommand(command, false, 'div');
+                // Disable designMode
+                document.designMode = "OFF";
             }
         }
 

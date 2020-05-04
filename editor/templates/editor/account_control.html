@@ -86,7 +86,7 @@
     </div>
     {% endif %}
 
-    <form action="." method="post">
+    <form action="." method="post" id="admin-table-form">
       {% csrf_token %}
       {{ all_users_formset.management_form }}
       {% if all_users_formset|length > 5 %}

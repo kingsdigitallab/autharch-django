@@ -344,4 +344,4 @@ class Source(TimeStampedModel):
 
     name = models.CharField(max_length=256)
     url = models.URLField(verbose_name="URL", blank=True, null=True)
-    notes = models.TextField(null=True)
+    notes = models.TextField(blank=True, null=True)

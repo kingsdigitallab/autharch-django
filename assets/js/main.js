@@ -507,6 +507,7 @@ function deleteField(el, toDelete) {
   event.preventDefault();
   $(el).closest(toDelete).addClass('none');
   $(el).parents(".formset").first().children("label").show();
+  
 }
 
 
@@ -514,7 +515,7 @@ function deleteRow(el) {
   if (!$(el).parent().siblings('td').hasClass('none')) {
     $(el).parent().siblings('td').addClass('none');
     $(el).parent().attr('colspan', '6');
-    $(el).after(`<button class="button-link danger" onclick="deleteField(this, 'tr')"><i class="fas fa-trash-alt"></i>Delete permanently</button>`)
+    $(el).after(`<button class="button-link danger" onclick="deleteField(this, 'tr')"><i class="fas fa-trash-alt"></i>Delete permanently and save table</button>`)
   } else {
     $(el).parent().attr('colspan', '1');
     $(el).parent().siblings('td').removeClass('none');

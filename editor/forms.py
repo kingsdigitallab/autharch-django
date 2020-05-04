@@ -28,6 +28,12 @@ RICHTEXT_ATTRS = {
     'aria-label': 'richtext field'
 }
 
+RICHTEXT_TRANSCRIPTION = {
+    'class': 'richtext-transcription',
+    'rows': 8,
+    'aria-label': 'richtext field'
+}
+
 ENTITY_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
     'placeholder': 'Search entities',
@@ -476,7 +482,7 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'record_type': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'start_date': HTML5DateInput(),
             'subjects': FunctionSelect(),
-            'transcription': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'transcription': forms.Textarea(attrs=RICHTEXT_TRANSCRIPTION),
             'uuid': forms.HiddenInput(),
             'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS)
         }

@@ -22,7 +22,7 @@ TITLE_HELP = 'This element is used to provide the name of the document(s) approp
 
 RECORD_TYPE_HELP = 'This element is used to distinguish different types of record to enable users to filter searches to specific types of documents. This data element should be completed at the lowest level possible.'
 
-URL_HELP = 'This element is used to give the file name of the digitised image of the document(s) (PDF) to enable users to link to Georgian Papers Online from shared catalogue data.'
+URL_HELP = 'This element is used to point to the archival record at gpp.rct.uk.'
 
 LOCATION_OF_ORIGINALS_HELP = 'This element is used to indicate the existence and location, availability and/or destruction of originals, if the unit of description consists of copies. If the original of the unit of description is available (either in the RA or elsewhere), its location should be recorded, together with any significant references. If the originals no longer exist, or their location is unknown, give that information.'
 
