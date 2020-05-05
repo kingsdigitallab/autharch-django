@@ -93,6 +93,8 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField(faceted=True)
     languages = indexes.MultiValueField(faceted=True)
+    writers = indexes.MultiValueField(faceted=True)
+    writers_display = indexes.CharField()
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
 
