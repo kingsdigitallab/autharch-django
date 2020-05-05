@@ -1001,6 +1001,18 @@ main {
                 width: 100%;
                 border: 1px solid darken($light-grey, 15%);
             }
+            .fa-trash-alt {
+                color: $danger;
+                padding-left: 2em;
+            }
+            input[type=submit] {
+                padding: 0;
+                padding-left: 5px;
+                &:hover, &:active, &:focus {
+                    box-shadow: none !important;
+                    text-decoration: underline;
+                }
+            }
         }
     }
     table {
@@ -1137,6 +1149,11 @@ main {
                         &:after {
                             content: "Delete user";
                         }   
+                    }
+                    label {
+                        &:hover, &:focus {
+                            text-decoration: underline;
+                        }
                     }
                     button {
                         margin-left: 2em;
@@ -1440,9 +1457,6 @@ main {
                         margin-bottom: 10px;
                     }
                     .image {
-                        -webkit-border-radius: 5px;
-                        -moz-border-radius: 5px;
-                        border-radius: 5px;
                         overflow: hidden;
                         height: auto;
                         background-color: darken($dark-grey, 20%);
@@ -1450,6 +1464,7 @@ main {
                         cursor: grab;
                         #navigation-pane {
                             background-color: lighten($light-grey, 5%);
+                            border: 1px solid #d1d1d1;
                             padding: 10px 20px;
                             display: flex;
                             justify-content: space-between;
@@ -1463,9 +1478,9 @@ main {
                             .nav-icon {
                                 font-family: $fontawesome;
                                 font-weight: 200;
-                                color: $primary;
+                                color: darken($dark-grey, 30%);
                                 margin: 0px 10px;
-                                font-size: 1.4em;
+                                font-size: 1.3em;
                                 cursor: pointer;
                                 &:hover, &:focus {
                                     color: $dark-grey;
@@ -1492,53 +1507,9 @@ main {
                         }
                     }
                     .transcription {
-                        .richText {
-                            margin-bottom: 0;
-                        }
-                        .richText-editor {
+                        .cke_contents {
                             height: 50vh;
                             min-height: 500px;
-                            .tei-body {
-                                .richtext-editor-newLine {
-                                    font-size: 12px;
-                                    margin-right: 20px;
-                                    background-color: $light-grey;
-                                }
-                                .tei-add {
-                                    background-color: lighten($save, 42%);
-                                    text-decoration: none;
-                                    // &:before {
-                                    //     content: '\f067';
-                                    //     font-family: $fontawesome;
-                                    //     margin-right: 0px;
-                                    //     margin-left: 5px;
-                                    //     font-weight: 300;
-                                    //     color: darken($save, 10%);
-                                    //     font-size: 11px;
-                                    // }
-                                }
-                                .tei-del {
-                                    background-color: lighten($danger, 56%);
-                                    // &:before {
-                                    //     content: '\f068';
-                                    //     font-family: $fontawesome;
-                                    //     margin-right: 0px;
-                                    //     margin-left: 5px;
-                                    //     font-weight: 300;
-                                    //     color: darken($danger, 10%);
-                                    //     font-size: 11px;
-                                    // }
-                                }
-                                .tei-pb {
-                                    &:before {
-                                        content: 'Page:';
-                                        vertical-align: center;
-                                        color: $dark-grey;
-                                        background-color: $light-grey;
-                                        padding: 0 5px;
-                                    }
-                                }
-                            }
                         }
                     }
                 }

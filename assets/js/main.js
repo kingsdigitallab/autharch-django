@@ -84,13 +84,15 @@ $(document).ready(function() {
 
   //TRANSCRIPTIONS
   // add aria-labels to richtext areas
-  $('.richtext-transcription').attr('aria-label', 'richtext transcription editor');
+  // $('.richtext-transcription').attr('aria-label', 'richtext transcription editor');
 
-  $('.richtext-transcription').each(function(index) {
-    $(this).richTextTranscriptions({
-      id: "richText-transcription-" + index
-    });
-  });
+  // $('.richtext-transcription').each(function(index) {
+  //   $(this).richTextTranscriptions({
+  //     id: "richText-transcription-" + index
+  //   });
+  // });
+
+  $( 'textarea.richtext-transcription' ).ckeditor();
 
   // add pagination to all tables
   $('table').each(function(i, el) {
@@ -507,7 +509,6 @@ function deleteField(el, toDelete) {
   event.preventDefault();
   $(el).closest(toDelete).addClass('none');
   $(el).parents(".formset").first().children("label").show();
-  
 }
 
 
@@ -515,7 +516,7 @@ function deleteRow(el) {
   if (!$(el).parent().siblings('td').hasClass('none')) {
     $(el).parent().siblings('td').addClass('none');
     $(el).parent().attr('colspan', '6');
-    $(el).after(`<button class="button-link danger" onclick="deleteField(this, 'tr')"><i class="fas fa-trash-alt"></i>Delete permanently and save table</button>`)
+    $(el).after(`<i class="fas fa-trash-alt"></i><input name="all_users_submit" aria-label="save admin table" type="submit" class="button-link danger" value="Delete permanently and save table" />`)
   } else {
     $(el).parent().attr('colspan', '1');
     $(el).parent().siblings('td').removeClass('none');
