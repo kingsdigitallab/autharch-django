@@ -419,30 +419,37 @@ class ArchivalRecordEditForm(forms.ModelForm):
     change.
 
     """
-
     disabled_fields = {
         EditorProfile.ADMIN: ['maintenance_status'],
         EditorProfile.MODERATOR: [
-            'arrangement', 'cataloguer', 'copyright_status',
-            'description_date', 'extent', 'maintenance_status',
+            'arrangement', 'extent', 'maintenance_status',
             'physical_description', 'provenance', 'publication_permission',
             'rcin', 'record_type', 'references', 'repository',
-            'rights_declaration', 'rights_declaration_abbreviation',
-            'rights_declaration_citation', 'withheld'
+            'rights_declaration', 'rights_declaration_citation', 'withheld'
         ],
         EditorProfile.EDITOR: [
-            'arrangement', 'cataloguer', 'copyright_status',
-            'description_date', 'extent', 'maintenance_status',
+            'arrangement', 'extent', 'maintenance_status',
             'physical_description', 'provenance', 'publication_permission',
             'publication_status', 'rcin', 'record_type', 'references',
-            'repository', 'rights_declaration',
-            'rights_declaration_abbreviation', 'rights_declaration_citation',
+            'repository', 'rights_declaration', 'rights_declaration_citation',
             'withheld'
         ],
     }
 
+    # Fields visible only to admin users.
+    private_fields = [
+        'cataloguer', 'copyright_status', 'description_date',
+        'rights_declaration_abbreviation',
+    ]
+
     def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
         super().__init__(*args, **kwargs)
+        if editor_role != EditorProfile.ADMIN:
+            for field in self.private_fields:
+                try:
+                    del self.fields[field]
+                except KeyError:
+                    pass
         for field in self.disabled_fields[editor_role]:
             # Due to polymorphic model, some fields are not going
             # to exist.
