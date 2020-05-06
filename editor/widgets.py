@@ -58,7 +58,7 @@ class AutocompleteMixin:
         return groups
 
 
-class FunctionSelect(AutocompleteMixin, forms.Select):
+class FunctionAutocomplete(AutocompleteMixin):
 
     def build_attrs(self, base_attrs, extra_attrs=None):
         attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
@@ -67,6 +67,16 @@ class FunctionSelect(AutocompleteMixin, forms.Select):
 
     def get_url(self):
         return reverse('jargon:jargon_function_autocomplete')
+
+
+class FunctionMultiSelect(FunctionAutocomplete, forms.SelectMultiple):
+
+    pass
+
+
+class FunctionSelect(FunctionAutocomplete, forms.Select):
+
+    pass
 
 
 class GenderSelect(AutocompleteMixin, forms.Select):

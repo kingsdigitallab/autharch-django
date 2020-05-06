@@ -19,7 +19,8 @@ from jargon.models import EntityType, NamePartType, PublicationStatus
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
-from .widgets import FunctionSelect, GenderSelect, HTML5DateInput
+from .widgets import (FunctionMultiSelect, FunctionSelect, GenderSelect,
+                      HTML5DateInput)
 
 
 RICHTEXT_ATTRS = {
@@ -488,7 +489,7 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'provenance': forms.Textarea(attrs={'rows': 4}),
             'record_type': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'start_date': HTML5DateInput(),
-            'subjects': FunctionSelect(),
+            'subjects': FunctionMultiSelect(),
             'transcription': forms.Textarea(attrs=RICHTEXT_TRANSCRIPTION),
             'uuid': forms.HiddenInput(),
             'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS)
