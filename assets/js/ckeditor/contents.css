@@ -27,6 +27,60 @@ body
 	word-wrap: break-word;
 }
 
+.cke_button__teiparagraph_icon {
+		content: '\f292';
+		font-family: FontAwesome;
+}
+
+.tei-pb:before {
+	content: 'Page #:';
+	color: #424242;
+	background-color: #ebebeb;
+	padding: 5px 5px;
+	margin-right: 10px; 
+}
+
+.tei-add {
+	background-color: rgb(212, 238, 212);
+	text-decoration: none;
+}
+
+.tei-del {
+	background-color: rgb(248, 206, 206);
+}
+
+.tei-note:before {
+	content:'[Note:';
+	background-color: #ebebeb;
+	padding: 5px 5px;
+	margin-right: 3px; 
+}
+
+.tei-note:after {
+	content:']';
+	background-color: #ebebeb;
+	padding: 5px 5px;
+	margin-left: 3px; 
+}
+
+.tei-unclear:before {
+	content:'<';
+	background-color: #ebebeb;
+	padding: 5px 5px;
+	margin-right: 3px; 
+}
+
+.tei-unclear {
+	font-style: italic;
+}
+
+.tei-unclear:after {
+	content:'>';
+	background-color: #ebebeb;
+	padding: 5px 5px;
+	margin-left: 3px; 
+}
+
 blockquote
 {
 	font-style: italic;

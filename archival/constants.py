@@ -22,7 +22,7 @@ TITLE_HELP = 'This element is used to provide the name of the document(s) approp
 
 RECORD_TYPE_HELP = 'This element is used to distinguish different types of record to enable users to filter searches to specific types of documents. This data element should be completed at the lowest level possible.'  # noqa
 
-URL_HELP = 'This element is used to hold the URLs for the archival record in the Georgian Papers Online website, https://gpp.rct.uk/'  # noqa
+URL_HELP = 'This element is used to hold the URLs for the archival record in the Georgian Papers Online website, https://gpp.rct.uk/.'  # noqa
 
 LOCATION_OF_ORIGINALS_HELP = 'This element is used to indicate the existence and location, availability and/or destruction of originals, if the unit of description consists of copies. If the original of the unit of description is available (either in the RA or elsewhere), its location should be recorded, together with any significant references. If the originals no longer exist, or their location is unknown, give that information.'  # noqa
 
