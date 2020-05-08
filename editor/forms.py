@@ -9,7 +9,9 @@ import haystack.forms
 
 from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
-from archival.models import Collection, File, Item, Series
+from archival.models import (
+    ArchivalRecordTranscription, Collection, File, Item, Series
+)
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
     LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
@@ -117,6 +119,16 @@ class ContainerModelForm(forms.ModelForm):
         for formset in self.formsets.values():
             formset.save(commit)
         return result
+
+
+class ArchivalRecordTranscriptionEditInlineForm(forms.ModelForm):
+
+    class Meta:
+        exclude = []
+        model = ArchivalRecordTranscription
+        widgets = {
+            'transcription': forms.Textarea(attrs=RICHTEXT_TRANSCRIPTION),
+        }
 
 
 class NamePartEditInlineForm(forms.ModelForm):
@@ -410,7 +422,7 @@ class IdentityEditInlineForm(ContainerModelForm):
         }
 
 
-class ArchivalRecordEditForm(forms.ModelForm):
+class ArchivalRecordEditForm(ContainerModelForm):
 
     """Base class for all ArchivalRecord forms.
 
@@ -464,6 +476,15 @@ class ArchivalRecordEditForm(forms.ModelForm):
             self.fields['publication_status'].widget = forms.Select(
                 choices=[(in_process_status.pk, 'inProcess')])
 
+    def _add_formsets(self, *args, **kwargs):
+        formsets = {}
+        TranscriptionFormset = inlineformset_factory(
+            self.Meta.model, ArchivalRecordTranscription, exclude=[],
+            form=ArchivalRecordTranscriptionEditInlineForm, extra=0)
+        formsets['transcriptions'] = TranscriptionFormset(
+            *args, instance=self.instance, prefix='transcription')
+        return formsets
+
     class Meta:
         exclude = []
         widgets = {
@@ -490,7 +511,6 @@ class ArchivalRecordEditForm(forms.ModelForm):
             'record_type': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'start_date': HTML5DateInput(),
             'subjects': FunctionMultiSelect(),
-            'transcription': forms.Textarea(attrs=RICHTEXT_TRANSCRIPTION),
             'uuid': forms.HiddenInput(),
             'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS)
         }

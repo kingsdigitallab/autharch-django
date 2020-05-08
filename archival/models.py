@@ -133,8 +133,6 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
 
     sources = models.TextField(blank=True, null=True)
 
-    transcription = models.TextField(blank=True)
-
     class Meta:
         ordering = ['title']
 
@@ -281,6 +279,9 @@ class ArchivalRecordTranscription(models.Model):
                                related_name='transcription_texts')
     transcription = models.TextField(blank=True)
     order = models.PositiveIntegerField()
+    transcriber = models.CharField(blank=True, max_length=128)
+    reviewer = models.CharField(blank=True, max_length=128)
+    corrector = models.CharField(blank=True, max_length=128)
 
     class Meta:
         ordering = ['order']

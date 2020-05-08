@@ -19,6 +19,7 @@ django-rest-polymorphic
 django-reversion
 django-script-codes
 elasticsearch>=2.0.0,<3.0.0
+lxml
 markdown
 pandas
 psycopg2-binary
