@@ -8,7 +8,7 @@ $danger: #a10101;
 $background: #FCFCFC;
 $input : #707070;
 $light-grey: #EBEBEB;
-$medium-grey: #BABABA;
+$medium-grey: #C4C4C4;
 $dark-grey: #424242;
 
 $font-primary: 'Roboto', sans-serif;
@@ -1465,7 +1465,7 @@ main {
                         #navigation-pane {
                             background-color: lighten($light-grey, 5%);
                             border: 1px solid #d1d1d1;
-                            padding: 10px 20px;
+                            padding: 9px 20px;
                             display: flex;
                             justify-content: space-between;
                             position: absolute;
