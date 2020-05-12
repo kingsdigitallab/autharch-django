@@ -4,7 +4,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
     init: function( editor ) {
 
         // TODO - REFACTOR
-        
+
         // TEI-ADD
         editor.addCommand( 'teiAdd', {
             exec: function( editor ) {
@@ -145,7 +145,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             }
         });
         editor.ui.addButton('TeiUnderline', {
-            label: 'tei-underline: highlights text\nthat was underlined by an author',
+            label: 'tei-hi: highlights text\nthat was underlined by an author',
             command: 'teiUnderline',
             toolbar: 'tei-underline'
         });
