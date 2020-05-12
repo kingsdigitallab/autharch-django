@@ -32,6 +32,7 @@ from .forms import (
     get_archival_record_edit_form_for_subclass,
 )
 from .models import EditorProfile, RevisionMetadata
+from .signals import view_post_save
 
 
 def is_user_admin(user):
@@ -483,6 +484,8 @@ def record_delete(request, record_id):
         record.maintenance_status = MaintenanceStatus.objects.get(
             title='deleted')
         record.save()
+        view_post_save.send(sender=record.get_real_instance_class(),
+                            instance=record)
         return redirect('editor:records-list')
     return redirect('editor:record-edit', record_id=record_id)
 
@@ -521,6 +524,8 @@ def record_edit(request, record_id):
             reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                                collaborative_workspace_editor_type=editor_type)
             form.save()
+            view_post_save.send(sender=record.get_real_instance_class(),
+                                instance=record)
             url = reverse('editor:record-edit',
                           kwargs={'record_id': record_id}) + '?saved=true'
             return redirect(url)
@@ -563,6 +568,11 @@ def revert(request):
     revision_id = request.POST.get('revision_id')
     revision = get_object_or_404(Revision, pk=revision_id)
     revision.revert(delete=True)
+    for version in revision.version_set.all():
+        model = version.content_type.model_class()
+        if model in (Collection, File, Item, Series):
+            record = model.objects.get(pk=version.object_id)
+            view_post_save.send(sender=model, instance=record)
     return redirect(request.POST.get('redirect_url'))
 
 

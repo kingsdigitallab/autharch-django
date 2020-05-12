@@ -352,7 +352,7 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = None
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'editor.signals.HaystackRealtimeSignalProcessor'
 
 
 ARCHIVAL_RIGHTS_DECLARATION = """
