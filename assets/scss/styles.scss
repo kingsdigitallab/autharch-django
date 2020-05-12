@@ -824,7 +824,31 @@ main {
                         width: 100%;
                     }
                     #year-range {
-                        margin: 0px 10px 10px 10px;
+                        margin: 0px 10px 12px 10px;
+                    }
+                    &#year-range-filter {
+                        .checkbox-anchor {
+                            background-color: $add;
+                            -webkit-border-radius: 30px;
+                            -moz-border-radius: 30px;
+                            border-radius: 30px;
+                            width: 55px;
+                            padding: 5px 10px;
+                            display: inline-block;
+                            text-align: center;
+                            font-size: 13px;
+                            color: white;
+                            // label {
+                            //     cursor: pointer;
+                            // }
+                            // label:after {
+                            //     content: 'Filter';
+                            //     color: white;
+                            //     font-weight: 400;
+                            //     font-size: 13px;
+                            //     cursor: pointer;
+                            // }
+                        }
                     }
                 }
             }
@@ -1469,7 +1493,7 @@ main {
                             display: flex;
                             justify-content: space-between;
                             position: absolute;
-                            top: 0;
+                            bottom: 0;
                             left: 0;
                             cursor: auto;
                             z-index: 8;
@@ -1507,9 +1531,21 @@ main {
                         }
                     }
                     .transcription {
+                        div[id^=cke_id_transcription]:not(:first-of-type) {
+                            display: none;
+                        }
                         .cke_contents {
                             height: 50vh;
                             min-height: 500px;
+                        }
+                        .rte-pagination {
+                            text-align: center;
+                            background-color: lighten($light-grey, 5%);
+                            border: 1px solid #d1d1d1;
+                            padding: 9px 20px;
+                            .button-link {
+                                padding: 0em 0.7em;
+                            }
                         }
                     }
                 }
