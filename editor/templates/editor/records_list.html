@@ -19,19 +19,14 @@
           <div class="filters-hidden">
             <a href="." class="dotted-underline clear-filters aoctive">Clear all filters</a>
             <div class="filters">
-                <!-- if min_year != None and max_year != None -->
+                {% if min_year != None and max_year != None %}
                 <fieldset class="filter-list" id="year-range-filter">
                   <legend>Creation year</legend>
                   <div id="year-range"></div>
-                  <!-- TODO - please update a min value to {{min_year}} and please add {{start_year}} to the 'value' attribute;
-                      if a start_year is not set, please set the default value of start_year as a min_year. 
-                      Same for {{max_year}} and end_year. 
-                   -->
-                  <input type="number" id="id_start_year" min="1700" value="1750" aria-label="min year" placeholder="{{min_year}}" onfocus="this.placeholder=''" onblur="this.placeholder='{{min_year}}'"> -
-                  <input type="number" id="id_end_year" max="2020" value="1900" aria-label="max year" placeholder="{{max_year}}" onfocus="this.placeholder=''" onblur="this.placeholder='{{max_year}}'">
+                  {{ form.start_year }} – {{ form.end_year }}
                   <a href="" class="checkbox-anchor" id="year-range-anchor">Filter</a>
                 </fieldset>
-                <!-- endif -->
+                {% endif %}
                 <fieldset class="filter-list" id="document-level-filter">
                   <legend>Document level</legend>
                   {% if facets.fields.archival_level|length > 7 %}

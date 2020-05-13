@@ -736,8 +736,12 @@ class ArchivalRecordFacetedSearchForm(FacetedSearchForm):
         super().__init__(*args, **kwargs)
         self.fields['start_year'].widget.attrs['min'] = min_year
         self.fields['start_year'].widget.attrs['max'] = max_year
+        self.fields['start_year'].widget.attrs['placeholder'] = min_year
         self.fields['end_year'].widget.attrs['min'] = min_year
         self.fields['end_year'].widget.attrs['max'] = max_year
+        self.fields['end_year'].widget.attrs['placeholder'] = max_year
+        self._min_year = min_year
+        self._max_year = max_year
 
     def search(self):
         sqs = super().search()

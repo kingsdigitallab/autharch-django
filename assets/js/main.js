@@ -220,48 +220,7 @@ $(document).ready(function() {
     })  
   });
 
-  // year range filters
-  var minValue = Number($("#id_start_year").attr("min"));
-  var maxValue = Number($("#id_end_year").attr("max"));
-  var startYear = $("#id_start_year").val();
-  var endYear = $("#id_end_year").val();
-  var yearAnchor = '?';
-  if (location.search.includes('?selected_facets')) {
-    yearAnchor = '&';
-  }
-
-  $('#year-range-anchor').attr('href', yearAnchor + 'start_year=' + startYear + '&end_year=' + endYear);
-
-  $( "#year-range" ).slider({
-      range: true,
-      min: minValue,
-      max: maxValue,
-      values: [ startYear, endYear],
-      slide: function( event, ui ) {
-        $( "#id_start_year" ).val(ui.values[ 0 ]);
-        $( "#id_end_year" ).val(ui.values[ 1 ]);
-        $('#year-range-anchor').attr('href', yearAnchor + 'start_year=' + $("#id_start_year").val() + '&end_year=' + $("#id_end_year").val());
-      }
-  });
-  
-  /* these values should be specified via start_year and end_year in the template:
-    $( "#id_start_year" ).val( $( "#year-range" ).slider( "values", 0 ));
-    $( "#id_end_year" ).val( $( "#year-range" ).slider( "values", 1 ));
-  */
-  $( "#id_start_year" ).on('keyup change', function(el) {
-    var endYear = parseInt($( "#id_end_year" ).val());
-    if ($(el.target).val() >= minValue && $(el.target).val() <= endYear) {
-      $('#year-range').slider("values", 0, $(el.target).val());
-      $('#year-range-anchor').attr('href', yearAnchor + 'start_year=' + $("#id_start_year").val() + '&end_year=' + $("#id_end_year").val());
-    }
-  });
-  $( "#id_end_year" ).on('keyup change', function(el) {
-    var startYear = parseInt($( "#id_start_year" ).val());
-    if ($(el.target).val() >= startYear && $(el.target).val() <= maxValue) {
-      $('#year-range').slider("values", 1, $(el.target).val());
-      $('#year-range-anchor').attr('href', yearAnchor + 'start_year=' + $("#id_start_year").val() + '&end_year=' + $("#id_end_year").val());
-    }
-  });
+  setUpCreationYearSlider();
 
   //wait for cke_transcription to load
   setTimeout(function() {
@@ -562,6 +521,22 @@ function deleteRow(el) {
 
 
 /**
+ * Return the current URL's querystring with the start_year and
+ * end_year parameters set to the supplied startYear and endYear.
+ *
+ * @param {Number} startYear - the year to set as start_year in the querystring
+ * @param {Number} endYear - the year to set as end_year in the querystring
+ * @returns {String}
+ */
+function generateCreationYearURL(startYear, endYear) {
+  let searchParams = new URLSearchParams(location.search);
+  searchParams.set("start_year", startYear)
+  searchParams.set("end_year", endYear)
+  return '?' + searchParams.toString();
+}
+
+
+/**
  * Initialise all autocomplete widgets except ones in an empty
  * template form.
  *
@@ -574,6 +549,66 @@ function initAutocompleteWidgets() {
 
 
 /**
+ * Create and initialise the creation year slider, handling all of its
+ * varied updates to the 'submit' link etc.
+ */
+function setUpCreationYearSlider() {
+  // year range filters
+  let minValue = Number($('#id_start_year').attr('min'));
+  let maxValue = Number($('#id_end_year').attr('max'));
+  if ($('#id_start_year').val() == '') {
+    $('#id_start_year').val(minValue);
+  }
+  let startYear = parseInt($('#id_start_year').val());
+  if ($('#id_end_year').val() == '') {
+    $('#id_end_year').val(maxValue);
+  }
+  let endYear = parseInt($('#id_end_year').val());
+  let queryString = generateCreationYearURL(startYear, endYear);
+
+  $('#year-range-anchor').attr('href', queryString);
+
+  $('#year-range').slider({
+    range: true,
+    min: minValue,
+    max: maxValue,
+    values: [startYear, endYear],
+    slide: function( event, ui ) {
+      let startYear = ui.values[0];
+      let endYear = ui.values[1];
+      let queryString = generateCreationYearURL(startYear, endYear);
+      $('#id_start_year').val(startYear);
+      $('#id_end_year').val(endYear);
+      $('#year-range-anchor').attr('href', queryString);
+    }
+  });
+
+  /* these values should be specified via start_year and end_year in the template:
+     $( "#id_start_year" ).val( $( "#year-range" ).slider( "values", 0 ));
+     $( "#id_end_year" ).val( $( "#year-range" ).slider( "values", 1 ));
+  */
+  $( "#id_start_year" ).on('keyup change', function(el) {
+    var endYear = parseInt($( "#id_end_year" ).val());
+    if ($(el.target).val() >= minValue && $(el.target).val() <= endYear) {
+      $('#year-range').slider("values", 0, $(el.target).val());
+      let queryString = generateCreationYearURL($('#id_start_year').val(),
+                                                $('#id_end_year').val());
+      $('#year-range-anchor').attr('href', queryString);
+    }
+  });
+  $( "#id_end_year" ).on('keyup change', function(el) {
+    var startYear = parseInt($( "#id_start_year" ).val());
+    if ($(el.target).val() >= startYear && $(el.target).val() <= maxValue) {
+      $('#year-range').slider("values", 1, $(el.target).val());
+      let queryString = generateCreationYearURL($('#id_start_year').val(),
+                                                $('#id_end_year').val());
+      $('#year-range-anchor').attr('href', queryString);
+    }
+  });
+}
+
+
+ /**
  * Mark/unmark an inline form for deletion.
  *
  * This involves three changes:

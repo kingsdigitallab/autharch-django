@@ -259,6 +259,8 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         context['end_year'] = self.request.GET.get('end_year')
         context['facets'] = self._merge_facets(context['facets'],
                                                self.request.GET.copy())
+        context['max_year'] = context['form']._max_year
+        context['min_year'] = context['form']._min_year
         context['start_year'] = self.request.GET.get('start_year')
         context['writer_manager'] = Entity.objects
         context['year_remove_link'] = self._create_unapply_year_link(
@@ -267,6 +269,28 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        # By making start_date and end_date into a pseudo-facet, we
+        # have put ourselves in a bind. It is bad UI to restrict the
+        # date range to the values that fall within the existing
+        # queryset (which might be bound by a previously specified
+        # date range), because that would require removing the date
+        # facet entirely before being able to specify a new date range
+        # that extended beyond the current one.
+        #
+        # On the other hand, not restricting the date range to the
+        # values that fall within the existing queryset means that it
+        # may be possible to select a date range that will have no
+        # results within it, if there are other facet values selected.
+        #
+        # To avoid both problems, we could make a second query that
+        # uses all specified facets except for the date, and get the
+        # possible date range from that, but now we're making multiple
+        # search queries in order to do a single search. No, we won't
+        # do that.
+        #
+        # Here we go with option #2, having the date range be the full
+        # span of dates across all records, not just those in the
+        # search results.
         years = ArchivalRecord.objects.aggregate(Min('start_date'),
                                                  Max('end_date'))
         if (years['start_date__min'] and years['end_date__max']):
@@ -275,7 +299,7 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         else:
             min_year = None
             max_year = None
-        kwargs.update({'min_year': min_year, 'max_year': max_year})
+        kwargs.update({'max_year': max_year, 'min_year': min_year})
         return kwargs
 
     def test_func(self):
