@@ -36,8 +36,24 @@ body
 	font-size: 13px;
 }
 
+.tei-p:before {
+	content: '---------------------------- paragraph ----------------------------';
+	font-size: 11px;
+	color: #969696;
+	display: block;
+}
+
+.tei-p:after {
+	content: '------------------------------------------------------------------------';
+	font-size: 11px;
+	color: #969696;
+	display: block;
+}
+
+
 .tei-pb:before {
 	content: 'Page #:';
+	font-size: 11px;
 	text-decoration: none;
 	color: #424242;
 	background-color: #ebebeb;
@@ -55,24 +71,27 @@ body
 }
 
 .tei-note:before {
-	content:'[Note:';
-	text-decoration: none;
+	content:'<Note:';
+	font-size: 11px;
+	text-decoration: none !important;
 	background-color: #ebebeb;
 	padding: 5px 5px;
 	margin-right: 3px; 
 }
 
 .tei-note:after {
-	content:']';
-	text-decoration: none;
+	content:'>';
+	font-size: 11px;
+	text-decoration: none !important;
 	background-color: #ebebeb;
 	padding: 5px 5px;
 	margin-left: 3px; 
 }
 
 .tei-unclear:before {
-	content:'<';
-	text-decoration: none;
+	content:'[';
+	font-size: 11px;
+	text-decoration: none !important;
 	background-color: #ebebeb;
 	padding: 5px 5px;
 	margin-right: 3px; 
@@ -83,8 +102,9 @@ body
 }
 
 .tei-unclear:after {
-	content:'>';
-	text-decoration: none;
+	content:']';
+	font-size: 11px;
+	text-decoration: none !important;
 	background-color: #ebebeb;
 	padding: 5px 5px;
 	margin-left: 3px; 
