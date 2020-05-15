@@ -40,7 +40,8 @@ class Organisation(models.Model):
         return self.title
 
 
-@reversion.register(follow=['transcription_images', 'transcription_texts'])
+@reversion.register(follow=['origin_locations', 'transcription_images',
+                            'transcription_texts'])
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
     rcin = models.CharField('RCIN', max_length=256, blank=True, null=True)
@@ -76,10 +77,6 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
 
     physical_location = models.CharField(max_length=2048, blank=True,
                                          null=True)
-
-    origin_location = models.CharField(
-        'location of originals', max_length=2048, blank=True, null=True,
-        help_text=constants.LOCATION_OF_ORIGINALS_HELP)
 
     media = models.ManyToManyField(Media, blank=True)
     caption = models.TextField(blank=True, null=True)
@@ -298,3 +295,12 @@ class ArchivalRecordImage(models.Model):
     class Meta:
         ordering = ['order']
         unique_together = (('record', 'order'),)
+
+
+@reversion.register()
+class OriginLocation(models.Model):
+    record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
+                               related_name='origin_locations')
+    location = models.TextField(
+        'location of originals',
+        help_text=constants.LOCATION_OF_ORIGINALS_HELP)

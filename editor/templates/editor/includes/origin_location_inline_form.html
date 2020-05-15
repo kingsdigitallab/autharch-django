@@ -1,0 +1,14 @@
+{% load editor_form_tags %}
+<div data-form-type="origin_location" class="flex">
+  <div class="grid inline-deletable">
+    {% render_form_delete_widget form.DELETE %}
+    {% render_field form.id %}
+    {% render_field form.location %}
+  </div>
+  <div class="delete-button-block">
+    <label class="button-link danger">
+      <span hidden>Delete location of originals</span>
+      <input type="button" class="icon-only" value="&#xf2ed;" onclick="toggleDeleteInline(event, this)"/>
+    </label>
+  </div>
+</div>

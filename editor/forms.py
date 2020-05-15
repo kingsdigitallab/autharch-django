@@ -10,7 +10,7 @@ import haystack.forms
 from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import (
-    ArchivalRecordTranscription, Collection, File, Item, Series
+    ArchivalRecordTranscription, Collection, File, Item, OriginLocation, Series
 )
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
@@ -221,6 +221,13 @@ class MandateEditInlineForm(forms.ModelForm):
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
         }
+
+
+class OriginLocationEditInlineForm(forms.ModelForm):
+
+    class Meta:
+        exclude = []
+        model = OriginLocation
 
 
 class PlaceEditInlineForm(forms.ModelForm):
@@ -478,6 +485,11 @@ class ArchivalRecordEditForm(ContainerModelForm):
 
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
+        OriginLocationFormset = inlineformset_factory(
+            self.Meta.model, OriginLocation, exclude=[],
+            form=OriginLocationEditInlineForm, extra=0)
+        formsets['origin_locations'] = OriginLocationFormset(
+            *args, instance=self.instance, prefix='origin_locations')
         TranscriptionFormset = inlineformset_factory(
             self.Meta.model, ArchivalRecordTranscription, exclude=[],
             form=ArchivalRecordTranscriptionEditInlineForm, extra=0)

@@ -83,6 +83,7 @@
                   {% with transcriptions=form.formsets.transcriptions %}
                     {{ transcriptions.management_form }}
                     {% for transcription in transcriptions.forms %}
+                      {% render_field transcription.id %}
                       {{ transcription.transcription }}
                     {% endfor %}
                   {% endwith %}
@@ -127,7 +128,21 @@
                 {% render_field form.record_type %}
                 {% render_field form.rcin %}
                 {% render_field form.url %}
-                {% render_field form.origin_location %}
+                <div class="formset">
+                  {% with origin_locations=form.formsets.origin_locations %}
+                  <div class="management_form">
+                    {{ origin_locations.management_form }}
+                  </div>
+                  <div class="fieldsets">
+                    {% for origin_location in origin_locations.forms %}
+                    {% include "./includes/origin_location_inline_form.html" with form=origin_location %}
+                    {% endfor %}
+                  </div>
+                  {% endwith %}
+                  <label class="button-link create">
+                    <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('origin_location', this)">Add location of originals
+                  </label>
+                </div>
                 {% render_field form.related_materials %}
                 {% render_field form.description_date %}
               </div>
@@ -272,6 +287,12 @@
     </form>
   </div>
   {% include "./includes/delete_modal.html" with delete_url=delete_url %}
+  <div id="empty_forms" style="display: none;">
+    {% comment %}Include an empty form for each sub-form on the page,
+    to allow for JS creation of new forms, rather than supplying a set
+    number of extra forms server-side.{% endcomment %}
+    {% include "./includes/origin_location_inline_form.html" with form=form.formsets.origin_locations.empty_form %}
+  </div>
   {% endblock content %}
 </main>
 {% endblock main %}
