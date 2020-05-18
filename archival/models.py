@@ -96,7 +96,7 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     related_entities = models.ManyToManyField(Entity, blank=True,
                                               related_name='related_entities')
     organisations_as_subjects = models.ManyToManyField(
-        Organisation, blank=True)
+        Organisation, blank=True, verbose_name='Corporate bodies as subjects')
     places_as_subjects = models.ManyToManyField(Place, blank=True)
 
     related_materials = models.CharField(

@@ -220,7 +220,8 @@ $(document).ready(function() {
     for (var i = 0; i < transcriptions; i++) {
       $('.rte-pagination').append('<button class="button-link" onclick="showTranscription('+i+')">'+(i+1)+'</button>');
     }
-    $('.rte-pagination > button:nth-of-type(1)').addClass('current');
+    $('.rte-pagination > button:eq(0)').addClass('current');
+
   }, 1000);
 
   // enable Save admin table button once one of the input fields is clicked
@@ -238,9 +239,9 @@ function showTranscription(i) {
   $("div[id^=cke_id_transcription]").css('display', 'none');
   $("div[id^=cke_id_transcription-"+i+"]").css('display', 'block');
   $('.rte-pagination > button').removeClass('current');
-  $('.rte-pagination > button:nth-of-type('+(i+1)+')').addClass('current');
-}
+  $('.rte-pagination > button:eq('+i+')').addClass('current');
 
+}
 
 
 
