@@ -301,6 +301,6 @@ class ArchivalRecordImage(models.Model):
 class OriginLocation(models.Model):
     record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
                                related_name='origin_locations')
-    location = models.TextField(
-        'location of originals',
+    location = models.CharField(
+        'location of originals', max_length=256,
         help_text=constants.LOCATION_OF_ORIGINALS_HELP)
