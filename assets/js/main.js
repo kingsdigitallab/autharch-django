@@ -541,9 +541,9 @@ function setUpCreationYearSlider() {
  * 3. The part of the form to be hidden/shown must be a descendant of
  * the encompassing element (see #1).
  *
- * 4. The DELETE checkbox for the form must be a grand-child (within
- * an element with a class of "inline-delete-form-field") of the part
- * of the form to be hidden/shown (see #2).
+ * 4. The DELETE checkbox for the form must be a descendant (within an
+ * element with a class of "inline-delete-form-field") of the part of
+ * the form to be hidden/shown (see #2).
  *
  * @param {Element} button - the button element that triggered the toggle
  */
@@ -586,7 +586,7 @@ function toggleDeleteInline(event, button) {
   }
 
   // Find and toggle the DELETE checkbox for the form.
-  let deleteField = form_part.children("[class~='inline-delete-form-field']").children("[name$='DELETE']").first();
+  let deleteField = form_part.children("[class~='inline-delete-form-field']").find("[name$='DELETE']").first();
   deleteField.prop("checked", !deleteField.prop("checked"));
 }
 
