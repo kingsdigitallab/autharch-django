@@ -1,4 +1,4 @@
-"""Signals and signal processor.
+"""Signals and signal processors.
 
 Haystack has a poor interaction with django-polymorphic models and
 django-reversion, in that reverting a Revision that includes an object
@@ -9,14 +9,19 @@ signal and processor subclass. The signal should be sent from a view
 immediately after a save is made (this includes reversions and
 'deletions').
 
+Create an EditorProfile whenever a User is created.
+
 """
 
-from django.db import models
+from django.contrib.auth.models import User
+from django.db.models import signals
 import django.dispatch
 
 import haystack.signals
 
 from authority.models import Entity
+
+from .models import EditorProfile
 
 
 view_post_save = django.dispatch.Signal(providing_args=['instance'])
@@ -29,11 +34,17 @@ class HaystackRealtimeSignalProcessor(haystack.signals.BaseSignalProcessor):
     new view_post_save signal."""
 
     def setup(self):
-        models.signals.post_save.connect(self.handle_save, sender=Entity)
-        models.signals.post_delete.connect(self.handle_delete)
+        signals.post_save.connect(self.handle_save, sender=Entity)
+        signals.post_delete.connect(self.handle_delete)
         view_post_save.connect(self.handle_save)
 
     def teardown(self):
-        models.signals.post_save.disconnect(self.handle_save, sender=Entity)
-        models.signals.post_delete.disconnect(self.handle_delete)
+        signals.post_save.disconnect(self.handle_save, sender=Entity)
+        signals.post_delete.disconnect(self.handle_delete)
         view_post_save.disconnect(self.handle_save)
+
+
+@django.dispatch.receiver(signals.post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        EditorProfile.objects.create(user=instance)

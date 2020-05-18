@@ -323,7 +323,7 @@
         - django
 
     - name: django | set vagrant user to be app admin
-      command: '{{ user_home }}/venv/bin/python {{ project_root }}/manage.py shell -c "from django.contrib.auth.models import User; from editor.models import EditorProfile; user = User.objects.get(username=''vagrant''); ep = EditorProfile(user=user, role=''AD''); ep.save()"'
+      command: '{{ user_home }}/venv/bin/python {{ project_root }}/manage.py shell -c "from django.contrib.auth.models import User; user = User.objects.get(username=''vagrant''); user.editor_profile.role = ''AD''; ep.save()"'
       ignore_errors: no
       tags:
         - django
