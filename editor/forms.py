@@ -486,8 +486,8 @@ class ArchivalRecordEditForm(ContainerModelForm):
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
         OriginLocationFormset = inlineformset_factory(
-            self.Meta.model, OriginLocation, exclude=[],
-            form=OriginLocationEditInlineForm, extra=0)
+            self.Meta.model, OriginLocation, exclude=[], extra=0,
+            form=OriginLocationEditInlineForm, min_num=1)
         formsets['origin_locations'] = OriginLocationFormset(
             *args, instance=self.instance, prefix='origin_locations')
         TranscriptionFormset = inlineformset_factory(
