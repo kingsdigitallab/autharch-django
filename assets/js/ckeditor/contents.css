@@ -22,7 +22,7 @@ body
 .cke_editable
 {
 	font-size: 12px;
-	line-height: 1.6;
+	line-height: 1.4;
 	/* Fix for missing scrollbars with RTL texts. (#10488) */
 	word-wrap: break-word;
 }
@@ -34,17 +34,18 @@ body
 
 .tei-p {
 	font-size: 13px;
+	line-height: 1.6;
 }
 
 .tei-p:before {
-	content: '---------------------------- paragraph ----------------------------';
+	content: 'new paragraph --------------------';
 	font-size: 11px;
 	color: #969696;
 	display: block;
 }
 
 .tei-p:after {
-	content: '------------------------------------------------------------------------';
+	content: '----------------------------------------';
 	font-size: 11px;
 	color: #969696;
 	display: block;

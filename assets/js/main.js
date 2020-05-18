@@ -83,15 +83,6 @@ $(document).ready(function() {
   });
 
   //TRANSCRIPTIONS
-  // add aria-labels to richtext areas
-  // $('.richtext-transcription').attr('aria-label', 'richtext transcription editor');
-
-  // $('.richtext-transcription').each(function(index) {
-  //   $(this).richTextTranscriptions({
-  //     id: "richText-transcription-" + index
-  //   });
-  // });
-
   $( 'textarea.richtext-transcription' ).ckeditor();
 
   // add pagination to all tables
@@ -225,11 +216,12 @@ $(document).ready(function() {
   //wait for cke_transcription to load
   setTimeout(function() {
     var transcriptions = $("div[id^=cke_id_transcription]").length;
+    $("div[id^=cke_id_transcription]:not(:first)").css('display', 'none');
     for (var i = 0; i < transcriptions; i++) {
-      $('.rte-pagination').append('<button class="button-link" onclick="transcriptionPaginator('+i+')">'+(i+1)+'</button>');
+      $('.rte-pagination').append('<button class="button-link" onclick="showTranscription('+i+')">'+(i+1)+'</button>');
     }
     $('.rte-pagination > button:nth-of-type(1)').addClass('current');
-  }, 500);
+  }, 1000);
 
   // enable Save admin table button once one of the input fields is clicked
   $('.admin-table').find('label').on('click', function() {
@@ -240,8 +232,8 @@ $(document).ready(function() {
 
 });
 
-// pagination for the transcriptions
-function transcriptionPaginator(i) {
+// show transcription
+function showTranscription(i) {
   event.preventDefault();
   $("div[id^=cke_id_transcription]").css('display', 'none');
   $("div[id^=cke_id_transcription-"+i+"]").css('display', 'block');

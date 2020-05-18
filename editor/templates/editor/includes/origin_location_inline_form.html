@@ -1,6 +1,6 @@
 {% load editor_form_tags %}
-<div data-form-type="origin_location" class="flex">
-  <div class="grid inline-deletable">
+<div data-form-type="origin_location" class="editable-field">
+  <div class="inline-deletable">
     {% render_form_delete_widget form.DELETE %}
     {% render_field form.id %}
     {% render_field form.location %}

@@ -79,7 +79,7 @@
                     <span class="nav-icon" id="next"></span>
                   </div>
               </div>
-              <div class="transcription">
+              <div id="transcription">
                   {% with transcriptions=form.formsets.transcriptions %}
                     {{ transcriptions.management_form }}
                     {% for transcription in transcriptions.forms %}
@@ -191,7 +191,7 @@
             <div class="two-column-table">
               <div>
                 {% render_field form.subjects %}
-                {% render_field form.organisation_as_subjects %}
+                {% render_field form.organisations_as_subjects %}
                 {% render_field form.arrangement %}
               </div>
               <div>

@@ -1217,6 +1217,7 @@ main {
             // width: 100%;
             // overflow: hidden;
             justify-content: center;
+            align-items: center;
             label, input:not([type=button]):not([type=radio]):not([type=checkbox]), select, textarea {
                 // width: -moz-available;
                 // width: -webkit-fill-available;
@@ -1530,10 +1531,7 @@ main {
                             }
                         }
                     }
-                    .transcription {
-                        div[id^=cke_id_transcription]:not(:first-of-type) {
-                            display: none;
-                        }
+                    #transcription {
                         .cke_contents {
                             height: 50vh;
                             min-height: 500px;
