@@ -372,7 +372,7 @@ def entity_create(request):
             control = Control(entity=entity, language=language, script=script,
                               maintenance_status=ms, publication_status=ps)
             control.save()
-            entity.save()  # To cause reindexing with control data.
+            view_post_save.send(sender=Entity, instance=entity)
             return redirect('editor:entity-edit', entity_id=entity.pk)
     else:
         form = EntityCreateForm()
@@ -408,6 +408,7 @@ def entity_delete(request, entity_id):
             title='deleted')
         control.save()
         entity.save()
+        view_post_save.send(sender=Entity, instance=entity)
         return redirect('editor:entities-list')
     return redirect('editor:entity-edit', entity_id=entity_id)
 
@@ -446,6 +447,7 @@ def entity_edit(request, entity_id):
             reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                                collaborative_workspace_editor_type=editor_type)
             form.save()
+            view_post_save.send(sender=Entity, instance=entity)
             url = reverse('editor:entity-edit',
                           kwargs={'entity_id': entity_id}) + '?saved=true'
             return redirect(url)
@@ -594,9 +596,8 @@ def revert(request):
     revision.revert(delete=True)
     for version in revision.version_set.all():
         model = version.content_type.model_class()
-        if model in (Collection, File, Item, Series):
-            record = model.objects.get(pk=version.object_id)
-            view_post_save.send(sender=model, instance=record)
+        obj = model.objects.get(pk=version.object_id)
+        view_post_save.send(sender=model, instance=obj)
     return redirect(request.POST.get('redirect_url'))
 
 

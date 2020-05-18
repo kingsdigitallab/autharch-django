@@ -1,5 +1,8 @@
 """Signals and signal processors.
 
+* Update the search index only when a custom signal is sent.
+* Create an EditorProfile whenever a User is created.
+
 Haystack has a poor interaction with django-polymorphic models and
 django-reversion, in that reverting a Revision that includes an object
 that has an associated search index and is a subclass of a polymorphic
@@ -9,7 +12,10 @@ signal and processor subclass. The signal should be sent from a view
 immediately after a save is made (this includes reversions and
 'deletions').
 
-Create an EditorProfile whenever a User is created.
+Further, since inline forms are saved after the parent, index fields
+that use data from sub-fields doesn't get indexed until the next time
+the parent is saved. This is a serious issue with Entity objects, in
+which almost everything is in related models.
 
 """
 
@@ -19,8 +25,6 @@ import django.dispatch
 
 import haystack.signals
 
-from authority.models import Entity
-
 from .models import EditorProfile
 
 
@@ -29,18 +33,16 @@ view_post_save = django.dispatch.Signal(providing_args=['instance'])
 
 class HaystackRealtimeSignalProcessor(haystack.signals.BaseSignalProcessor):
 
-    """A Haystack signal processor that connects the post_save signal only
-    for Entities, leaving handling of the ArchivalRecord subclasses to the
-    new view_post_save signal."""
+    """A Haystack signal processor that does not connect the post_save
+    signal, leaving handling of index updates to the new
+    view_post_save signal.
+
+    """
 
     def setup(self):
-        signals.post_save.connect(self.handle_save, sender=Entity)
-        signals.post_delete.connect(self.handle_delete)
         view_post_save.connect(self.handle_save)
 
     def teardown(self):
-        signals.post_save.disconnect(self.handle_save, sender=Entity)
-        signals.post_delete.disconnect(self.handle_delete)
         view_post_save.disconnect(self.handle_save)
 
 
