@@ -209,7 +209,7 @@ class FileBase(models.Model):
 
     copyright_status = models.CharField(
         max_length=256, blank=True, help_text=constants.COPYRIGHT_STATUS_HELP)
-    publication_permission = models.TextField('Credit', blank=True, null=True)
+    publication_permission = models.TextField('Credit', blank=True, null=True, help_text=constants.CREDIT_HELP)
     withheld = models.CharField(max_length=256, blank=True, null=True,
                                 help_text=constants.WITHHELD_HELP)
 
@@ -302,5 +302,5 @@ class OriginLocation(models.Model):
     record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
                                related_name='origin_locations')
     location = models.CharField(
-        'location of originals', max_length=256,
+        blank=True, verbose_name='location of originals', max_length=256,
         help_text=constants.LOCATION_OF_ORIGINALS_HELP)

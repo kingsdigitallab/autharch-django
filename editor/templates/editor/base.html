@@ -79,8 +79,9 @@
     {% endblock footer %}
     {% block end_js %}
     <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'js/richtext/jquery.richtext.min.js' %}"></script>
     <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
+    <script src="{% static 'js/simplePagination/jquery.simplePagination.js' %}"></script>
     <script src="{% static 'js/ckeditor/adapters/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'js/select2/select2.min.js' %}"></script>
@@ -92,6 +93,7 @@
     <script src="{% static 'js/tablesorter/addons/pager/jquery.tablesorter.pager.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     {% endblock end_js %}
-    {% block extra_js %}{% endblock extra_js %}
+    {% block extra_js %}
+    {% endblock extra_js %}
   </body>
 </html>

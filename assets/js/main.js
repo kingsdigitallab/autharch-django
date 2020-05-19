@@ -46,46 +46,24 @@ $(document).ready(function() {
     }
   });
 
-  // ADD-ONS
-
-  // Change textareas to richtext fields. A unique ID must be
-  // provided for each, to avoid the contents being duplicated.
-  $('.richtext').each(function(index) {
-    $(this).richText({
-      imageUpload:false,
-      fileUpload:false,
-      videoEmbed:false,
-      code:false,
-      id: "richText-" + index
-    });
+  // SELECT-WITH-SEARCH
+  // add search bar to the select dropdown
+  $(".select-with-search").select2( {
+    placeholder: "Select",
+    allowClear: true
+  } );
+  //add aria-label to select2 input
+  $('.select2-search__field').attr('aria-label', 'select with search');
+  $('.select2-selection__rendered').attr('aria-label', 'select2-selection__rendered');
+  $('.select2-selection--multiple').attr({
+    'aria-label': 'select2-selection--multiple',
+    'role': 'list'
+  });
+  $('.select2-selection--single').attr({
+    'role': 'list'
   });
 
-  // add aria-labels to richtext areas
-  $('.richtext').attr('aria-label', 'richtext editor');
-
-  // add unique id to toolbar elements
-  $('.richText-toolbar').each(function(i) {
-    $(this).find('li').each(function(j) {
-      var updatedId = $(this).find("[for^=richText-]").attr('id')+'-'+i+'-'+j;
-      $(this).find("label").attr('for', updatedId);
-      $(this).find("[id^=richText-]").attr('id', updatedId);
-      $(this).find("[id^=openIn]").attr({
-        'id': $(this).find("[id^=openIn]").attr('id')+'-'+i+'-'+j,
-        'aria-label': 'richText-form-item'
-      });
-    });
-    $(this).find(".richText-form-item").each(function(k) {
-      $(this).find("input").attr({
-        'id': $(this).find("input").attr('id')+'-'+i+'-'+k,
-        'aria-label': 'id'
-      });
-    });
-  });
-
-  //TRANSCRIPTIONS
-  $( 'textarea.richtext-transcription' ).ckeditor();
-
-  // add pagination to all tables
+  // TABLE PAGINATION
   $('table').each(function(i, el) {
     $.tablesorter.customPagerControls({
       table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
@@ -114,41 +92,19 @@ $(document).ready(function() {
         container: $("#"+$(el).parent(".table-container").next('.pager').attr('id')),
         size: 10
       });
-
     //  make sure that corrent 'rows per page' number is active
     var rowsPerPage = $("#"+$(el).attr('id')).find("tbody > tr").filter(function() {
       return $(this).css('display') !== 'none';
     }).length;
     var label = 0;
-    if (rowsPerPage <= 10) {
-      label = 10;
-    }
-    else if (rowsPerPage <= 25) {
-      label = 25;
-    }
-    else if (rowsPerPage <= 50) {
-      label = 50;
-    }
-    else {
-      label = 100;
+    var rows = [10, 25, 50, 100];
+    for (var i = 0; i < rows.length; i++) {
+      if (rowsPerPage <= rows[i]) {
+        label = rows[i];
+        break;
+      }
     }
     $("#"+$(el).attr('id')).parent('.table-container').next(".pager").find("a[data-label='"+label+"']").addClass("current");
-  });
-
-  // add search bar to the select dropdown
-  $(".select-with-search").select2( {
-    placeholder: "Select",
-    allowClear: true
-  } );
-  //add aria-label to select2 input
-  $('.select2-search__field').attr('aria-label', 'select with search');
-  $('.select2-selection__rendered').attr('aria-label', 'select2-selection__rendered');
-  $('.select2-selection--multiple').attr({
-    'aria-label': 'select2-selection--multiple',
-    'role': 'list'
-  });
-  $('.select2-selection--single').attr({
-    'role': 'list'
   });
 
   // optional functionality (can be removed if needed) - dynamic styling of the sections
@@ -173,13 +129,13 @@ $(document).ready(function() {
     }
   });
   
+  //FILTERS
   // add clear all filters button when one of the facet options is selected
   if ($('.checkbox-anchor').children('input[type=checkbox]:checked').length > 0) {
     $('.clear-filters').addClass('active');
   } else {
     $('.clear-filters').removeClass('active');
   }
-
   // reduce the filter list size by adding the show all button
   $('.filter-list').each(function() {
     if ($(this).children("a").length > 5) {
@@ -187,7 +143,6 @@ $(document).ready(function() {
       $(this).append(`<button class="button-link show-more" onclick="toggleFilters('`+$(this).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+$(this).children("a").length+`)</button>`);
     }
   });
-
   // search in filter options and display options that match the query
   $('.instant-search').on('focus', function (el) {
     var filterOptions = $(el.target).siblings('.checkbox-anchor');
@@ -210,39 +165,47 @@ $(document).ready(function() {
       }
     })  
   });
-
   setUpCreationYearSlider();
 
+  //TRANSCRIPTIONS
+  $( 'textarea.richtext-transcription' ).ckeditor();
   //wait for cke_transcription to load
   setTimeout(function() {
-    var transcriptions = $("div[id^=cke_id_transcription]").length;
-    $("div[id^=cke_id_transcription]:not(:first)").css('display', 'none');
-    for (var i = 0; i < transcriptions; i++) {
-      $('.rte-pagination').append('<button class="button-link" onclick="showTranscription('+i+')">'+(i+1)+'</button>');
-    }
-    $('.rte-pagination > button:eq(0)').addClass('current');
-
+    $("div[id^=cke_id_transcription]:not(:first)").hide();
+    $('#rte-pagination').pagination({
+      items: $("div[id^=cke_id_transcription]").length,
+      itemsOnPage: 1,
+      useAnchors: false,
+      displayedPages: 3,
+      prevText: ' ',
+      nextText: ' ',
+      ellipsePageSet: false,
+      onPageClick: function(pageNumber, event) {
+        $("div[id^=cke_id_transcription]").hide();
+        $("div[id^=cke_id_transcription-"+(pageNumber-1)+"]").css('display', 'block');
+        viewer.goToPage(pageNumber-1);
+      }
+    });
   }, 1000);
 
+  // RICHTEXT FIELDS
+  tinymce.init({
+    selector: '.richtext',
+    menubar: '',
+    content_style: ".mce-content-body {font-size:14px;font-family:Roboto,sans-serif;}",
+    plugins: 'charmap image media link table lists code',
+    toolbar: 'bold italic underline strikethrough | insertfile image media link | table | formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | charmap | removeformat | undo redo | code',
+  });
+
+  // SAVE ADMIN TABLE BUTTON
   // enable Save admin table button once one of the input fields is clicked
   $('.admin-table').find('label').on('click', function() {
     if ($('.save-admin-table').hasClass('none')) {
       $('.save-admin-table').removeClass('none');
     }
   });
-
+  
 });
-
-// show transcription
-function showTranscription(i) {
-  event.preventDefault();
-  $("div[id^=cke_id_transcription]").css('display', 'none');
-  $("div[id^=cke_id_transcription-"+i+"]").css('display', 'block');
-  $('.rte-pagination > button').removeClass('current');
-  $('.rte-pagination > button:eq('+i+')').addClass('current');
-
-}
-
 
 
 // expand/collapse entity/archival record sections
@@ -266,6 +229,7 @@ function toggleFilters(el) {
 
 // hide/show help text on single entity and archival records pages
 function toggleHelpText(el, help_text) {
+  event.preventDefault();
   if ($(el).siblings('p.additional-info').length) {
     // change icon to 'question mark'
     $(el).text("");

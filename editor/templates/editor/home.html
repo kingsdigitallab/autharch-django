@@ -45,7 +45,7 @@
               {% endif %}
               <td>{{ result.publication_status }}
                 {% if result.maintenance_status.title == "deleted" %}
-                  <br>(deleted)
+                   (deleted)
                 {% endif %}
               </td>
               <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
@@ -104,7 +104,7 @@
               <td>
                 {{ record.publication_status }}
                 {% if record.maintenance_status.title == "deleted" %}
-                  <br>(deleted)
+                   (deleted)
                 {% endif %}
               </td>
               <td data-text="{{ record.modified.isoformat }}">{{ record.modified }}</td>
@@ -117,7 +117,7 @@
               <td>
                 {{ entity.control.publication_status }}
                 {% if entity.control.maintenance_status.title == "deleted" %}
-                 <br>(deleted)
+                 (deleted)
                 {% endif %}
               </td>
               <td data-text="{{ entity.modified.isoformat }}">{{ entity.modified }}</td>

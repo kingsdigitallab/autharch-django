@@ -106,7 +106,7 @@
           <tr>
             <td class="description archival-record"><a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
             <!-- display writers as a string compiled out of all writers listed in the document. -->
-            <td>{{ result.writers_display|default_if_none:"" }}</td>
+            <td class="description">{{ result.writers_display|default_if_none:"Addington, Henry; First Lord of the Treasury and Chancellor of the Exchequer, Addington, Henry, 1757-1844, 1st Viscount Sidmouth" }}</td>
             <td>{{ result.archival_level }}</td>
             <td>{{ result.publication_status }}</td>
             <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>

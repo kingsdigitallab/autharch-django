@@ -66,30 +66,26 @@
             </div>
           </div>
           <div class="fieldset-body expand">
-            <div class="two-column-table">
+            <div class="two-column-table" id="transcription-section">
               <div id="openseadragon1" class="image">
                   <div id="navigation-pane">
-                      <span class="nav-icon" id="prev"></span>
-                    <div>
                       <span class="nav-icon" id="zoom-in"></span>
                       <span class="nav-icon" id="zoom-out"></span>
                       <span class="nav-icon" id="default"></span>
                       <span class="nav-icon" id="full-mode"></span>
-                    </div>
-                    <span class="nav-icon" id="next"></span>
                   </div>
               </div>
               <div id="transcription">
-                  {% with transcriptions=form.formsets.transcriptions %}
-                    {{ transcriptions.management_form }}
-                    {% for transcription in transcriptions.forms %}
-                      {% render_field transcription.id %}
-                      {{ transcription.transcription }}
-                    {% endfor %}
-                  {% endwith %}
-                <div class="rte-pagination"></div>
+                {% with transcriptions=form.formsets.transcriptions %}
+                  {{ transcriptions.management_form }}
+                  {% for transcription in transcriptions.forms %}
+                    {% render_field transcription.id %}
+                    {{ transcription.transcription }}
+                  {% endfor %}
+                {% endwith %}
               </div>
             </div>
+            <div id="rte-pagination"></div>
           </div>
         </fieldset>
       </div>
@@ -302,21 +298,21 @@
   var viewer = OpenSeadragon({
       id: "openseadragon1",
       prefixUrl: "{% static 'js/openseadragon/images/' %}",
-      zoomInButton:   "zoom-in",
-      zoomOutButton:  "zoom-out",
-      homeButton:     "default",
+      sequenceMode: true,
+      zoomInButton: "zoom-in",
+      zoomOutButton: "zoom-out",
+      homeButton: "default",
       fullPageButton: "full-mode",
-      nextButton:     "next",
-      prevButton: "prev",
-      tileSources: {
-        height: 1760,
-        width:  1400,
-        tileSize: 1760,
-        minLevel: 11,
-        getTileUrl: function(){
-            return "{% static 'images/GEO_ADD_15_0855_001.jpg' %}";
-        }
-      }
+      tileSources: [
+        {
+          type: 'image',
+          url: "{% static 'images/GEO_ADD_15_0855_001.jpg' %}"
+        },
+        {
+          type: 'image',
+          url: "{% static 'images/GEO_ADD_15_0857l_001.jpg' %}"
+        },
+    ]
   });
 </script>
 {% endblock extra_js %}
