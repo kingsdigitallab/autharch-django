@@ -218,7 +218,8 @@ class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     queryset = SearchQuerySet().models(
         Collection, Entity, File, Item, Series).filter(
             maintenance_status='deleted')
-    facet_fields = ['entity_type']
+    facet_fields = ['addressees', 'archival_level', 'entity_type', 'languages',
+                    'writers']
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

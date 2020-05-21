@@ -19,12 +19,51 @@
             <div class="filters-hidden">
             <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
                 <div class="filters">
-                    <fieldset class="filter-list">
+                  <fieldset class="filter-list" id="document-level-filter">
+                    <legend>Document level</legend>
+                    {% if facets.fields.archival_level|length > 7 %}
+                    <input type="text" name="search-archivalLevel" aria-label="search archival level" class="instant-search" placeholder="Search archival level" onfocus="this.placeholder=''" onblur="this.placeholder='Search archival level'"/>
+                    {% endif %}
+                    {% for archival_level in facets.fields.archival_level %}
+                    {% render_facet archival_level %}
+                    {% endfor %}
+                  </fieldset>
+                  <fieldset class="filter-list" id="writer-filter">
+                    <legend>Writer</legend>
+                    {% if facets.fields.writers|length > 7 %}
+                    <input type="text" name="search-writer" aria-label="search writer" class="instant-search" placeholder="Search writer" onfocus="this.placeholder=''" onblur="this.placeholder='Search writer'"/>
+                    {% endif %}
+                    {% for writer in facets.fields.writers %}
+                    {% render_facet writer %}
+                    {% endfor %}
+                  </fieldset>
+                  <fieldset class="filter-list" id="addressee-filter">
+                    <legend>Addressee</legend>
+                    {% if facets.fields.addressees|length > 7 %}
+                    <input type="text" name="search-addressee" aria-label="search addressee" class="instant-search" placeholder="Search addressee" onfocus="this.placeholder=''" onblur="this.placeholder='Search addressee'"/>
+                    {% endif %}
+                    {% for addressee in facets.fields.addressees %}
+                    {% render_facet addressee %}
+                    {% endfor %}
+                  </fieldset>
+                  <fieldset class="filter-list" id="language-filter">
+                    <legend>Language</legend>
+                    {% if facets.fields.languages|length > 7 %}
+                    <input type="text" name="search-language" aria-label="search language" class="instant-search" placeholder="Search language" onfocus="this.placeholder=''" onblur="this.placeholder='Search language'"/>
+                    {% endif %}
+                    {% for language in facets.fields.languages %}
+                    {% render_facet language %}
+                    {% endfor %}
+                  </fieldset>
+                  <fieldset class="filter-list" id="entity-type-filter">
                     <legend>Entity type</legend>
+                    {% if facets.fields.entity_type|length > 7 %}
+                    <input type="text" name="search-entityType" aria-label="search entity type" class="instant-search" placeholder="Search entity type" onfocus="this.placeholder=''" onblur="this.placeholder='Search entity type'"/>
+                    {% endif %}
                     {% for entity_type in facets.fields.entity_type %}
                     {% render_facet entity_type %}
                     {% endfor %}
-                    </fieldset>
+                  </fieldset>
                 </div>
             </div>
         </div>
