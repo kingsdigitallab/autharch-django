@@ -17,7 +17,6 @@
             <th>User</th>
             <th>Status</th>
             <th>Logged comment</th>
-            <th>Changes</th>
             <th></th>
           </tr>
         </thead>
@@ -31,7 +30,6 @@
               Maintenance status: {{ maintenance_status }}<br>
              Editing event type: {{ revision.revision_metadata.editing_event_type }}</td>
             <td class="description">{{ revision.comment }}</td>
-            <td class="description">QAZ</td>
             <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Reset</button></td>
             {% endwith %}
           </tr>
