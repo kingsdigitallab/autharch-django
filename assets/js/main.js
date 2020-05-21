@@ -169,7 +169,7 @@ $(document).ready(function() {
 
   //TRANSCRIPTIONS
   $( 'textarea.richtext-transcription' ).ckeditor();
-  //wait for cke_transcription to load
+  //wait for cke_transcription to load - OL todo: try with Promise
   setTimeout(function() {
     $("div[id^=cke_id_transcription]:not(:first)").hide();
     $('#rte-pagination').pagination({
@@ -182,20 +182,26 @@ $(document).ready(function() {
       ellipsePageSet: false,
       onPageClick: function(pageNumber, event) {
         $("div[id^=cke_id_transcription]").hide();
-        $("div[id^=cke_id_transcription-"+(pageNumber-1)+"]").css('display', 'block');
+        $("div[id=cke_id_transcription-"+(pageNumber-1)+"]").css('display', 'block');
         viewer.goToPage(pageNumber-1);
       }
     });
-  }, 1000);
+  }, 1500);
 
   // RICHTEXT FIELDS
   tinymce.init({
-    selector: '.richtext',
     menubar: '',
     content_style: ".mce-content-body {font-size:14px;font-family:Roboto,sans-serif;}",
     plugins: 'charmap image media link table lists code',
     toolbar: 'bold italic underline strikethrough | insertfile image media link | table | formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | charmap | removeformat | undo redo | code',
   });
+  // initialise TinyMCE for all visible editors
+  $('.richtext').each(function () {
+    if (!$(this).attr('id').includes("prefix")) {
+      tinymce.EditorManager.execCommand('mceAddEditor', true, $(this).attr('id'));
+    }
+  });
+  
 
   // SAVE ADMIN TABLE BUTTON
   // enable Save admin table button once one of the input fields is clicked
@@ -314,6 +320,9 @@ function addEmptyForm(formType, context) {
         placeholder: "Select",
         allowClear: true
       } );
+    }
+    if ($(this).hasClass("richtext")) {
+      tinymce.EditorManager.execCommand('mceAddEditor', true, $(this).attr('id'));
     }
   });
   // The management form for the formset of the new form must have its

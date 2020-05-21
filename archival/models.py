@@ -240,7 +240,7 @@ class File(ArchivalRecord, SeriesBase, FileBase):
         related_name='files_as_relations')
     places_as_relations = models.ManyToManyField(
         Place, verbose_name="Receiving address", blank=True,
-        related_name='files_as_relations')
+        related_name='files_as_relations', help_text=constants.PLACE_OF_WRITING_HELP)
 
     def __str__(self):
         return self.title
@@ -258,13 +258,13 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
         related_name='items_created')
     creation_places = models.ManyToManyField(
         Place, verbose_name="Place of writing", related_name='items_created',
-        blank=True)
+        blank=True, help_text=constants.PLACE_OF_WRITING_HELP)
     persons_as_relations = models.ManyToManyField(
         Entity, verbose_name="Addressee", blank=True,
         related_name='items_as_relations')
     places_as_relations = models.ManyToManyField(
         Place, verbose_name="Receiving address", blank=True,
-        related_name='items_as_relations')
+        related_name='items_as_relations', help_text=constants.PLACE_OF_WRITING_HELP)
 
     def __str__(self):
         return self.title
