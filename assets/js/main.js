@@ -168,6 +168,7 @@ $(document).ready(function() {
   setUpCreationYearSlider();
 
   //TRANSCRIPTIONS
+  //hide all transcriptions and generate ckeditor for the first transcription on the list
   $( 'textarea.richtext-transcription' ).hide();
   $( 'textarea#id_transcription-0-transcription' ).ckeditor();
   $('#rte-pagination').pagination({
