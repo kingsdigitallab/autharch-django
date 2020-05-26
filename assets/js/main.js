@@ -168,25 +168,23 @@ $(document).ready(function() {
   setUpCreationYearSlider();
 
   //TRANSCRIPTIONS
-  $( 'textarea.richtext-transcription' ).ckeditor();
-  //wait for cke_transcription to load - OL todo: try with Promise
-  setTimeout(function() {
-    $("div[id^=cke_id_transcription]:not(:first)").hide();
-    $('#rte-pagination').pagination({
-      items: $("div[id^=cke_id_transcription]").length,
-      itemsOnPage: 1,
-      useAnchors: false,
-      displayedPages: 3,
-      prevText: ' ',
-      nextText: ' ',
-      ellipsePageSet: false,
-      onPageClick: function(pageNumber, event) {
-        $("div[id^='cke_id_transcription']").hide();
-        $("div[id='cke_id_transcription-"+(pageNumber-1)+"-transcription']").css('display', 'block');
-        viewer.goToPage(pageNumber-1);
-      }
-    });
-  }, 1500);
+  $( 'textarea.richtext-transcription' ).hide();
+  $( 'textarea#id_transcription-0-transcription' ).ckeditor();
+  $('#rte-pagination').pagination({
+    items: $("textarea.richtext-transcription").length,
+    itemsOnPage: 1,
+    useAnchors: false,
+    displayedPages: 3,
+    prevText: ' ',
+    nextText: ' ',
+    ellipsePageSet: false,
+    onPageClick: function(pageNumber, event) {
+      $("div[id^=cke_id_transcription]").hide();
+      $("textarea#id_transcription-"+(pageNumber-1)+"-transcription").ckeditor();
+      $("div[id='cke_id_transcription-"+(pageNumber-1)+"-transcription']").css('display', 'block');
+      viewer.goToPage(pageNumber-1);
+    }
+  });
 
   // RICHTEXT FIELDS
   tinymce.init({
