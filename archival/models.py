@@ -124,9 +124,9 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
     language = models.ForeignKey(Language, on_delete=models.PROTECT,
-                                 related_name='record_control_languages')
+                                 related_name='record_control_languages', verbose_name="Record language")
     script = models.ForeignKey(Script, on_delete=models.PROTECT,
-                               related_name='record_control_scripts')
+                               related_name='record_control_scripts', verbose_name="Record script")
 
     sources = models.TextField(blank=True, null=True)
 

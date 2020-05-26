@@ -224,7 +224,7 @@ function toggleFilters(el) {
   $('#'+el).children(".show-more").remove();
   if ($('#'+el).children("a[style='display: none;']").length) {
     $('#'+el).children("a").show();
-    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Hide</button>`);
+    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Show less</button>`);
   }
   else {
     $('#'+el).children("a").slice(5, $('#'+el).children("a").length).hide();

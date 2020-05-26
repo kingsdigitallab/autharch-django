@@ -104,26 +104,10 @@
           <div class="fieldset-body expand">
             <div class="two-column-table">
               <div>
-                {% render_field form.repository %}
-                <label>
-                  <span class="required">Repository code</span>
-                  <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
-                </label>
+                {% render_field form.references %}
                 {% render_field form.parent_series %}
                 {% render_field form.parent_file %}
-                {% render_field form.references %}
-                {% render_field form.cataloguer %}
-              </div>
-              <div>
-                <label>
-                  <span class="required">Archival level</span>
-                  <select name="archival-level" disabled="disabled">
-                    <option>{{ record.archival_level }}</option>
-                  </select>
-                </label>
-                {% render_field form.record_type %}
-                {% render_field form.rcin %}
-                {% render_field form.url %}
+                {% render_field form.related_materials %}
                 <div class="formset">
                   {% with origin_locations=form.formsets.origin_locations %}
                   <div class="management_form">
@@ -139,8 +123,20 @@
                     <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('origin_location', this)">Add location of originals
                   </label>
                 </div>
-                {% render_field form.related_materials %}
-                {% render_field form.description_date %}
+                {% render_field form.publications %}
+              </div>
+              <div>
+                {% render_field form.repository %}
+                <label>
+                  <span class="required">Archival level</span>
+                  <select name="archival-level" disabled="disabled">
+                    <option>{{ record.archival_level }}</option>
+                  </select>
+                </label>
+                {% render_field form.record_type %}
+                {% render_field form.url %}
+                {% render_field form.withheld %}
+                {% render_field form.publication_permission %}
               </div>
             </div>
           </div>
@@ -160,14 +156,12 @@
             <div class="two-column-table">
               <div>
                 {% render_field form.title %}
+                {% render_field form.creation_dates %}
+                {% render_field form.creation_dates_notes %}
                 <div class="two-column-table date">
                   {% render_field form.start_date %}
                   {% render_field form.end_date %}
                 </div>
-                {% render_field form.creation_dates %}
-                {% render_field form.creation_dates_notes %}
-                {% render_field form.extent %}
-                {% render_field form.languages %}
               </div>
               <div>
                 {% render_field form.creators %}
@@ -177,42 +171,45 @@
               </div>
             </div>
             {% render_field form.description %}
+            <div class="two-column-table">
+              <div>
+                {% render_field form.languages %}
+                {% render_field form.physical_description %}
+              </div>
+              <div>
+                {% render_field form.extent %}
+                {% render_field form.provenance %}
+              </div>
+            </div>
             {% render_field form.notes %}
             <div class="two-column-table">
               <div>
-                {% render_field form.physical_description %}
+                
               </div>
             </div>
             {% render_field form.administrative_history %}
             <div class="two-column-table">
               <div>
                 {% render_field form.subjects %}
-                {% render_field form.organisations_as_subjects %}
-                {% render_field form.arrangement %}
+                {% render_field form.places_as_subjects %}
               </div>
               <div>
                 {% render_field form.persons_as_subjects %}
-                {% render_field form.places_as_subjects %}
-                {% render_field form.provenance %}
+                {% render_field form.organisations_as_subjects %}
               </div>
             </div>
+            {% render_field form.arrangement %}
           </div>
         </fieldset>
       </div>
 
       <div class="form-section">
-        <h2>ACCESS</h2>
+        <h2>ADMINISTRATIVE METADATA</h2>
 
         <fieldset>
           <div class="fieldset-header">
             <h4>
-              {% if record.withheld %}
-                {{ record.withheld }} | 
-              {% elif record.copyright_status %} 
-                {{ record.copyright_status }}
-              {% else %}
-                Access
-              {% endif %}
+                Administrative metadata
             </h4>
 
             <div>
@@ -222,12 +219,16 @@
           <div class="fieldset-body expand">
             <div class="two-column-table">
               <div>
-                {% render_field form.publications %}
+                <label>
+                  <span class="required">Repository code</span>
+                  <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
+                </label>
+                {% render_field form.rcin %}
+                {% render_field form.copyright_status %}
               </div>
               <div>
-                {% render_field form.copyright_status %}
-                {% render_field form.withheld %}
-                {% render_field form.publication_permission %}
+                {% render_field form.cataloguer %}
+                {% render_field form.description_date %}
               </div>
             </div>
           </div>
@@ -235,7 +236,7 @@
       </div>
 
       <div class="form-section">
-        <h2>CONTROL</h2>
+        <h2>ARCHIVAL RECORD DIGITAL RIGHTS STATEMENT</h2>
 
         <fieldset>
           <div class="fieldset-header">
@@ -248,14 +249,20 @@
             <div class="two-column-table">
               <div>
                 {% render_field form.language %}
-                {% render_field form.rights_declaration_citation %}
               </div>
               <div>
                 {% render_field form.script %}
-                {% render_field form.rights_declaration_abbreviation %}
               </div>
             </div>
             {% render_field form.rights_declaration %}
+            <div class="two-column-table">
+              <div>
+                {% render_field form.rights_declaration_citation %}
+              </div>
+              <div>
+                {% render_field form.rights_declaration_abbreviation %}
+              </div>
+            </div>
           </div>
         </fieldset>
       </div>
