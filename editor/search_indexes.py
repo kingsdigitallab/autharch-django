@@ -18,7 +18,8 @@ class ArchivalRecordIndex:
         return year
 
     def prepare_addressees(self, obj):
-        return list(obj.creators.distinct().values_list('pk', flat=True))
+        return list(obj.persons_as_relations.distinct().values_list(
+            'pk', flat=True))
 
     def prepare_dates(self, obj):
         start_year = self._get_year_from_date(obj.start_date)
