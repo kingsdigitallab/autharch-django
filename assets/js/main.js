@@ -181,8 +181,8 @@ $(document).ready(function() {
       nextText: ' ',
       ellipsePageSet: false,
       onPageClick: function(pageNumber, event) {
-        $("div[id^=cke_id_transcription]").hide();
-        $("div[id=cke_id_transcription-"+(pageNumber-1)+"]").css('display', 'block');
+        $("div[id^='cke_id_transcription']").hide();
+        $("div[id='cke_id_transcription-"+(pageNumber-1)+"-transcription']").css('display', 'block');
         viewer.goToPage(pageNumber-1);
       }
     });
