@@ -478,6 +478,8 @@ class ArchivalRecordEditForm(ContainerModelForm):
             # to exist.
             try:
                 self.fields[field].disabled = True
+                if field == 'rights_declaration':
+                    self.fields[field].widget = forms.Textarea()
             except KeyError:
                 pass
         if editor_role == EditorProfile.EDITOR:
