@@ -179,7 +179,8 @@ class HomeView(UserPassesTestMixin, SearchView):
     def _get_unpublished_records(self, user):
         entities = None
         records = None
-        if user.editor_profile.role == EditorProfile.ADMIN:
+        if user.editor_profile.role in (EditorProfile.ADMIN,
+                                        EditorProfile.MODERATOR):
             entities = Entity.objects.exclude(
                 control__publication_status__title='published').exclude(
                     control__maintenance_status__title='deleted')
