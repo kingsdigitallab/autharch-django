@@ -523,6 +523,9 @@ def record_delete(request, record_id):
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     editor_role = request.user.editor_profile.role
+    is_admin = False
+    if editor_role == EditorProfile.ADMIN:
+        is_admin = True
     # For the simplified editing workflow, Editors can edit objects
     # regardless of their publication or maintenance status.
     #
@@ -566,6 +569,7 @@ def record_edit(request, record_id):
                               kwargs={'record_id': record_id}),
         'form': form,
         'images': record.transcription_images.all(),
+        'is_admin': is_admin,
         'is_deleted': is_deleted,
         'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,

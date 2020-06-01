@@ -219,10 +219,12 @@
           <div class="fieldset-body expand">
             <div class="two-column-table">
               <div>
+                {% if is_admin %}
                 <label>
                   <span class="required">Repository code</span>
                   <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
                 </label>
+                {% endif %}
                 {% render_field form.rcin %}
                 {% render_field form.copyright_status %}
               </div>
