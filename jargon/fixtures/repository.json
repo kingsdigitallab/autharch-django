@@ -1,0 +1,22 @@
+[
+{
+  "model": "jargon.repository",
+  "pk": 1,
+  "fields": {
+    "created": "2020-06-02T14:40:27.855Z",
+    "modified": "2020-06-02T14:40:27.855Z",
+    "title": "Royal Archives",
+    "code": 262
+  }
+},
+{
+  "model": "jargon.repository",
+  "pk": 2,
+  "fields": {
+    "created": "2020-06-02T14:40:27.855Z",
+    "modified": "2020-06-02T14:40:27.855Z",
+    "title": "Royal Library",
+    "code": 262
+  }
+}
+]
