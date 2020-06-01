@@ -610,9 +610,10 @@ def user_create(request):
         profile_form = EditorProfileForm(request.POST)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
+            # EditorProfile is created automatically via signal.
             role = profile_form.cleaned_data['role']
-            profile = EditorProfile(user=user, role=role)
-            profile.save()
+            user.editor_profile.role = role
+            user.editor_profile.save()
             return redirect('editor:account-control')
     else:
         user_form = UserCreateForm()
