@@ -42,12 +42,14 @@
             <h4>Archival records</h4>
           </a>
         </div>
+        {% if show_delete %}
         <div class="link{% if current_section == 'deleted' %} active{% endif %}">
           <a href="{% url 'editor:deleted-list' %}">
             <i class="far fa-trash-alt"></i>
             <h4>Deleted</h4>
           </a>
         </div>
+        {% endif %}
       </div>
       <div id="menu-account">
         <div class="link{% if current_section == 'account' %} active{% endif %}">

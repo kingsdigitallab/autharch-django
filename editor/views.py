@@ -35,6 +35,10 @@ from .models import EditorProfile, RevisionMetadata
 from .signals import view_post_save
 
 
+def can_show_delete_page(profile_role):
+    return profile_role in (EditorProfile.ADMIN, EditorProfile.MODERATOR)
+
+
 def is_user_admin(user):
     try:
         return user.editor_profile.role == EditorProfile.ADMIN
@@ -46,6 +50,14 @@ def is_user_editor_plus(user):
     try:
         return user.editor_profile.role in (
             EditorProfile.ADMIN, EditorProfile.MODERATOR, EditorProfile.EDITOR)
+    except AttributeError:
+        return False
+
+
+def is_user_moderator_plus(user):
+    try:
+        return user.editor_profile.role in (
+            EditorProfile.ADMIN, EditorProfile.MODERATOR)
     except AttributeError:
         return False
 
@@ -156,6 +168,7 @@ class HomeView(UserPassesTestMixin, SearchView):
         entities, records = self._get_unpublished_records(user)
         context['unpublished_entities'] = entities
         context['unpublished_records'] = records
+        context['show_delete'] = can_show_delete_page(user.editor_profile.role)
         return context
 
     def _get_ids_from_version_for_user(self, model, user):
@@ -206,6 +219,8 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         context['current_section'] = 'entities'
         context['facets'] = self._merge_facets(context['facets'],
                                                self.request.GET.copy())
+        context['show_delete'] = can_show_delete_page(
+            self.request.user.editor_profile.role)
         return context
 
     def test_func(self):
@@ -227,10 +242,12 @@ class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         context['current_section'] = 'deleted'
         context['facets'] = self._merge_facets(context['facets'],
                                                self.request.GET.copy())
+        context['show_delete'] = can_show_delete_page(
+            self.request.user.editor_profile.role)
         return context
 
     def test_func(self):
-        return is_user_editor_plus(self.request.user)
+        return is_user_moderator_plus(self.request.user)
 
 
 class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
@@ -267,6 +284,8 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         context['writer_manager'] = Entity.objects
         context['year_remove_link'] = self._create_unapply_year_link(
             self.request.GET)
+        context['show_delete'] = can_show_delete_page(
+            self.request.user.editor_profile.role)
         return context
 
     def get_form_kwargs(self):
@@ -347,6 +366,7 @@ def account_control(request):
         'saved_all_users': saved_all_users,
         'saved_password': saved_password,
         'saved_user': saved_user,
+        'show_delete': can_show_delete_page(user.editor_profile.role),
         'user': user,
         'user_form': user_form,
     }
@@ -381,6 +401,7 @@ def entity_create(request):
     context = {
         'current_section': 'entities',
         'form': form,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
     }
     return render(request, 'editor/entity_create.html', context)
 
@@ -469,6 +490,7 @@ def entity_edit(request, entity_id):
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
         'saved': saved,
+        'show_delete': can_show_delete_page(editor_role),
     }
     return render(request, 'editor/entity_edit.html', context)
 
@@ -484,6 +506,7 @@ def entity_history(request, entity_id):
         'item': entity,
         'maintenance_status': control.maintenance_status,
         'publication_status': control.publication_status,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
         'versions': Version.objects.get_for_object(entity),
     }
     return render(request, 'editor/history.html', context)
@@ -523,9 +546,7 @@ def record_delete(request, record_id):
 def record_edit(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     editor_role = request.user.editor_profile.role
-    is_admin = False
-    if editor_role == EditorProfile.ADMIN:
-        is_admin = True
+    is_admin = editor_role == EditorProfile.ADMIN
     # For the simplified editing workflow, Editors can edit objects
     # regardless of their publication or maintenance status.
     #
@@ -575,6 +596,7 @@ def record_edit(request, record_id):
         'log_form': log_form,
         'record': record,
         'saved': saved,
+        'show_delete': can_show_delete_page(editor_role),
     }
     return render(request, 'editor/record_edit.html', context)
 
@@ -589,6 +611,7 @@ def record_history(request, record_id):
         'item': record,
         'maintenance_status': record.maintenance_status,
         'publication_status': record.publication_status,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
         'versions': Version.objects.get_for_object(record),
     }
     return render(request, 'editor/history.html', context)
