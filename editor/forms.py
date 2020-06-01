@@ -266,6 +266,9 @@ class SourceEditInlineForm(forms.ModelForm):
     class Meta:
         exclude = []
         model = Source
+        widgets = {
+            'name': forms.Textarea(attrs=RICHTEXT_ATTRS)
+        }
 
 
 class BiographyHistoryEditInlineForm(forms.ModelForm):

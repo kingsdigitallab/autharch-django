@@ -225,7 +225,8 @@ class BiographyHistory(TimeStampedModel):
     structure_or_genealogy = models.TextField(
         blank=True, null=True,
         help_text=constants.BIOGRAPHY_STRUCTURE_GENEALOGY_HELP)
-    sources = models.TextField(blank=True, null=True)
+    sources = models.TextField(blank=True, null=True,
+                                 help_text=constants.BIOGRAPHY_SOURCES_HELP)
     copyright = models.TextField(blank=True, null=True,
                                  help_text=constants.BIOGRAPHY_COPYRIGHT_HELP)
 
@@ -312,9 +313,9 @@ class Resource(TimeStampedModel):
         ResourceRelationType, verbose_name="Resource relationship type",
         on_delete=models.PROTECT,
         help_text=constants.RESOURCE_RELATIONSHIP_TYPE_HELP)
-    url = models.URLField(verbose_name="URL", null=True)
+    url = models.URLField(blank=True, verbose_name="URL", null=True)
     citation = models.TextField()
-    notes = models.TextField(null=True)
+    notes = models.TextField(blank=True, null=True)
 
 
 @reversion.register(follow=['sources'])
@@ -342,6 +343,6 @@ class Source(TimeStampedModel):
     control = models.ForeignKey(Control, on_delete=models.CASCADE,
                                 related_name="sources")
 
-    name = models.CharField(max_length=256)
+    name = models.TextField(max_length=256, verbose_name="Source")
     url = models.URLField(verbose_name="URL", blank=True, null=True)
     notes = models.TextField(blank=True, null=True)

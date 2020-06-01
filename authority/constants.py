@@ -26,7 +26,9 @@ BIOGRAPHY_ABSTRACT_HELP = 'If only a short biography is available, then it will 
 
 BIOGRAPHY_STRUCTURE_GENEALOGY_HELP = 'This element &quot;encodes information within the description area, information expressing the internal administrative structure(s) of a corporate body and the dates of any changes to that structure that are significant to understanding the way that corporate body conducted affairs (such as dated organization charts), or the genealogy of a family (such as a family tree) in a way that demonstrates the interrelationships of its members with relevant dates&quot;. See structureOrGenealogy at eac.staatsbibliothek-berlin.de.'
 
-BIOGRAPHY_COPYRIGHT_HELP = 'Copyright statements for biographies or histories are to conform to the Creative Commons Licence used throughout the GPP - http://www.chicagomanualofstyle.org/tools_citationguide/citation-guide-1.html.'
+BIOGRAPHY_SOURCES_HELP = "Format citations using the Chicago Style guide - http://www.chicagomanualofstyle.org/tools_citationguide/citation-guide-1.html."
+
+BIOGRAPHY_COPYRIGHT_HELP = "Copyright statements included here relate to a person&rsquo;s or corporate body&rsquo;s biography/history only. Include Creative Commons Licences where these govern reproduction of the material included. If the biography/history is original work in which you wish to assert copyright or include a Creative Commons Licence please contact our GPP academic leads, Arthur Burns or Karin Wulf for more information."
 
 LANGUAGE_HELP = 'This element denotes the language(s) used by an entity.'
 

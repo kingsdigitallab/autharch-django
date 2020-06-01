@@ -17,13 +17,13 @@
   </div>
   <div class="fieldset-body expand inline-deletable">
     {% render_form_delete_widget form.DELETE %}
+    {% render_field form.id %}
+    {% render_field form.name %}
     <div class="two-column-table">
       <div>
-        {% render_field form.id %}
-        {% render_field form.name %}
+        {% render_field form.url %}
       </div>
       <div>
-        {% render_field form.url %}
       </div>
     </div>
     {% render_field form.notes %}
