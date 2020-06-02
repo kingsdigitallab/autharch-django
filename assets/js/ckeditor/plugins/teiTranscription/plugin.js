@@ -31,8 +31,11 @@ function unwrapStartTag(el, tag, className) {
     return html;
 }
 
-function checkWhiteSpace() {
-
+function cleanUp(editorSelection) {
+    checkWhiteSpace();
+    checkAmpersands();
+    checkMissingClasses();
+    removeEmptyTags(editorSelection);
 }
 
 function removeEmptyTags(editorSelection) {
@@ -46,10 +49,25 @@ function removeEmptyTags(editorSelection) {
     }
 }
 
+// TODO
+function checkWhiteSpace() {
+    return false;
+}
+
+// TODO
+function checkAmpersands() {
+    return false;
+}
+
+// TODO
+function checkMissingClasses() {
+    return false;
+}
+
 CKEDITOR.plugins.add( 'teiTranscription', {
-    icons: 'teiPageBreak,teiAdd,teiDel,teiParagraph,teiLineBreak,teiNote,teiUnclear,teiUnderline',
+    icons: 'teiPageBreak,teiAdd,teiDel,teiParagraph,teiLineBreak,teiNote,teiUnclear,teiUnderline,teiFormula,teiFigure,teiCatchwords,teiForeign',
     init: function( editor ) {
-        // TEI-ADD
+        // TEI-ADD <ins class="tei-add"> | <add> </add>
         editor.addCommand( 'teiAdd', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
@@ -69,15 +87,15 @@ CKEDITOR.plugins.add( 'teiTranscription', {
 
                 // unwrap - check class of the parent element; if the same as the class of the embedded icon
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
-                    editor.insertHtml(el.getHtml());
+                    editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
                 else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(el, teiObject.tag, teiObject.className);
+                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
                     editor.insertHtml(newElement);
                 }
                 // wrap - check if any text was selected so as not to embed an empty tag
                 else if (editorSelection.getSelectedText().length > 0) {
-                    //resolve conflicts
+                    //resolve conflicts with parent elements
                     if (commonAncestor.$.className == 'tei-del') {
                         range.deleteContents();
                     }
@@ -88,7 +106,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     return false;
                 }
                 // clean up the script and remove empty tags
-                removeEmptyTags(editorSelection);
+                cleanUp(editorSelection);
             }
         });
         editor.ui.addButton('TeiAdd', {
@@ -97,7 +115,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-add'
         });
 
-        // TEI-DELETE
+        // TEI-DELETE <del class="tei-del"> | <del> </del>
         editor.addCommand( 'teiDelete', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
@@ -116,10 +134,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 }
 
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
-                    editor.insertHtml(el.getHtml());
+                    editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
                 else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(el, teiObject.tag, teiObject.className);
+                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
                     editor.insertHtml(newElement);
                 }
                 else if (editorSelection.getSelectedText().length > 0) {
@@ -133,7 +151,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 else {
                     return false;
                 }
-                removeEmptyTags(editorSelection);
+                cleanUp(editorSelection);
             }
         });
         editor.ui.addButton('TeiDel', {
@@ -142,7 +160,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-del'
         });
 
-        // TEI-UNDERLINE
+        // TEI-UNDERLINE <u class="tei-hi"> |  <hi rend='underline'>  </hi>
         editor.addCommand( 'teiUnderline', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
@@ -161,10 +179,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 }
 
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
-                    editor.insertHtml(el.getHtml());
+                    editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
                 else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(el, teiObject.tag, teiObject.className);
+                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
                     editor.insertHtml(newElement);
                 }
                 else if (editorSelection.getSelectedText().length > 0) {
@@ -174,7 +192,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 else {
                     return false;
                 }
-                removeEmptyTags(editorSelection);
+                cleanUp(editorSelection);
             }
         });
         editor.ui.addButton('TeiUnderline', {
@@ -183,7 +201,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-underline'
         });
 
-        // TEI-NOTE
+        // TEI-NOTE <span class="tei-note"> | <note>  </note>
         editor.addCommand( 'teiNote', {
             exec: function( editor ) {
                 var className = 'tei-note';
@@ -202,7 +220,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 }
                 
                 if (className === commonAncestor.$.className || className === commonAncestor.$.parentElement.className) {
-                    editor.insertHtml(el.getHtml());
+                    editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
                 else if (editorSelection.getSelectedText().length > 0) {
                     var newElement = wrap(teiObject);
@@ -211,7 +229,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 else {
                     return false;
                 }
-                removeEmptyTags(editorSelection);
+                cleanUp(editorSelection);
             }
         });
         editor.ui.addButton('TeiNote', {
@@ -220,7 +238,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-note'
         });
 
-        // TEI-UNCLEAR
+        // TEI-UNCLEAR <span class="tei-unclear"> | <unclear>[unclear]</unclear>
         editor.addCommand( 'teiUnclear', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
@@ -237,8 +255,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     conflictChildren: '.tei-unclear, .tei-p'
                 }
 
+                // TODO - if selection is empty, add [unclear] inside the tag
+
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
-                    editor.insertHtml(el.getHtml());
+                    editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
                 else if (editorSelection.getSelectedText().length > 0) {
                     var newElement = wrap(teiObject);
@@ -247,7 +267,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 else {
                     return false;
                 }
-                removeEmptyTags(editorSelection);
+                cleanUp(editorSelection);
             }
         });
         editor.ui.addButton('TeiUnclear', {
@@ -256,7 +276,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-unclear'
         });
 
-        // TEI-LINEBREAK
+        // TEI-LINEBREAK <br class="tei-lb"> | <lb/>
         editor.addCommand( 'teiLineBreak', {
             exec: function( editor ) {
                 var className = 'tei-lb';
@@ -273,7 +293,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-lb'
         });
 
-        // TEI-PAGEBREAK
+        // TEI-PAGEBREAK <span class="tei-pb"> | <pb n="x">
         editor.addCommand( 'teiPageBreak', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
@@ -298,7 +318,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     editor.insertHtml(html);
                 } 
                 else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(el, teiObject.tag, teiObject.className);
+                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
                     editor.insertHtml(newElement);
                 }
                 else if (editorSelection.getSelectedText().length > 0) {
@@ -308,7 +328,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 else {
                     return false;
                 }
-                removeEmptyTags(editorSelection);
+                cleanUp(editorSelection);
             }
         });
         editor.ui.addButton('TeiPageBreak', {
@@ -317,7 +337,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-pb'
         });
 
-        // TEI-PARAGRAPH
+        // TEI-PARAGRAPH <p class="tei-p"> | <p>
         editor.addCommand( 'teiParagraph', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
@@ -335,7 +355,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     conflictChildren: '.tei-p'
                 }
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
-                    var html = "</p>"+el.getHtml()+"<p class='tei-p'>";
+                    var html = "</p>"+teiObject.elToInsert.getHtml()+"<p class='tei-p'>";
                     range.deleteContents();
                     editor.insertHtml(html);
                 }
@@ -346,7 +366,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 else {
                     return false;
                 }
-                removeEmptyTags(editorSelection);
+                cleanUp(editorSelection);
             }
         });
         editor.ui.addButton('TeiParagraph', {
@@ -354,6 +374,205 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             command: 'teiParagraph',
             toolbar: 'tei-p'
         });
+
+        // TEI-CATCHWORDS <span class="tei-catchwords"> | <catchwords>  </catchwords>
+        editor.addCommand( 'teiCatchwords', {
+            exec: function( editor ) {
+                var editorSelection = editor.getSelection();
+                var range = editorSelection.getRanges()[ 0 ];
+                var el = editor.document.createElement( 'div' );
+                el.append(range.cloneContents());
+                var commonAncestor = editorSelection.getCommonAncestor();
+                var startTag = editorSelection.getStartElement();
+
+                var teiObject = {
+                    elToInsert: el,
+                    tag: 'span',
+                    className: 'tei-catchwords',
+                    additionalAttributes: [],
+                    conflictChildren: '.tei-catchwords'
+                }
+
+                if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
+                    editor.insertHtml(teiObject.elToInsert.getHtml());
+                }
+                else if (teiObject.className === startTag.$.className) {
+                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
+                    editor.insertHtml(newElement);
+                }
+                else if (editorSelection.getSelectedText().length > 0) {
+                    var newElement = wrap(teiObject);
+                    editor.insertElement(newElement);
+                }
+                else {
+                    return false;
+                }
+                cleanUp(editorSelection);
+            }
+        });
+        editor.ui.addButton('teiCatchwords', {
+            label: 'tei-catchwords: indicates annotations at the foot of the page',
+            command: 'teiCatchwords',
+            toolbar: 'tei-catchwords'
+        });
+
+        // TEI-FORMULA <span class="tei-formula">[mathematical formula or graphic depicted in document]</span> | <formula> [mathematical formula or graphic depicted in document] </formula>
+        editor.addCommand( 'teiFormula', {
+            exec: function( editor ) {
+                var teiObject = {
+                    elToInsert: '[mathematical formula or graphic depicted in document]',
+                    tag: 'span',
+                    className: 'tei-formula',
+                    additionalAttributes: [],
+                    conflictChildren: '.tei-formula'
+                }
+                var editorSelection = editor.getSelection();
+                var range = editorSelection.getRanges()[ 0 ];
+
+                var commonAncestor = editorSelection.getCommonAncestor();
+
+                // remove the formula reference completely
+                if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
+                    commonAncestor.remove();
+                }
+                // embed
+                else {
+                    var newElement = new CKEDITOR.dom.element(teiObject.tag);
+                    newElement.setAttributes({class: teiObject.className});
+                    newElement.setHtml(teiObject.elToInsert);
+                    range.insertNode(newElement);
+                }
+                cleanUp(editorSelection);
+            }
+        });
+        editor.ui.addButton('TeiFormula', {
+            label: 'tei-formula: indicates that text contains a mathematical or other formula',
+            command: 'teiFormula',
+            toolbar: 'tei-formula'
+        });
+        
+        // TEI-FIGURE <span class="tei-figure"><span class="tei-figDesc">[image or symbol depicted in document]</span></span> | <figure> <figDesc> [image or symbol depicted in document]  </figDesc> </figure>
+        editor.addCommand( 'teiFigure', {
+            exec: function( editor ) {
+                var teiObject = {
+                    elToInsert: '<span class="tei-figDesc">[image or symbol depicted in document]</span>',
+                    tag: 'span',
+                    className: 'tei-figure',
+                    additionalAttributes: [],
+                    conflictChildren: '.tei-figure'
+                }
+                var editorSelection = editor.getSelection();
+                var range = editorSelection.getRanges()[ 0 ];
+
+                var commonAncestor = editorSelection.getCommonAncestor();
+                // remove the figure reference accessed via tei-figDesc
+                if (teiObject.className === commonAncestor.$.parentNode.parentElement.className) {
+                    commonAncestor.remove();
+                }
+                // embed
+                else {
+                    var newElement = new CKEDITOR.dom.element(teiObject.tag);
+                    newElement.setAttributes({class: teiObject.className});
+                    newElement.setHtml(teiObject.elToInsert);
+                    range.insertNode(newElement);
+                }
+                cleanUp(editorSelection);
+            }
+        });
+        editor.ui.addButton('TeiFigure', {
+            label: 'tei-figure: used to represent graphic\ninformation such as an illustration,\ndrawing, doodle, symbol, emblem',
+            command: 'teiFigure',
+            toolbar: 'tei-figure'
+        });
+
+        editor.addCommand( 'foreignDialog', new CKEDITOR.dialogCommand( 'foreignDialog' ) );
+        CKEDITOR.dialog.add( 'foreignDialog', function ( editor ) {
+            return {
+                title: 'Select language',
+                minWidth: 100,
+                minHeight: 100,
+        
+                contents: [
+                    {
+                        id: 'tab-lang',
+                        label: 'Language Tab',
+                        elements: [
+                            {
+                                type: 'select',
+                                id: 'language',
+                                minWidth: 80,
+                                items: [ [ 'unknown' ], [ 'English, en' ], [ 'French, fr' ], ['German, de'], ['Greek, el'], ['Latin, la'], ['Russian, ru']],
+                                'default': 'French, fr',
+                                validate: CKEDITOR.dialog.validate.notEmpty( "Abbreviation field cannot be empty." )
+                            },
+                        ]
+                    }
+                ],
+                onOk: function() {
+                    var dialog = this;
+                    var editorSelection = editor.getSelection();
+                    var range = editorSelection.getRanges()[ 0 ];
+                    var el = editor.document.createElement( 'div' );
+                    el.append(range.cloneContents());
+
+                    var teiObject = {
+                        elToInsert: el,
+                        tag: 'span',
+                        className: 'tei-foreign',
+                        additionalAttributes: [],
+                        conflictChildren: '.tei-foreign'
+                    }
+                    var language = dialog.getValueOf('tab-lang', 'language').split(", ")[1];
+                    teiObject.additionalAttributes.push({'data-tei-lang': language});
+                    var newElement = wrap(teiObject);
+                    editor.insertElement(newElement);
+                }
+            };
+        });
+
+        // TEI-FOREIGN <span class="tei-foreign" data-tei-lang="fr"> | <foreign xml:lang='xx'>  </foreign>
+        editor.addCommand( 'teiForeign', {
+            exec: function( editor ) {
+                var editorSelection = editor.getSelection();
+                var range = editorSelection.getRanges()[ 0 ];
+                var el = editor.document.createElement( 'div' );
+                el.append(range.cloneContents());
+                var commonAncestor = editorSelection.getCommonAncestor();
+                var startTag = editorSelection.getStartElement();
+
+                var teiObject = {
+                    elToInsert: el,
+                    tag: 'span',
+                    className: 'tei-foreign',
+                    additionalAttributes: [],
+                    conflictChildren: '.tei-foreign'
+                }
+
+                if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
+                    editor.insertHtml(teiObject.elToInsert.getHtml());
+                }
+                else if (teiObject.className === startTag.$.className) {
+                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
+                    editor.insertHtml(newElement);
+                }
+                else if (editorSelection.getSelectedText().length > 0) {
+                    editor.execCommand('foreignDialog');
+                }
+                else {
+                    return false;
+                }
+                cleanUp(editorSelection);
+            }
+        });
+        editor.ui.addButton('teiForeign', {
+            label: 'tei-foreign: identifies a word or phrase\nas belonging to some language other\nthan that of the surrounding text',
+            command: 'teiForeign',
+            toolbar: 'tei-foreign'
+        });
+
+        // AMP ampersands (&) -- typed as normal keyboard should be transformed to &amp;
+
+        // accent marks ?
 
         // TODO - unwrap elements with only br in them
         // TODO - make sure that only markup relevant to the tag is removed, not all text markup - currently removing parents

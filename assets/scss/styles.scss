@@ -444,7 +444,7 @@ h1 {
 h2 {
     font-size: 16px;
     margin-top: 0px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 h3 {
@@ -780,9 +780,7 @@ main {
                 height:80vh;
                 margin-top: 1em;
                 margin-bottom: 20px;
-                padding-top: 1em;
                 overflow-y: auto;
-                border-top: 1px solid $medium-grey;
                 border-bottom: 1px solid $medium-grey;
                 .filter-list {
                     border: 0;
@@ -800,9 +798,17 @@ main {
                         display: block;
                         font-size: 14px;
                         white-space: initial;
+                        margin-bottom: 3px;
                     }
                     .year-search-field {
                         max-width: 140px;
+                    }
+                    input[type=checkbox] {
+                        margin-top: 0;
+                        margin-left: 0;
+                        display: inline-block;
+                        vertical-align: middle;
+                        border: 1px solid $medium-grey;
                     }
                     input[type=number], input[type=text] {
                         font-family: $font-primary;
@@ -814,17 +820,17 @@ main {
                         border: 1px solid $medium-grey;
                         line-height: 1.4em;
                     }
-                    input[type=submit] {
-                        width: 80px;
-                        display: inline-block;
-                        margin-left: 10px;
-                    }
                     input[type=number] {
                         width: 80px;
                     }
                     input[type=text] {
                         margin-bottom: 0.7em;
                         width: 100%;
+                    }
+                    input[type=submit] {
+                        width: 80px;
+                        display: inline-block;
+                        margin-left: 10px;
                     }
                     #year-range {
                         margin: 0px 10px 12px 10px;
@@ -855,11 +861,11 @@ main {
                     }
                 }
             }
-            input[type=submit] {
-                width: 100%;
-                //to overwrite the default max-width: max-content;
-                max-width: 100% !important;
-            }
+            // input[type=submit] {
+            //     width: 100%;
+            //     //to overwrite the default max-width: max-content;
+            //     max-width: 100% !important;
+            // }
         }
         input[type=checkbox]:checked + label.filter-button {
             position: fixed; 
@@ -1011,6 +1017,9 @@ main {
         }
         input[type=checkbox] {
             margin-left: 0px;
+            margin-top: 0px;
+            display: inline-block;
+            vertical-align: middle;
         }
         .checkbox-anchor {
             margin-right: 2em;

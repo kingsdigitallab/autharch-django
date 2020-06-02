@@ -24,6 +24,10 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tei-lb' },
 		{ name: 'tei-note' },
 		{ name: 'tei-unclear' },
+		{ name: 'tei-formula' },
+		{ name: 'tei-figure' },
+		{ name: 'tei-catchwords' },
+		{ name: 'tei-foreign' },
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo', 'redo' ] },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 	];
