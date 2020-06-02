@@ -1,11 +1,14 @@
 import logging
+import os.path
 
-from django.db import transaction
 import pandas as pd
+
+from django.core import management
+from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
 
 from archival.models import Collection, File, Item, Reference, Series
 from authority.models import Entity
-from django.core.management.base import BaseCommand, CommandError
 from jargon.models import (
     MaintenanceStatus, Publication, PublicationStatus, ReferenceSource,
     Repository)
@@ -13,30 +16,67 @@ from languages_plus.models import Language
 from script_codes.models import Script
 
 
+# Parser help.
+HELP = ('Import archival data from spreadsheet or CSV files. Creates initial '
+        'revisions on successful import.')
+PATHS_HELP = 'Path to spreadsheet/CSV file to import.'
+
+# Default values for missing data.
+DEFAULT_PUBLICATION_STATUS = 'published'
+DEFAULT_REPOSITORY_CODE = 262
+
+NON_ESSENTIAL_COLUMNS = (
+    'Admin History', 'Arrangement', 'Cataloguer', 'Date',
+    'Description', 'Extent', 'Notes', 'Title')
+
+# Error and log messages.
+INVALID_INPUT_FILE_TYPE_MSG = (
+    'Invalid file type for "{}"; please provide a .csv or .xlsx file.')
+MISSING_OPTIONAL_COL_MSG = (
+    'Data at "{}" does not include the optional "{}" column.')
+MISSING_REQUIRED_COL_MSG = (
+    'Data at "{}" does not include the required "{}" column.')
+NO_PUBLICATION_CODE_COL_MSG = (
+    'Data at "{}" does not include a "Publication Status" column; using '
+    'default value of "%s" for all rows.' % DEFAULT_PUBLICATION_STATUS)
+NO_REPOSITORY_CODE_COL_MSG = (
+    'Data at "{}" does not include a "Repository Code" column; using default '
+    'value of "%s" for Royal Archives and Royal Library repositories.'
+    % DEFAULT_REPOSITORY_CODE)
+NO_REPOSITORY_CODE_MSG = (
+    'Data at "{}" has no "Repository Code" column and specifies an archive '
+    'other than "Royal Archives" or "Royal Library.')
+
+
 class Command(BaseCommand):
-    args = '<spreadsheet_path>'
-    help = 'Imports archival data from a spreadsheet or csv file'
+
+    help = HELP
     logger = logging.getLogger(__name__)
 
     language = Language.objects.filter(name_en='English').first()
     script = Script.objects.get(name='Latin')
 
     def add_arguments(self, parser):
-        parser.add_argument('spreadsheet_path', nargs=1, type=str)
+        parser.add_argument('paths', help=PATHS_HELP, metavar='FILE',
+                            nargs='+', type=str)
 
     @transaction.atomic
     def handle(self, *args, **options):
-        path = options['spreadsheet_path'][0]
+        paths = options['paths']
+        for path in paths:
+            self._import_path(os.path.abspath(path))
+        management.call_command('createinitialrevisions')
 
+    def _import_path(self, path):
         if path.endswith('.csv'):
             df = pd.read_csv(path)
         elif path.endswith('.xlsx'):
             df = pd.read_excel(path)
         else:
-            raise CommandError(
-                'Invalid file type, please provide a csv or xlsx file.')
+            raise CommandError(INVALID_INPUT_FILE_TYPE_MSG.format(path))
 
-        df['Date of Description'] = pd.to_datetime(df['Date of Description'])
+        self._path = path
+        df = self._tidy_df(df)
 
         for i, row in df.iterrows():
             self._import_row(row)
@@ -90,32 +130,39 @@ class Command(BaseCommand):
             return obj
 
     def _add_base_collection_data(self, obj, row):
+        repository_name = row['Repository']
+        if 'Repository Code' in row:
+            repository_code = row['Repository Code']
+        elif repository_name in ('Royal Archives', 'Royal Library'):
+            repository_code = DEFAULT_REPOSITORY_CODE
+        else:
+            raise CommandError(NO_REPOSITORY_CODE_MSG)
         repository, created = Repository.objects.get_or_create(
-            code=row['Repository Code'], title=row['Repository'])
+            code=repository_code, title=repository_name)
         self.logger.debug(
             'Repository {} was created? {}'.format(repository, created))
         obj.repository = repository
 
-        obj.title = row['Title']
-        # obj.provenance
-        obj.creation_dates = row['Date']
+        obj = self._set_field_from_cell_data(obj, 'title', row, 'Title')
+        obj = self._set_field_from_cell_data(obj, 'creation_dates', row,
+                                             'Date')
+        obj = self._set_field_from_cell_data(obj, 'description', row,
+                                             'Description')
+        obj = self._set_field_from_cell_data(obj, 'notes', row, 'Notes')
+        obj = self._set_field_from_cell_data(obj, 'extent', row, 'Extent')
+        obj = self._set_field_from_cell_data(obj, 'related_materials', row,
+                                             'RA_Related Materials')
+        obj = self._set_field_from_cell_data(obj, 'cataloguer', row,
+                                             'Cataloguer')
+        obj = self._set_field_from_cell_data(obj, 'description_date', row,
+                                             'Date of Description')
 
-        if not pd.isnull(row['Description']):
-            obj.description = row['Description']
-
-        if not pd.isnull(row['Notes']):
-            obj.notes = row['Notes']
-
-        obj.extent = row['Extent']
-
-        if not pd.isnull(row['RA_Related Materials']):
-            obj.related_materials = row['RA_Related Materials']
-
-        obj.cataloguer = row['Cataloguer']
-        obj.description_date = row['Date of Description']
-
+        # Use a default publication status if none is supplied.
+        publication_status = DEFAULT_PUBLICATION_STATUS
+        if 'Publication Status' in row:
+            publication_status = row['Publication Status']
         ps, _ = PublicationStatus.objects.get_or_create(
-            title=row['Publication Status'])
+            title=publication_status)
         obj.publication_status = ps
 
         ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
@@ -126,15 +173,17 @@ class Command(BaseCommand):
 
         obj.save()
 
-        source, _ = ReferenceSource.objects.get_or_create(title='RA')
-        ref, _ = Reference.objects.get_or_create(
-            source=source, unitid=row['RA_Reference'])
-        obj.references.add(ref)
+        if 'RA_Reference' in row:
+            source, _ = ReferenceSource.objects.get_or_create(title='RA')
+            ref, _ = Reference.objects.get_or_create(
+                source=source, unitid=row['RA_Reference'])
+            obj.references.add(ref)
 
-        source, _ = ReferenceSource.objects.get_or_create(title='CALM')
-        ref, _ = Reference.objects.get_or_create(
-            source=source, unitid=row['CALM_reference'])
-        obj.references.add(ref)
+        if 'CALM_reference' in row:
+            source, _ = ReferenceSource.objects.get_or_create(title='CALM')
+            ref, _ = Reference.objects.get_or_create(
+                source=source, unitid=row['CALM_reference'])
+            obj.references.add(ref)
 
         if not pd.isnull(row['Language']):
             try:
@@ -147,12 +196,10 @@ class Command(BaseCommand):
         return obj
 
     def _add_collection_data(self, col, row):
-        if not pd.isnull(row['Admin History']):
-            col.administrative_history = row['Admin History']
-
-        if not pd.isnull(row['Arrangement']):
-            col.arrangement = row['Arrangement']
-
+        col = self._set_field_from_cell_data(col, 'administrative_history',
+                                             row, 'Admin History')
+        col = self._set_field_from_cell_data(col, 'arrangement', row,
+                                             'Arrangement')
         return col
 
     def _add_base_series_data(self, obj, row):
@@ -197,12 +244,9 @@ class Command(BaseCommand):
             return None
 
     def _add_base_file_data(self, obj, row):
-        if not pd.isnull(row['Physical Description']):
-            obj.physical_description = row['Physical Description']
-
-        if not pd.isnull(row['Withheld']):
-            obj.withheld = row['Withheld']
-
+        obj = self._set_field_from_cell_data(obj, 'physical_description', row,
+                                             'Physical Description')
+        obj = self._set_field_from_cell_data(obj, 'withheld', row, 'Withheld')
         return obj
 
     def _add_file_data(self, f, row):
@@ -271,3 +315,59 @@ class Command(BaseCommand):
             obj.parent_series = series[0]
 
         return obj
+
+    def _set_field_from_cell_data(self, obj, field, row, column):
+        value = row.get(column)
+        if not pd.isnull(value):
+            setattr(obj, field, value)
+        return obj
+
+    def _tidy_df(self, df):
+        """The archival records data exists in multiple Excel
+        spreadsheets. These are inconsistent with each in regards to
+        which columns are present and the names used for columns that
+        hold the same sort of data.
+
+        Make an attempt to sort out any problems here, raising a
+        CommandError on a problem that cannot be worked around, and
+        logging a warning otherwise.
+
+        """
+        # Essential columns (error if not present).
+
+        if 'ID' not in df.columns:
+            # Yes, there is a fallback. Yes, it has two spaces in it.
+            if 'Serial  No.' in df.columns:
+                df.rename(columns={'Serial  No.': 'ID'}, inplace=True)
+            else:
+                raise CommandError(
+                    MISSING_REQUIRED_COL_MSG.format(self._path, 'ID'))
+
+        if 'Date of Description' in df.columns:
+            df['Date of Description'] = pd.to_datetime(
+                df['Date of Description'])
+        else:
+            raise CommandError(MISSING_REQUIRED_COL_MSG.format(
+                self._path, 'Date of Description'))
+
+        # Non-essential columns (warning if not present).
+
+        if 'RA_Reference' not in df.columns:
+            if 'RA Reference' in df.columns:
+                df.rename(columns={'RA Reference': 'RA_Reference'},
+                          inplace=True)
+            else:
+                self.logger.warning(MISSING_OPTIONAL_COL_MSG.format(
+                    self._path, 'RA_Reference'))
+
+        if 'Publication Status' not in df.columns:
+            self.logger.warning(NO_PUBLICATION_CODE_COL_MSG.format(self._path))
+        if 'Repository Code' not in df.columns:
+            self.logger.warning(NO_REPOSITORY_CODE_COL_MSG.format(self._path))
+
+        for column in NON_ESSENTIAL_COLUMNS:
+            if column not in df.columns:
+                self.logger.warning(MISSING_OPTIONAL_COL_MSG.format(
+                    self._path, column))
+
+        return df
