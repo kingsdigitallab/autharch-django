@@ -210,9 +210,10 @@ class EntityListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/entities_list.html'
     queryset = SearchQuerySet().models(Entity).exclude(
-        maintenance_status='deleted')
+        maintenance_status='deleted').facet('entity_type').facet(
+            'related_entities', size=0)
     form_class = EntityFacetedSearchForm
-    facet_fields = ['entity_type', 'related_entities']
+    facet_fields = []
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -233,9 +234,10 @@ class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     form_class = DeletedFacetedSearchForm
     queryset = SearchQuerySet().models(
         Collection, Entity, File, Item, Series).filter(
-            maintenance_status='deleted')
-    facet_fields = ['addressees', 'archival_level', 'entity_type', 'languages',
-                    'writers']
+            maintenance_status='deleted').facet('addressees', size=0).facet(
+                'archival_level').facet('entity_type').facet(
+                    'languages', size=0).facet('writers', size=0)
+    facet_fields = []
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -254,9 +256,11 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series).exclude(
-        maintenance_status='deleted')
+        maintenance_status='deleted').facet('addressees', size=0).facet(
+            'archival_level').facet('languages', size=0).facet(
+                'writers', size=0)
     form_class = ArchivalRecordFacetedSearchForm
-    facet_fields = ['addressees', 'archival_level', 'languages', 'writers']
+    facet_fields = []
 
     def _create_unapply_year_link(self, query_dict):
         """Return a link to unapply the start and end year 'facet'."""
