@@ -58,6 +58,8 @@
     <xsl:call-template name="tei-element-in-html" />
   </xsl:template>
 
+  <xsl:template match="@*" />
+
   <xsl:template match="tei:*" mode="tei-as-attribute">
     <xsl:attribute name="class">
       <xsl:value-of select="concat('tei-', local-name())" />
