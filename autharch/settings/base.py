@@ -384,7 +384,7 @@ content="GB" about="https://georgianpapers.com/">
 United Kingdom</span>.
 </p>
 
-Other copyright considerations: Check Public Permission field for copyright
+Other copyright considerations: Check Credit field for copyright
 statements for those items that are not under Crown copyright, for example
 unpublished manuscripts by non-royals.
 """
