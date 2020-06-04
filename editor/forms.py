@@ -39,7 +39,7 @@ RICHTEXT_TRANSCRIPTION = {
 
 ENTITY_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
-    'placeholder': 'Search entities',
+    'placeholder': 'Search people and corporate bodies',
     'type': 'search',
 }
 

@@ -33,7 +33,6 @@ function unwrapStartTag(el, tag, className) {
 
 function cleanUp(editorSelection) {
     checkWhiteSpace();
-    checkAmpersands();
     checkMissingClasses();
     removeEmptyTags(editorSelection);
 }
@@ -51,11 +50,6 @@ function removeEmptyTags(editorSelection) {
 
 // TODO
 function checkWhiteSpace() {
-    return false;
-}
-
-// TODO
-function checkAmpersands() {
     return false;
 }
 
@@ -89,18 +83,21 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
                     editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
+                // unwrap - optional, is used to unwrap when two or more objects are highlighted but don't have the same common ancestor
                 else if (teiObject.className === startTag.$.className) {
                     var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
                     editor.insertHtml(newElement);
                 }
                 // wrap - check if any text was selected so as not to embed an empty tag
                 else if (editorSelection.getSelectedText().length > 0) {
-                    //resolve conflicts with parent elements
+                    var newElement = wrap(teiObject);
+                    //resolve conflicts
                     if (commonAncestor.$.className == 'tei-del') {
                         range.deleteContents();
+                        editor.insertHtml('</del>'+newElement.$.outerHTML+'<ins class="tei-del">');
+                    } else {
+                        editor.insertElement(newElement);
                     }
-                    var newElement = wrap(teiObject);
-                    editor.insertElement(newElement);
                 }
                 else {
                     return false;
@@ -141,12 +138,14 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     editor.insertHtml(newElement);
                 }
                 else if (editorSelection.getSelectedText().length > 0) {
+                    var newElement = wrap(teiObject);
                     //resolve conflicts
                     if (commonAncestor.$.className == 'tei-add') {
                         range.deleteContents();
+                        editor.insertHtml('</ins>'+newElement.$.outerHTML+'<ins class="tei-add">');
+                    } else {
+                        editor.insertElement(newElement);
                     }
-                    var newElement = wrap(teiObject);
-                    editor.insertElement(newElement);
                 }
                 else {
                     return false;
@@ -246,6 +245,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 var el = editor.document.createElement( 'div' );
                 el.append(range.cloneContents());
                 var commonAncestor = editorSelection.getCommonAncestor();
+                var startTag = editorSelection.getStartElement();
 
                 var teiObject = {
                     elToInsert: el,
@@ -255,14 +255,20 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     conflictChildren: '.tei-unclear, .tei-p'
                 }
 
-                // TODO - if selection is empty, add [unclear] inside the tag
-
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
-                    editor.insertHtml(teiObject.elToInsert.getHtml());
+                    // check if text is [unclear] which was inserted automatically
+                    if (commonAncestor.$.parentElement.innerHTML == '[unclear]') {
+                        commonAncestor.$.parentElement.remove();
+                    } else {
+                        editor.insertHtml(teiObject.elToInsert.getHtml());
+                    }
                 }
                 else if (editorSelection.getSelectedText().length > 0) {
                     var newElement = wrap(teiObject);
                     editor.insertElement(newElement);
+                } 
+                else if (editorSelection.getSelectedText().length == 0) {
+                    editor.insertHtml('<'+teiObject.tag+' class="'+teiObject.className+'">[unclear]</'+teiObject.tag+'> ');
                 }
                 else {
                     return false;
@@ -335,44 +341,6 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             label: 'tei-pb: marks the beginning of\na new page in a paginated document',
             command: 'teiPageBreak',
             toolbar: 'tei-pb'
-        });
-
-        // TEI-PARAGRAPH <p class="tei-p"> | <p>
-        editor.addCommand( 'teiParagraph', {
-            exec: function( editor ) {
-                var editorSelection = editor.getSelection();
-                var range = editorSelection.getRanges()[ 0 ];
-                var el = editor.document.createElement( 'div' );
-                el.append(range.cloneContents());
-                var commonAncestor = editorSelection.getCommonAncestor();
-                var startTag = editorSelection.getStartElement();
-
-                var teiObject = {
-                    elToInsert: el,
-                    tag: 'p',
-                    className: 'tei-p',
-                    additionalAttributes: [],
-                    conflictChildren: '.tei-p'
-                }
-                if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
-                    var html = "</p>"+teiObject.elToInsert.getHtml()+"<p class='tei-p'>";
-                    range.deleteContents();
-                    editor.insertHtml(html);
-                }
-                else if (editorSelection.getSelectedText().length > 0) {
-                    var newElement = wrap(teiObject);
-                    editor.insertElement(newElement);
-                }
-                else {
-                    return false;
-                }
-                cleanUp(editorSelection);
-            }
-        });
-        editor.ui.addButton('TeiParagraph', {
-            label: 'tei-p: inserts a paragraph',
-            command: 'teiParagraph',
-            toolbar: 'tei-p'
         });
 
         // TEI-CATCHWORDS <span class="tei-catchwords"> | <catchwords>  </catchwords>
@@ -485,6 +453,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-figure'
         });
 
+        // DIALOG BOX - added to select language for the <foreign xml:lang=""> tag
         editor.addCommand( 'foreignDialog', new CKEDITOR.dialogCommand( 'foreignDialog' ) );
         CKEDITOR.dialog.add( 'foreignDialog', function ( editor ) {
             return {
@@ -570,9 +539,43 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-foreign'
         });
 
-        // AMP ampersands (&) -- typed as normal keyboard should be transformed to &amp;
+        // TEI-PARAGRAPH <p class="tei-p"> | <p>
+        editor.addCommand( 'teiParagraph', {
+            exec: function( editor ) {
+                var editorSelection = editor.getSelection();
+                var range = editorSelection.getRanges()[ 0 ];
+                var el = editor.document.createElement( 'div' );
+                el.append(range.cloneContents());
+                var commonAncestor = editorSelection.getCommonAncestor();
+                var startTag = editorSelection.getStartElement();
 
-        // accent marks ?
+                var teiObject = {
+                    elToInsert: el,
+                    tag: 'p',
+                    className: 'tei-p',
+                    additionalAttributes: [],
+                    conflictChildren: '.tei-p'
+                }
+                if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
+                    var html = "</p>"+teiObject.elToInsert.getHtml()+"<p class='tei-p'>";
+                    range.deleteContents();
+                    editor.insertHtml(html);
+                }
+                else if (editorSelection.getSelectedText().length > 0) {
+                    var newElement = wrap(teiObject);
+                    editor.insertElement(newElement);
+                }
+                else {
+                    return false;
+                }
+                cleanUp(editorSelection);
+            }
+        });
+        editor.ui.addButton('TeiParagraph', {
+            label: 'tei-p: inserts a paragraph',
+            command: 'teiParagraph',
+            toolbar: 'tei-p'
+        });
 
         // TODO - unwrap elements with only br in them
         // TODO - make sure that only markup relevant to the tag is removed, not all text markup - currently removing parents

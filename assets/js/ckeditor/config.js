@@ -32,12 +32,11 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 	];
 	config.allowedContent = true;
-	config.extraPlugins = ['teiTranscription', 'sourcedialog'];
+	config.extraPlugins = ['teiTranscription', 'sourcedialog', 'elementspath'];
 	// config.fillEmptyBlocks = false;
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
 	config.removeButtons = 'Cut,Copy,Paste,Anchor,Underline,Strike,Subscript,Superscript';
-
 	// Dialog windows are also simplified.
 	// config.removeDialogTabs = 'link:advanced';
 };
