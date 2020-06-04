@@ -1,7 +1,9 @@
-import reversion
-from authority.models import Entity
 from django.conf import settings
 from django.db import models
+
+import reversion
+from authority.fields import PartialDateField
+from authority.models import Entity
 from geonames_place.models import Place
 from jargon.models import (
     Function, MaintenanceStatus, Publication, PublicationStatus, RecordType,
@@ -70,9 +72,9 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     aquisition_dates_notes = models.CharField(max_length=1024, null=True,
                                               blank=True)
 
-    start_date = models.DateField(blank=True, null=True,
+    start_date = PartialDateField(blank=True,
                                   help_text=constants.START_DATE_HELP)
-    end_date = models.DateField(blank=True, null=True,
+    end_date = PartialDateField(blank=True,
                                 help_text=constants.END_DATE_HELP)
 
     physical_location = models.CharField(max_length=2048, blank=True,
@@ -124,9 +126,11 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
     language = models.ForeignKey(Language, on_delete=models.PROTECT,
-                                 related_name='record_control_languages', verbose_name="Record language")
+                                 related_name='record_control_languages',
+                                 verbose_name="Record language")
     script = models.ForeignKey(Script, on_delete=models.PROTECT,
-                               related_name='record_control_scripts', verbose_name="Record script")
+                               related_name='record_control_scripts',
+                               verbose_name="Record script")
 
     sources = models.TextField(blank=True, null=True)
 
@@ -209,7 +213,8 @@ class FileBase(models.Model):
 
     copyright_status = models.CharField(
         max_length=256, blank=True, help_text=constants.COPYRIGHT_STATUS_HELP)
-    publication_permission = models.TextField('Credit', blank=True, null=True, help_text=constants.CREDIT_HELP)
+    publication_permission = models.TextField(
+        'Credit', blank=True, null=True, help_text=constants.CREDIT_HELP)
     withheld = models.CharField(max_length=256, blank=True, null=True,
                                 help_text=constants.WITHHELD_HELP)
 
@@ -240,7 +245,8 @@ class File(ArchivalRecord, SeriesBase, FileBase):
         related_name='files_as_relations')
     places_as_relations = models.ManyToManyField(
         Place, verbose_name="Receiving address", blank=True,
-        related_name='files_as_relations', help_text=constants.PLACE_OF_WRITING_HELP)
+        related_name='files_as_relations',
+        help_text=constants.PLACE_OF_WRITING_HELP)
 
     def __str__(self):
         return self.title
@@ -264,7 +270,8 @@ class Item(ArchivalRecord, SeriesBase, FileBase):
         related_name='items_as_relations')
     places_as_relations = models.ManyToManyField(
         Place, verbose_name="Receiving address", blank=True,
-        related_name='items_as_relations', help_text=constants.PLACE_OF_WRITING_HELP)
+        related_name='items_as_relations',
+        help_text=constants.PLACE_OF_WRITING_HELP)
 
     def __str__(self):
         return self.title

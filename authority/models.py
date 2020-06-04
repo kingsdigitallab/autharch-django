@@ -14,12 +14,13 @@ import reversion
 from script_codes.models import Script
 
 from . import constants
+from .fields import PartialDateField
 
 
 class DateRangeMixin(models.Model):
-    date_from = models.DateField(blank=True, null=True,
+    date_from = PartialDateField(blank=True,
                                  help_text=constants.START_DATE_HELP)
-    date_to = models.DateField(blank=True, null=True,
+    date_to = PartialDateField(blank=True,
                                help_text=constants.END_DATE_HELP)
     display_date = models.CharField(max_length=1024, blank=True)
 
