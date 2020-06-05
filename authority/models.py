@@ -340,5 +340,5 @@ class Source(TimeStampedModel):
     control = models.ForeignKey(Control, on_delete=models.CASCADE,
                                 related_name="sources")
     name = models.TextField(verbose_name="Source")
-    url = models.URLField(verbose_name="URL", blank=True)
+    url = models.URLField(verbose_name="URL", blank=True, max_length=512)
     notes = models.TextField(blank=True)
