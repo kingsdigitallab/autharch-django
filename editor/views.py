@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.db.models import Max, Min
 from django.forms import modelformset_factory
-from django.http import HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -18,7 +19,9 @@ import reversion
 from reversion.models import Revision, Version
 from reversion.views import create_revision
 
-from archival.models import ArchivalRecord, Collection, Series, File, Item
+from archival.models import (
+    ArchivalRecord, ArchivalRecordTranscription, Collection, Series, File,
+    Item)
 from authority.models import Control, Entity
 from jargon.models import (
     CollaborativeWorkspaceEditorType as CWEditorType, EditingEventType,
@@ -619,6 +622,16 @@ def record_history(request, record_id):
         'versions': Version.objects.get_for_object(record),
     }
     return render(request, 'editor/history.html', context)
+
+
+@user_passes_test(is_user_editor_plus)
+def record_images(request, record_id):
+    record = get_object_or_404(ArchivalRecord, pk=record_id)
+    queryset = ArchivalRecordTranscription.objects.filter(
+        record=record)
+    data = serializers.serialize('json', queryset,
+                                 fields=('order', 'transcription'))
+    return HttpResponse(data, content_type='application/json')
 
 
 @user_passes_test(is_user_editor_plus)
