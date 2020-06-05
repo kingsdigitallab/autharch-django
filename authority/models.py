@@ -222,8 +222,6 @@ class BiographyHistory(TimeStampedModel):
 
     abstract = models.TextField(help_text=constants.BIOGRAPHY_ABSTRACT_HELP)
     content = models.TextField(blank=True)
-    structure_or_genealogy = models.TextField(
-        blank=True, help_text=constants.BIOGRAPHY_STRUCTURE_GENEALOGY_HELP)
     sources = models.TextField(
         blank=True, help_text=constants.BIOGRAPHY_SOURCES_HELP)
     copyright = models.TextField(

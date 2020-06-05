@@ -10,7 +10,6 @@
 {% for biography in description.biography_history.all %}
 {{ biography.abstract }}
 {{ biography.content }}
-{{ biography.structure_or_genealogy }}
 {{ biography.sources }}
 {% endfor %}
 {% endfor %}

@@ -4,15 +4,15 @@ from jargon.serializers import EntityTypeSerializer
 from rest_framework import serializers
 
 from .models import (
-    BiographyHistory, Control, Description, Entity, Identity, Event, LanguageScript,
-    LocalDescription, NameEntry, Place
+    BiographyHistory, Control, Description, Entity, Identity, Event,
+    LanguageScript, LocalDescription, NameEntry, Place
 )
 
 
 class BiographyHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = BiographyHistory
-        fields = ['abstract', 'content', 'structure_or_genealogy', 'sources', 'copyright']
+        fields = ['abstract', 'content', 'sources', 'copyright']
         depth = 10
 
 
@@ -22,11 +22,13 @@ class LanguageScriptSerializer(serializers.ModelSerializer):
         fields = ['language', 'script']
         depth = 10
 
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['event', 'place']
         depth = 10
+
 
 class LocalDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,8 +55,8 @@ class DescriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Description
-        fields = ['biography_history', 'function', 'local_descriptions', 'events',
-                  'languages_scripts', 'places']
+        fields = ['biography_history', 'function', 'local_descriptions',
+                  'events', 'languages_scripts', 'places']
         depth = 10
 
 
@@ -239,8 +241,6 @@ class EntitySerializer(serializers.ModelSerializer):
                 genders_json = []
                 bios_json = []
                 events_json = []
-                #OL - structure/genealogy should be a part of biography/history; not a standalone field. I moved 'structure_or_genealogy' to bio but haven't removed anything else.
-                genealogies_json = []
                 langscripts_json = []
                 places_json = []
                 legal_statuses_json = []
@@ -278,20 +278,16 @@ class EntitySerializer(serializers.ModelSerializer):
                                     "name": "Content",
                                     "content": bio.content
                                 }, {
-                                    "name": "Genealogy",
-                                    "content": bio.structure_or_genealogy
-                                }, {
                                     "name": "Sources",
                                     "content": bio.sources
                                 }, {
                                     "name": "Copyright",
                                     "content": bio.copyright
-                                },])
+                                }])
 
                         except BiographyHistory.DoesNotExist:
                             pass
 
-                        
                         # Events (OL - events were under bio/hist)
                         events = description.events
                         if events.count():
@@ -414,14 +410,6 @@ class EntitySerializer(serializers.ModelSerializer):
                     identity_json.append({
                         "name": "Relationships",
                         "content": relations_json
-                    })
-
-                # OL - moved structure and genealogy to bio but haven't removed the json links (yet)
-                # Geneaologies
-                if len(genealogies_json):
-                    identity_json.append({
-                        "name": "Genealogies",
-                        "content": genealogies_json
                     })
 
                 # Langscript

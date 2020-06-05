@@ -279,7 +279,6 @@ class BiographyHistoryEditInlineForm(forms.ModelForm):
         widgets = {
             'abstract': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'content': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'structure_or_genealogy': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'sources': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'copyright': forms.Textarea(attrs=RICHTEXT_ATTRS),
         }
