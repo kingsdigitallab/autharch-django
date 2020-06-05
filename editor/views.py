@@ -625,7 +625,7 @@ def record_history(request, record_id):
 
 
 @user_passes_test(is_user_editor_plus)
-def record_images(request, record_id):
+def record_transcriptions(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     queryset = ArchivalRecordTranscription.objects.filter(
         record=record)

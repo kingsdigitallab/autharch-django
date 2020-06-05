@@ -53,8 +53,8 @@ urlpatterns = [
          name='record-delete'),
     path('records/<int:record_id>/history/', views.record_history,
          name='record-history'),
-    path('records/<int:record_id>/images/', views.record_images,
-         name='record-images'),
+    path('records/<int:record_id>/transcriptions/',
+         views.record_transcriptions, name='record-transcriptions'),
     path('deleted/', views.DeletedListView.as_view(), name='deleted-list'),
     path('revert/', views.revert, name='revert'),
 ]
