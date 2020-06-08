@@ -95,7 +95,7 @@ $(document).ready(function() {
       addKeyboard    : true,                     // use left,right,up,down,pageUp,pageDown,home, or end to change current page
       pageKeyStep    : 10                        // page step to use for pageUp and pageDown
     });
-    //add tablesorter to the tables
+    //add tablesorter to the tables; had to go with an if-statement because tablesorter parameters cannot be modified once linked to a table
     if ($(el).attr('id') !== 'records-list-table') {
       $("#"+$(el).attr('id'))
         .tablesorter({
