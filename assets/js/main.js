@@ -80,12 +80,13 @@ $(document).ready(function() {
       pageKeyStep    : 10                        // page step to use for pageUp and pageDown
     });
     //add tablesorter to the tables
+    // set default sorting to level with collections, series, files, items
     $("#"+$(el).attr('id'))
       .tablesorter({
           widgets: ["filter"],
           widgetOptions: {
               filter_columnFilters: true,
-              filter_filterLabel : 'Filter "{{label}}"',
+              filter_filterLabel : 'Filter "{{label}}"'
           }
       })
       .tablesorterPager({
@@ -167,26 +168,6 @@ $(document).ready(function() {
   });
   setUpCreationYearSlider();
 
-  //TRANSCRIPTIONS
-  //hide all transcriptions and generate ckeditor for the first transcription on the list
-  $( 'textarea.richtext-transcription' ).hide();
-  $( 'textarea#id_transcription-0-transcription' ).ckeditor();
-  $('#rte-pagination').pagination({
-    items: $("textarea.richtext-transcription").length,
-    itemsOnPage: 1,
-    useAnchors: false,
-    displayedPages: 3,
-    prevText: ' ',
-    nextText: ' ',
-    ellipsePageSet: false,
-    onPageClick: function(pageNumber, event) {
-      $("div[id^=cke_id_transcription]").hide();
-      $("textarea#id_transcription-"+(pageNumber-1)+"-transcription").ckeditor();
-      $("div[id='cke_id_transcription-"+(pageNumber-1)+"-transcription']").css('display', 'block');
-      viewer.goToPage(pageNumber-1);
-    }
-  });
-
   // RICHTEXT FIELDS
   tinymce.init({
     menubar: '',
@@ -209,9 +190,64 @@ $(document).ready(function() {
       $('.save-admin-table').removeClass('none');
     }
   });
+
+  // TRANSCRIPTIONS - if expanded by default
+  if ($('#transcription-div').hasClass('expand') && $( 'textarea.richtext-transcription' ).length == 0) {
+    fetchTranscriptions();
+  }
+  
+  // TRANSCRIPTIONS - if collapsed by default
+  $('.transcription-toggle').on('click', function() {
+    // fetch transcriptions when the transcription section is expanded and there are no transcriptions yet 
+    if ($('#transcription-div').hasClass('expand') && $( 'textarea.richtext-transcription' ).length == 0) {
+      fetchTranscriptions();
+    }
+  });
   
 });
 
+// TRANSCRIPTIONS
+// fetch transcriptions
+async function fetchTranscriptions() {
+  await fetch(window.location.pathname + 'transcriptions').then(
+    function(response) {
+      response.json().then(function(data) {
+        let transcriptions = '';
+        data.forEach(function(t) {
+          transcriptions += `<textarea class="richtext-transcription" id="id_transcription-`+t.order+`-transcription">`+t.transcription+`</textarea>`;
+        });
+        $('#transcription').append(transcriptions);
+        addCKEditor();
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log(err);
+  });
+}
+
+/** 
+  hide all transcriptions and generate ckeditor for the first transcription on the list
+*/
+function addCKEditor() {
+  $( 'textarea.richtext-transcription' ).hide();
+  $( 'textarea#id_transcription-0-transcription' ).ckeditor();
+  $('#rte-pagination').pagination({
+    items: $("textarea.richtext-transcription").length,
+    itemsOnPage: 1,
+    useAnchors: false,
+    displayedPages: 3,
+    prevText: ' ',
+    nextText: ' ',
+    ellipsePageSet: false,
+    onPageClick: function(pageNumber, event) {
+      $("div[id^=cke_id_transcription]").hide();
+      $("textarea#id_transcription-"+(pageNumber-1)+"-transcription").ckeditor();
+      $("div[id='cke_id_transcription-"+(pageNumber-1)+"-transcription']").css('display', 'block');
+      viewer.goToPage(pageNumber-1);
+    }
+  });
+}
 
 // expand/collapse entity/archival record sections
 function toggleTab(el) {
@@ -256,8 +292,6 @@ function deleteRecord(event) {
   $("#delete-modal").addClass('active');
   event.preventDefault();
 }
-
-
 
 /**
  * Add a new empty form of the specified form_type.

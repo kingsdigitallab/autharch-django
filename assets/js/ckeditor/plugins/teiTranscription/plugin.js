@@ -577,6 +577,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-p'
         });
 
+        // TODO - add a popup with documentation
         // TODO - unwrap elements with only br in them
         // TODO - make sure that only markup relevant to the tag is removed, not all text markup - currently removing parents
     }
