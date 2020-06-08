@@ -1,6 +1,7 @@
 import os.path
 import re
 
+from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
@@ -9,19 +10,21 @@ from lxml import etree
 from ...models import ArchivalRecord, ArchivalRecordTranscription
 
 
-NAMESPACES = {'tei': 'http://www.tei-c.org/ns/1.0'}
-
-
-class Command(BaseCommand):
-
-    help = """\
+HELP = """\
 Import transcription XML files.
 
 Existing transcriptions for the same record will likely cause the
 process to fail - delete them first."""
+NAMESPACES = {'tei': 'http://www.tei-c.org/ns/1.0'}
+XML_PATH_HELP = 'Path to XML transcription file to import.'
+
+
+class Command(BaseCommand):
+
+    help = HELP
 
     def add_arguments(self, parser):
-        parser.add_argument('xml_path', nargs='+')
+        parser.add_argument('xml_path', help=XML_PATH_HELP, nargs='+')
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -30,6 +33,7 @@ process to fail - delete them first."""
         self._transform = etree.XSLT(etree.parse(xslt_path))
         for xml_path in options['xml_path']:
             self._import_transcription(xml_path)
+        management.call_command('createinitialrevisions')
 
     def _convert_transcription(self, xml_path):
         """Return the content and unique details of the transcription at
