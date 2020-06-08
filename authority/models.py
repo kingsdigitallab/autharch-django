@@ -238,7 +238,7 @@ class Event(DateRangeMixin, TimeStampedModel):
         Description, on_delete=models.CASCADE, related_name='events')
 
     event = models.TextField()
-    place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)
+    place = models.ForeignKey(GeoPlace, blank=True, on_delete=models.CASCADE)
 
 
 @reversion.register()

@@ -63,7 +63,23 @@ $(document).ready(function() {
     'role': 'list'
   });
 
-  // TABLE PAGINATION
+  // TABLE PAGINATION / TABLESORTER
+  // sorter for the archival records table - Collection -> Series -> File -> Item
+  $.tablesorter.addParser({
+    id: 'level',
+    is: function(s) {
+      return false;
+    },
+    format: function(s) {
+      return s.toLowerCase()
+              .replace("collection", "0")
+              .replace("series", "1")
+              .replace("file", "2")
+              .replace("item", "3");
+    },
+    type: 'numeric'
+  });  
+
   $('table').each(function(i, el) {
     $.tablesorter.customPagerControls({
       table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
@@ -80,19 +96,37 @@ $(document).ready(function() {
       pageKeyStep    : 10                        // page step to use for pageUp and pageDown
     });
     //add tablesorter to the tables
-    // set default sorting to level with collections, series, files, items
-    $("#"+$(el).attr('id'))
-      .tablesorter({
-          widgets: ["filter"],
-          widgetOptions: {
-              filter_columnFilters: true,
-              filter_filterLabel : 'Filter "{{label}}"'
-          }
-      })
-      .tablesorterPager({
-        container: $("#"+$(el).parent(".table-container").next('.pager').attr('id')),
-        size: 10
-      });
+    if ($(el).attr('id') !== 'records-list-table') {
+      $("#"+$(el).attr('id'))
+        .tablesorter({
+            widgets: ["filter"],
+            widgetOptions: {
+                filter_columnFilters: true,
+                filter_filterLabel : 'Filter "{{label}}"',
+            }
+        })
+    } else {
+      $("#records-list-table")
+        .tablesorter({
+            widgets: ["filter"],
+            widgetOptions: {
+                filter_columnFilters: true,
+                filter_filterLabel: 'Filter "{{label}}"'
+            },
+            sortList: [[2,0]],
+            headers: {
+              2: {
+                sorter: 'level'
+              }
+            }
+        })
+    }
+
+    $("#"+$(el).attr('id')).tablesorterPager({
+      container: $("#"+$(el).parent(".table-container").next('.pager').attr('id')),
+      size: 10
+    });
+   
     //  make sure that corrent 'rows per page' number is active
     var rowsPerPage = $("#"+$(el).attr('id')).find("tbody > tr").filter(function() {
       return $(this).css('display') !== 'none';
