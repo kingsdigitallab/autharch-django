@@ -48,6 +48,10 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="tei:pb/@n">
+    <xsl:value-of select="." />
+  </xsl:template>
+
   <xsl:template match="tei:TEI">
     <xsl:apply-templates select="tei:text/tei:body" />
   </xsl:template>
