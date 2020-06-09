@@ -2,6 +2,8 @@
     checks only the closest ancestor; 
     therefore, if the text is wrapped in <u><del>text</del></u>, the condition is false
 */
+
+
 function wrap(teiObject) {
     //create new element
     var newElement = new CKEDITOR.dom.element(teiObject.tag);
@@ -59,7 +61,7 @@ function checkMissingClasses() {
 }
 
 CKEDITOR.plugins.add( 'teiTranscription', {
-    icons: 'teiPageBreak,teiAdd,teiDel,teiParagraph,teiLineBreak,teiNote,teiUnclear,teiUnderline,teiFormula,teiFigure,teiCatchwords,teiForeign',
+    icons: 'teiPageBreak,teiAdd,teiDel,teiParagraph,teiLineBreak,teiNote,teiUnclear,teiUnderline,teiFormula,teiFigure,teiCatchwords,teiForeign,teiSpaceBefore,teiSpaceAfter',
     init: function( editor ) {
         // TEI-ADD <ins class="tei-add"> | <add> </add>
         editor.addCommand( 'teiAdd', {
@@ -297,6 +299,36 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             label: 'tei-lb: inserts a line break',
             command: 'teiLineBreak',
             toolbar: 'tei-lb'
+        });
+
+        // EXTRA SPACE
+        editor.addCommand( 'teiSpaceBefore', {
+            exec: function( editor ) {
+                var editorSelection = editor.getSelection();
+                var newElement = new CKEDITOR.dom.text( '\u00A0' );
+                var startTag = editorSelection.getStartElement();
+                newElement.insertBefore(startTag);
+            }
+        });
+        editor.ui.addButton('TeiSpaceBefore', {
+            label: 'inserts extra space before the opening tag',
+            command: 'teiSpaceBefore',
+            toolbar: 'tei-spaceBefore'
+        });
+
+        // EXTRA SPACE
+        editor.addCommand( 'teiSpaceAfter', {
+            exec: function( editor ) {
+                var editorSelection = editor.getSelection();
+                var newElement = new CKEDITOR.dom.text( '\u00A0' );
+                var startTag = editorSelection.getStartElement();
+                newElement.insertAfter(startTag);
+            }
+        });
+        editor.ui.addButton('TeiSpaceAfter', {
+            label: 'inserts extra space after the closing tag',
+            command: 'teiSpaceAfter',
+            toolbar: 'tei-spaceAfter'
         });
 
         // TEI-PAGEBREAK <span class="tei-pb"> | <pb n="x">

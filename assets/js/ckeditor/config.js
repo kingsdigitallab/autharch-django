@@ -10,12 +10,6 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The toolbar groups arrangement, optimized for a single toolbar row.
 	config.toolbarGroups = [
-		// { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
-		// { name: 'forms' },
-		// { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		// { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		// { name: 'links' },
-		// { name: 'insert' },
 		{ name: 'tei-pb' },
 		{ name: 'tei-p' },
 		{ name: 'tei-underline' },
@@ -28,12 +22,14 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tei-figure' },
 		{ name: 'tei-catchwords' },
 		{ name: 'tei-foreign' },
+		{ name: 'tei-spaceBefore' },
+		{ name: 'tei-spaceAfter' },
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo', 'redo' ] },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 	];
 	config.allowedContent = true;
+	CKEDITOR.timestamp = '2'; 
 	config.extraPlugins = ['teiTranscription', 'sourcedialog', 'elementspath'];
-	// config.fillEmptyBlocks = false;
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
 	config.removeButtons = 'Cut,Copy,Paste,Anchor,Underline,Strike,Subscript,Superscript';
