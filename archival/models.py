@@ -113,8 +113,7 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
                                     help_text="Generic Connection Text C")
 
     cataloguer = models.CharField(max_length=512, blank=True, null=True)
-    description_date = models.DateField()
-    # description_date = models.CharField(max_length=512, null=True)
+    description_date = models.CharField(max_length=128)
 
     rights_declaration = models.TextField(
         default=settings.ARCHIVAL_RIGHTS_DECLARATION)
