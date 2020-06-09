@@ -24,11 +24,10 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tei-foreign' },
 		{ name: 'tei-spaceBefore' },
 		{ name: 'tei-spaceAfter' },
-		{ name: 'clipboard',   groups: [ 'clipboard', 'undo', 'redo' ] },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
+		{ name: 'clipboard',   groups: [ 'clipboard', 'undo', 'redo' ] },
 	];
 	config.allowedContent = true;
-	CKEDITOR.timestamp = '2'; 
 	config.extraPlugins = ['teiTranscription', 'sourcedialog', 'elementspath'];
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.

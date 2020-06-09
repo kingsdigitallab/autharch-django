@@ -301,7 +301,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-lb'
         });
 
-        // EXTRA SPACE
+        // EXTRA SPACE BEFORE - when the cursor cannot be placed between the tags, traverse one step up in the DOM from the selection and add extra space before the tag
         editor.addCommand( 'teiSpaceBefore', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
@@ -316,7 +316,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             toolbar: 'tei-spaceBefore'
         });
 
-        // EXTRA SPACE
+        // EXTRA SPACE AFTER - when the cursor cannot be placed between the tags, traverse one step up in the DOM from the selection and add extra space after the tag
         editor.addCommand( 'teiSpaceAfter', {
             exec: function( editor ) {
                 var editorSelection = editor.getSelection();
