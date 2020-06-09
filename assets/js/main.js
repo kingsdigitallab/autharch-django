@@ -225,7 +225,7 @@ $(document).ready(function() {
     }
   });
 
-  // TRANSCRIPTIONS - if expanded by default
+  // TRANSCRIPTIONS - if expanded by default (WILL BE REMOVED ONCE THE RTE DEVELOPMENT IS COMPLETED)
   if ($('#transcription-div').hasClass('expand') && $( 'textarea.richtext-transcription' ).length == 0) {
     fetchTranscriptions();
   }
@@ -246,10 +246,14 @@ async function fetchTranscriptions() {
   await fetch(window.location.pathname + 'transcriptions').then(
     function(response) {
       response.json().then(function(data) {
+        let orderedData = data.sort(function(a, b) {return parseInt(a.fields.order) - parseInt(b.fields.order)});
+        let transcriptionManagementForm = `<input type="hidden" name="transcription-TOTAL_FORMS" value="`+orderedData.length+`" id="id_transcription-TOTAL_FORMS"><input type="hidden" name="transcription-INITIAL_FORMS" value="`+orderedData.length+`" id="id_transcription-INITIAL_FORMS"><input type="hidden" name="transcription-MIN_NUM_FORMS" value="0" id="id_transcription-MIN_NUM_FORMS"><input type="hidden" name="transcription-MAX_NUM_FORMS" value="1000" id="id_transcription-MAX_NUM_FORMS">`;
         let transcriptions = '';
-        data.forEach(function(t) {
-          transcriptions += `<textarea class="richtext-transcription" id="id_transcription-`+t.order+`-transcription">`+t.transcription+`</textarea>`;
+        orderedData.forEach(function(t, i) {
+          transcriptions += `<input type="hidden" name="transcription-`+i+`-id" value="`+t.pk+`" id="id_transcription-`+i+`-id" aria-label="input field">
+                            <textarea name="transcription-`+i+`-transcription" class="richtext-transcription" rows="8" id="id_transcription-`+i+`-transcription" cols="40" aria-label="richtext field">`+t.fields.transcription+`</textarea>`;
         });
+        $('#transcription').append(transcriptionManagementForm);
         $('#transcription').append(transcriptions);
         addCKEditor();
       });
@@ -273,7 +277,6 @@ function addCKEditor() {
     displayedPages: 3,
     prevText: ' ',
     nextText: ' ',
-    ellipsePageSet: false,
     onPageClick: function(pageNumber, event) {
       $("div[id^=cke_id_transcription]").hide();
       $("textarea#id_transcription-"+(pageNumber-1)+"-transcription").ckeditor();

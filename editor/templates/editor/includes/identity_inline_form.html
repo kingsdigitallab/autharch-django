@@ -49,7 +49,6 @@
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('name_entry', this)">Add name entry
       </label>
     </div>
-    <br>
     <div class="formset">
       {% with descriptions=form.formsets.descriptions %}
       <h3>DESCRIPTIONS ({{ descriptions.management_form.INITIAL_FORMS.value|default:"0" }})
@@ -69,7 +68,6 @@
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('description', this)">Add description
       </label>
     </div>
-
     <div class="formset">
       {% with relations=form.formsets.relations %}
       <h3>RELATIONS ({{ relations.management_form.INITIAL_FORMS.value|default:"0" }})
@@ -89,7 +87,6 @@
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('relation', this)">Add relation
       </label>
     </div>
-    <br>
     <div class="formset">
       {% with resources=form.formsets.resources %}
       <h3>RESOURCES ({{ resources.management_form.INITIAL_FORMS.value|default:"0" }})
