@@ -11,10 +11,14 @@ from authority.models import Entity, Relation
 class ArchivalRecordIndex:
 
     def _get_year_from_date(self, date):
-        if date is None:
+        if not date:
             year = None
         else:
-            year = date.year
+            try:
+                year_end_index = date.index('-')
+                year = int(date[:year_end_index])
+            except ValueError:
+                year = int(date)
         return year
 
     def prepare_addressees(self, obj):
