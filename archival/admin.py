@@ -18,7 +18,6 @@ class ArchivalRecordImageInline(admin.TabularInline):
 class ArchivalRecordAdmin(PolymorphicParentModelAdmin, VersionAdmin):
     base_model = Collection
     child_models = [Collection, File, Item, Series]
-    date_hierarchy = 'description_date'
 
     list_display = ['archival_level', 'title']
     list_display_links = list_display
