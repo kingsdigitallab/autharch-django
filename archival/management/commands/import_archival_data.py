@@ -7,7 +7,7 @@ from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from archival.models import Collection, File, Item, Reference, Series
+from archival.models import Collection, File, Item, Project, Reference, Series
 from authority.models import Entity
 from jargon.models import (
     MaintenanceStatus, Publication, PublicationStatus, ReferenceSource,
@@ -20,32 +20,55 @@ from script_codes.models import Script
 HELP = ('Import archival data from spreadsheet or CSV files. Creates initial '
         'revisions on successful import.')
 PATHS_HELP = 'Path to spreadsheet/CSV file to import.'
+PROJECT_ID_HELP = 'ID of project the imported data is to be associated with.'
 
 # Default values for missing data.
+DEFAULT_CATALOGUER = 'Not available'
+DEFAULT_DESCRIPTION_DATE = 'Not available'
 DEFAULT_PUBLICATION_STATUS = 'published'
 DEFAULT_REPOSITORY_CODE = 262
 
-NON_ESSENTIAL_COLUMNS = (
-    'Admin History', 'Arrangement', 'Cataloguer', 'Date',
-    'Description', 'Extent', 'Notes', 'Title')
+NON_ESSENTIAL_COLUMNS = {
+    'Admin History': None,
+    'Arrangement': None,
+    'Cataloguer': DEFAULT_CATALOGUER,
+    'Date': None,
+    'Date of Description': DEFAULT_DESCRIPTION_DATE,
+    'Description': None,
+    'Extent': None,
+    'Notes': None,
+    'Publication Status': DEFAULT_PUBLICATION_STATUS,
+    'Publications': None,
+    'RA_Reference': None,
+    'Title': None,
+}
 
 # Error and log messages.
+EXISTING_RECORD_IN_DIFFERENT_PROJECT_MSG = (
+    'Record with UUID "{}" in data at "{}" (sheet "{}") already exists under '
+    'different project "{}".')
 INVALID_INPUT_FILE_TYPE_MSG = (
     'Invalid file type for "{}"; please provide a .csv or .xlsx file.')
+LANGUAGE_NOT_FOUND_MSG = (
+    'Language "{}" not found in record in data at "{}" (sheet "{}").')
+MISSING_ID_FOR_RECORD = (
+    'Row has no ID value in data at "{}" (sheet "{}"); skipping.')
 MISSING_OPTIONAL_COL_MSG = (
-    'Data at "{}" does not include the optional "{}" column.')
+    'Data at "{}" (sheet "{}") does not include the optional "{}" column.')
+MISSING_OPTIONAL_COL_WITH_DEFAULT_MSG = (
+    'Data at "{}" (sheet "{}") does not include the optional "{}" column; '
+    'using default value of "{}" for all rows.')
 MISSING_REQUIRED_COL_MSG = (
-    'Data at "{}" does not include the required "{}" column.')
-NO_PUBLICATION_CODE_COL_MSG = (
-    'Data at "{}" does not include a "Publication Status" column; using '
-    'default value of "%s" for all rows.' % DEFAULT_PUBLICATION_STATUS)
+    'Data at "{}" (sheet "{}") does not include the required "{}" column.')
 NO_REPOSITORY_CODE_COL_MSG = (
-    'Data at "{}" does not include a "Repository Code" column; using default '
-    'value of "%s" for Royal Archives and Royal Library repositories.'
-    % DEFAULT_REPOSITORY_CODE)
+    'Data at "{}" (sheet "{}") does not include a "Repository Code" column; '
+    'using default value of "%s" for Royal Archives and Royal Library '
+    'repositories.' % DEFAULT_REPOSITORY_CODE)
 NO_REPOSITORY_CODE_MSG = (
     'Data at "{}" has no "Repository Code" column and specifies an archive '
     'other than "Royal Archives" or "Royal Library.')
+NON_EXISTENT_PROJECT_MSG = 'Project with ID "{}" does not exist.'
+USING_PROJECT_MSG = 'Importing records into project "{}".'
 
 
 class Command(BaseCommand):
@@ -57,47 +80,62 @@ class Command(BaseCommand):
     script = Script.objects.get(name='Latin')
 
     def add_arguments(self, parser):
+        parser.add_argument('project_id', help=PROJECT_ID_HELP, type=int)
         parser.add_argument('paths', help=PATHS_HELP, metavar='FILE',
                             nargs='+', type=str)
 
     @transaction.atomic
     def handle(self, *args, **options):
+        try:
+            project = Project.objects.get(pk=options['project_id'])
+        except Project.DoesNotExist:
+            raise CommandError(NON_EXISTENT_PROJECT_MSG.format(
+                options['project_id']))
+        self.logger.info(USING_PROJECT_MSG.format(project.title))
         paths = options['paths']
         for path in paths:
-            self._import_path(os.path.abspath(path))
+            self._import_path(os.path.abspath(path), project)
         management.call_command('createinitialrevisions')
 
-    def _import_path(self, path):
+    def _import_path(self, path, project):
+        self._path = path
         if path.endswith('.csv'):
+            self._sheet = None
             df = pd.read_csv(path)
+            self._import_sheet(df, project)
         elif path.endswith('.xlsx'):
-            df = pd.read_excel(path)
+            for sheet, df in pd.read_excel(path, sheet_name=None).items():
+                self._sheet = sheet
+                self._import_sheet(df, project)
         else:
             raise CommandError(INVALID_INPUT_FILE_TYPE_MSG.format(path))
 
-        self._path = path
+    def _import_sheet(self, df, project):
         df = self._tidy_df(df)
-
         for i, row in df.iterrows():
-            self._import_row(row)
+            self._import_row(row, project)
 
-    def _import_row(self, row):
+    def _import_row(self, row, project):
         uuid = row['ID']
+        if pd.isnull(uuid):
+            self.logger.warn(MISSING_ID_FOR_RECORD.format(
+                self._path, self._sheet))
+            return
         level = row['Level'].lower()
 
         if level in ['collection', 'fonds']:
-            col = self._create_or_get_object(Collection, uuid)
+            col = self._create_or_get_object(Collection, uuid, project)
             col = self._add_base_collection_data(col, row)
             col = self._add_collection_data(col, row)
             col.save()
         elif level == 'series':
-            series = self._create_or_get_object(Series, uuid)
+            series = self._create_or_get_object(Series, uuid, project)
             series = self._add_base_collection_data(series, row)
             series = self._add_base_series_data(series, row)
             series = self._add_series_data(series, row)
             series.save()
         elif 'file' in level:
-            f = self._create_or_get_object(File, uuid)
+            f = self._create_or_get_object(File, uuid, project)
             f = self._add_base_collection_data(f, row)
             f = self._add_base_series_data(f, row)
             f = self._add_base_file_data(f, row)
@@ -106,7 +144,7 @@ class Command(BaseCommand):
             self.logger.debug(f.persons_as_relations.all())
             f.save()
         elif level == 'item':
-            item = self._create_or_get_object(Item, uuid)
+            item = self._create_or_get_object(Item, uuid, project)
             item = self._add_base_collection_data(item, row)
             item = self._add_base_series_data(item, row)
             item = self._add_base_file_data(item, row)
@@ -115,17 +153,22 @@ class Command(BaseCommand):
             self.logger.debug(item.persons_as_relations.all())
             item.save()
 
-    def _create_or_get_object(self, model, uuid):
+    def _create_or_get_object(self, model, uuid, project):
         try:
             obj = model.objects.get(uuid=uuid)
             self.logger.info('Found existing {} with uuid: {}'.format(
                 model, uuid))
-
+            if obj.project is None:
+                obj.project = project
+            elif obj.project.id != project.id:
+                raise CommandError(
+                    EXISTING_RECORD_IN_DIFFERENT_PROJECT_MSG.format(
+                        uuid, self._path, self._sheet, obj.project.title))
             return obj
         except model.DoesNotExist:
-            self.logger.warning('{} not found for uuid: {}. Creating.'.format(
+            self.logger.debug('{} not found for uuid: {}. Creating.'.format(
                 model, uuid))
-            obj = model(uuid=uuid)
+            obj = model(uuid=uuid, project=project)
 
             return obj
 
@@ -153,19 +196,19 @@ class Command(BaseCommand):
         obj = self._set_field_from_cell_data(obj, 'related_materials', row,
                                              'RA_Related Materials')
         obj = self._set_field_from_cell_data(obj, 'cataloguer', row,
-                                             'Cataloguer')
-        obj = self._set_field_from_cell_data(obj, 'description_date', row,
-                                             'Date of Description')
+                                             'Cataloguer', DEFAULT_CATALOGUER)
+        obj = self._set_field_from_cell_data(
+            obj, 'description_date', row, 'Date of Description',
+            DEFAULT_DESCRIPTION_DATE)
 
         # Use a default publication status if none is supplied.
         publication_status = DEFAULT_PUBLICATION_STATUS
         if 'Publication Status' in row:
             publication_status = row['Publication Status']
-        ps, _ = PublicationStatus.objects.get_or_create(
-            title=publication_status)
+        ps = PublicationStatus.objects.get(title=publication_status)
         obj.publication_status = ps
 
-        ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
+        ms = MaintenanceStatus.objects.get(title='new')
         obj.maintenance_status = ms
 
         obj.language = self.language
@@ -186,12 +229,14 @@ class Command(BaseCommand):
             obj.references.add(ref)
 
         if not pd.isnull(row['Language']):
-            try:
-                language = Language.objects.get(name_en=row['Language'])
-                obj.languages.add(language)
-            except Language.DoesNotExist:
-                self.logger.warning('Language {} not found'.format(
-                    row['Language']))
+            languages = row['Language'].split(', ')
+            for lang in languages:
+                try:
+                    language = Language.objects.get(name_en=lang)
+                    obj.languages.add(language)
+                except Language.DoesNotExist:
+                    self.logger.warning(LANGUAGE_NOT_FOUND_MSG.format(
+                        lang, self._path, self._sheet))
 
         return obj
 
@@ -203,7 +248,7 @@ class Command(BaseCommand):
         return col
 
     def _add_base_series_data(self, obj, row):
-        if not pd.isnull(row['Publications']):
+        if not pd.isnull(row.get('Publications')):
             publication, _ = Publication.objects.get_or_create(
                 title=row['Publications'])
             obj.publications.add(publication)
@@ -211,9 +256,8 @@ class Command(BaseCommand):
         return obj
 
     def _add_series_data(self, obj, row):
-        if not pd.isnull(row['Arrangement']):
-            obj.arrangement = row['Arrangement']
-
+        obj = self._set_field_from_cell_data(obj, 'arrangement', row,
+                                             'Arrangement')
         reference = self._get_parent_reference(row)
         self.logger.debug('reference {}'.format(reference))
         if not reference:
@@ -232,7 +276,7 @@ class Command(BaseCommand):
 
     def _get_parent_reference(self, row):
         source = ReferenceSource.objects.get(title='CALM')
-        unitid = '/'.join(row['CALM_reference'].split('/')[:-1])
+        unitid = '/'.join(row.get('CALM_reference', '').split('/')[:-1])
 
         try:
             reference = Reference.objects.get(source=source, unitid=unitid)
@@ -316,8 +360,8 @@ class Command(BaseCommand):
 
         return obj
 
-    def _set_field_from_cell_data(self, obj, field, row, column):
-        value = row.get(column)
+    def _set_field_from_cell_data(self, obj, field, row, column, default=None):
+        value = row.get(column) or default
         if not pd.isnull(value):
             setattr(obj, field, value)
         return obj
@@ -339,16 +383,21 @@ class Command(BaseCommand):
             # Yes, there is a fallback. Yes, it has two spaces in it.
             if 'Serial  No.' in df.columns:
                 df.rename(columns={'Serial  No.': 'ID'}, inplace=True)
+            elif 'Serial Number' in df.columns:
+                df.rename(columns={'Serial Number': 'ID'}, inplace=True)
+            elif 'Serial No.' in df.columns:
+                df.rename(columns={'Serial No.': 'ID'}, inplace=True)
             else:
-                raise CommandError(
-                    MISSING_REQUIRED_COL_MSG.format(self._path, 'ID'))
+                raise CommandError(MISSING_REQUIRED_COL_MSG.format(
+                    self._path, self._sheet, 'ID'))
+
+        if 'Repository' not in df.columns:
+            if 'Respository' in df.columns:
+                df.rename(columns={'Respository': 'Repository'}, inplace=True)
 
         if 'Date of Description' in df.columns:
             df['Date of Description'] = pd.to_datetime(
                 df['Date of Description'])
-        else:
-            raise CommandError(MISSING_REQUIRED_COL_MSG.format(
-                self._path, 'Date of Description'))
 
         # Non-essential columns (warning if not present).
 
@@ -356,18 +405,19 @@ class Command(BaseCommand):
             if 'RA Reference' in df.columns:
                 df.rename(columns={'RA Reference': 'RA_Reference'},
                           inplace=True)
-            else:
-                self.logger.warning(MISSING_OPTIONAL_COL_MSG.format(
-                    self._path, 'RA_Reference'))
 
-        if 'Publication Status' not in df.columns:
-            self.logger.warning(NO_PUBLICATION_CODE_COL_MSG.format(self._path))
         if 'Repository Code' not in df.columns:
-            self.logger.warning(NO_REPOSITORY_CODE_COL_MSG.format(self._path))
+            self.logger.warning(NO_REPOSITORY_CODE_COL_MSG.format(
+                self._path, self._sheet))
 
-        for column in NON_ESSENTIAL_COLUMNS:
+        for column, default in NON_ESSENTIAL_COLUMNS.items():
             if column not in df.columns:
-                self.logger.warning(MISSING_OPTIONAL_COL_MSG.format(
-                    self._path, column))
+                if default is not None:
+                    msg = MISSING_OPTIONAL_COL_WITH_DEFAULT_MSG.format(
+                        self._path, self._sheet, column, default)
+                else:
+                    msg = MISSING_OPTIONAL_COL_MSG.format(
+                        self._path, self._sheet, column)
+                self.logger.warning(msg)
 
         return df
