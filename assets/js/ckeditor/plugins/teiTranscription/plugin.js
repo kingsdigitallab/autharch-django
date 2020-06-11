@@ -61,7 +61,7 @@ function checkMissingClasses() {
 }
 
 CKEDITOR.plugins.add( 'teiTranscription', {
-    icons: 'teiPageBreak,teiAdd,teiDel,teiParagraph,teiLineBreak,teiNote,teiUnclear,teiUnderline,teiFormula,teiFigure,teiCatchwords,teiForeign,teiSpaceBefore,teiSpaceAfter',
+    icons: 'teiPageBreak,teiAdd,teiDel,teiParagraph,teiLineBreak,teiNote,teiUnclear,teiUnderline,teiFormula,teiFigure,teiCatchwords,teiForeign,teiSpaceBefore,teiSpaceAfter,howToUse',
     init: function( editor ) {
         // TEI-ADD <ins class="tei-add"> | <add> </add>
         editor.addCommand( 'teiAdd', {
@@ -529,6 +529,46 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     editor.insertElement(newElement);
                 }
             };
+        });
+
+        editor.addCommand( 'howToUse', new CKEDITOR.dialogCommand( 'howToUseDialog' ) );
+        CKEDITOR.dialog.add( 'howToUseDialog', function ( editor ) {
+            var size = CKEDITOR.document.getWindow().getViewPaneSize();
+            
+            // Make it maximum 800px wide, but still fully visible in the viewport.
+            var width = Math.min( size.width - 70, 800 );
+
+            // Make it use 2/3 of the viewport height.
+            var height = size.height / 1.5
+            return {
+                title: 'How to use the rich text editor for transcriptions',
+                minWidth: width,
+                minHeight: height,
+        
+                contents: [
+                    {
+                        id: 'tab-use',
+                        label: 'How To Use Tab',
+                        elements: [
+                            {
+                                type: 'html',
+                                id: 'description',
+                                html: '<h3>This is some sample HTML content.</h3>'
+                            }
+                        ]
+                    }
+                ],
+                onShow: function(){
+                },
+                onOk: function() {
+                    var dialog = this;
+                }
+            };
+        });
+        editor.ui.addButton('HowToUse', {
+            label: 'How to Use',
+            command: 'howToUse',
+            toolbar: 'tei-howToUse'
         });
 
         // TEI-FOREIGN <span class="tei-foreign" data-tei-lang="fr"> | <foreign xml:lang='xx'>  </foreign>

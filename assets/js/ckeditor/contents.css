@@ -26,10 +26,6 @@ body
 	word-wrap: break-word;
 }
 
-a.cke_button {
-	cursor: pointer;
-}
-
 .cke_button__teiparagraph_icon {
 		content: '\f292';
 		font-family: FontAwesome;
