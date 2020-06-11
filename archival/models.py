@@ -72,8 +72,7 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     aquisition_dates_notes = models.CharField(max_length=1024, null=True,
                                               blank=True)
 
-    start_date = PartialDateField(blank=True,
-                                  help_text=constants.START_DATE_HELP)
+    start_date = PartialDateField(help_text=constants.START_DATE_HELP)
     end_date = PartialDateField(blank=True,
                                 help_text=constants.END_DATE_HELP)
 
@@ -172,7 +171,7 @@ class ArchivalRecordSet(TimeStampedModel):
 class Collection(ArchivalRecord):
     administrative_history = models.TextField(
         help_text=constants.ADMINISTRATIVE_HISTORY_HELP)
-    arrangement = models.TextField(help_text=constants.ARRANGEMENT_HELP)
+    arrangement = models.TextField(blank=True,help_text=constants.ARRANGEMENT_HELP)
 
     def __str__(self):
         return self.title
@@ -194,7 +193,7 @@ class Series(ArchivalRecord, SeriesBase):
     parent_series = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.CASCADE)
 
-    arrangement = models.TextField(help_text=constants.ARRANGEMENT_HELP)
+    arrangement = models.TextField(blank=True,help_text=constants.ARRANGEMENT_HELP)
 
     class Meta:
         verbose_name_plural = 'Series'

@@ -65,7 +65,7 @@
               <a class="toggle-tab-button transcription-toggle" onclick="toggleTab(this)"></a>
             </div>
           </div>
-          <div class="fieldset-body expand" id="transcription-div">
+          <div class="fieldset-body" id="transcription-div">
             <div class="two-column-table" id="transcription-section">
               <div id="openseadragon1" class="image">
                   <div id="navigation-pane">
@@ -75,7 +75,11 @@
                       <span class="nav-icon" id="full-mode"></span>
                   </div>
               </div>
-              <div id="transcription"></div>
+              <div id="transcription">
+                {% with transcriptions=form.formsets.transcriptions %}
+                  {{ transcriptions.management_form }}
+                {% endwith %}
+              </div>
             </div>
             <div id="rte-pagination"></div>
           </div>

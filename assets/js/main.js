@@ -247,13 +247,11 @@ async function fetchTranscriptions() {
     function(response) {
       response.json().then(function(data) {
         let orderedData = data.sort(function(a, b) {return parseInt(a.fields.order) - parseInt(b.fields.order)});
-        let transcriptionManagementForm = `<input type="hidden" name="transcription-TOTAL_FORMS" value="`+orderedData.length+`" id="id_transcription-TOTAL_FORMS"><input type="hidden" name="transcription-INITIAL_FORMS" value="`+orderedData.length+`" id="id_transcription-INITIAL_FORMS"><input type="hidden" name="transcription-MIN_NUM_FORMS" value="0" id="id_transcription-MIN_NUM_FORMS"><input type="hidden" name="transcription-MAX_NUM_FORMS" value="1000" id="id_transcription-MAX_NUM_FORMS">`;
         let transcriptions = '';
         orderedData.forEach(function(t, i) {
           transcriptions += `<input type="hidden" name="transcription-`+i+`-id" value="`+t.pk+`" id="id_transcription-`+i+`-id" aria-label="input field">
                             <textarea name="transcription-`+i+`-transcription" class="richtext-transcription" rows="8" id="id_transcription-`+i+`-transcription" cols="40" aria-label="richtext field">`+t.fields.transcription+`</textarea>`;
         });
-        $('#transcription').append(transcriptionManagementForm);
         $('#transcription').append(transcriptions);
         addCKEditor();
       });

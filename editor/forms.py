@@ -237,6 +237,8 @@ class PlaceEditInlineForm(forms.ModelForm):
         model = Place
         widgets = {
             'place': PlaceSelect(),
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput()
         }
 
 
@@ -247,7 +249,9 @@ class RelationEditInlineForm(forms.ModelForm):
         model = Relation
         widgets = {
             'place': PlaceSelect(),
-            'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC)
+            'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC),
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput()
         }
 
 
