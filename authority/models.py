@@ -256,7 +256,7 @@ class Mandate(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='mandates')
 
-    term = models.CharField(max_length=256, blank=True)
+    term = models.CharField(max_length=256, blank=True, help_text=constants.MANDATE_HELP)
     notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
     citation = models.TextField(blank=True)
 
@@ -274,7 +274,7 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='legal_statuses')
 
-    term = models.CharField(max_length=256, blank=True)
+    term = models.CharField(max_length=256, blank=True, help_text=constants.LEGAL_STATUS_HELP)
     notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
     citation = models.TextField(blank=True,
                                 help_text=constants.LEGAL_STATUS_CITATION_HELP)
@@ -289,7 +289,8 @@ class Relation(DateRangeMixin, TimeStampedModel):
         Identity, on_delete=models.CASCADE, related_name='relations')
     relation_type = models.ForeignKey(
         EntityRelationType, verbose_name="Relationship type",
-        on_delete=models.PROTECT)
+        on_delete=models.PROTECT,
+        help_text=constants.RELATION_TYPE_HELP)
     related_entity = models.ForeignKey(
         Entity, verbose_name="Related person or corporate body",
         on_delete=models.CASCADE, null=True,
@@ -337,6 +338,7 @@ class Control(LanguageScriptMixin, TimeStampedModel):
 class Source(TimeStampedModel):
     control = models.ForeignKey(Control, on_delete=models.CASCADE,
                                 related_name="sources")
-    name = models.TextField(verbose_name="Source")
+    name = models.TextField(verbose_name="Source",
+        help_text=constants.SOURCE_HELP)
     url = models.URLField(verbose_name="URL", blank=True, max_length=512)
     notes = models.TextField(blank=True)

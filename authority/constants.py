@@ -36,7 +36,9 @@ PLACE_ROLE_HELP = 'For preference, for personal entities we should capture, at m
 
 # PLACE_DATE_HELP = 'If dates are available you should  include them but do note if they are repetition of dates of existence in which case they do not need to be repeated here.'  # noqa
 
-# MANDATE_HELP = 'This term captures &quot;The source of authority or mandate for the corporate body in terms of its powers, functions, responsibilities or sphere of activities, such as a law, directive, or charter.&quot; See mandate at eac.staatsbibliothek-berlin.de.'  # noqa
+MANDATE_HELP = 'This element captures &quot;The source of authority or mandate for the corporate body in terms of its powers, functions, responsibilities or sphere of activities, such as a law, directive, or charter.&quot; See mandate at eac.staatsbibliothek-berlin.de.'  # noqa
+
+LEGAL_STATUS_HELP = 'This element is used to encode information about the legal status of a corporate body. &quot;The legal status of a corporate body is typically defined and granted by authorities or through authorized agencies. Enter terms in accordance with provisions of the controlling legislation.&quot; See legal status at eac.staatsbibliothek-berlin.de.'  # noqa
 
 LEGAL_STATUS_CITATION_HELP = 'This &quot;is a generic element available within a number of descriptive elements that cites an external resource in machine and / or human readable form&quot;. See citation at eac.staatsbibliothek-berlin.de.'  # noqa
 
@@ -45,3 +47,8 @@ LEGAL_STATUS_CITATION_HELP = 'This &quot;is a generic element available within a
 # RELATIONS_HELP = 'This element captures the relationship between a person or organisation within the GPP  name authority files and the entity described in the EAC-CPF instance you are encoding.'  # noqa
 
 RESOURCE_RELATIONSHIP_TYPE_HELP = 'This element &quot;contains the description of a resource related to the described entity&quot;. See resourceRelation at eac.staatsbibliothek-berlin.de.'  # noqa
+
+RELATION_TYPE_HELP = 'The type of relation that the corporate body or person has to the entity being described. See https://eac.staatsbibliothek-berlin.de/ for more info.'  # noqa
+
+
+SOURCE_HELP = 'This field should contain references to the material used in creating and populating a person or corporate body record. The content of this field can include source name and ID where appropriate or full citation if required. Examples of source name and ID include - Wikipedia: George III of the United Kingdom, VIAF ID: 49264990 or Wikidata ID: Q127318.'  # noqa
