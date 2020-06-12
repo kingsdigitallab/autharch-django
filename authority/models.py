@@ -98,6 +98,8 @@ class Entity(TimeStampedModel, DateRangeMixin):
         et, _ = EntityType.objects.get_or_create(title='person')
 
         entity = Entity(entity_type=et)
+        if project:
+            entity.project = project
         entity.save()
 
         identity = Identity(entity=entity)
