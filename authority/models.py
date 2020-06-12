@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
 
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (
@@ -102,7 +101,6 @@ class Entity(TimeStampedModel, DateRangeMixin):
         entity.save()
 
         identity = Identity(entity=entity)
-        identity.date_from = timezone.now()
         identity.preferred_identity = True
         identity.save()
 
@@ -256,7 +254,8 @@ class Mandate(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='mandates')
 
-    term = models.CharField(max_length=256, blank=True, help_text=constants.MANDATE_HELP)
+    term = models.CharField(max_length=256, blank=True,
+                            help_text=constants.MANDATE_HELP)
     notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
     citation = models.TextField(blank=True)
 
@@ -274,7 +273,8 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='legal_statuses')
 
-    term = models.CharField(max_length=256, blank=True, help_text=constants.LEGAL_STATUS_HELP)
+    term = models.CharField(max_length=256, blank=True,
+                            help_text=constants.LEGAL_STATUS_HELP)
     notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
     citation = models.TextField(blank=True,
                                 help_text=constants.LEGAL_STATUS_CITATION_HELP)
@@ -339,6 +339,6 @@ class Source(TimeStampedModel):
     control = models.ForeignKey(Control, on_delete=models.CASCADE,
                                 related_name="sources")
     name = models.TextField(verbose_name="Source",
-        help_text=constants.SOURCE_HELP)
+                            help_text=constants.SOURCE_HELP)
     url = models.URLField(verbose_name="URL", blank=True, max_length=512)
     notes = models.TextField(blank=True)
