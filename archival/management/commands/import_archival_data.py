@@ -7,7 +7,8 @@ from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from archival.models import Collection, File, Item, Project, Reference, Series
+from archival.models import (
+    ArchivalRecord, Collection, File, Item, Project, Reference, Series)
 from authority.models import Entity
 from jargon.models import (
     MaintenanceStatus, Publication, PublicationStatus, ReferenceSource,
@@ -30,6 +31,7 @@ DEFAULT_REPOSITORY_CODE = 262
 
 NON_ESSENTIAL_COLUMNS = {
     'Admin History': None,
+    'Addressee': None,
     'Arrangement': None,
     'Cataloguer': DEFAULT_CATALOGUER,
     'Date': None,
@@ -41,12 +43,17 @@ NON_ESSENTIAL_COLUMNS = {
     'Publications': None,
     'RA_Reference': None,
     'Title': None,
+    'Writer': None,
 }
 
 # Error and log messages.
+EXISTING_RECORD_DIFFERENT_MODEL_MSG = (
+    'Existing record is "{}"; wanted to create "{}".')
 EXISTING_RECORD_IN_DIFFERENT_PROJECT_MSG = (
     'Record with UUID "{}" in data at "{}" (sheet "{}") already exists under '
     'different project "{}".')
+EXISTING_RECORD_MSG = (
+    'Record with UUID "{}" in data at "{}" (sheet "{}") already exists.')
 INVALID_INPUT_FILE_TYPE_MSG = (
     'Invalid file type for "{}"; please provide a .csv or .xlsx file.')
 LANGUAGE_NOT_FOUND_MSG = (
@@ -124,18 +131,24 @@ class Command(BaseCommand):
         level = row['Level'].lower()
 
         if level in ['collection', 'fonds']:
-            col = self._create_or_get_object(Collection, uuid, project)
+            col = self._create_object(Collection, uuid, project)
+            if col is None:
+                return
             col = self._add_base_collection_data(col, row)
             col = self._add_collection_data(col, row)
             col.save()
         elif level == 'series':
-            series = self._create_or_get_object(Series, uuid, project)
+            series = self._create_object(Series, uuid, project)
+            if series is None:
+                return
             series = self._add_base_collection_data(series, row)
             series = self._add_base_series_data(series, row)
             series = self._add_series_data(series, row)
             series.save()
         elif 'file' in level:
-            f = self._create_or_get_object(File, uuid, project)
+            f = self._create_object(File, uuid, project)
+            if f is None:
+                return
             f = self._add_base_collection_data(f, row)
             f = self._add_base_series_data(f, row)
             f = self._add_base_file_data(f, row)
@@ -144,7 +157,9 @@ class Command(BaseCommand):
             self.logger.debug(f.persons_as_relations.all())
             f.save()
         elif level == 'item':
-            item = self._create_or_get_object(Item, uuid, project)
+            item = self._create_object(Item, uuid, project)
+            if item is None:
+                return
             item = self._add_base_collection_data(item, row)
             item = self._add_base_series_data(item, row)
             item = self._add_base_file_data(item, row)
@@ -153,19 +168,26 @@ class Command(BaseCommand):
             self.logger.debug(item.persons_as_relations.all())
             item.save()
 
-    def _create_or_get_object(self, model, uuid, project):
+    def _create_object(self, model, uuid, project):
+        """Create and return a `model` object in `project` with `uuid`.
+
+        Returns None if a record with `uuid` already exists."""
         try:
-            obj = model.objects.get(uuid=uuid)
-            self.logger.info('Found existing {} with uuid: {}'.format(
-                model, uuid))
+            obj = ArchivalRecord.objects.get(uuid=uuid)
+            self.logger.info(EXISTING_RECORD_MSG.format(uuid, self._path,
+                                                        self._sheet))
+            existing_model = obj.get_real_instance_class()
+            if existing_model != model:
+                self.logger.info(EXISTING_RECORD_DIFFERENT_MODEL_MSG.format(
+                    existing_model._meta.model_name, model._meta.model_name))
             if obj.project is None:
-                obj.project = project
+                pass
             elif obj.project.id != project.id:
                 raise CommandError(
                     EXISTING_RECORD_IN_DIFFERENT_PROJECT_MSG.format(
                         uuid, self._path, self._sheet, obj.project.title))
-            return obj
-        except model.DoesNotExist:
+            return None
+        except ArchivalRecord.DoesNotExist:
             self.logger.debug('{} not found for uuid: {}. Creating.'.format(
                 model, uuid))
             obj = model(uuid=uuid, project=project)
@@ -294,12 +316,12 @@ class Command(BaseCommand):
         return obj
 
     def _add_file_data(self, f, row):
-        if not pd.isnull(row['Writer']):
+        if not pd.isnull(row.get('Writer')):
             entity = self._get_entity_by_name(row['Writer'])
             if entity:
                 f.creators.add(entity)
 
-        if not pd.isnull(row['Addressee']):
+        if not pd.isnull(row.get('Addressee')):
             entity = self._get_entity_by_name(row['Addressee'])
             if entity:
                 f.persons_as_relations.add(entity)
@@ -335,12 +357,12 @@ class Command(BaseCommand):
         return entity
 
     def _add_item_data(self, obj, row):
-        if not pd.isnull(row['Writer']):
+        if not pd.isnull(row.get('Writer')):
             entity = self._get_entity_by_name(row['Writer'])
             if entity:
                 obj.creators.add(entity)
 
-        if not pd.isnull(row['Addressee']):
+        if not pd.isnull(row.get('Addressee')):
             entity = self._get_entity_by_name(row['Addressee'])
             if entity:
                 obj.persons_as_relations.add(entity)
