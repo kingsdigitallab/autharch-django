@@ -541,7 +541,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             // Make it use 2/3 of the viewport height.
             var height = size.height / 1.5
             return {
-                title: 'How to use the rich text editor for transcriptions',
+                title: 'How to use rich text editor for transcriptions',
                 minWidth: width,
                 minHeight: height,
         
@@ -553,7 +553,19 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                             {
                                 type: 'html',
                                 id: 'description',
-                                html: '<h3>This is some sample HTML content.</h3>'
+                                html: `
+                                    <h2 class="dialog-contents-heading">Tags</h2>
+                                    <h3 class="dialog-contents-subheading">Paragraph | &lt;p class="tei-p"&gt; </h3>
+                                    <p>This element is used to insert a new paragraph.</p>
+                                    <h4 class="dialog-contents-doc">Wrapping</h4>
+                                    <p>...</p>
+                                    <h4 class="dialog-contents-doc">Unwrapping</h4>
+                                    <p>...</p>
+                                    <br>
+                                    <h3 class="dialog-contents-subheading">Add | &lt;ins class="tei-add"&gt; </h3>
+                                    <p>This element is used to highlight text that was inserted in the source text by an author.</p>
+                
+                                `
                             }
                         ]
                     }
