@@ -1,6 +1,7 @@
 from archival.models import (
-    ArchivalRecord, ArchivalRecordImage, ArchivalRecordSet, Collection,
-    File, Item, Organisation, Reference, Series, Project)
+    ArchivalRecord, ArchivalRecordImage, ArchivalRecordSet,
+    ArchivalRecordTranscription, Collection, File, Item, Organisation,
+    OriginLocation, Reference, Series, Project)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -12,6 +13,14 @@ from reversion.admin import VersionAdmin
 
 class ArchivalRecordImageInline(admin.TabularInline):
     model = ArchivalRecordImage
+
+
+class ArchivalRecordTranscriptionInline(admin.TabularInline):
+    model = ArchivalRecordTranscription
+
+
+class OriginLocationInline(admin.TabularInline):
+    model = OriginLocation
 
 
 @admin.register(ArchivalRecord)
@@ -49,7 +58,8 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
                            'publication_status', 'subjects',
                            'persons_as_subjects', 'organisations_as_subjects',
                            'places_as_subjects', 'media', 'related_entities']
-    inlines = [ArchivalRecordImageInline]
+    inlines = [OriginLocationInline, ArchivalRecordImageInline,
+               ArchivalRecordTranscriptionInline]
 
     base_fieldsets = [
         ['Repository', {
@@ -68,8 +78,7 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         }],
         ['An example of a collapsible group', {
             'classes': ['collapse'],
-            'fields': ['physical_location', 'origin_location',
-                       'languages', 'description',
+            'fields': ['physical_location', 'languages', 'description',
                        'publication_description', 'notes', 'extent']
         }],
         ['Enhanced Dating', {
@@ -98,9 +107,6 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         }],
         ['Project', {
             'fields': ['project']
-        }],
-        ['Transcription', {
-            'fields': ['transcription']
         }],
     ]
 
