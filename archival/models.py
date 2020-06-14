@@ -34,14 +34,6 @@ class Reference(models.Model):
         return '{}: {}'.format(self.source, self.unitid)
 
 
-class Organisation(models.Model):
-    """TODO: Organisation"""
-    title = models.CharField(max_length=128, unique=True)
-
-    def __str__(self):
-        return self.title
-
-
 @reversion.register(follow=['origin_locations', 'transcription_images',
                             'transcription_texts'])
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
@@ -93,11 +85,15 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
 
     subjects = models.ManyToManyField(Function, blank=True,
                                       related_name='record_subjects')
-    persons_as_subjects = models.ManyToManyField(Entity, blank=True)
+    persons_as_subjects = models.ManyToManyField(
+        Entity, blank=True, limit_choices_to={'entity_type__title': 'person'},
+        related_name='person_subject_for_records')
     related_entities = models.ManyToManyField(Entity, blank=True,
                                               related_name='related_entities')
     organisations_as_subjects = models.ManyToManyField(
-        Organisation, blank=True, verbose_name='Corporate bodies as subjects')
+        Entity, blank=True, verbose_name='Corporate bodies as subjects',
+        limit_choices_to={'entity_type__title': 'corporateBody'},
+        related_name='organisation_subject_for_records')
     places_as_subjects = models.ManyToManyField(Place, blank=True)
 
     related_materials = models.CharField(
@@ -171,7 +167,8 @@ class ArchivalRecordSet(TimeStampedModel):
 class Collection(ArchivalRecord):
     administrative_history = models.TextField(
         help_text=constants.ADMINISTRATIVE_HISTORY_HELP)
-    arrangement = models.TextField(blank=True,help_text=constants.ARRANGEMENT_HELP)
+    arrangement = models.TextField(
+        blank=True, help_text=constants.ARRANGEMENT_HELP)
 
     def __str__(self):
         return self.title
@@ -193,7 +190,8 @@ class Series(ArchivalRecord, SeriesBase):
     parent_series = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.CASCADE)
 
-    arrangement = models.TextField(blank=True,help_text=constants.ARRANGEMENT_HELP)
+    arrangement = models.TextField(
+        blank=True, help_text=constants.ARRANGEMENT_HELP)
 
     class Meta:
         verbose_name_plural = 'Series'

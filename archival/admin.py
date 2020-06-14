@@ -1,7 +1,7 @@
 from archival.models import (
     ArchivalRecord, ArchivalRecordImage, ArchivalRecordSet,
-    ArchivalRecordTranscription, Collection, File, Item, Organisation,
-    OriginLocation, Reference, Series, Project)
+    ArchivalRecordTranscription, Collection, File, Item, OriginLocation,
+    Reference, Series, Project)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -186,11 +186,6 @@ class ItemAdmin(ArchivalRecordChildAdmin):
                        'places_as_relations']
         }]
     ] + FileAdmin.base_fieldsets
-
-
-@admin.register(Organisation)
-class OrganisationAdmin(admin.ModelAdmin):
-    search_fields = ['title']
 
 
 @admin.register(Reference)

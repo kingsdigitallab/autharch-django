@@ -517,6 +517,8 @@ class ArchivalRecordEditForm(ContainerModelForm):
             'languages': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'creators': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'organisations_as_subjects': forms.SelectMultiple(
+                attrs=SEARCH_SELECT_ATTRS),
             'parent_file': forms.Select(attrs=SEARCH_SELECT_ATTRS),
             'parent_series': forms.Select(attrs=SEARCH_SELECT_ATTRS),
             'persons_as_relations': forms.SelectMultiple(
