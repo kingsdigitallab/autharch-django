@@ -370,6 +370,11 @@ class DescriptionEditInlineForm(ContainerModelForm):
 
 class NameEntryEditInlineForm(ContainerModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
+            del self.fields['is_royal_name']
+
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
         data = kwargs.get('data')
