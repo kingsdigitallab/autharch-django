@@ -97,8 +97,7 @@
       </label>
     </div>
     <div class="form-section">
-      <h2>CONTROL 
-        <!-- TODO: add help text --> 
+      <h2>ENTITY RECORD DIGITAL RIGHTS MANAGEMENT 
         <!-- <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span> -->
       </h2>
       {{ form.formsets.control.management_form }}
@@ -115,14 +114,20 @@
             <div>
               {% render_field control.id %}
               {% render_field control.language %}
-              {% render_field control.rights_declaration_citation %}
             </div>
             <div>
               {% render_field control.script %}
-              {% render_field control.rights_declaration_abbreviation %}
             </div>
           </div>
           {% render_field control.rights_declaration %}
+          <div class="two-column-table">
+            <div>
+              {% render_field control.rights_declaration_citation %}
+            </div>
+            <div>
+              {% render_field control.rights_declaration_abbreviation %}
+            </div>
+          </div>
         </div>
       </fieldset>
       {% endfor %}

@@ -605,7 +605,7 @@ header {
         }
     }
     .select2-search {
-        padding-top: 7px;
+        padding-top: 9px;
         .select2-search__field {
             font-size: 14px;
             &:focus {
@@ -1292,7 +1292,7 @@ main {
 
     .tablesorter-filter {
         padding-right: 25px !important;
-        background-position: calc(100% - 20px) calc(1.1em - 1px), calc(100% - 15px) calc(1.1em - 1px) !important;
+        background-position: calc(100% - 15px) calc(0.9em - 1px),calc(100% - 10px) calc(0.9em - 1px)!important;
     }
     
     form {

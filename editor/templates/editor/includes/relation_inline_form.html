@@ -2,8 +2,8 @@
 <fieldset data-form-type="relation">
   <div class="fieldset-header">
     <h4>
-      {% if form.instance.relation_type %}
-        {{ form.instance.relation_type|default:"" }}
+      {% if form.instance.related_entity %}
+        {{ form.instance.related_entity|default:"" }}
       {% else %}
         Relation
       {% endif %}

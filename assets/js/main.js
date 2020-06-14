@@ -205,7 +205,7 @@ $(document).ready(function() {
   // RICHTEXT FIELDS
   tinymce.init({
     menubar: '',
-    content_style: ".mce-content-body {font-size:14px;font-family:Roboto,sans-serif;}",
+    content_style: ".mce-content-body {font-size:14px;}",
     plugins: 'charmap image media link table lists code',
     toolbar: 'bold italic underline strikethrough | insertfile image media link | table | formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | charmap | removeformat | undo redo | code',
   });

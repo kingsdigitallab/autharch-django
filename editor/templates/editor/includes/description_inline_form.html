@@ -17,7 +17,7 @@
     <div class="formset">
       {% with local_descriptions=form.formsets.local_descriptions %}
       <h3>GENDER ({{ local_descriptions.management_form.INITIAL_FORMS.value|default:"0" }})
-        <!-- <span role="button" aria-label="additional info" data-content-type="gender" class="icon-only additional-info-icon">&#xf059;</span> -->
+        <!-- <span ole="button" aria-label="additional info" data-content-type="gender" class="icon-only additional-info-icon">&#xf059;</span> -->
       </h3>
       <div class="management_form">
         {{ local_descriptions.management_form }}
@@ -106,10 +106,28 @@
           <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('event', this)">Add event
         </label>
     </div>
+    <div class="formset">
+      {% with functions=form.formsets.functions %}
+      <h3>FUNCTIONS ({{ functions.management_form.INITIAL_FORMS.value|default:"0" }})
+        <!-- <span role="button" aria-label="additional info" data-content-type="function" class="icon-only additional-info-icon">&#xf059;</span> -->
+      </h3>
+      <div class="management_form">
+        {{ functions.management_form }}
+      </div>
+      <div class="fieldsets">
+        {% for function in functions.forms %}
+        {% include "./function_inline_form.html" with form=function %}
+        {% endfor %}
+      </div>
+      {% endwith %}
+      <label class="create linked-button">
+        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('function', this)">Add function
+      </label>
+    </div>
     {% with mandates=form.formsets.mandates %}
     {% if mandates %}
     <div class="formset">
-      <h3>MANDATE ({{ mandates.management_form.INITIAL_FORMS.value|default:"0" }})
+      <h3>MANDATES ({{ mandates.management_form.INITIAL_FORMS.value|default:"0" }})
         <!-- <span role="button" aria-label="additional info" data-content-type="mandate" class="icon-only additional-info-icon">&#xf059;</span> -->
       </h3>
       <div class="management_form">
@@ -129,7 +147,7 @@
     {% with legal_statuses=form.formsets.legal_statuses %}
     {% if legal_statuses %}
     <div class="formset">
-      <h3>LEGAL STATUS ({{ legal_statuses.management_form.INITIAL_FORMS.value|default:"0" }})
+      <h3>LEGAL STATUSES ({{ legal_statuses.management_form.INITIAL_FORMS.value|default:"0" }})
         <!-- <span role="button" aria-label="additional info" data-content-type="legal-status" class="icon-only additional-info-icon">&#xf059;</span> -->
       </h3>
       <div class="management_form">
@@ -146,23 +164,5 @@
     </div>
     {% endif %}
     {% endwith %}
-    <div class="formset">
-      {% with functions=form.formsets.functions %}
-      <h3>FUNCTION ({{ functions.management_form.INITIAL_FORMS.value|default:"0" }})
-        <!-- <span role="button" aria-label="additional info" data-content-type="function" class="icon-only additional-info-icon">&#xf059;</span> -->
-      </h3>
-      <div class="management_form">
-        {{ functions.management_form }}
-      </div>
-      <div class="fieldsets">
-        {% for function in functions.forms %}
-        {% include "./function_inline_form.html" with form=function %}
-        {% endfor %}
-      </div>
-      {% endwith %}
-      <label class="create linked-button">
-        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('function', this)">Add function
-      </label>
-    </div>
   </div>
 </fieldset>

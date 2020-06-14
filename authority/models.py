@@ -221,9 +221,9 @@ class BiographyHistory(TimeStampedModel):
                                        related_name='biography_history')
 
     abstract = models.TextField(help_text=constants.BIOGRAPHY_ABSTRACT_HELP)
-    content = models.TextField(blank=True)
+    content = models.TextField(blank=True, verbose_name="Biography")
     sources = models.TextField(
-        blank=True, help_text=constants.BIOGRAPHY_SOURCES_HELP)
+        blank=True, help_text=constants.BIOGRAPHY_SOURCES_HELP, verbose_name="Biography sources")
     copyright = models.TextField(
         blank=True, help_text=constants.BIOGRAPHY_COPYRIGHT_HELP)
 
@@ -257,8 +257,8 @@ class Mandate(DateRangeMixin, TimeStampedModel):
                                     related_name='mandates')
 
     term = models.CharField(max_length=256, blank=True,
-                            help_text=constants.MANDATE_HELP)
-    notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
+                            help_text=constants.MANDATE_HELP, verbose_name="Mandate")
+    notes = models.TextField(blank=True)
     citation = models.TextField(blank=True)
 
 
@@ -276,7 +276,7 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
                                     related_name='legal_statuses')
 
     term = models.CharField(max_length=256, blank=True,
-                            help_text=constants.LEGAL_STATUS_HELP)
+                            help_text=constants.LEGAL_STATUS_HELP, verbose_name="Legal status")
     notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
     citation = models.TextField(blank=True,
                                 help_text=constants.LEGAL_STATUS_CITATION_HELP)
@@ -317,7 +317,7 @@ class Resource(TimeStampedModel):
 
 
 @reversion.register(follow=['sources'])
-class Control(LanguageScriptMixin, TimeStampedModel):
+class Control(TimeStampedModel):
     entity = models.OneToOneField(Entity, on_delete=models.CASCADE,
                                   related_name="control")
 
@@ -331,6 +331,11 @@ class Control(LanguageScriptMixin, TimeStampedModel):
     rights_declaration_abbreviation = models.CharField(
         max_length=256, blank=True)
     rights_declaration_citation = models.URLField(blank=True)
+
+    language = models.ForeignKey(
+        Language, on_delete=models.PROTECT,
+        help_text=constants.LANGUAGE_HELP, verbose_name="Record language")
+    script = models.ForeignKey(Script, on_delete=models.PROTECT,  verbose_name="Record script")
 
     class Meta:
         verbose_name_plural = 'Control'
