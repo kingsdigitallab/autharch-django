@@ -400,9 +400,6 @@ span[role=button] {
     .far {
         font-weight: 600;
     }
-    // .fas {
-    //     font-weight: 700;
-    // }
     &:hover, &:focus {
         cursor: pointer;
         text-decoration: underline;
@@ -594,8 +591,9 @@ header {
         }
     }
     .select2-selection__rendered, .select2-search {
-        padding-left: 8px;
-        padding-right: 15px;
+        padding-right: 20px !important;
+        padding-left: 8px !important;
+        width: -webkit-fill-available !important;
     }
     .select2-selection__rendered {
         padding-top: 5px;
@@ -1282,7 +1280,7 @@ main {
         grid-column-gap: 5px;
     }
 
-    select, .select2-selection--single {
+    select, .select2-selection--single, .select2-selection--multiple {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;

@@ -581,7 +581,8 @@ class ArchivalRecordEditForm(ContainerModelForm):
             'start_date': HTML5DateInput(),
             'subjects': FunctionMultiSelect(),
             'uuid': forms.HiddenInput(),
-            'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS)
+            'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'publications': forms.Textarea(attrs=RICHTEXT_ATTRS)
         }
 
 

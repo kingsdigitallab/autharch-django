@@ -65,7 +65,7 @@
               <a class="toggle-tab-button transcription-toggle" onclick="toggleTab(this)"></a>
             </div>
           </div>
-          <div class="fieldset-body" id="transcription-div">
+          <div class="fieldset-body expand" id="transcription-div">
             <div class="two-column-table" id="transcription-section">
               <div id="openseadragon1" class="image">
                   <div id="navigation-pane">
@@ -119,7 +119,6 @@
                     <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('origin_location', this)">Add location of originals
                   </label>
                 </div>
-                {% render_field form.publications %}
               </div>
               <div>
                 {% render_field form.repository %}
@@ -135,6 +134,7 @@
                 {% render_field form.publication_permission %}
               </div>
             </div>
+            {% render_field form.publications %}
           </div>
         </fieldset>
       </div>

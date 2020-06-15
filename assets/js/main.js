@@ -253,7 +253,9 @@ async function fetchTranscriptions() {
                             <textarea name="transcription-`+i+`-transcription" class="richtext-transcription" rows="8" id="id_transcription-`+i+`-transcription" cols="40" aria-label="richtext field">`+t.fields.transcription+`</textarea>`;
         });
         $('#transcription').append(transcriptions);
+        document.addEventListener("fullscreenchange", exitHandler);
         addCKEditor();
+        addPagination();
       });
     }
   )
@@ -262,12 +264,25 @@ async function fetchTranscriptions() {
   });
 }
 
+function exitHandler() {
+  if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+    var index = viewer.currentPage();
+    setTimeout(function() {
+      goToTranscription(index);
+      $('#rte-pagination').pagination('selectPage', parseInt(index+1));
+    }, 500);
+  }
+} 
+
 /** 
   hide all transcriptions and generate ckeditor for the first transcription on the list
 */
 function addCKEditor() {
   $( 'textarea.richtext-transcription' ).hide();
   $( 'textarea#id_transcription-0-transcription' ).ckeditor();
+}
+
+function addPagination() {
   $('#rte-pagination').pagination({
     items: $("textarea.richtext-transcription").length,
     itemsOnPage: 1,
@@ -276,13 +291,22 @@ function addCKEditor() {
     prevText: ' ',
     nextText: ' ',
     onPageClick: function(pageNumber, event) {
-      $("div[id^=cke_id_transcription]").hide();
-      $("textarea#id_transcription-"+(pageNumber-1)+"-transcription").ckeditor();
-      $("div[id='cke_id_transcription-"+(pageNumber-1)+"-transcription']").css('display', 'block');
+      goToTranscription(pageNumber-1);
       viewer.goToPage(pageNumber-1);
     }
   });
 }
+
+function goToTranscription(i) {
+  $("div[id^=cke_id_transcription]").hide();
+  $("textarea#id_transcription-"+(i)+"-transcription").ckeditor();
+  $("div[id='cke_id_transcription-"+(i)+"-transcription']").css('display', 'block');
+}
+
+// when the pagination button in full screen mode is clicked, 
+// get index of an image 
+// update pagination 
+// update transcription in RTE
 
 // expand/collapse entity/archival record sections
 function toggleTab(el) {

@@ -267,7 +267,7 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
     term = models.CharField(
         max_length=256, blank=True, help_text=constants.LEGAL_STATUS_HELP,
         verbose_name="Legal status")
-    notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
+    notes = models.TextField(blank=True)
     citation = models.TextField(blank=True,
                                 help_text=constants.LEGAL_STATUS_CITATION_HELP)
 
