@@ -264,13 +264,11 @@ async function fetchTranscriptions() {
   });
 }
 
+
 function exitHandler() {
   if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
     var index = viewer.currentPage();
-    setTimeout(function() {
-      goToTranscription(index);
-      $('#rte-pagination').pagination('selectPage', parseInt(index+1));
-    }, 500);
+    $('#rte-pagination').pagination('selectPage', parseInt(index+1));
   }
 } 
 
@@ -299,8 +297,8 @@ function addPagination() {
 
 function goToTranscription(i) {
   $("div[id^=cke_id_transcription]").hide();
-  $("textarea#id_transcription-"+(i)+"-transcription").ckeditor();
-  $("div[id='cke_id_transcription-"+(i)+"-transcription']").css('display', 'block');
+  $("textarea#id_transcription-"+i+"-transcription").ckeditor();
+  $("div[id='cke_id_transcription-"+i+"-transcription']").css('display', 'block');
 }
 
 // when the pagination button in full screen mode is clicked, 
