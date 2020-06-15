@@ -332,8 +332,13 @@ class DescriptionEditInlineForm(ContainerModelForm):
             Description, Event, form=EventEditInlineForm, extra=0)
         formsets['events'] = EventFormset(
             data, instance=instance, prefix=prefix + '-event')
+        function_kwargs = {}
+        if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
+            function_kwargs['min_num'] = 1
+            function_kwargs['validate_min'] = True
         FunctionFormset = inlineformset_factory(
-            Description, Function, form=FunctionEditInlineForm, extra=0)
+            Description, Function, form=FunctionEditInlineForm, extra=0,
+            **function_kwargs)
         formsets['functions'] = FunctionFormset(
             data, instance=instance, prefix=prefix + '-function')
         LanguageScriptFormset = inlineformset_factory(
@@ -439,10 +444,17 @@ class IdentityEditInlineForm(ContainerModelForm):
             extra=0, entity_type=self.Meta.entity_type)
         formsets['name_entries'] = NameEntryFormset(
             data, instance=self.instance, prefix=self.prefix + '-name_entry')
+        description_kwargs = {}
+        if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
+            # There is a minimum here because there must be at least
+            # one Function, and if there is no Description, validation
+            # doesn't extend down to the FunctionFormset.
+            description_kwargs['min_num'] = 1
+            description_kwargs['validate_min'] = True
         DescriptionFormset = inlineformset_factory(
             Identity, Description, exclude=[], form=DescriptionEditInlineForm,
             extra=0, entity_type=self.Meta.entity_type, max_num=1,
-            validate_max=True)
+            validate_max=True, **description_kwargs)
         formsets['descriptions'] = DescriptionFormset(
             data, instance=self.instance, prefix=self.prefix + '-description')
         RelationFormset = inlineformset_factory(
