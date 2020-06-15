@@ -163,7 +163,9 @@
     {% include "./includes/name_part_inline_form.html" with form=identity_form.formsets.name_entries.empty_form.formsets.name_parts.empty_form %}
     {% with description_form=identity_form.formsets.descriptions.empty_form %}
     {% include "./includes/description_inline_form.html" with form=description_form %}
+    {% if description_form.formsets.local_descriptions %}
     {% include "./includes/local_description_inline_form.html" with form=description_form.formsets.local_descriptions.empty_form %}
+    {% endif %}
     {% include "./includes/biography_history_inline_form.html" with form=description_form.formsets.biography_histories.empty_form %}
     {% include "./includes/event_inline_form.html" with form=description_form.formsets.events.empty_form %}
     {% include "./includes/function_inline_form.html" with form=description_form.formsets.functions.empty_form %}

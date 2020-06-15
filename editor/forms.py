@@ -346,11 +346,12 @@ class DescriptionEditInlineForm(ContainerModelForm):
             extra=0)
         formsets['biography_histories'] = BiographyHistoryFormset(
             data, instance=instance, prefix=prefix + '-biography_history')
-        LocalDescriptionFormset = inlineformset_factory(
-            Description, LocalDescription, form=LocalDescriptionEditInlineForm,
-            extra=0)
-        formsets['local_descriptions'] = LocalDescriptionFormset(
-            data, instance=instance, prefix=prefix + '-local_description')
+        if self.Meta.entity_type == PERSON_ENTITY_TYPE:
+            LocalDescriptionFormset = inlineformset_factory(
+                Description, LocalDescription,
+                form=LocalDescriptionEditInlineForm, extra=0)
+            formsets['local_descriptions'] = LocalDescriptionFormset(
+                data, instance=instance, prefix=prefix + '-local_description')
         if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
             MandateFormset = inlineformset_factory(
                 Description, Mandate, form=MandateEditInlineForm, extra=0)
@@ -372,7 +373,7 @@ class NameEntryEditInlineForm(ContainerModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
+        if self.Meta.entity_type != PERSON_ENTITY_TYPE:
             del self.fields['is_royal_name']
 
     def _add_formsets(self, *args, **kwargs):

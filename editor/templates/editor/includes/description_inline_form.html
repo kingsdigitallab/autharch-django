@@ -14,8 +14,9 @@
     <div>
       {% render_field form.id %}
     </div>
+    {% with local_descriptions=form.formsets.local_descriptions %}
+    {% if local_descriptions %}
     <div class="formset">
-      {% with local_descriptions=form.formsets.local_descriptions %}
       <h3>GENDER ({{ local_descriptions.management_form.INITIAL_FORMS.value|default:"0" }})
         <!-- <span ole="button" aria-label="additional info" data-content-type="gender" class="icon-only additional-info-icon">&#xf059;</span> -->
       </h3>
@@ -27,11 +28,12 @@
         {% include "./local_description_inline_form.html" with form=local_description %}
         {% endfor %}
       </div>
-      {% endwith %}
       <label class="create linked-button">
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('local_description', this)">Add gender
       </label>
     </div>
+    {% endif %}
+    {% endwith %}
 
     <div class="formset">
       {% with biography_histories=form.formsets.biography_histories %}
