@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.db import models
 
 from geonames_place.models import Place as GeoPlace
@@ -167,18 +166,6 @@ class NameEntry(DateRangeMixin, LanguageScriptMixin, TimeStampedModel):
         return self.display_name or ', '.join(['{}: {}'.format(
             p.name_part_type, p.part) for p in self.parts.all()])
 
-    def clean(self):
-        # A royal name must have at least a "forename" name part
-        # and a "properTitle" name part.
-        if self.is_royal_name:
-            forename_type = NamePartType.objects.get(title='forename')
-            proper_title_type = NamePartType.objects.get(title='proper title')
-            if not self.parts.filter(name_part_type=forename_type) and \
-               not self.parts.filter(name_part_type=proper_title_type):
-                raise ValidationError(
-                    'A royal name must contain a "forename" part and a '
-                    '"proper title" part.')
-
 
 @reversion.register()
 class NamePart(TimeStampedModel):
@@ -223,7 +210,8 @@ class BiographyHistory(TimeStampedModel):
     abstract = models.TextField(help_text=constants.BIOGRAPHY_ABSTRACT_HELP)
     content = models.TextField(blank=True, verbose_name="Biography")
     sources = models.TextField(
-        blank=True, help_text=constants.BIOGRAPHY_SOURCES_HELP, verbose_name="Biography sources")
+        blank=True, help_text=constants.BIOGRAPHY_SOURCES_HELP,
+        verbose_name="Biography sources")
     copyright = models.TextField(
         blank=True, help_text=constants.BIOGRAPHY_COPYRIGHT_HELP)
 
@@ -256,8 +244,9 @@ class Mandate(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='mandates')
 
-    term = models.CharField(max_length=256, blank=True,
-                            help_text=constants.MANDATE_HELP, verbose_name="Mandate")
+    term = models.CharField(
+        max_length=256, blank=True, help_text=constants.MANDATE_HELP,
+        verbose_name="Mandate")
     notes = models.TextField(blank=True)
     citation = models.TextField(blank=True)
 
@@ -275,8 +264,9 @@ class LegalStatus(DateRangeMixin, TimeStampedModel):
     description = models.ForeignKey(Description, on_delete=models.CASCADE,
                                     related_name='legal_statuses')
 
-    term = models.CharField(max_length=256, blank=True,
-                            help_text=constants.LEGAL_STATUS_HELP, verbose_name="Legal status")
+    term = models.CharField(
+        max_length=256, blank=True, help_text=constants.LEGAL_STATUS_HELP,
+        verbose_name="Legal status")
     notes = models.TextField(verbose_name="Descriptive Notes", blank=True)
     citation = models.TextField(blank=True,
                                 help_text=constants.LEGAL_STATUS_CITATION_HELP)
@@ -335,7 +325,8 @@ class Control(TimeStampedModel):
     language = models.ForeignKey(
         Language, on_delete=models.PROTECT,
         help_text=constants.LANGUAGE_HELP, verbose_name="Record language")
-    script = models.ForeignKey(Script, on_delete=models.PROTECT,  verbose_name="Record script")
+    script = models.ForeignKey(Script, on_delete=models.PROTECT,
+                               verbose_name="Record script")
 
     class Meta:
         verbose_name_plural = 'Control'

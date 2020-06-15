@@ -386,6 +386,35 @@ class NameEntryEditInlineForm(ContainerModelForm):
             data, instance=self.instance, prefix=self.prefix + '-name_part')
         return formsets
 
+    def clean(self):
+        cleaned_data = super().clean()
+        # A royal name must have at least a "forename" name part
+        # and a "properTitle" name part.
+        if cleaned_data.get('is_royal_name'):
+            self._validate_royal_name(cleaned_data)
+
+    def _validate_royal_name(self, cleaned_data):
+        forename_type = NamePartType.objects.get(title='forename')
+        proper_title_type = NamePartType.objects.get(title='proper title')
+        has_forename = False
+        has_proper_title = False
+        try:
+            # The parts may be invalid, in which case we don't
+            # want to bother with this check.
+            parts_data = self.formsets['name_parts'].cleaned_data
+        except AttributeError:
+            return
+        for part_data in parts_data:
+            part_type = part_data.get('name_part_type')
+            if part_type == forename_type:
+                has_forename = True
+            elif part_type == proper_title_type:
+                has_proper_title = True
+        if not (has_forename and has_proper_title):
+            raise forms.ValidationError(
+                'A royal name must contain a "forename" part and a '
+                '"proper title" part.', code='invalid')
+
     class Meta:
         exclude = []
         model = NameEntry
@@ -631,7 +660,8 @@ class BaseUserFormset(forms.BaseModelFormSet):
                EditorProfile.ADMIN and not form.cleaned_data['DELETE']:
                 admin_remaining = True
         if not admin_remaining:
-            raise forms.ValidationError('There must always be one admin user.')
+            raise forms.ValidationError('There must always be one admin user.',
+                                        code='invalid')
 
 
 class EditorProfileForm(forms.Form):
