@@ -11,8 +11,7 @@ from archival.models import (
     ArchivalRecord, Collection, File, Item, Project, Reference, Series)
 from authority.models import Entity
 from jargon.models import (
-    MaintenanceStatus, Publication, PublicationStatus, ReferenceSource,
-    Repository)
+    MaintenanceStatus, PublicationStatus, ReferenceSource, Repository)
 from languages_plus.models import Language
 from script_codes.models import Script
 
@@ -219,8 +218,6 @@ class Command(BaseCommand):
                                              'Description')
         obj = self._set_field_from_cell_data(obj, 'notes', row, 'Notes')
         obj = self._set_field_from_cell_data(obj, 'extent', row, 'Extent')
-        obj = self._set_field_from_cell_data(obj, 'related_materials', row,
-                                             'RA_Related Materials')
         obj = self._set_field_from_cell_data(obj, 'cataloguer', row,
                                              'Cataloguer', DEFAULT_CATALOGUER)
         obj = self._set_field_from_cell_data(
@@ -274,11 +271,8 @@ class Command(BaseCommand):
         return col
 
     def _add_base_series_data(self, obj, row):
-        if not pd.isnull(row.get('Publications')):
-            publication, _ = Publication.objects.get_or_create(
-                title=row['Publications'])
-            obj.publications.add(publication)
-
+        obj = self._set_field_from_cell_data(obj, 'publications', row,
+                                             'Publications')
         return obj
 
     def _add_series_data(self, obj, row):
