@@ -103,7 +103,21 @@
                 {% render_field form.references %}
                 {% render_field form.parent_series %}
                 {% render_field form.parent_file %}
-                {% render_field form.related_materials %}
+                <div class="formset">
+                  {% with related_materials=form.formsets.related_materials %}
+                  <div class="management_form">
+                    {{ related_materials.management_form }}
+                  </div>
+                  <div class="fieldsets">
+                    {% for related_material in related_materials.forms %}
+                    {% include "./includes/related_material_inline_form.html" with form=related_material %}
+                    {% endfor %}
+                  </div>
+                  {% endwith %}
+                  <label class="button-link create">
+                    <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('related_material', this)">Add related material
+                  </label>
+                </div>
                 <div class="formset">
                   {% with origin_locations=form.formsets.origin_locations %}
                   <div class="management_form">
@@ -292,6 +306,7 @@
     {% comment %}Include an empty form for each sub-form on the page,
     to allow for JS creation of new forms, rather than supplying a set
     number of extra forms server-side.{% endcomment %}
+    {% include "./includes/related_material_inline_form.html" with form=form.formsets.related_materials.empty_form %}
     {% include "./includes/origin_location_inline_form.html" with form=form.formsets.origin_locations.empty_form %}
   </div>
   {% endblock content %}

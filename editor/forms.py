@@ -10,7 +10,8 @@ import haystack.forms
 from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import (
-    ArchivalRecordTranscription, Collection, File, Item, OriginLocation, Series
+    ArchivalRecordTranscription, Collection, File, Item, OriginLocation,
+    RelatedMaterialReference, Series
 )
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
@@ -239,6 +240,16 @@ class PlaceEditInlineForm(forms.ModelForm):
             'place': PlaceSelect(),
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput()
+        }
+
+
+class RelatedMaterialEditInlineForm(forms.ModelForm):
+
+    class Meta:
+        exclude = []
+        model = RelatedMaterialReference
+        widgets = {
+            'related_record': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC),
         }
 
 
@@ -544,7 +555,12 @@ class ArchivalRecordEditForm(ContainerModelForm):
             self.Meta.model, OriginLocation, exclude=[], extra=0,
             form=OriginLocationEditInlineForm, min_num=1)
         formsets['origin_locations'] = OriginLocationFormset(
-            *args, instance=self.instance, prefix='origin_locations')
+            *args, instance=self.instance, prefix='origin_location')
+        RelatedMaterialFormset = inlineformset_factory(
+            self.Meta.model, RelatedMaterialReference, exclude=[], extra=0,
+            form=RelatedMaterialEditInlineForm, fk_name='record')
+        formsets['related_materials'] = RelatedMaterialFormset(
+            *args, instance=self.instance, prefix='related_material')
         TranscriptionFormset = inlineformset_factory(
             self.Meta.model, ArchivalRecordTranscription, exclude=[],
             form=ArchivalRecordTranscriptionEditInlineForm, extra=0)

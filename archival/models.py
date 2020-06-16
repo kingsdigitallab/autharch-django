@@ -34,8 +34,8 @@ class Reference(models.Model):
         return '{}: {}'.format(self.source, self.unitid)
 
 
-@reversion.register(follow=['origin_locations', 'transcription_images',
-                            'transcription_texts'])
+@reversion.register(follow=['origin_locations', 'referenced_related_materials',
+                            'transcription_images', 'transcription_texts'])
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
     rcin = models.CharField('RCIN', max_length=256, blank=True, null=True)
@@ -95,10 +95,6 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
         limit_choices_to={'entity_type__title': 'corporateBody'},
         related_name='organisation_subject_for_records')
     places_as_subjects = models.ManyToManyField(Place, blank=True)
-
-    related_materials = models.CharField(
-        max_length=2048, blank=True, null=True,
-        help_text=constants.RELATED_MATERIALS_HELP)
 
     connection_a = models.CharField(max_length=2048, blank=True, null=True,
                                     help_text="Generic Connection Text A")
@@ -307,3 +303,14 @@ class OriginLocation(models.Model):
     location = models.CharField(
         blank=True, verbose_name='location of originals', max_length=256,
         help_text=constants.LOCATION_OF_ORIGINALS_HELP)
+
+
+@reversion.register()
+class RelatedMaterialReference(models.Model):
+    record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
+                               related_name='referenced_related_materials')
+    context = models.CharField(max_length=2048, blank=True,
+                               help_text=constants.RELATED_MATERIALS_HELP)
+    related_record = models.ForeignKey(
+        ArchivalRecord, on_delete=models.CASCADE,
+        related_name='referencing_related_materials')
