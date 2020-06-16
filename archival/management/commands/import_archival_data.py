@@ -75,6 +75,9 @@ NO_REPOSITORY_CODE_MSG = (
     'Data at "{}" has no "Repository Code" column and specifies an archive '
     'other than "Royal Archives" or "Royal Library.')
 NON_EXISTENT_PROJECT_MSG = 'Project with ID "{}" does not exist.'
+UPDATE_SEARCH_INDEX_MSG = (
+    'Note that the search index has not been updated to incorpoate any new '
+    'data imported. Run ./manage.py rebuild_index when appropriate.')
 USING_PROJECT_MSG = 'Importing records into project "{}".'
 
 
@@ -103,6 +106,7 @@ class Command(BaseCommand):
         for path in paths:
             self._import_path(os.path.abspath(path), project)
         management.call_command('createinitialrevisions')
+        self.stdout.write(UPDATE_SEARCH_INDEX_MSG)
 
     def _import_path(self, path, project):
         self._path = path
@@ -152,7 +156,7 @@ class Command(BaseCommand):
             f = self._add_base_collection_data(f, row)
             f = self._add_base_series_data(f, row)
             f = self._add_base_file_data(f, row)
-            f = self._add_file_data(f, row)
+            f = self._add_file_data(f, row, project)
             self.logger.debug(f.creators.all())
             self.logger.debug(f.persons_as_relations.all())
             f.save()
@@ -163,7 +167,7 @@ class Command(BaseCommand):
             item = self._add_base_collection_data(item, row)
             item = self._add_base_series_data(item, row)
             item = self._add_base_file_data(item, row)
-            item = self._add_item_data(item, row)
+            item = self._add_item_data(item, row, project)
             self.logger.debug(item.creators.all())
             self.logger.debug(item.persons_as_relations.all())
             item.save()
@@ -315,14 +319,14 @@ class Command(BaseCommand):
         obj = self._set_field_from_cell_data(obj, 'withheld', row, 'Withheld')
         return obj
 
-    def _add_file_data(self, f, row):
+    def _add_file_data(self, f, row, project):
         if not pd.isnull(row.get('Writer')):
-            entity = self._get_entity_by_name(row['Writer'])
+            entity = self._get_entity_by_name(row['Writer'], project)
             if entity:
                 f.creators.add(entity)
 
         if not pd.isnull(row.get('Addressee')):
-            entity = self._get_entity_by_name(row['Addressee'])
+            entity = self._get_entity_by_name(row['Addressee'], project)
             if entity:
                 f.persons_as_relations.add(entity)
 
@@ -341,7 +345,7 @@ class Command(BaseCommand):
 
         return f
 
-    def _get_entity_by_name(self, name):
+    def _get_entity_by_name(self, name, project):
         if not name:
             return None
 
@@ -352,18 +356,18 @@ class Command(BaseCommand):
             name = name.replace(']', '')
 
         entity, _ = Entity.get_or_create_by_display_name(
-            name, self.language, self.script)
+            name, self.language, self.script, project)
 
         return entity
 
-    def _add_item_data(self, obj, row):
+    def _add_item_data(self, obj, row, project):
         if not pd.isnull(row.get('Writer')):
-            entity = self._get_entity_by_name(row['Writer'])
+            entity = self._get_entity_by_name(row['Writer'], project)
             if entity:
                 obj.creators.add(entity)
 
         if not pd.isnull(row.get('Addressee')):
-            entity = self._get_entity_by_name(row['Addressee'])
+            entity = self._get_entity_by_name(row['Addressee'], project)
             if entity:
                 obj.persons_as_relations.add(entity)
 
