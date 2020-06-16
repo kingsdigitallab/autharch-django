@@ -226,7 +226,8 @@ class Event(DateRangeMixin, TimeStampedModel):
         Description, on_delete=models.CASCADE, related_name='events')
 
     event = models.TextField()
-    place = models.ForeignKey(GeoPlace, blank=True, null=True, on_delete=models.CASCADE)
+    place = models.ForeignKey(GeoPlace, blank=True, null=True,
+                              on_delete=models.CASCADE)
 
 
 @reversion.register()
@@ -320,7 +321,8 @@ class Control(TimeStampedModel):
         default=settings.AUTHORITY_RIGHTS_DECLARATION)
     rights_declaration_abbreviation = models.CharField(
         max_length=256, blank=True)
-    rights_declaration_citation = models.URLField(blank=True)
+    rights_declaration_citation = models.URLField(
+        blank=True, default=settings.AUTHORITY_RIGHTS_DECLARATION_CITATION)
 
     language = models.ForeignKey(
         Language, on_delete=models.PROTECT,

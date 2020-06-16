@@ -137,7 +137,7 @@ USE_L10N = False
 USE_TZ = True
 
 LOGGING_ROOT = os.path.join(BASE_DIR, 'logs')
-LOGGING_LEVEL = logging.WARN
+LOGGING_LEVEL = logging.WARNING
 
 if not os.path.exists(LOGGING_ROOT):
     os.makedirs(LOGGING_ROOT)
@@ -186,6 +186,11 @@ LOGGING = {
             'handlers': ['file'],
             'level': LOGGING_LEVEL,
             'propagate': True
+        },
+        'archival': {
+            'handlers': ['console'],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
         },
     }
 }
@@ -416,3 +421,5 @@ content="GB" about="https://georgianpapers.com/">
 United Kingdom</span>.
 </p>
 """
+
+AUTHORITY_RIGHTS_DECLARATION_CITATION = 'https://creativecommons.org/publicdomain/zero/1.0/'  # noqa
