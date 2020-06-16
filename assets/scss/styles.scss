@@ -170,6 +170,7 @@ input[type=submit]:not(.search-button), .save {
     min-width: 80px;
 }
 
+/* Safari */
 input[type=search] {
     -webkit-appearance: textfield;
 }
@@ -183,6 +184,31 @@ input[type=search]::-webkit-search-decoration {
     -webkit-appearance: none;
 }
 
+.pseudo-checkbox {
+    -webkit-appearance: none;
+	border: 1px solid $input;
+    border-radius: 50%;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    &:checked {
+        border: 1px solid $add;
+        background-color: $add;
+        &:after {
+            content: ' ';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            background-color: white;
+            top: 3px;
+            left: 3px;
+        }
+    }
+}
 
 .search {
     position: relative;
@@ -964,9 +990,6 @@ main {
                         margin-right: 10px;
                     }
                 }
-                input[type=submit] {
-                    margin-top: 1.2em;
-                }
             }
         }
     }
@@ -1660,6 +1683,8 @@ main {
                 justify-content: space-between;
                 align-items: center;
                 h2 {
+                    color: $primary;
+                    font-weight: 500;
                     margin-bottom: 0px;
                 }
                 input[type=button] {
@@ -1667,7 +1692,7 @@ main {
                     margin-left: auto;
                 }
             }
-            .modal-header, .modal-body {
+            .modal-body {
                 margin-bottom: 30px;
                 p {
                     font-size: 16px;

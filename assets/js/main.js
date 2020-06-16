@@ -144,23 +144,32 @@ $(document).ready(function() {
 
   // optional functionality (can be removed if needed) - dynamic styling of the sections
   // style border for preferred names and identities
-  $("fieldset:has(input[name*='preferred']:checked)").addClass('border-left');
-  $("fieldset:has(input[name*='authorised']:checked)").addClass('border-left');
+  $("input[name*='preferred']:checked").parents('fieldset').addClass('border-left');
+  $("input[name*='authorised']:checked").closest('fieldset').addClass('border-left');
+
   $('body').on('click', 'input[name*="preferred"]', function (el) {
-    $('input[name*="preferred"]:checked').prop('checked', false);
-    $(el.target).parents('fieldset').first().find('input[name*="preferred"]').prop('checked', true);
+    // find other identities and uncheck their preferred status
+    $(el.target).parents('fieldset').siblings().find('input[name*="preferred"]:checked').prop('checked', false);
+    // find the identity where the checkbox was checked and set its checkbox as checked
+    $(el.target).closest('fieldset').find('input[name*="preferred"]').prop('checked', true);
+    // find other identities and make sure that a blue border-left is removed
     $(el.target).parents('fieldset').siblings().removeClass('border-left');
+    // set blue-border left to the preferred fieldset
     if ($(el.target).is(':checked')) {
-      $(el.target).parents('fieldset').first().addClass('border-left');
+      $(el.target).closest('fieldset').addClass('border-left');
     }
   });
 
   $('body').on('click', 'input[name*="authorised"]', function (el) {
-    $('input[name*="authorised"]:checked').prop('checked', false);
-    $(el.target).parents('fieldset').first().find('input[name*="authorised"]').prop('checked', true);
-    $(el.target).parents('fieldset').siblings().removeClass('border-left');
+    // find other name parts (within the same scope!) and uncheck their authorised status
+    $(el.target).closest('fieldset').siblings().find('input[name*="authorised"]:checked').prop('checked', false);
+    // find the name part that was checked and set its checkbox as checked
+    $(el.target).closest('fieldset').find('input[name*="authorised"]').prop('checked', true);
+    // find other name parts where the border-left is set to authorised and remove the border
+    $(el.target).closest('fieldset').siblings().removeClass('border-left');
+    // find the checked name part and set its border to blue
     if ($(el.target).is(':checked')) {
-      $(el.target).parents('fieldset').first().addClass('border-left');
+      $(el.target).closest('fieldset').addClass('border-left');
     }
   });
   

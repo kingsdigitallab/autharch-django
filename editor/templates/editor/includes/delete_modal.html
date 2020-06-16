@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body"></div>
     <div class="modal-footer">
-      <form action="{{ delete_url }}" method="post"> `
+      <form action="{{ delete_url }}" method="post">
         {% csrf_token %}
         <input type="hidden" name="DELETE" value="DELETE"/>
         <input type="submit" value="Cancel" class="default modal-cancel"/>

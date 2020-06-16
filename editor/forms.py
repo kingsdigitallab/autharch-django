@@ -38,6 +38,10 @@ RICHTEXT_TRANSCRIPTION = {
     'aria-label': 'richtext field'
 }
 
+PSEUDO_CHECKBOX = {
+    'class': 'pseudo-checkbox',
+}
+
 ENTITY_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
     'placeholder': 'Search people and corporate bodies',
@@ -442,6 +446,7 @@ class NameEntryEditInlineForm(ContainerModelForm):
         widgets = {
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
+            'authorised_form': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX)
         }
 
 
@@ -490,6 +495,7 @@ class IdentityEditInlineForm(ContainerModelForm):
         widgets = {
             'date_from': HTML5DateInput(),
             'date_to': HTML5DateInput(),
+            'preferred_identity': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX)
         }
 
 
