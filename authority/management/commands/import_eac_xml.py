@@ -1,4 +1,6 @@
+import logging
 import os.path
+import re
 
 from django.core import management
 from django.core.management.base import BaseCommand, CommandError
@@ -92,6 +94,7 @@ NAME_PARTS_ORDER = ['surname', 'forename', 'ordinalNumber', 'DATE',
 
 default_language = Language.objects.filter(name_en='English').first()
 default_script = Script.objects.get(name='Latin')
+normalise_space = re.compile(r'\s+').sub
 
 
 class Command(BaseCommand):
@@ -120,19 +123,25 @@ class Command(BaseCommand):
         # relationships to other entities are imported.
         entity_map = {}
         for xml_path in options['xml_path']:
-            entity_import = EntityImport(xml_path, project)
-            try:
-                entity_import.import_entity(xsd)
-            except Exception as e:
-                self.stdout.write(xml_path)
-                raise e
+            entity_import = self._import_entity(xml_path, project, xsd)
             entity_map[xml_path] = entity_import
         for xml_path in options['xml_path']:
             entity_map[xml_path].import_relations()
         management.call_command('createinitialrevisions')
 
+    def _import_entity(self, xml_path, project, xsd):
+        entity_import = EntityImport(xml_path, project)
+        try:
+            entity_import.import_entity(xsd)
+        except Exception as e:
+            self.stdout.write(xml_path)
+            raise e
+        return entity_import
+
 
 class EntityImport:
+
+    logger = logging.getLogger(__name__)
 
     def __init__(self, xml_path, project):
         self._xml_path = xml_path
@@ -234,14 +243,28 @@ class EntityImport:
                                                            script_code))
         return script
 
+    def _get_text(self, element, xpath):
+        return normalise_space(' ', ''.join(
+            element.xpath(xpath, namespaces=NS_MAP)))
+
     def _import_biog_hist(self, description, biog_hist_el):
-        abstract = biog_hist_el.xpath('e:abstract[1]/text()',
-                                      namespaces=NS_MAP)
-        sources = biog_hist_el.xpath('e:citation[1]/text()', namespaces=NS_MAP)
-        copyright = biog_hist_el.xpath('e:p[1]/text()', namespaces=NS_MAP)
+        abstract = self._get_text(biog_hist_el, 'e:abstract[1]//text()')
+        sources = self._get_text(biog_hist_el, 'e:citation[1]//text()')
+        content_parts = []
+        for p in biog_hist_el.xpath('e:p', namespaces=NS_MAP):
+            content_parts.append('<p>{}</p>'.format(
+                self._get_text(p, './/text()')))
+        content = ''.join(content_parts)
+        copyright_parts = []
+        for p in biog_hist_el.xpath(
+                '/e:eac-cpf/e:control/e:rightsDeclaration[@localType='
+                '"biogHist"]/e:descriptiveNote/e:p', namespaces=NS_MAP):
+            copyright_parts.append('<p>{}</p>'.format(
+                self._get_text(p, './/text()')))
+        copyright = ''.join(copyright_parts)
         biog_hist = BiographyHistory(
             description=description, abstract=abstract, sources=sources,
-            copyright=copyright)
+            content=content, copyright=copyright)
         biog_hist.save()
 
     def _import_control(self, control, tree):
@@ -304,17 +327,14 @@ class EntityImport:
             self._import_biog_hist(description, biography_history)
 
     def _import_display_name(self, name_entry_el, is_authorised):
-        display_name = None
+        display_name = ''
         if is_authorised:
             # There should be a nameEntry[@type='directOrder'] that
             # provides a display name for this name.
-            try:
-                display_name = name_entry_el.xpath(
-                    '../e:nameEntry[@localType="directOrder"]/e:part',
-                    namespaces=NS_MAP)[0].text
-            except IndexError:
-                pass
-        if display_name is None:
+            display_name = self._get_text(
+                name_entry_el,
+                '../e:nameEntry[@localType="directOrder"]/e:part/text()')
+        if not display_name:
             # Construction of display names is a nightmare of
             # antiquated card catalogue nonsense. Bodge something
             # together.
@@ -387,6 +407,11 @@ class EntityImport:
         gender = self._get_jargon_term(local_description_el, 'gender')
         local_description = LocalDescription(description=description,
                                              gender=gender)
+        for date_range in local_description_el.xpath('e:dateRange',
+                                                     namespaces=NS_MAP):
+            self._import_date_range(local_description, date_range)
+        local_description.citation = self._get_text(local_description_el,
+                                                    'e:citation//text()')
         local_description.save()
 
     def _import_name_entry(self, identity, name_entry_el, is_authorised):
@@ -425,9 +450,9 @@ class EntityImport:
         place_name = place_el.xpath('e:placeEntry', namespaces=NS_MAP)[0].text
         geo_place = GeoPlace.get_or_create_from_geonames(place_name)
         if geo_place is None:
+            self.logger.warn(PLACE_NOT_FOUND_ERROR.format(self._xml_path,
+                                                          place_name))
             return
-            raise CommandError(PLACE_NOT_FOUND_ERROR.format(self._xml_path,
-                                                            place_name))
         role = place_el.xpath('e:placeRole', namespaces=NS_MAP)[0].text
         place = Place(description=description, place=geo_place, role=role)
         for date in place_el.xpath('e:date', namespaces=NS_MAP):
@@ -441,7 +466,7 @@ class EntityImport:
             details.append(detail.text)
         relation_detail = ' '.join(details)
         relation_type = self._get_jargon_term(relation_el, 'relationship_type')
-        name = relation_el.xpath('e:relationEntry', namespaces=NS_MAP)[0].text
+        name = self._get_text(relation_el, 'e:relationEntry[1]/text()')
         related_entity, created = Entity.get_or_create_by_display_name(
             name, default_language, default_script, self._project)
         if related_entity is None:
