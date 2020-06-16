@@ -6,7 +6,7 @@ from authority.fields import PartialDateField
 from authority.models import Entity
 from geonames_place.models import Place
 from jargon.models import (
-    Function, MaintenanceStatus, Publication, PublicationStatus, RecordType,
+    Function, MaintenanceStatus, PublicationStatus, RecordType,
     ReferenceSource, Repository
 )
 from languages_plus.models import Language
@@ -171,8 +171,8 @@ class Collection(ArchivalRecord):
 
 
 class SeriesBase(models.Model):
-    publications = models.ManyToManyField(
-        Publication, blank=True, verbose_name="Known previous publications",
+    publications = models.TextField(
+        blank=True, verbose_name="Known previous publications",
         help_text=constants.PUBLICATIONS_HELP)
 
     class Meta:
