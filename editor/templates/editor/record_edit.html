@@ -92,7 +92,7 @@
             {% csrf_token %}
             {% render_field form.uuid %}
             {% render_field form.project %}
-            <h4>{{ record.repository }}</h4>
+            <h4>{{ record.references.all|join:", " }}</h4>
             <div>
               <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
             </div>
