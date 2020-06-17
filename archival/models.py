@@ -28,7 +28,7 @@ class Project(models.Model):
 
 class Reference(models.Model):
     source = models.ForeignKey(ReferenceSource, on_delete=models.CASCADE)
-    unitid = models.CharField(max_length=128)
+    unitid = models.CharField(max_length=512)
 
     def __str__(self):
         return '{}: {}'.format(self.source, self.unitid)
