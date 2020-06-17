@@ -1,5 +1,6 @@
 import logging
 import os.path
+import re
 
 import pandas as pd
 
@@ -90,6 +91,7 @@ class Command(BaseCommand):
 
     language = Language.objects.filter(name_en='English').first()
     script = Script.objects.get(name='Latin')
+    normalise_space = re.compile(r'\s+').sub
 
     def add_arguments(self, parser):
         parser.add_argument('project_id', help=PROJECT_ID_HELP, type=int)
@@ -318,14 +320,14 @@ class Command(BaseCommand):
 
     def _add_file_data(self, f, row, project):
         if not pd.isnull(row.get('Writer')):
-            entity = self._get_entity_by_name(row['Writer'], project)
-            if entity:
-                f.creators.add(entity)
+            entities = self._get_entities_by_name(row['Writer'], project)
+            if entities:
+                f.creators.add(*entities)
 
         if not pd.isnull(row.get('Addressee')):
-            entity = self._get_entity_by_name(row['Addressee'], project)
-            if entity:
-                f.persons_as_relations.add(entity)
+            entities = self._get_entities_by_name(row['Addressee'], project)
+            if entities:
+                f.persons_as_relations.add(*entities)
 
         reference = self._get_parent_reference(row)
         if not reference:
@@ -342,28 +344,40 @@ class Command(BaseCommand):
 
         return f
 
-    def _get_entity_by_name(self, name, project):
-        if not name:
+    def _get_entities_by_name(self, full_name, project):
+        """Return a list of entities matching the names in `full_name` -
+        either created or already existing.
+
+        `full_name` may include multiple names separated with "|".
+
+        """
+        if full_name is None:
             return None
-
-        name = name.replace('[', '')
-        name = name.replace(']', '')
-
-        entity, _ = Entity.get_or_create_by_display_name(
-            name, self.language, self.script, project)
-
-        return entity
+        full_name = full_name.replace('[', '')
+        full_name = full_name.replace(']', '')
+        full_name = self.normalise_space(' ', full_name)
+        names = full_name.split('|')
+        entities = []
+        for name in names:
+            name = name.strip()
+            if not name:
+                continue
+            entity, _ = Entity.get_or_create_by_display_name(
+                name, self.language, self.script, project)
+            if entity is not None:
+                entities.append(entity)
+        return entities
 
     def _add_item_data(self, obj, row, project):
         if not pd.isnull(row.get('Writer')):
-            entity = self._get_entity_by_name(row['Writer'], project)
-            if entity:
-                obj.creators.add(entity)
+            entities = self._get_entities_by_name(row['Writer'], project)
+            if entities:
+                obj.creators.add(*entities)
 
         if not pd.isnull(row.get('Addressee')):
-            entity = self._get_entity_by_name(row['Addressee'], project)
-            if entity:
-                obj.persons_as_relations.add(entity)
+            entities = self._get_entities_by_name(row['Addressee'], project)
+            if entities:
+                obj.persons_as_relations.add(*entities)
 
         reference = self._get_parent_reference(row)
         if not reference:
