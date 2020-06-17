@@ -343,11 +343,8 @@ class Command(BaseCommand):
         if not name:
             return None
 
-        if '[' in name:
-            name = name.replace('[', '')
-
-        if ']' in name:
-            name = name.replace(']', '')
+        name = name.replace('[', '')
+        name = name.replace(']', '')
 
         entity, _ = Entity.get_or_create_by_display_name(
             name, self.language, self.script, project)
@@ -427,7 +424,7 @@ class Command(BaseCommand):
                           inplace=True)
 
         if 'Repository Code' not in df.columns:
-            self.logger.warning(NO_REPOSITORY_CODE_COL_MSG.format(
+            self.logger.info(NO_REPOSITORY_CODE_COL_MSG.format(
                 self._path, self._sheet))
 
         for column, default in NON_ESSENTIAL_COLUMNS.items():
@@ -438,6 +435,6 @@ class Command(BaseCommand):
                 else:
                     msg = MISSING_OPTIONAL_COL_MSG.format(
                         self._path, self._sheet, column)
-                self.logger.warning(msg)
+                self.logger.info(msg)
 
         return df
