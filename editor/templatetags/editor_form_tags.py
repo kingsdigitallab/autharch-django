@@ -75,6 +75,17 @@ def render_field(form_field, form_id=None):
     }
 
 
+@register.simple_tag()
+def render_field_option(form_field, default):
+    """Render a choice form field's selected option, or `default` if none
+    match."""
+    key = form_field.value()
+    for k, v in form_field.field.choices:
+        if k == key:
+            return v
+    return default
+
+
 @register.inclusion_tag('editor/includes/delete_form_field.html')
 def render_form_delete_widget(field):
     """Renders the widget for a form's DELETE `field`."""
