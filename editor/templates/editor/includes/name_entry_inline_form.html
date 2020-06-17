@@ -27,6 +27,17 @@
     <div class="two-column-table">
       <div class="formset">
         {{ form.is_royal_name }} {{ form.is_royal_name.label }}
+        {% with errors=form.non_field_errors %}
+        {% if errors %}
+        <div class="error-notification">
+          <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
         {% with name_parts=form.formsets.name_parts %}
         <div class="management_form">
           {{ name_parts.management_form }}
