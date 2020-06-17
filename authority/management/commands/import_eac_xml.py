@@ -44,6 +44,9 @@ PLACE_NOT_FOUND_ERROR = ('Document "{}" references place "{}" that does not '
 RELATED_ENTITY_NOT_FOUND_ERROR = (
     'Document "{}" references related entity with name "{}" that does not '
     'exist.')
+UPDATE_SEARCH_INDEX_MSG = (
+    'Note that the search index has not been updated to incorpoate any new '
+    'data imported. Run ./manage.py rebuild_index when appropriate.')
 
 XLINK = '{http://www.w3.org/1999/xlink}'
 XML = '{http://www.w3.org/XML/1998/namespace}'
@@ -128,6 +131,7 @@ class Command(BaseCommand):
         for xml_path in options['xml_path']:
             entity_map[xml_path].import_relations()
         management.call_command('createinitialrevisions')
+        self.stdout.write(UPDATE_SEARCH_INDEX_MSG)
 
     def _import_entity(self, xml_path, project, xsd):
         entity_import = EntityImport(xml_path, project)
@@ -340,12 +344,9 @@ class EntityImport:
             # together.
             for part_type in NAME_PARTS_ORDER:
                 if part_type != 'DATE':
-                    try:
-                        part = name_entry_el.xpath(
-                            'e:part[@localType="{}"]'.format(part_type),
-                            namespaces=NS_MAP)[0].text
-                    except IndexError:
-                        part = None
+                    part = self._get_text(
+                        name_entry_el, 'e:part[@localType="{}"]/text()'.format(
+                            part_type))
                 else:
                     date_ranges = name_entry_el.xpath(
                         '../../e:description/e:existDates/e:dateRange',
@@ -363,9 +364,11 @@ class EntityImport:
                         part = '{}-{}'.format(from_year, to_year)
                     elif date:
                         part = date[0].get('standardDate')
-                if part is None:
+                    else:
+                        part = ''
+                if not part:
                     continue
-                if display_name is None:
+                if not display_name:
                     display_name = part
                 elif part_type != 'ordinalNumber':
                     display_name = display_name + ', ' + part

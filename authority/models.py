@@ -81,18 +81,20 @@ class Entity(TimeStampedModel, DateRangeMixin):
         if not name or not language or not script:
             return None, False
 
-        name_entries = NameEntry.objects.filter(display_name=name)
-
+        entities = Entity.objects.filter(
+            identities__name_entries__display_name=name).distinct()
         if project:
-            name_entries = name_entries.filter(
-                identity__entity__project=project)
-        # too many entities match the display name, we can't accurately return
-        # one
-        if name_entries and name_entries.count() > 1:
-            return None, False
+            entities = entities.filter(project=project)
 
-        if name_entries and name_entries.count() == 1:
-            return name_entries[0].identity.entity, False
+        if entities:
+            entities_count = len(entities)
+            if entities_count > 1:
+                # We cannot choose between multiple entities, so
+                # neither return an existing entitiy nor create a new
+                # one.
+                return None, False
+            if entities_count == 1:
+                return entities[0], False
 
         et, _ = EntityType.objects.get_or_create(title='person')
 
