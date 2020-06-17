@@ -53,6 +53,9 @@ EXISTING_RECORD_IN_DIFFERENT_PROJECT_MSG = (
     'different project "{}".')
 EXISTING_RECORD_MSG = (
     'Record with UUID "{}" in data at "{}" (sheet "{}") already exists.')
+INVALID_DATE_OF_DESCRIPTION_MSG = (
+    'Invalid Date of Description data; cannot convert to a date in data at '
+    '"{}" (sheet "{}").')
 INVALID_INPUT_FILE_TYPE_MSG = (
     'Invalid file type for "{}"; please provide a .csv or .xlsx file.')
 LANGUAGE_NOT_FOUND_MSG = (
@@ -404,6 +407,8 @@ class Command(BaseCommand):
                 df.rename(columns={'Serial Number': 'ID'}, inplace=True)
             elif 'Serial No.' in df.columns:
                 df.rename(columns={'Serial No.': 'ID'}, inplace=True)
+            elif 'Id' in df.columns:
+                df.rename(columns={'Id': 'ID'}, inplace=True)
             else:
                 raise CommandError(MISSING_REQUIRED_COL_MSG.format(
                     self._path, self._sheet, 'ID'))
@@ -413,8 +418,12 @@ class Command(BaseCommand):
                 df.rename(columns={'Respository': 'Repository'}, inplace=True)
 
         if 'Date of Description' in df.columns:
-            df['Date of Description'] = pd.to_datetime(
-                df['Date of Description'])
+            try:
+                df['Date of Description'] = pd.to_datetime(
+                    df['Date of Description'])
+            except TypeError:
+                raise CommandError(INVALID_DATE_OF_DESCRIPTION_MSG.format(
+                    self._path, self._sheet))
 
         # Non-essential columns (warning if not present).
 
