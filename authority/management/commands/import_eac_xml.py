@@ -1,3 +1,15 @@
+"""Import entities from EAC-CPF XML.
+
+Limitations:
+
+* Complex dates are not supported (e:dateSet, multiple e:date or
+  e:dateRange). These are not supported in the Django model.
+
+* Date descriptions (e:descriptiveNote in a date context). This is not
+  supported in the Django model.
+
+"""
+
 import logging
 import os.path
 import re
@@ -249,7 +261,7 @@ class EntityImport:
 
     def _get_text(self, element, xpath):
         return normalise_space(' ', ''.join(
-            element.xpath(xpath, namespaces=NS_MAP)))
+            element.xpath(xpath, namespaces=NS_MAP))).strip()
 
     def _import_biog_hist(self, description, biog_hist_el):
         abstract = self._get_text(biog_hist_el, 'e:abstract[1]//text()')
@@ -313,9 +325,6 @@ class EntityImport:
 
     def _import_description(self, identity, description_el):
         description = Description(identity=identity)
-        for date_range in description_el.xpath('e:existDates/e:dateRange',
-                                               namespaces=NS_MAP):
-            self._import_date_range(description, date_range)
         description.save()
         for local_description in description_el.xpath(
                 'e:localDescription[@localType="gender"]', namespaces=NS_MAP):
@@ -378,6 +387,13 @@ class EntityImport:
 
     def _import_identity(self, entity, identity_el, is_primary):
         identity = Identity(entity=entity, preferred_identity=is_primary)
+        for date in identity_el.xpath(
+                '../e:description/e:existDates/e:date', namespaces=NS_MAP):
+            self._import_date(identity, date)
+        for date_range in identity_el.xpath(
+                '../e:description/e:existDates/e:dateRange',
+                namespaces=NS_MAP):
+            self._import_date_range(identity, date_range)
         identity.save()
         self._identities.append(identity)
         names = []
