@@ -121,7 +121,10 @@ body {
 }
 
 .dotted-underline {
-    border-bottom: 1px dotted $primary;
+    border-bottom: 1px dotted $medium-grey;
+    &:hover, &:focus {
+        border-bottom: 1px dotted $primary;
+    }
 }
 
 .border-left {
@@ -294,23 +297,26 @@ span[role=button] {
     background-color: transparent;
     display: inline-block;
     cursor: pointer;
+    border: 1px solid white;
     &:before {
         content: "\f2ed";
         font-family: $fontawesome;
         margin-right: 7px;
     }
-    &:after {
-        content: "Delete";
-    }
+    // &:after {
+    //     content: "Delete";
+    // }
     .fas {
         margin-right: 10px;
     }
     &:focus {
         outline: none;
         box-shadow: 0px 0px 1px darken($danger, 20%);
+        border: 1px solid $danger;
     }
     &:hover {
         color: darken($danger, 5%);
+        border: 1px solid $danger;
     }
 }
 
@@ -371,6 +377,7 @@ span[role=button] {
         -webkit-box-shadow: none !important;
         box-shadow: none !important;
         outline: none;
+        text-decoration: none !important;
     }
     .fa-question-circle {
         font-size: 16px;
@@ -389,6 +396,13 @@ span[role=button] {
     -moz-border-radius: 0px;
     border-radius: 0px;
     // max-width: max-content;
+    &:hover, &:focus {
+        text-decoration: underline;
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none;
+    }
+    
     &.danger {
         color: $danger;
         .icon-only:focus {
@@ -398,6 +412,7 @@ span[role=button] {
 
     &.create {
         color: darken($add, 5%);
+        width: fit-content;
         .icon-only:focus {
             text-decoration: underline;
         }
@@ -425,13 +440,6 @@ span[role=button] {
     }
     .far {
         font-weight: 600;
-    }
-    &:hover, &:focus {
-        cursor: pointer;
-        text-decoration: underline;
-        -moz-box-shadow: none !important;
-        -webkit-box-shadow: none !important;
-        box-shadow: none;
     }
 }
 
@@ -1301,6 +1309,15 @@ main {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-column-gap: 5px;
+        &.group-field {
+            label {
+                margin-bottom: 0px !important;
+                &:not(:first-of-type) {
+                    margin-top: 0px !important;
+                }
+            }
+            margin-bottom: 10px !important;
+        }
     }
 
     select, .select2-selection--single, .select2-selection--multiple {
@@ -1519,6 +1536,9 @@ main {
                     overflow: hidden;
                     .formset {
                         margin-bottom: 1.5em;
+                        .group-title {
+                            margin-bottom: 0;
+                        }
                     }
                     &.expand {
                         opacity: 1;
@@ -1713,6 +1733,20 @@ main {
                         margin-right: 50px;
                     }
                 }
+            }
+        }
+    }
+
+    textarea.richtext:invalid {
+        & + .tox-tinymce {
+            border: 1px solid $danger;
+            border-left: 10px solid $danger;
+            background-color: lighten($danger, 60%);
+            &:after {
+                display: block;
+                content: 'This field is required';
+                font-size: 13px;
+                color: $danger;
             }
         }
     }

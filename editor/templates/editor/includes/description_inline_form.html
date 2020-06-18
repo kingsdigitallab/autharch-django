@@ -37,7 +37,12 @@
 
     <div class="formset">
       {% with biography_histories=form.formsets.biography_histories %}
-      <h3>BIOGRAPHY/HISTORY ({{ biography_histories.management_form.INITIAL_FORMS.value|default:"0" }})
+      <h3>
+        {% if is_corporate_body %}
+          HISTORY ({{ biography_histories.management_form.INITIAL_FORMS.value|default:"0" }})
+        {% else %}
+          BIOGRAPHY ({{ biography_histories.management_form.INITIAL_FORMS.value|default:"0" }})
+        {% endif %}
         <!-- <span role="button" aria-label="additional info" data-content-type="biography" class="icon-only additional-info-icon">&#xf059;</span> -->
       </h3>
       <div class="management_form">
@@ -50,7 +55,11 @@
       </div>
       {% endwith %}
       <label class="create linked-button">
-        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('biography', this)">Add biography/history
+        {% if is_corporate_body %}
+        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('biography', this)">Add history
+        {% else %}
+        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('biography', this)">Add biography
+        {% endif %}
       </label>
     </div>
 

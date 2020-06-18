@@ -5,7 +5,11 @@
         {% if form.abstract.value %}
           {{ form.abstract.value|default:""|truncatewords:10 }}
         {% else %}
-          Biography/History
+          {% if is_corporate_body %}
+            History
+          {% else %}
+            Biography
+          {% endif %}
         {% endif %}
       </h4>
     <div class="flex">

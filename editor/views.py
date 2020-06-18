@@ -35,6 +35,7 @@ from .forms import (
     get_archival_record_edit_form_for_subclass,
 )
 from .models import EditorProfile, RevisionMetadata
+from .constants import PERSON_ENTITY_TYPE
 from .signals import view_post_save
 
 
@@ -460,6 +461,7 @@ def entity_edit(request, entity_id):
     form_errors = []
     current_section = 'entities'
     is_deleted = False
+    is_corporate_body = entity.entity_type.title == 'corporateBody'
     if entity.control.maintenance_status == MaintenanceStatus.objects.get(
             title='deleted'):
         is_deleted = True
@@ -494,6 +496,7 @@ def entity_edit(request, entity_id):
         'form_errors': form_errors,
         'form': form,
         'is_deleted': is_deleted,
+        'is_corporate_body': is_corporate_body,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
         'saved': saved,

@@ -87,6 +87,10 @@ SEARCH_SELECT_ATTRS_DYNAMIC = {
 }
 
 
+ENTITY_START_DATE_HELP = 'This element indicates a date of existence - birth date for people and existence date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'
+ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date for people and extinction date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'
+
+
 class ContainerModelForm(forms.ModelForm):
 
     """Base class for model forms that have associated inline formsets.
@@ -253,7 +257,7 @@ class RelatedMaterialEditInlineForm(forms.ModelForm):
         exclude = []
         model = RelatedMaterialReference
         widgets = {
-            'related_record': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC),
+            'related_record': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC)
         }
 
 
@@ -291,6 +295,15 @@ class SourceEditInlineForm(forms.ModelForm):
 
 
 class BiographyHistoryEditInlineForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.Meta.entity_type == PERSON_ENTITY_TYPE:
+            self.fields['content'].label = 'Biography'
+            self.fields['sources'].label = 'Biography sources'
+        elif self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
+            self.fields['content'].label = 'History'
+            self.fields['sources'].label = 'History sources'
 
     class Meta:
         exclude = []
@@ -363,7 +376,7 @@ class DescriptionEditInlineForm(ContainerModelForm):
             data, instance=instance, prefix=prefix + '-language_script')
         BiographyHistoryFormset = inlineformset_factory(
             Description, BiographyHistory, form=BiographyHistoryEditInlineForm,
-            extra=0)
+            extra=0, entity_type=self.Meta.entity_type)
         formsets['biography_histories'] = BiographyHistoryFormset(
             data, instance=instance, prefix=prefix + '-biography_history')
         if self.Meta.entity_type == PERSON_ENTITY_TYPE:
@@ -491,6 +504,10 @@ class IdentityEditInlineForm(ContainerModelForm):
         labels = {
             'date_from': 'Identity existed from',
             'date_to': 'Identity existed until',
+        }
+        help_texts = {
+            'date_from': ENTITY_START_DATE_HELP,
+            'date_to': ENTITY_END_DATE_HELP,
         }
         widgets = {
             'date_from': HTML5DateInput(),

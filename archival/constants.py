@@ -26,7 +26,7 @@ URL_HELP = 'This element is used to hold the URLs for the archival record in the
 
 LOCATION_OF_ORIGINALS_HELP = 'This element is used to indicate the existence and location, availability and/or destruction of originals, if the unit of description consists of copies. If the original of the unit of description is available (either in the RA or elsewhere), its location should be recorded, together with any significant references. If the originals no longer exist, or their location is unknown, give that information.'  # noqa
 
-RELATED_MATERIALS_HELP = 'This element is used for the cross-referencing of relevant material held elsewhere in the Georgian Papers.'  # noqa
+RELATED_MATERIALS_LABEL_HELP = 'This element is used for the cross-referencing of relevant material held elsewhere in the Georgian Papers. Please include a descriptive label for the cross-referencing, e.g., &quot;For additional papers relating to Nathaniel Kent, see GEO/ADD/15/0356-0429&quot;'  # noqa
 
 EXTENT_HELP = 'This element is used to give the number of records at the level being described. The extent of the record(s) should be given as appropriate to the level of description. This gives the user an idea of the size of a collection, series, item or file they are interested in. At higher levels, boxes can be included to help users visualise the size of the collection. At file and item levels, number of pages in the document(s) are required (in brackets) in order to guide users as to the size of the digital image download (PDF format). This should be ascertained at the cataloguing stage and not from the PDF. One letter equals one document regardless of length.'  # noqa
 

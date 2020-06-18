@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="action-buttons">
-      {% if not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)"></button>{% endif %}
+      {% if not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>{% endif %}
       <input type="submit" value="{% if is_deleted %}Restore{% else %}Save{% endif %}" form="record-form" class="save"/>
     </div>
   </div>
@@ -104,21 +104,6 @@
                 {% render_field form.parent_series %}
                 {% render_field form.parent_file %}
                 <div class="formset">
-                  {% with related_materials=form.formsets.related_materials %}
-                  <div class="management_form">
-                    {{ related_materials.management_form }}
-                  </div>
-                  <div class="fieldsets">
-                    {% for related_material in related_materials.forms %}
-                    {% include "./includes/related_material_inline_form.html" with form=related_material %}
-                    {% endfor %}
-                  </div>
-                  {% endwith %}
-                  <label class="button-link create">
-                    <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('related_material', this)">Add related material
-                  </label>
-                </div>
-                <div class="formset">
                   {% with origin_locations=form.formsets.origin_locations %}
                   <div class="management_form">
                     {{ origin_locations.management_form }}
@@ -131,6 +116,22 @@
                   {% endwith %}
                   <label class="button-link create">
                     <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('origin_location', this)">Add location of originals
+                  </label>
+                </div>
+                <div class="formset">
+                  {% with related_materials=form.formsets.related_materials %}
+                  <h4 class="group-title">Related materials</h4>
+                  <div class="management_form">
+                    {{ related_materials.management_form }}
+                  </div>
+                  <div class="fieldsets">
+                    {% for related_material in related_materials.forms %}
+                    {% include "./includes/related_material_inline_form.html" with form=related_material %}
+                    {% endfor %}
+                  </div>
+                  {% endwith %}
+                  <label class="button-link create">
+                    <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('related_material', this)">Add related material
                   </label>
                 </div>
               </div>

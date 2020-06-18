@@ -34,6 +34,7 @@ $(document).ready(function() {
   });
 
 
+  
   // Open popup to log changes when saving a record, then actually
   // submit the form when submitting from the popup.
   $("#record-form").submit(function(event) {
@@ -217,6 +218,11 @@ $(document).ready(function() {
     content_style: ".mce-content-body {font-size:14px;}",
     plugins: 'charmap image media link table lists code',
     toolbar: 'bold italic underline strikethrough | insertfile image media link | table | formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | charmap | removeformat | undo redo | code',
+    setup: function (editor) {
+      editor.on('change', function (e) {
+          editor.save();
+      });
+    }
   });
   // initialise TinyMCE for all visible editors
   $('.richtext').each(function () {

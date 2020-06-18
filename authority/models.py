@@ -210,10 +210,9 @@ class BiographyHistory(TimeStampedModel):
                                        related_name='biography_history')
 
     abstract = models.TextField(help_text=constants.BIOGRAPHY_ABSTRACT_HELP)
-    content = models.TextField(blank=True, verbose_name="Biography")
+    content = models.TextField(blank=True)
     sources = models.TextField(
-        blank=True, help_text=constants.BIOGRAPHY_SOURCES_HELP,
-        verbose_name="Biography sources")
+        blank=True, help_text=constants.BIOGRAPHY_SOURCES_HELP)
     copyright = models.TextField(
         blank=True, help_text=constants.BIOGRAPHY_COPYRIGHT_HELP)
 
