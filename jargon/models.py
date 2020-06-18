@@ -43,6 +43,7 @@ class Function(BaseJargonModel):
     schemes = models.ManyToManyField(
         'self', blank=True, related_name='in_scheme', symmetrical=False)
     is_term = models.BooleanField(default=True)
+    uri = models.URLField(blank=True)
 
     class Meta:
         verbose_name = 'EAC: Function'
