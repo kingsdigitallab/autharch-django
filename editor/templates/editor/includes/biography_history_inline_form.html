@@ -3,7 +3,7 @@
   <div class="fieldset-header">
       <h4>
         {% if form.abstract.value %}
-          {{ form.abstract.value|default:""|truncatewords:10 }}
+          {{ form.abstract.value|default:""|striptags|truncatewords:10 }}
         {% else %}
           {% if is_corporate_body %}
             History
