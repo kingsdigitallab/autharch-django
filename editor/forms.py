@@ -10,8 +10,8 @@ import haystack.forms
 from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import (
-    ArchivalRecordTranscription, Collection, File, Item, OriginLocation,
-    RelatedMaterialReference, Series
+    ArchivalRecord, ArchivalRecordTranscription, Collection, File, Item,
+    OriginLocation, RelatedMaterialReference, Series
 )
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
@@ -87,8 +87,14 @@ SEARCH_SELECT_ATTRS_DYNAMIC = {
 }
 
 
-ENTITY_START_DATE_HELP = 'This element indicates a date of existence - birth date for people and existence date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'
-ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date for people and extinction date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'
+ENTITY_START_DATE_HELP = 'This element indicates a date of existence - birth date for people and existence date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
+ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date for people and extinction date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
+
+
+class RelatedMaterialRecordChoiceField(forms.ModelChoiceField):
+
+    def label_from_instance(self, obj):
+        return ', '.join([str(ref) for ref in obj.references.all()])
 
 
 class ContainerModelForm(forms.ModelForm):
@@ -253,12 +259,13 @@ class PlaceEditInlineForm(forms.ModelForm):
 
 class RelatedMaterialEditInlineForm(forms.ModelForm):
 
+    related_record = RelatedMaterialRecordChoiceField(
+        queryset=ArchivalRecord.objects.all(),
+        widget=forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC))
+
     class Meta:
         exclude = []
         model = RelatedMaterialReference
-        widgets = {
-            'related_record': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC)
-        }
 
 
 class RelationEditInlineForm(forms.ModelForm):
