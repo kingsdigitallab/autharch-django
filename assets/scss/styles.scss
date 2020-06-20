@@ -1301,7 +1301,7 @@ main {
         grid-template-columns: 1fr 2fr;
         grid-column-gap: 10px;
         justify-content: center;
-        align-items: flex-end !important;
+        align-items: flex-start !important;
         font-size: 14px;
     }
 
@@ -1776,6 +1776,13 @@ main {
         border: 1px solid $danger;
         border-left: 5px solid $danger;
         background-color: lighten($danger, 60%);
+        & + .tox-tinymce {
+            border: 1px solid $danger;
+            border-left: 10px solid $danger;
+            .tox-edit-area__iframe {
+                background-color: lighten($danger, 60%);
+            }
+        }
     }
 
     .errorlist {
