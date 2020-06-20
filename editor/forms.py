@@ -421,7 +421,7 @@ class NameEntryEditInlineForm(ContainerModelForm):
         data = kwargs.get('data')
         NamePartFormset = inlineformset_factory(
             NameEntry, NamePart, form=NamePartEditInlineForm, extra=0,
-            entity_type=self.Meta.entity_type)
+            entity_type=self.Meta.entity_type, min_num=1)
         formsets['name_parts'] = NamePartFormset(
             data, instance=self.instance, prefix=self.prefix + '-name_part')
         return formsets
