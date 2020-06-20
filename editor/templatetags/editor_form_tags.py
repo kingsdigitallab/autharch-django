@@ -55,13 +55,14 @@ def render_field(form_field, form_id=None):
     """
     if form_field == '':
         return {'render': False}
-    attrs = {
-        'aria-label': 'input field'
-    }
+    attrs = form_field.field.widget.attrs
+    if 'aria-label' not in attrs:
+        attrs['aria-label'] = 'input field'
     if form_id:
         attrs['form'] = form_id
     if form_field.errors:
-        attrs['class'] = ' '.join((form_field.css_classes(), 'error'))
+        attrs['class'] = ' '.join(
+            (attrs.get('class', ''), form_field.css_classes(), 'error'))
     widget = form_field.as_widget(attrs=attrs)
     return {
         'errors': form_field.errors,
