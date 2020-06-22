@@ -11,11 +11,11 @@
             {% csrf_token %}
             {% render_field user_form.username %}
             {% render_field user_form.first_name %}
-            {% render_field user_form.last_name %}
+            {% render_field profile_form.role %}
           </div>
           <div>
             {% render_field user_form.email %}
-            {% render_field profile_form.role %}
+            {% render_field user_form.last_name %}
           </div>
         </div>
         <br>
