@@ -1023,6 +1023,11 @@ main {
 
     .admin {
         margin-top: 40px;
+        form > input[type=submit] {
+            display: block;
+            margin-left: auto;
+            margin-top: 20px;
+        }
     }
 
     .form-header{
