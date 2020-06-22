@@ -57,6 +57,8 @@
     <h2>{{ record.archival_level }}</h2>
 
     <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
+      {% with transcriptions=form.formsets.transcriptions %}
+      {% if transcriptions|length > 0 %}
       <div class="form-section">
         <fieldset id="side-by-side">
           <div class="fieldset-header">
@@ -76,15 +78,15 @@
                   </div>
               </div>
               <div id="transcription">
-                {% with transcriptions=form.formsets.transcriptions %}
-                  {{ transcriptions.management_form }}
-                {% endwith %}
+                {{ transcriptions.management_form }}
               </div>
             </div>
             <div id="rte-pagination"></div>
           </div>
         </fieldset>
       </div>
+      {% endif %}
+      {% endwith %}
       <div class="form-section">
         <h2>SUMMARY</h2>
         <fieldset id="summary">

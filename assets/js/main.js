@@ -232,14 +232,6 @@ $(document).ready(function() {
   });
   
 
-  // SAVE ADMIN TABLE BUTTON
-  // enable Save admin table button once one of the input fields is clicked
-  $('.admin-table').find('label').on('click', function() {
-    if ($('.save-admin-table').hasClass('none')) {
-      $('.save-admin-table').removeClass('none');
-    }
-  });
-
   // TRANSCRIPTIONS - if expanded by default (WILL BE REMOVED ONCE THE RTE DEVELOPMENT IS COMPLETED)
   if ($('#transcription-div').hasClass('expand') && $( 'textarea.richtext-transcription' ).length == 0) {
     fetchTranscriptions();

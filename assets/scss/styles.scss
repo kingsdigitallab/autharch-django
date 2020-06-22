@@ -1266,7 +1266,7 @@ main {
             // width: 100%;
             // overflow: hidden;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             label, input:not([type=button]):not([type=radio]):not([type=checkbox]):not([type=date]), select, textarea {
                 // width: -moz-available;
                 // width: -webkit-fill-available;
