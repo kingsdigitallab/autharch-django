@@ -500,8 +500,8 @@ function deleteRow(el) {
   } else {
     $(el).parent().attr('colspan', '1');
     $(el).parent().siblings('td').removeClass('none');
-    $(el).siblings('i.fa-trash-alt').remove();
-    $(el).siblings('input[type=submit]').remove();
+    $(el).closest('label').siblings('i.fa-trash-alt').remove();
+    $(el).closest('label').siblings('input[type=submit]').remove();
   }
   // Find and toggle the DELETE checkbox for the form.
   let deleteField = $(el).closest("[data-form-type]").find("[class~='delete-form-field']").find("[name$='DELETE']").first();
