@@ -35,7 +35,6 @@ from .forms import (
     get_archival_record_edit_form_for_subclass,
 )
 from .models import EditorProfile, RevisionMetadata
-from .constants import PERSON_ENTITY_TYPE
 from .signals import view_post_save
 
 
@@ -652,6 +651,7 @@ def revert(request):
 
 @user_passes_test(is_user_admin)
 def user_create(request):
+    editor_role = request.user.editor_profile.role
     if request.method == 'POST':
         user_form = UserCreateForm(request.POST)
         profile_form = EditorProfileForm(request.POST)
@@ -667,6 +667,7 @@ def user_create(request):
         profile_form = EditorProfileForm()
     context = {
         'profile_form': profile_form,
+        'show_delete': can_show_delete_page(editor_role),
         'user_form': user_form,
     }
     return render(request, 'editor/user_create.html', context)
