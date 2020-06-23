@@ -264,7 +264,7 @@ class PlaceEditInlineForm(forms.ModelForm):
 class RelatedMaterialEditInlineForm(forms.ModelForm):
 
     related_record = RelatedMaterialRecordChoiceField(
-        queryset=ArchivalRecord.objects.all(),
+        label='Related material', queryset=ArchivalRecord.objects.all(),
         widget=forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC))
 
     class Meta:
@@ -312,7 +312,8 @@ class BiographyHistoryEditInlineForm(forms.ModelForm):
         if self.Meta.entity_type == PERSON_ENTITY_TYPE:
             self.fields['content'].label = 'Biography'
             self.fields['sources'].label = 'Biography sources'
-            self.fields['copyright'].label = 'Biography Digital Rights Statement'
+            self.fields['copyright'].label = \
+                'Biography Digital Rights Statement'
         elif self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
             self.fields['content'].label = 'History'
             self.fields['sources'].label = 'History sources'
