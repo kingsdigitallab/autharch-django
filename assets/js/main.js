@@ -32,8 +32,6 @@ $(document).ready(function() {
     let modal = $(event.target).parents(".modal").first().removeClass("active");
     event.preventDefault();
   });
-
-
   
   // Open popup to log changes when saving a record, then actually
   // submit the form when submitting from the popup.

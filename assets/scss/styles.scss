@@ -1540,6 +1540,20 @@ main {
                     overflow: hidden;
                     .formset {
                         margin-bottom: 1.5em;
+                        .royalName-required {
+                            display: none;
+                        }
+                        input[type=checkbox][id$=is_royal_name]:checked + .royalName-required {
+                            display: block;
+                            margin-bottom: 0.5em;
+                            &:before {
+                                content: '\f071';
+                                font-family: $fontawesome;
+                                color: $danger;
+                                margin-right: 7px;
+                                font-weight: 600;
+                            }
+                        }
                         .group-title {
                             margin-bottom: 0;
                         }
@@ -1763,6 +1777,10 @@ main {
         background-color: lighten($danger, 60%);
         padding: 10px 20px;
         margin: 1em 0em 2em 0em;
+        ul {
+            padding: 0;
+            list-style: none;
+        }
         h4 {
             margin: 0px;
             margin-bottom: 10px;

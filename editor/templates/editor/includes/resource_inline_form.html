@@ -3,7 +3,7 @@
   <div class="fieldset-header">
     <h4>
       {% if form.instance.citation %}
-        {{ form.instance.citation|default:""|truncatewords:20 }}
+        {{ form.instance.citation|striptags|default:""|truncatewords:20 }}
       {% else %}
         Resource
       {% endif %}

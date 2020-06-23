@@ -27,6 +27,7 @@
     <div class="two-column-table">
       <div class="formset">
         {{ form.is_royal_name }} {{ form.is_royal_name.label }}
+        <div class="royalName-required">A royal name must contain a "forename" part and a "proper title" part.</div>
         {% with errors=form.non_field_errors %}
         {% if errors %}
         <div class="error-notification">
