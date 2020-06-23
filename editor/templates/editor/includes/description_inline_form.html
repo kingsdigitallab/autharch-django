@@ -14,6 +14,26 @@
     <div>
       {% render_field form.id %}
     </div>
+    {% if is_corporate_body %}
+    <div class="formset">
+      {% with functions=form.formsets.functions %}
+      <h3>FUNCTIONS ({{ functions.management_form.INITIAL_FORMS.value|default:"0" }})
+        <!-- <span role="button" aria-label="additional info" data-content-type="function" class="icon-only additional-info-icon">&#xf059;</span> -->
+      </h3>
+      <div class="management_form">
+        {{ functions.management_form }}
+      </div>
+      <div class="fieldsets">
+        {% for function in functions.forms %}
+        {% include "./function_inline_form.html" with form=function %}
+        {% endfor %}
+      </div>
+      {% endwith %}
+      <label class="create linked-button">
+        <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('function', this)">Add function
+      </label>
+    </div>
+    {% endif %}
     {% with local_descriptions=form.formsets.local_descriptions %}
     {% if local_descriptions %}
     <div class="formset">
@@ -117,6 +137,7 @@
           <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('event', this)">Add event
         </label>
     </div>
+    {% if not is_corporate_body %}
     <div class="formset">
       {% with functions=form.formsets.functions %}
       <h3>FUNCTIONS ({{ functions.management_form.INITIAL_FORMS.value|default:"0" }})
@@ -135,6 +156,7 @@
         <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('function', this)">Add function
       </label>
     </div>
+    {% endif %}
     {% with mandates=form.formsets.mandates %}
     {% if mandates %}
     <div class="formset">

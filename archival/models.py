@@ -309,7 +309,7 @@ class OriginLocation(models.Model):
 class RelatedMaterialReference(models.Model):
     record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
                                related_name='referenced_related_materials')
-    context = models.CharField(max_length=2048, blank=True,
+    context = models.CharField(max_length=2048,
                                help_text=constants.RELATED_MATERIALS_LABEL_HELP, verbose_name="Related material label")
     related_record = models.ForeignKey(
         ArchivalRecord, on_delete=models.CASCADE,

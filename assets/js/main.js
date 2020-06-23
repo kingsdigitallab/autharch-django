@@ -146,6 +146,14 @@ $(document).ready(function() {
   $("input[name*='preferred']:checked").parents('fieldset').addClass('border-left');
   $("input[name*='authorised']:checked").closest('fieldset').addClass('border-left');
 
+  $('.formset').on('click', 'input[id$="is_royal_name"]', function(el) {
+    if ($(el.target).prop("checked")) {
+      $(el.target).next(".namePartField-required").text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
+    } else {
+      $(el.target).next(".namePartField-required").text(`A personal name must contain a "surname" part type.`);
+    }
+  });
+
   $('body').on('click', 'input[name*="preferred"]', function (el) {
     // find other identities and uncheck their preferred status
     $(el.target).parents('fieldset').siblings().find('input[name*="preferred"]:checked').prop('checked', false);

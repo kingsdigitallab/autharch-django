@@ -9,13 +9,15 @@
       {% else %}
       <h1>Dashboard</h1>
     {% endif%}
-    <form class="search">
-      <label>
-        <span hidden>Search</span>
-        {{ form.q }}
-      </label>
-      <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
-    </form>
+    <div class="search-filter">
+      <form class="search">
+        <label>
+          <span hidden>Search</span>
+          {{ form.q }}
+        </label>
+        <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
+      </form>
+    </div>
   </div>
   {% endblock page_header %}
 
