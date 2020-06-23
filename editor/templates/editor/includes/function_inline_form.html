@@ -2,8 +2,8 @@
 <fieldset data-form-type="function">
   <div class="fieldset-header">
     <h4>
-      {% if form.function.value %}
-        {{ form.function.value|default:""|truncatewords:10 }}
+      {% if form.instance.title %}
+        {{ form.instance.title|default:""|truncatewords:10 }}
       {% else %}
         Function
       {% endif %}
