@@ -194,12 +194,6 @@
                 {% render_field form.provenance %}
               </div>
             </div>
-            {% render_field form.notes %}
-            <div class="two-column-table">
-              <div>
-                
-              </div>
-            </div>
             {% render_field form.administrative_history %}
             <div class="two-column-table">
               <div>
@@ -211,6 +205,7 @@
                 {% render_field form.organisations_as_subjects %}
               </div>
             </div>
+            {% render_field form.notes %}
             {% render_field form.arrangement %}
           </div>
         </fieldset>
@@ -317,6 +312,8 @@
 {% endblock main %}
 {% block extra_js %}
 <script src="{% static 'js/openseadragon/openseadragon.min.js' %}"></script>
+{% with transcriptions=form.formsets.transcriptions %}
+{% if transcriptions|length > 0 %}
 <script type="text/javascript">
   var viewer = OpenSeadragon({
       id: "openseadragon1",
@@ -355,4 +352,6 @@
     }
   }
 </script>
+{% endif %}
+{% endwith %}
 {% endblock extra_js %}

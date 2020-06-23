@@ -183,7 +183,7 @@ $(document).ready(function() {
   $('.filter-list').each(function() {
     if ($(this).children("a").length > 5) {
       $(this).children("a").slice(5, $(this).children("a").length).hide();
-      $(this).append(`<button class="button-link show-more" onclick="toggleFilters('`+$(this).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+$(this).children("a").length+`)</button>`);
+      $(this).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+$(this).children("a").length+`)</button>`);
     }
   });
   // search in filter options and display options that match the query
@@ -194,8 +194,11 @@ $(document).ready(function() {
       if (query == '') {
         filterOptions.slice(0, 5).show();
         filterOptions.slice(6, filterOptions.length).hide();
+        $(el.target).closest('fieldset').children(".show-more").remove();
+        $(el.target).closest('fieldset').append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+$(el.target).closest('fieldset').children("a").length+`)</button>`);
       }
       else {
+        $(el.target).closest('fieldset').children('button.show-more').hide();
         filterOptions.each(function() {
           var option = $(this).text().toLowerCase();
           if (option.includes(query)) {
@@ -319,14 +322,15 @@ function toggleTab(el) {
 
 // show more/less facet options
 function toggleFilters(el) {
-  $('#'+el).children(".show-more").remove();
-  if ($('#'+el).children("a[style='display: none;']").length) {
-    $('#'+el).children("a").show();
-    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-minus"></i> Show less</button>`);
+  var fieldset = $(el).parent('fieldset').first();
+  $(fieldset).children(".show-more").remove();
+  if ($(fieldset).children("a[style='display: none;']").length) {
+    $(fieldset).children("a").show();
+    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-minus"></i> Show less</button>`);
   }
   else {
-    $('#'+el).children("a").slice(5, $('#'+el).children("a").length).hide();
-    $('#'+el).append(`<button class="button-link show-more" onclick="toggleFilters('`+$('#'+el).attr('id')+`')"><i class="far fa-plus"></i> Show all (`+ $('#'+el).children("a").length +`)</button>`);
+    $(fieldset).children("a").slice(5, $(fieldset).children("a").length).hide();
+    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+ $(fieldset).children("a").length +`)</button>`);
   }
 }
 

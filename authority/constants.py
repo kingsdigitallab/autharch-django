@@ -46,9 +46,10 @@ LEGAL_STATUS_CITATION_HELP = 'This &quot;is a generic element available within a
 
 # RELATIONS_HELP = 'This element captures the relationship between a person or organisation within the GPP  name authority files and the entity described in the EAC-CPF instance you are encoding.'  # noqa
 
-RESOURCE_RELATIONSHIP_TYPE_HELP = 'This element &quot;contains the description of a resource related to the described entity&quot;. See resourceRelation at eac.staatsbibliothek-berlin.de.'  # noqa
+RESOURCE_RELATIONSHIP_TYPE_HELP = 'This field defines the relationship between a resource and the person or corporate body in question. See resourceRelation at eac.staatsbibliothek-berlin.de for more information.'  # noqa
 
 RELATION_TYPE_HELP = 'The type of relation that the corporate body or person has to the entity being described. See https://eac.staatsbibliothek-berlin.de/ for more info.'  # noqa
 
+RELATION_DESCRIPTION_HELP = 'This field describes the relationship between the related person or corporate body and the person or corporate body in question, e.g. Charlotte is the wife of George III.'
 
 SOURCE_HELP = 'This field should contain references to the material used in creating and populating a person or corporate body record. The content of this field can include source name and ID where appropriate or full citation if required. Examples of source name and ID include - Wikipedia: George III of the United Kingdom, VIAF ID: 49264990 or Wikidata ID: Q127318.'  # noqa

@@ -206,6 +206,8 @@ class LegalStatusEditInlineForm(forms.ModelForm):
         widgets = {
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput()
         }
 
 
@@ -235,6 +237,8 @@ class MandateEditInlineForm(forms.ModelForm):
         widgets = {
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'date_from': HTML5DateInput(),
+            'date_to': HTML5DateInput()
         }
 
 
@@ -308,9 +312,11 @@ class BiographyHistoryEditInlineForm(forms.ModelForm):
         if self.Meta.entity_type == PERSON_ENTITY_TYPE:
             self.fields['content'].label = 'Biography'
             self.fields['sources'].label = 'Biography sources'
+            self.fields['copyright'].label = 'Biography Digital Rights Statement'
         elif self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
             self.fields['content'].label = 'History'
             self.fields['sources'].label = 'History sources'
+            self.fields['copyright'].label = 'History Digital Rights Statement'
 
     class Meta:
         exclude = []
@@ -603,7 +609,7 @@ class ArchivalRecordEditForm(ContainerModelForm):
         widgets = {
             'references': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'administrative_history': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'arrangement': forms.Textarea(),
+            'arrangement': forms.Textarea(attrs={'rows': 4}),
             'creation_places': PlaceSelectMultiple(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'end_date': HTML5DateInput(),
@@ -618,7 +624,7 @@ class ArchivalRecordEditForm(ContainerModelForm):
                 attrs=SEARCH_SELECT_ATTRS),
             'persons_as_subjects': forms.SelectMultiple(
                 attrs=SEARCH_SELECT_ATTRS),
-            'physical_description': forms.Textarea(),
+            'physical_description': forms.Textarea(attrs={'rows': 4}),
             'places_as_relations': PlaceSelectMultiple(),
             'places_as_subjects': PlaceSelectMultiple(),
             'project': forms.HiddenInput(),

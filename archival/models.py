@@ -204,7 +204,7 @@ class FileBase(models.Model):
         blank=True, null=True, help_text=constants.PHYSICAL_DESCRIPTION_HELP)
 
     copyright_status = models.CharField(
-        max_length=256, blank=True, help_text=constants.COPYRIGHT_STATUS_HELP)
+        max_length=256, blank=True, help_text=constants.COPYRIGHT_STATUS_HELP, verbose_name='Copyright')
     publication_permission = models.TextField(
         'Credit', blank=True, null=True, help_text=constants.CREDIT_HELP)
     withheld = models.CharField(max_length=256, blank=True, null=True,

@@ -195,7 +195,7 @@ class Place(DateRangeMixin, TimeStampedModel):
 
     place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)
     address = models.TextField(blank=True)
-    role = models.TextField(blank=True, help_text=constants.PLACE_ROLE_HELP)
+    role = models.CharField(blank=True, max_length=256, help_text=constants.PLACE_ROLE_HELP)
 
 
 @reversion.register()
@@ -289,7 +289,7 @@ class Relation(DateRangeMixin, TimeStampedModel):
         Entity, verbose_name="Related person or corporate body",
         on_delete=models.CASCADE, null=True,
         related_name='related_to_relations')
-    relation_detail = models.TextField(verbose_name="Description")
+    relation_detail = models.TextField(verbose_name="Description", help_text=constants.RELATION_DESCRIPTION_HELP)
     place = models.ForeignKey(
         GeoPlace, verbose_name="Place related to relationship", blank=True,
         null=True, on_delete=models.CASCADE)

@@ -3,7 +3,7 @@
   <div class="fieldset-header">
     <h4>
       {% if form.name.value %}
-        {{ form.name.value|striptags|default:""|truncatewords:20 }}
+        {{ form.name.value|striptags|safe|default:""|truncatewords:20 }}
       {% else %}
         Source
       {% endif %}
