@@ -50,6 +50,10 @@
     <div class="success-notification">
       <h4>Your edits were successfuly saved.</h4>
     </div>
+    <!-- elif restored
+    <div class="success-notification">
+      <h4>The version [VERSION NUMBER] was sucessfully restored.</h4>
+    </div> -->
     {% endif %}
 
     <h1>{{ record }}</h1>
@@ -234,10 +238,10 @@
                 </label>
                 {% endif %}
                 {% render_field form.rcin %}
-                {% render_field form.copyright_status %}
+                {% render_field form.cataloguer %}
               </div>
               <div>
-                {% render_field form.cataloguer %}
+                {% render_field form.copyright_status %}
                 {% render_field form.description_date %}
               </div>
             </div>

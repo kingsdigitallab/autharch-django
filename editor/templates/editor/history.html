@@ -13,6 +13,7 @@
       <table>
         <thead>
           <tr>
+            <th>Version ID</th>
             <th>Updated</th>
             <th>User</th>
             <th>Status</th>
@@ -24,13 +25,14 @@
           {% for version in versions %}
           <tr>
             {% with revision=version.revision %}
+            <td>{{ version.revision_id }}</td>
             <td>{{ revision.date_created }}</td>
             <td>{{ revision.user }}</td>
             <td>Publication status: {{ publication_status }}<br>
               Maintenance status: {{ maintenance_status }}<br>
              Editing event type: {{ revision.revision_metadata.editing_event_type }}</td>
             <td class="description">{{ revision.comment }}</td>
-            <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Reset</button></td>
+            <td><button aria-label="revert changes" class="button-link" name="revision_id" type="submit" value="{{ revision.id }}"><i class="fas fa-history"></i>Restore<br>this version</button></td>
             {% endwith %}
           </tr>
           {% endfor %}
