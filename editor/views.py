@@ -472,6 +472,7 @@ def entity_edit(request, entity_id):
         if form.is_valid() and log_form.is_valid():
             entity.control.maintenance_status = MaintenanceStatus.objects.get(
                 title='revised')
+            entity.control.save()
             reversion.set_comment(log_form.cleaned_data['comment'])
             event_type = EditingEventType.objects.get(title='revised')
             editor_type = CWEditorType.objects.get(title='human')
