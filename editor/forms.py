@@ -346,7 +346,8 @@ class ControlEditInlineForm(ContainerModelForm):
         formsets = {}
         data = kwargs.get('data')
         SourceFormset = inlineformset_factory(
-            Control, Source, form=SourceEditInlineForm, extra=0)
+            Control, Source, form=SourceEditInlineForm, extra=0, min_num=1,
+            validate_min=True)
         formsets['sources'] = SourceFormset(
             data, instance=self.instance, prefix=self.prefix + '-source')
         return formsets
@@ -396,7 +397,8 @@ class DescriptionEditInlineForm(ContainerModelForm):
         if self.Meta.entity_type == PERSON_ENTITY_TYPE:
             LocalDescriptionFormset = inlineformset_factory(
                 Description, LocalDescription,
-                form=LocalDescriptionEditInlineForm, extra=0)
+                form=LocalDescriptionEditInlineForm, extra=0, min_num=1,
+                validate_min=True)
             formsets['local_descriptions'] = LocalDescriptionFormset(
                 data, instance=instance, prefix=prefix + '-local_description')
         if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
@@ -484,20 +486,14 @@ class IdentityEditInlineForm(ContainerModelForm):
         data = kwargs.get('data')
         NameEntryFormset = inlineformset_factory(
             Identity, NameEntry, exclude=[], form=NameEntryEditInlineForm,
-            extra=0, entity_type=self.Meta.entity_type)
+            extra=0, min_num=1, validate_min=True,
+            entity_type=self.Meta.entity_type)
         formsets['name_entries'] = NameEntryFormset(
             data, instance=self.instance, prefix=self.prefix + '-name_entry')
-        description_kwargs = {}
-        if self.Meta.entity_type == CORPORATE_BODY_ENTITY_TYPE:
-            # There is a minimum here because there must be at least
-            # one Function, and if there is no Description, validation
-            # doesn't extend down to the FunctionFormset.
-            description_kwargs['min_num'] = 1
-            description_kwargs['validate_min'] = True
         DescriptionFormset = inlineformset_factory(
             Identity, Description, exclude=[], form=DescriptionEditInlineForm,
             extra=0, entity_type=self.Meta.entity_type, max_num=1,
-            validate_max=True, **description_kwargs)
+            validate_max=True, min_num=1, validate_min=True)
         formsets['descriptions'] = DescriptionFormset(
             data, instance=self.instance, prefix=self.prefix + '-description')
         RelationFormset = inlineformset_factory(
@@ -681,12 +677,13 @@ class EntityEditForm(ContainerModelForm):
             entity_type = CORPORATE_BODY_ENTITY_TYPE
         IdentityFormset = inlineformset_factory(
             Entity, Identity, exclude=[], form=IdentityEditInlineForm,
-            extra=0, entity_type=entity_type)
+            extra=0, min_num=1, validate_min=True, entity_type=entity_type)
         formsets['identities'] = IdentityFormset(*args, instance=self.instance,
                                                  prefix='identity')
         ControlFormset = inlineformset_factory(
-            Entity, Control, exclude=[], form=ControlEditInlineForm, extra=1,
-            max_num=1, validate_max=True, editor_role=self._editor_role)
+            Entity, Control, exclude=[], form=ControlEditInlineForm,
+            max_num=1, validate_max=True, min_num=1, validate_min=True,
+            editor_role=self._editor_role)
         formsets['control'] = ControlFormset(*args, instance=self.instance,
                                              prefix='control')
         return formsets
