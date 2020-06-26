@@ -257,8 +257,15 @@ class Command(BaseCommand):
             obj.references.add(ref)
 
         if not pd.isnull(row['Language']):
-            languages = row['Language'].split(', ')
+            languages = []
+            for lang_string in row['Language'].split('; '):
+                if ', ' in lang_string:
+                    languages.extend(lang_string.split(', '))
+                else:
+                    languages.append(lang_string)
             for lang in languages:
+                if lang == 'Greek':
+                    lang = 'Greek, Modern'
                 try:
                     language = Language.objects.get(name_en=lang)
                     obj.languages.add(language)
