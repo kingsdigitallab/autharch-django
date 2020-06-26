@@ -154,4 +154,5 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_related_entities(self, obj):
         return [relation.related_entity.pk for relation in
-                Relation.objects.filter(identity__entity=obj)]
+                Relation.objects.filter(identity__entity=obj)
+                if relation.related_entity]
