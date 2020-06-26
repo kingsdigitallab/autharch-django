@@ -87,7 +87,6 @@ class Command(BaseCommand):
             entity_map[path] = self._import_entity(path, project)
         for path in options['paths']:
             entity_map[path].import_relations()
-        raise CommandError('Aborting for testing.')
         management.call_command('createinitialrevisions')
         self.stdout.write(UPDATE_SEARCH_INDEX_MSG)
 
