@@ -100,10 +100,6 @@ body
 	margin-right: 3px; 
 }
 
-.tei-unclear {
-	font-style: italic;
-}
-
 .tei-unclear:after {
 	content:']';
 	font-weight: bold;

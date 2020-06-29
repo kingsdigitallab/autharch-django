@@ -25,7 +25,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tei-spaceBefore' },
 		{ name: 'tei-spaceAfter' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'clipboard',   groups: [ 'clipboard', 'undo', 'redo' ] }
+		{ name: 'clipboard',   groups: [ 'clipboard', 'undo', 'redo' ] },
+		{ name: 'tei-howToUse' },
 	];
 	config.allowedContent = true;
 	config.extraPlugins = ['teiTranscription', 'sourcedialog', 'elementspath'];

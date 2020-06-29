@@ -156,6 +156,20 @@
               </div>
             </div>
             {% render_field form.publications %}
+            <div class="two-column-table">
+              <div>
+                {% if is_admin %}
+                <label>
+                  <span class="required">Repository code</span>
+                  <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
+                </label>
+                {% endif %}
+                {% render_field form.rcin %}
+              </div>
+              <div>
+                {% render_field form.copyright_status %}
+              </div>
+            </div>
           </div>
         </fieldset>
       </div>
@@ -211,40 +225,6 @@
             </div>
             {% render_field form.notes %}
             {% render_field form.arrangement %}
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="form-section">
-        <h2>ADMINISTRATIVE METADATA</h2>
-
-        <fieldset>
-          <div class="fieldset-header">
-            <h4>
-                Administrative metadata
-            </h4>
-
-            <div>
-              <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
-            </div>
-          </div>
-          <div class="fieldset-body expand">
-            <div class="two-column-table">
-              <div>
-                {% if is_admin %}
-                <label>
-                  <span class="required">Repository code</span>
-                  <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
-                </label>
-                {% endif %}
-                {% render_field form.rcin %}
-                {% render_field form.cataloguer %}
-              </div>
-              <div>
-                {% render_field form.copyright_status %}
-                {% render_field form.description_date %}
-              </div>
-            </div>
           </div>
         </fieldset>
       </div>

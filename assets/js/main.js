@@ -141,11 +141,6 @@ $(document).ready(function() {
     $("#"+$(el).attr('id')).parent('.table-container').next(".pager").find("a[data-label='"+label+"']").addClass("current");
   });
 
-  // optional functionality (can be removed if needed) - dynamic styling of the sections
-  // style border for preferred names and identities
-  $("input[name*='preferred']:checked").parents('fieldset').addClass('border-left');
-  $("input[name*='authorised']:checked").closest('fieldset').addClass('border-left');
-
   $('.formset').on('click', 'input[id$="is_royal_name"]', function(el) {
     if ($(el.target).prop("checked")) {
       $(el.target).next(".namePartField-required").text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
@@ -153,6 +148,22 @@ $(document).ready(function() {
       $(el.target).next(".namePartField-required").text(`A personal name must contain a "surname" part type.`);
     }
   });
+
+  //check the first 
+  if ($('body').find('input[name*="preferred"]:checked').length == 0) {
+    $('body').find('input[name*="preferred"]').first().prop('checked', true);
+  }
+
+  $('body').find('.fieldsets > [data-form-type="identity"]').each(function() {
+    if($(this).find('input[name*="authorised"]:checked').length == 0) {
+      $(this).find('input[name*="authorised"]').first().prop('checked', true);
+    }
+  });
+
+  // optional functionality (can be removed if needed) - dynamic styling of the sections
+  // style border for preferred names and identities
+  $("input[name*='preferred']:checked").parents('fieldset').addClass('border-left');
+  $("input[name*='authorised']:checked").closest('fieldset').addClass('border-left');
 
   $('body').on('click', 'input[name*="preferred"]', function (el) {
     // find other identities and uncheck their preferred status

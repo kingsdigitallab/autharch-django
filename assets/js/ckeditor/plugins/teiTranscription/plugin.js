@@ -34,7 +34,6 @@ function unwrapStartTag(el, tag, className) {
 }
 
 function cleanUp(editorSelection) {
-    checkWhiteSpace();
     checkMissingClasses();
     removeEmptyTags(editorSelection);
 }
@@ -42,17 +41,12 @@ function cleanUp(editorSelection) {
 function removeEmptyTags(editorSelection) {
     var elements = editorSelection.document.getBody().getElementsByTag( '*' );
     for ( var i = 0; i < elements.count(); ++i ) {
-        if (elements.getItem(i).$.className !== 'tei-lb' && elements.getItem(i).$.innerHTML.length == 0) {
+        if (elements.getItem(i).$.className !== 'tei-lb' && elements.getItem(i).$.innerHTML.length == 0 || elements.getItem(i).$.innerHTML == "<br>") {
             elements.getItem(i).remove();
         } else if (elements.getItem(i).$.innerHTML == '<br class="tei-lb">') {
             elements.getItem(i).$.outerHTML = elements.getItem(i).$.innerHTML;
         }
     }
-}
-
-// TODO
-function checkWhiteSpace() {
-    return false;
 }
 
 // TODO
@@ -86,10 +80,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                     editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
                 // unwrap - optional, is used to unwrap when two or more objects are highlighted but don't have the same common ancestor
-                else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
-                    editor.insertHtml(newElement);
-                }
+                // else if (teiObject.className === startTag.$.className) {
+                //     var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
+                //     editor.insertHtml(newElement);
+                // }
                 // wrap - check if any text was selected so as not to embed an empty tag
                 else if (editorSelection.getSelectedText().length > 0) {
                     var newElement = wrap(teiObject);
@@ -135,10 +129,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
                     editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
-                else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
-                    editor.insertHtml(newElement);
-                }
+                // else if (teiObject.className === startTag.$.className) {
+                //     var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
+                //     editor.insertHtml(newElement);
+                // }
                 else if (editorSelection.getSelectedText().length > 0) {
                     var newElement = wrap(teiObject);
                     //resolve conflicts
@@ -182,10 +176,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
                     editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
-                else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
-                    editor.insertHtml(newElement);
-                }
+                // else if (teiObject.className === startTag.$.className) {
+                //     var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
+                //     editor.insertHtml(newElement);
+                // }
                 else if (editorSelection.getSelectedText().length > 0) {
                     var newElement = wrap(teiObject);
                     editor.insertElement(newElement);
@@ -396,10 +390,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
                     editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
-                else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
-                    editor.insertHtml(newElement);
-                }
+                // else if (teiObject.className === startTag.$.className) {
+                //     var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
+                //     editor.insertHtml(newElement);
+                // }
                 else if (editorSelection.getSelectedText().length > 0) {
                     var newElement = wrap(teiObject);
                     editor.insertElement(newElement);
@@ -563,9 +557,7 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                                     <p>...</p>
                                     <br>
                                     <h3 class="dialog-contents-subheading">Add | &lt;ins class="tei-add"&gt; </h3>
-                                    <p>This element is used to highlight text that was inserted in the source text by an author.</p>
-                
-                                `
+                                    <p>This element is used to highlight text that was inserted in the source text by an author.</p>`
                             }
                         ]
                     }
@@ -604,10 +596,10 @@ CKEDITOR.plugins.add( 'teiTranscription', {
                 if (teiObject.className === commonAncestor.$.className || teiObject.className === commonAncestor.$.parentElement.className) {
                     editor.insertHtml(teiObject.elToInsert.getHtml());
                 }
-                else if (teiObject.className === startTag.$.className) {
-                    var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
-                    editor.insertHtml(newElement);
-                }
+                // else if (teiObject.className === startTag.$.className) {
+                //     var newElement = unwrapStartTag(teiObject.elToInsert, teiObject.tag, teiObject.className);
+                //     editor.insertHtml(newElement);
+                // }
                 else if (editorSelection.getSelectedText().length > 0) {
                     editor.execCommand('foreignDialog');
                 }
