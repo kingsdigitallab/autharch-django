@@ -1590,6 +1590,9 @@ main {
                             }
                         }
                         #transcription {
+                            a.cke_button {
+                                cursor: pointer !important;
+                            }
                             .cke_contents {
                                 height: 50vh;
                                 min-height: 500px;
@@ -1811,13 +1814,12 @@ main {
             margin-bottom: 0px;
         }
     }
-
+    .current {
+        color: darken($dark-grey, 30%);
+        text-decoration: underline;
+        font-weight: 500;
+    }
     .pager {
-        .current {
-            color: darken($dark-grey, 30%);
-            text-decoration: underline;
-            font-weight: 500;
-        }
         .page-size {
             text-align: right;
             a {

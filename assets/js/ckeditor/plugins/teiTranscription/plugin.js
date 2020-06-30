@@ -54,6 +54,7 @@ function checkMissingClasses() {
     return false;
 }
 
+
 CKEDITOR.plugins.add( 'teiTranscription', {
     icons: 'teiPageBreak,teiAdd,teiDel,teiParagraph,teiLineBreak,teiNote,teiUnclear,teiUnderline,teiFormula,teiFigure,teiCatchwords,teiForeign,teiSpaceBefore,teiSpaceAfter,howToUse',
     init: function( editor ) {
@@ -525,56 +526,6 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             };
         });
 
-        editor.addCommand( 'howToUse', new CKEDITOR.dialogCommand( 'howToUseDialog' ) );
-        CKEDITOR.dialog.add( 'howToUseDialog', function ( editor ) {
-            var size = CKEDITOR.document.getWindow().getViewPaneSize();
-            
-            // Make it maximum 800px wide, but still fully visible in the viewport.
-            var width = Math.min( size.width - 70, 800 );
-
-            // Make it use 2/3 of the viewport height.
-            var height = size.height / 1.5
-            return {
-                title: 'How to use rich text editor for transcriptions',
-                minWidth: width,
-                minHeight: height,
-        
-                contents: [
-                    {
-                        id: 'tab-use',
-                        label: 'How To Use Tab',
-                        elements: [
-                            {
-                                type: 'html',
-                                id: 'description',
-                                html: `
-                                    <h2 class="dialog-contents-heading">Tags</h2>
-                                    <h3 class="dialog-contents-subheading">Paragraph | &lt;p class="tei-p"&gt; </h3>
-                                    <p>This element is used to insert a new paragraph.</p>
-                                    <h4 class="dialog-contents-doc">Wrapping</h4>
-                                    <p>...</p>
-                                    <h4 class="dialog-contents-doc">Unwrapping</h4>
-                                    <p>...</p>
-                                    <br>
-                                    <h3 class="dialog-contents-subheading">Add | &lt;ins class="tei-add"&gt; </h3>
-                                    <p>This element is used to highlight text that was inserted in the source text by an author.</p>`
-                            }
-                        ]
-                    }
-                ],
-                onShow: function(){
-                },
-                onOk: function() {
-                    var dialog = this;
-                }
-            };
-        });
-        editor.ui.addButton('HowToUse', {
-            label: 'How to Use',
-            command: 'howToUse',
-            toolbar: 'tei-howToUse'
-        });
-
         // TEI-FOREIGN <span class="tei-foreign" data-tei-lang="fr"> | <foreign xml:lang='xx'>  </foreign>
         editor.addCommand( 'teiForeign', {
             exec: function( editor ) {
@@ -652,8 +603,150 @@ CKEDITOR.plugins.add( 'teiTranscription', {
             command: 'teiParagraph',
             toolbar: 'tei-p'
         });
+    
 
-        // TODO - add a popup with documentation
+        editor.addCommand( 'howToUse', new CKEDITOR.dialogCommand( 'howToUseDialog' ) );
+        CKEDITOR.dialog.add( 'howToUseDialog', function ( editor ) {
+            var size = CKEDITOR.document.getWindow().getViewPaneSize();
+            
+            // Make it maximum 800px wide, but still fully visible in the viewport.
+            var width = Math.min( size.width - 70, 800 );
+
+            // Make it use 2/3 of the viewport height.
+            var height = size.height / 1.5;
+            return {
+                title: 'How to use the trascription editor',
+                minWidth: width,
+                minHeight: height,
+        
+                contents: [
+                    {
+                        id: 'tab-use',
+                        label: 'How To Use Tab',
+                        elements: [
+                            {
+                                type: 'html',
+                                id: 'description',
+                                html: `
+                                    <div id="rte-doc-dialog">
+                                        <h2>Introduction</h2>
+                                        <p>The transcription editor was developed for you to review and edit the existing transcriptions of archival records. The editing process involves adding new or detecting missing document features, such as identifying a missing paragraph, encoding foreign words/figures/formulas/catchwords, spotting missing notes/deleted text/added text, or highlighting text that cannot be transcribed with certainty.</p>
+                                        <p>You are not expected to be familiar with a TEI-related syntax before editing transcriptions. The toolbar in the transcription editor has all the buttons needed to produce a valid transcription:</p>
+                                        <img src="/static/images/RTEtoolbar.png" alt="RTE toolbar" />
+                                        <p>For instance, if you noticed that some text needs to be underlined, you select this text and click on the Underline button <img src="/static/images/icons/teiUnderline.png" alt="tei underlined text" class="inline-img"/>. To remove the underline (i.e., to unwrap the text), you need to follow the same steps: you select the text that you want to unwrap and then you click on the Underline button <img src="/static/images/icons/teiUnderline.png" alt="tei underlined text" class="inline-img"/>.</p>
+                                        <h2>List of tags</h2>
+                                        <h3>Paragraph</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiParagraph.png" alt="tei paragraph" class="tag-icon"/>
+                                            <p class="tag">&lt;p class="tei-p"&gt;</p>
+                                        </div>
+                                        <p>This element is used to insert a new paragraph.</p>
+                                        <h3>Note</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiNote.png" alt="tei note" class="tag-icon"/>
+                                            <p class="tag">&lt;span class="tei-note"&gt;</p> 
+                                        </div>
+                                        <p>This element inserts notes or annotations made by an author in the source text.</p>
+                                        <h3>Page break</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiPageBreak.png" alt="tei page break" class="tag-icon"/>
+                                            <p class="tag">&lt;span class="tei-pb" data-tei-n=""&gt;</p>
+                                        </div>
+                                        <p>This element marks the beginning of a new page in a paginated document. You can find 'Page #' at the beginning of each transcribed page.</p>
+                                        <h3>Underlined text</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiUnderline.png" alt="tei underlined text" class="tag-icon"/>
+                                            <p class="tag">&lt;u class="tei-hi" data-tei-rend="underline"&gt;</p>
+                                        </div>
+                                        <p>This element highlights text that was underlined by an author in the source text.</p>
+                                        <h3>Deleted text</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiDel.png" alt="tei deleted text" class="tag-icon"/>
+                                            <p class="tag">&lt;del class="tei-del"&gt;</p>
+                                        </div>
+                                        <p>This element highlights text that was marked as deleted by an author in the source text.</p>
+                                        <h3>Inserted text</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiAdd.png" alt="tei inserted text" class="tag-icon"/>
+                                            <p class="tag">&lt;ins class="tei-add"&gt;</p>
+                                        </div>
+                                        <p>This element is used to highlight text that was inserted in the source text by an author.</p>
+                                        <h3>Unclear text</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiUnclear.png" alt="tei unclear text" class="tag-icon"/>
+                                            <p class="tag">&lt;span class="tei-unclear"&gt;</p>
+                                        </div>
+                                        <p>This element highlights illegible text that cannot be transcribed with certainty. You can either wrap a word or a sentence that is unclear (select an unclear word or a sentence and click on the Unclear button), or you can add '[unclear]' directly to the trascription (click on the Unclear button).</p>
+                                        <h3>Catchword</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiCatchwords.png" alt="tei catchword" class="tag-icon"/>
+                                            <p class="tag">&lt;span class="tei-catchwords"&gt;</p>
+                                        </div>
+                                        <p>This element indicates annotations at the foot of the page.</p>
+                                        <h3>Foreign word</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiForeign.png" alt="tei foreign word" class="tag-icon"/>
+                                            <p class="tag">&lt;span class="tei-foreign" data-tei-lang=""&gt;</p>
+                                        </div>
+                                        <p>This element identifies a word or phrase as belonging to some language other than that of the surrounding text. When you click on the Foreign button, you will be prompted to select a language the word or phrase belongs to in a dialog box.</p>
+                                        <h3>Formula</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiFormula.png" alt="tei formula" class="tag-icon"/>
+                                            <p class="tag">&lt;span class="tei-formula"&gt;[mathematical formula or graphic depicted in document]&lt;/span&gt;</p>
+                                        </div>
+                                        <p>This element is inserted before selected text. It indicates that text contains a mathematical or other formula.</p>
+                                        <h3>Figure (images or symbols)</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiFigure.png" alt="tei figure" class="tag-icon"/>
+                                            <p class="tag">&lt;span class="tei-figure"&gt;&lt;span class="tei-figDesc"&gt;[image or symbol depicted in document]&lt;/span&gt;&lt;/span&gt;</p>
+                                        </div>
+                                        <p>This element is inserted before selected text. It is used to represent graphic information such as an illustration, drawing, doodle, symbol, emblem.</p>
+                                        <h3>Line break</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiLineBreak.png" alt="line break" class="tag-icon"/>
+                                            <p class="tag">&lt;br class="tei-lb"&gt;</p>
+                                        </div>
+                                        <p>This element is used to insert a line break.</p>
+                                        <h3>Space before tag</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiSpaceBefore.png" alt="space before" class="tag-icon"/>
+                                        </div>
+                                        <p>This element inserts extra space before the opening tag in case you cannot put the cursor before text.</p>
+                                        <h3>Space after tag</h3>
+                                        <div class="two-column-table">
+                                            <img src="/static/images/icons/teiSpaceAfter.png" alt="space after" class="tag-icon"/>
+                                        </div>
+                                        <p>This element inserts extra space after the closing tag in case you cannot put the cursor after text.</p>
+                                        <h3>Source code</h3>
+                                        <p>You can edit transcriptions directly in the source code (see the Source button in the toolbar), which, however, is not recommended. When editing in the source code, you are required to follow the syntax for each tag and you cannot add new tags; otherwise, we will not be able to convert transcriptions back to the TEI format.</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    }
+                ],
+                buttons: [
+                    {
+                        type: 'button',
+                        id: 'rte-close-button',
+                        label: 'CLOSE',
+                        title: 'close',
+                        style: 'display: none'
+                    }
+                ],
+                onShow: function(){
+                },
+                onOk: function() {
+                    var dialog = this;
+                }
+            };
+        });
+        editor.ui.addButton('HowToUse', {
+            label: 'How to Use',
+            command: 'howToUse',
+            toolbar: 'tei-howToUse'
+        });
+        
         // TODO - unwrap elements with only br in them
         // TODO - make sure that only markup relevant to the tag is removed, not all text markup - currently removing parents
     }

@@ -149,16 +149,6 @@ $(document).ready(function() {
     }
   });
 
-  //check the first 
-  if ($('body').find('input[name*="preferred"]:checked').length == 0) {
-    $('body').find('input[name*="preferred"]').first().prop('checked', true);
-  }
-
-  $('body').find('.fieldsets > [data-form-type="identity"]').each(function() {
-    if($(this).find('input[name*="authorised"]:checked').length == 0) {
-      $(this).find('input[name*="authorised"]').first().prop('checked', true);
-    }
-  });
 
   // optional functionality (can be removed if needed) - dynamic styling of the sections
   // style border for preferred names and identities

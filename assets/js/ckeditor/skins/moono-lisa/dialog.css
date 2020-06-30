@@ -6,9 +6,6 @@ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 
 
 /* CUSTOM */
-a.cke_button {
-	cursor: pointer !important;
-}
 
 .cke_dialog_title {
 	letter-spacing: 0 !important;
@@ -16,20 +13,57 @@ a.cke_button {
     font-size: 1.2em;
 }
 
-.dialog-contents-heading {
+#rte-doc-dialog {
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
+#rte-doc-dialog h2 {
     font-size: 1.4em;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin: 20px 0px;
 }
 
-.dialog-contents-subheading {
+#rte-doc-dialog h3 {
     font-size: 1.2em;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin: 10px 0px;
+}
+#rte-doc-dialog h3:not(:first-of-type) {
+    margin-top: 20px;
 }
 
-.dialog-contents-docs {
+#rte-doc-dialog p {
+    font-size: 1.1em;
+    line-height: 1.6em;
+    margin-bottom: 1em;
+    white-space: normal;
+}
+
+#rte-doc-dialog .tag {
+    font-family: "Lucida Console", Courier, monospace !important;
     font-size: 1em;
-    font-weight: 700;
-    margin-bottom: 10px;
+}
+
+#rte-doc-dialog img {
+    width: 60%;
+}
+
+#rte-doc-dialog .tag-icon {
+    width: 30px;
+    margin-right: 10px;
+    border: 1px solid black;
+}
+
+#rte-doc-dialog .inline-img {
+    width: 20px;
+    border: 1px solid black;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#rte-doc-dialog .two-column-table {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
 }

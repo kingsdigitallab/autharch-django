@@ -10,18 +10,18 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The toolbar groups arrangement, optimized for a single toolbar row.
 	config.toolbarGroups = [
-		{ name: 'tei-pb' },
 		{ name: 'tei-p' },
+		{ name: 'tei-note' },
+		{ name: 'tei-pb' },
 		{ name: 'tei-underline' },
 		{ name: 'tei-del' },
 		{ name: 'tei-add' },
-		{ name: 'tei-lb' },
-		{ name: 'tei-note' },
 		{ name: 'tei-unclear' },
-		{ name: 'tei-formula' },
-		{ name: 'tei-figure' },
 		{ name: 'tei-catchwords' },
 		{ name: 'tei-foreign' },
+		{ name: 'tei-formula' },
+		{ name: 'tei-figure' },
+		{ name: 'tei-lb' },
 		{ name: 'tei-spaceBefore' },
 		{ name: 'tei-spaceAfter' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
@@ -29,6 +29,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tei-howToUse' },
 	];
 	config.allowedContent = true;
+	CKEDITOR.timestamp = '10';
 	config.extraPlugins = ['teiTranscription', 'sourcedialog', 'elementspath'];
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
