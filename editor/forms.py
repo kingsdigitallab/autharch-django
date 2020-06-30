@@ -440,9 +440,9 @@ class NameEntryEditInlineForm(ContainerModelForm):
         # A royal name must have at least a "forename" name part
         # and a "properTitle" name part.
         if cleaned_data.get('is_royal_name'):
-            self._validate_royal_name(cleaned_data)
+            self._validate_royal_name()
 
-    def _validate_royal_name(self, cleaned_data):
+    def _validate_royal_name(self):
         forename_type = NamePartType.objects.get(title='forename')
         proper_title_type = NamePartType.objects.get(title='proper title')
         has_forename = False
@@ -507,6 +507,30 @@ class IdentityEditInlineForm(ContainerModelForm):
         formsets['resources'] = ResourceFormset(
             data, instance=self.instance, prefix=self.prefix + '-resource')
         return formsets
+
+    def clean(self):
+        super().clean()
+        # One and only one NameEntry associated with an Identity may
+        # be marked as being the authorised form.
+        self._validate_authorised_form()
+
+    def _validate_authorised_form(self):
+        try:
+            entries_data = self.formsets['name_entries'].cleaned_data
+        except AttributeError:
+            return
+        count_authorised_forms = 0
+        for entry_data in entries_data:
+            if entry_data.get('authorised_form'):
+                count_authorised_forms += 1
+        if count_authorised_forms == 0:
+            raise forms.ValidationError(
+                'Each identity must have a name entry that is marked as '
+                'the authorised form.', code='invalid')
+        elif count_authorised_forms > 1:
+            raise forms.ValidationError(
+                'Each identity must have only one name entry that is marked '
+                'as the authorised form.', code='invalid')
 
     class Meta:
         model = Identity
@@ -687,6 +711,28 @@ class EntityEditForm(ContainerModelForm):
         formsets['control'] = ControlFormset(*args, instance=self.instance,
                                              prefix='control')
         return formsets
+
+    def clean(self):
+        super().clean()
+        # One and only one Identity may be marked as being preferred.
+        self._validate_preferred_identity()
+
+    def _validate_preferred_identity(self):
+        try:
+            identities_data = self.formsets['identities'].cleaned_data
+        except AttributeError:
+            return
+        count_preferred_identities = 0
+        for identity_data in identities_data:
+            if identity_data.get('preferred_identity'):
+                count_preferred_identities += 1
+        if count_preferred_identities == 0:
+            raise forms.ValidationError(
+                'One identity must be marked as preferred.', code='invalid')
+        elif count_preferred_identities > 1:
+            raise forms.ValidationError(
+                'Only one identity may be marked as preferred.',
+                code='invalid')
 
     class Meta:
         model = Entity
