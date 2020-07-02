@@ -52,10 +52,10 @@
     <div class="success-notification">
       <h4>Your edits were successfuly saved.</h4>
     </div>
-    <!-- elif restored
+    {% elif reverted %}
     <div class="success-notification">
-      <h4>The version [VERSION NUMBER] was sucessfully restored.</h4>
-    </div> -->
+      <h4>The entity was sucessfully restored.</h4>
+    </div>
     {% endif %}
 
     <h1>{{ entity }}</h1>

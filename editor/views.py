@@ -456,6 +456,7 @@ def entity_edit(request, entity_id):
     # if entity.control.publication_status.title != 'inProcess' and \
     #    editor_role == EditorProfile.EDITOR:
     #     return HttpResponseForbidden()
+    reverted = request.GET.get('reverted', False)
     saved = request.GET.get('saved', False)
     form_errors = []
     current_section = 'entities'
@@ -499,6 +500,7 @@ def entity_edit(request, entity_id):
         'is_corporate_body': is_corporate_body,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
+        'reverted': reverted,
         'saved': saved,
         'show_delete': can_show_delete_page(editor_role),
     }
@@ -565,6 +567,7 @@ def record_edit(request, record_id):
     # if record.publication_status.title != 'inProcess' and \
     #    editor_role == EditorProfile.EDITOR:
     #     return HttpResponseForbidden()
+    reverted = request.GET.get('reverted', False)
     saved = request.GET.get('saved', False)
     current_section = 'records'
     is_deleted = False
@@ -605,6 +608,7 @@ def record_edit(request, record_id):
         'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
         'record': record,
+        'reverted': reverted,
         'saved': saved,
         'show_delete': can_show_delete_page(editor_role),
     }
@@ -647,7 +651,7 @@ def revert(request):
         model = version.content_type.model_class()
         obj = model.objects.get(pk=version.object_id)
         view_post_save.send(sender=model, instance=obj)
-    return redirect(request.POST.get('redirect_url'))
+    return redirect(request.POST.get('redirect_url') + '?reverted=true')
 
 
 @user_passes_test(is_user_admin)
