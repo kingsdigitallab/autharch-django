@@ -651,7 +651,8 @@ def revert(request):
         model = version.content_type.model_class()
         obj = model.objects.get(pk=version.object_id)
         view_post_save.send(sender=model, instance=obj)
-    return redirect(request.POST.get('redirect_url') + '?reverted=true')
+    return redirect(request.POST.get('redirect_url')
+                    + '?reverted={}'.format(revision_id))
 
 
 @user_passes_test(is_user_admin)
