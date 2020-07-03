@@ -11,12 +11,13 @@ from languages_plus.models import Language
 from script_codes.models import Script
 
 from archival.models import Project
-from authority.models import Control, Entity, Identity, NameEntry, NamePart
+from authority.models import (
+    Control, Description, Entity, Event, Identity, NameEntry, NamePart, Source)
 from jargon.models import (
     EntityType, MaintenanceStatus, NamePartType, PublicationStatus)
 
 
-HELP = 'Import person entities from MADS XML files.'
+HELP = 'Import LIPARM person entities from MADS XML files.'
 PROJECT_ID_HELP = 'ID of project the imported data is to be associated with.'
 XML_PATHS_HELP = 'Path to MADS XML file.'
 
@@ -38,6 +39,11 @@ NAME_PART_TYPE_MAP = {
     'termsOfAddress': 'proper title'
 }
 NAME_PARTS_ORDER = ['family', 'given', 'date', 'termsOfAddress']
+
+LIPARM_SOURCE_NAME = (
+    'Gartner, Richard and Blaney, Jonathan LIPARM: Linking Parliamentary '
+    'Records through Metadata. [Dataset] (Unpublished)')
+LIPARM_SOURCE_URL = 'https://sas-space.sas.ac.uk/4315/'
 
 
 def from_iso_format(date_str):
@@ -93,6 +99,8 @@ class Command(BaseCommand):
             name_part = name_parts.get(part_type)
             if not name_part:
                 continue
+            if name_part == 'Mr' and part_type == 'termsOfAddress':
+                continue
             if not display_name:
                 display_name = name_part
             else:
@@ -122,6 +130,9 @@ class Command(BaseCommand):
             publication_status=default_publication_status,
             language=default_language, script=default_script)
         control.save()
+        source = Source(control=control, name=LIPARM_SOURCE_NAME,
+                        url=LIPARM_SOURCE_URL)
+        source.save()
 
     def _import_entity(self, mads_el, project):
         if not self._is_valid_entity(mads_el):
@@ -130,6 +141,33 @@ class Command(BaseCommand):
         entity.save()
         self._import_identity(entity, mads_el)
         self._import_control(entity)
+
+    def _import_event(self, description, constituency_el):
+        event_stmt = 'Elected to {} constituency.'.format(
+            constituency_el.text)
+        event = Event(description=description, event=event_stmt)
+        election_date = constituency_el.get('dateOfElection')
+        exit_date = constituency_el.get('dateOfExit')
+        display_date = ''
+        if election_date:
+            event.date_from = election_date
+            display_date = election_date
+            if exit_date:
+                display_date = '{} - '.format(display_date)
+        if exit_date:
+            event.date_to = exit_date
+            display_date = '{}{}'.format(display_date, exit_date)
+        event.display_date = display_date
+        event.save()
+
+    def _import_events(self, identity, mads_el):
+        constituencies = mads_el.xpath('m:extension/m:constituency',
+                                       namespaces=NS_MAP)
+        if constituencies:
+            description = Description(identity=identity)
+            description.save()
+            for constituency in constituencies:
+                self._import_event(description, constituency)
 
     def _import_file(self, xml_path, project, xsd):
         tree = self._parse_xml(xml_path, xsd)
@@ -167,6 +205,7 @@ class Command(BaseCommand):
                          namespaces=NS_MAP):
             self.stderr.write(
                 'Found variant that is not the useless firstNameUsed.')
+        self._import_events(identity, mads_el)
 
     def _import_name(self, identity, name_el, is_authorised=False):
         # Since MADS name may have multiple namePart's with the same
@@ -195,6 +234,8 @@ class Command(BaseCommand):
         name_entry.save()
 
     def _import_name_part(self, name_entry, part_type, part_value):
+        if part_type == 'termsOfAddress' and part_value == 'Mr':
+            return
         name_part_type = self._get_jargon_term(NamePartType,
                                                NAME_PART_TYPE_MAP[part_type])
         name_part = NamePart(
