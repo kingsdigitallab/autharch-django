@@ -141,45 +141,55 @@ $(document).ready(function() {
     $("#"+$(el).attr('id')).parent('.table-container').next(".pager").find("a[data-label='"+label+"']").addClass("current");
   });
 
-  $('.formset').on('click', 'input[id$="is_royal_name"]', function(el) {
-    if ($(el.target).prop("checked")) {
-      $(el.target).next(".namePartField-required").text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
+  $('.formset').on('click', 'input[id$="is_royal_name"]', function(e) {
+    if ($(e.target).prop("checked")) {
+      $(e.target).next(".namePartField-required").text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
     } else {
-      $(el.target).next(".namePartField-required").text(`A personal name must contain a "surname" part type.`);
+      $(e.target).next(".namePartField-required").text(`A personal name must contain a "surname" part type.`);
     }
   });
 
+  // close tooltips on click anywhere in the document
+  $('form').on('click', function(e) {
+    if (!$(e.target).is('.additional-info')) {
+      if($('.additional-info').length) {
+        $('.additional-info').siblings('[role="button"]').text("");
+        $('.additional-info').remove();
+      }
+    }
+  });
 
   // optional functionality (can be removed if needed) - dynamic styling of the sections
   // style border for preferred names and identities
   $("input[name*='preferred']:checked").parents('fieldset').addClass('border-left');
   $("input[name*='authorised']:checked").closest('fieldset').addClass('border-left');
 
-  $('body').on('click', 'input[name*="preferred"]', function (el) {
+  $(document).on('click', 'input[name*="preferred"]', function(e) {
     // find other identities and uncheck their preferred status
-    $(el.target).parents('fieldset').siblings().find('input[name*="preferred"]:checked').prop('checked', false);
+    $(e.target).parents('fieldset').siblings().find('input[name*="preferred"]:checked').prop('checked', false);
     // find the identity where the checkbox was checked and set its checkbox as checked
-    $(el.target).closest('fieldset').find('input[name*="preferred"]').prop('checked', true);
+    $(e.target).closest('fieldset').find('input[name*="preferred"]').prop('checked', true);
     // find other identities and make sure that a blue border-left is removed
-    $(el.target).parents('fieldset').siblings().removeClass('border-left');
+    $(e.target).parents('fieldset').siblings().removeClass('border-left');
     // set blue-border left to the preferred fieldset
-    if ($(el.target).is(':checked')) {
-      $(el.target).closest('fieldset').addClass('border-left');
+    if ($(e.target).is(':checked')) {
+      $(e.target).closest('fieldset').addClass('border-left');
     }
   });
 
-  $('body').on('click', 'input[name*="authorised"]', function (el) {
+  $(document).on('click', 'input[name*="authorised"]', function(e) {
     // find other name parts (within the same scope!) and uncheck their authorised status
-    $(el.target).closest('fieldset').siblings().find('input[name*="authorised"]:checked').prop('checked', false);
+    $(e.target).closest('fieldset').siblings().find('input[name*="authorised"]:checked').prop('checked', false);
     // find the name part that was checked and set its checkbox as checked
-    $(el.target).closest('fieldset').find('input[name*="authorised"]').prop('checked', true);
+    $(e.target).closest('fieldset').find('input[name*="authorised"]').prop('checked', true);
     // find other name parts where the border-left is set to authorised and remove the border
-    $(el.target).closest('fieldset').siblings().removeClass('border-left');
+    $(e.target).closest('fieldset').siblings().removeClass('border-left');
     // find the checked name part and set its border to blue
-    if ($(el.target).is(':checked')) {
-      $(el.target).closest('fieldset').addClass('border-left');
+    if ($(e.target).is(':checked')) {
+      $(e.target).closest('fieldset').addClass('border-left');
     }
   });
+  
   
   //FILTERS
   // add clear all filters button when one of the facet options is selected
@@ -196,18 +206,18 @@ $(document).ready(function() {
     }
   });
   // search in filter options and display options that match the query
-  $('.instant-search').on('focus', function (el) {
-    var filterOptions = $(el.target).siblings('.checkbox-anchor');
-    $(el.target).on('keyup change', function () {
-      var query = $(el.target).val().toLowerCase();
+  $('.instant-search').on('focus', function (e) {
+    var filterOptions = $(e.target).siblings('.checkbox-anchor');
+    $(e.target).on('keyup change', function () {
+      var query = $(e.target).val().toLowerCase();
       if (query == '') {
         filterOptions.slice(0, 5).show();
         filterOptions.slice(6, filterOptions.length).hide();
-        $(el.target).closest('fieldset').children(".show-more").remove();
-        $(el.target).closest('fieldset').append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+$(el.target).closest('fieldset').children("a").length+`)</button>`);
+        $(e.target).closest('fieldset').children(".show-more").remove();
+        $(e.target).closest('fieldset').append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+$(e.target).closest('fieldset').children("a").length+`)</button>`);
       }
       else {
-        $(el.target).closest('fieldset').children('button.show-more').hide();
+        $(e.target).closest('fieldset').children('button.show-more').hide();
         filterOptions.each(function() {
           var option = $(this).text().toLowerCase();
           if (option.includes(query)) {
@@ -345,6 +355,7 @@ function toggleFilters(el) {
 
 // hide/show help text on single entity and archival records pages
 function toggleHelpText(el, help_text) {
+  event.stopPropagation();
   event.preventDefault();
   if ($(el).siblings('p.additional-info').length) {
     // change icon to 'question mark'

@@ -6,7 +6,7 @@ $save: #6DA036;
 $add: #0e7bc5;
 $danger: #a10101;
 $background: #FCFCFC;
-$input : #707070;
+$input : #a7a7a7;
 $light-grey: #EBEBEB;
 $medium-grey: #C4C4C4;
 $dark-grey: #424242;
@@ -165,7 +165,7 @@ input[type=search]::-webkit-search-decoration {
 
 
 // accessibility
-input:not(.search-button):not(.select2-search__field):not(.icon-only), select, textarea, .richText-editor, .select2-selection, .openseadragon-canvas {
+input:not(.search-button):not(.select2-search__field):not(.icon-only), select, textarea, .richText-editor, .select2-selection, .openseadragon-canvas, .tox-edit-area__iframe {
     &:focus {
         outline: none;
         box-shadow: 0 0 0 1px $dark-grey !important;
@@ -957,7 +957,9 @@ main {
             margin-top: 20px;
         }
     }
-
+    .selection {
+        font-size: 14px;
+    }
     .select2-selection__choice__remove {
         color: $danger !important;
     }
@@ -1153,7 +1155,7 @@ main {
                     white-space: nowrap;
                 }
                 &.description {
-                    width: 70%;
+                    width: 80%;
                     white-space: normal;
                 }
                 a {
@@ -1322,7 +1324,7 @@ main {
         }
 
         label {
-            font-size: 14px;
+            font-size: 13px;
             display: block;
             // position: relative;
             input, select {
@@ -1514,7 +1516,7 @@ main {
                         margin-bottom: 1.5em;
                         .namePartField-required {
                             display: block;
-                            margin: 0.5em 0em;
+                            margin: 0.7em 0em;
                             &:before {
                                 content: '\f071';
                                 font-family: $fontawesome;

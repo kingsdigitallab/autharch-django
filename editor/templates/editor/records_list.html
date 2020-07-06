@@ -36,6 +36,9 @@
                   {% render_facet archival_level %}
                   {% endfor %}
                 </fieldset>
+                <fieldset class="filter-list" id="has-transcriptions-filter">
+                  <!-- TODO - add a checkbox to filter by records that have transcriptions -->
+                </fieldset>
                 <fieldset class="filter-list" id="writer-filter">
                   <legend>Writer</legend>
                   {% if facets.fields.writers|length > 7 %}
