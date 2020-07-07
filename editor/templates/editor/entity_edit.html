@@ -12,11 +12,13 @@
           <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
           <!-- <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li> -->
           <li>Updated: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
+          <li>
+            <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
+              <i class="far fa-clock"></i>
+              <span class="dotted-underline">History</span>
+            </a>
+          </li>
         </ul>
-        <a href="{% url 'editor:entity-history' entity_id=entity.pk %}">
-          <i class="far fa-clock"></i>
-          <span class="dotted-underline">History</span>
-        </a>
       </div>
     </div>
     <div class="action-buttons">
@@ -59,7 +61,27 @@
     {% endif %}
 
     <h1>{{ entity }}</h1>
-    <h2>{{ entity.entity_type }}</h2>
+
+  <div class="submenu">
+    <ul>
+      <li>Type: <span class="highlight">{{ entity.entity_type }}</span></li>
+      <li>
+        <a href="{% url 'editor:entity-related' entity_id=entity.pk %}">
+          <i class="fal fa-archive"></i>
+          <span class="dotted-underline">Related records</span>
+        </a>
+      </li>
+      <!-- TODO: display only if duplicates were detected -->
+      <li>
+        <a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}">
+          <i class="fal fa-copy"></i>
+          <!-- TODO: add count? -->
+          <span class="dotted-underline">Detected duplicates (0)</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
   </div>
   <form action="{% url 'editor:entity-edit' entity_id=entity.pk %}" id="record-form" method="post">
     {% csrf_token %}

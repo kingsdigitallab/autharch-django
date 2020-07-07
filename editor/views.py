@@ -523,6 +523,30 @@ def entity_history(request, entity_id):
     }
     return render(request, 'editor/history.html', context)
 
+@user_passes_test(is_user_editor_plus)
+def entity_related(request, entity_id):
+    entity = get_object_or_404(Entity, pk=entity_id)
+    context = {
+        'current_section': 'entities',
+        'edit_url': reverse('editor:entity-edit',
+                            kwargs={'entity_id': entity_id}),
+        'item': entity,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/related.html', context)
+
+@user_passes_test(is_user_editor_plus)
+def entity_duplicates(request, entity_id):
+    entity = get_object_or_404(Entity, pk=entity_id)
+    context = {
+        'current_section': 'entities',
+        'edit_url': reverse('editor:entity-edit',
+                            kwargs={'entity_id': entity_id}),
+        'item': entity,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/duplicates.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 @create_revision()
@@ -629,6 +653,30 @@ def record_history(request, record_id):
         'versions': Version.objects.get_for_object(record),
     }
     return render(request, 'editor/history.html', context)
+
+@user_passes_test(is_user_editor_plus)
+def record_hierarchy(request, record_id):
+    record = get_object_or_404(ArchivalRecord, pk=record_id)
+    context = {
+        'current_section': 'records',
+        'edit_url': reverse('editor:record-edit',
+                            kwargs={'record_id': record_id}),
+        'item': record,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/hierarchy.html', context)
+
+@user_passes_test(is_user_editor_plus)
+def record_related(request, record_id):
+    record = get_object_or_404(ArchivalRecord, pk=record_id)
+    context = {
+        'current_section': 'records',
+        'edit_url': reverse('editor:record-edit',
+                            kwargs={'record_id': record_id}),
+        'item': record,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/related.html', context)
 
 
 @user_passes_test(is_user_editor_plus)

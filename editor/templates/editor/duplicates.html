@@ -1,0 +1,12 @@
+{% extends "./base.html" %}
+{% block main %}
+<main>
+    {% block content %}
+        <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ item|truncatewords:15 }}</span></a>
+
+        <h1><span class="highlight">Duplicates of:</span> {{ item|truncatewords:15 }}</h1>
+
+  
+    {% endblock content %}
+</main>
+{% endblock main %}

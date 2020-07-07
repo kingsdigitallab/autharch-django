@@ -14,6 +14,8 @@ REPOSITORY_HELP = 'This element is used to give the managing custodian of the ma
 
 # REPOSITORY_CODE_HELP = 'This element is used to give the ARCHON code for the institution holding the material. For the Georgian Papers Project, the Royal Library will be included under the umbrella of the Royal Archives ARCHON code.'  # noqa
 
+RCIN_HELP = 'Royal Collection Inventory Number'
+
 TITLE_HELP = 'This element is used to provide the name of the document(s) appropriate to the level of description. The title should normally not be longer than one sentence in length. If it is possible to summarise the whole document in the Title field then do so and omit use of the Description field. Dates should not normally be included in the Title field unless integral to the name of the record in question. At collection and series level, titles should provide a concise summary of the scope and content of the papers being described. In the case of letters, give the name of the writer and addressee. For those letters with a very clear sense of subject, this can be referred to briefly in the Title field. For those letters with a less clear subject (usually personal family letters which are very hard to summarise), the broad description &quot;on family matters&quot; should be used.'  # noqa
 
 # CONTROL_HELP = 'This element encompasses administrative metadata.'

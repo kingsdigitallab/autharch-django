@@ -6,7 +6,7 @@ $save: #6DA036;
 $add: #0e7bc5;
 $danger: #a10101;
 $background: #FCFCFC;
-$input : #a7a7a7;
+$input : #707070;
 $light-grey: #EBEBEB;
 $medium-grey: #C4C4C4;
 $dark-grey: #424242;
@@ -48,7 +48,7 @@ $fontawesome: 'Font Awesome 5 Pro';
         li {
             list-style: none;
             margin: 0px 0px 5px 0px;
-            &:after {
+            &:not(:last-of-type):after {
                 content: $value;
                 margin: 0px 10px;
                 color: $medium-grey;
@@ -201,6 +201,8 @@ input[type=submit]:not(.search-button) {
 
 span[role=button] {
     margin: auto;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .create {
@@ -274,12 +276,9 @@ span[role=button] {
 
 // ICONS
 .fas, .fal {
-    margin-right: 7px;
+    margin-right: 3px;
 }
 
-.far {
-    font-weight: 600;
-}
 
 .fa-question-circle {
     font-size: 16px;
@@ -423,7 +422,7 @@ h1 {
     font-size: 24px;
     font-weight: 500;
     color: $primary;
-    line-height: 1.1em;
+    line-height: 1.3em;
 }
 
 h2 {
@@ -460,6 +459,11 @@ p {
         z-index: 8;
         word-break: break-word;
     }
+}
+
+.highlight {
+    font-weight: 700;
+    color: $primary;
 }
 
 li {
@@ -839,10 +843,10 @@ main {
         .action-buttons {
             float: right;
         }
-        // history icon
-        .far {
-            font-weight: 400;
-        }
+    }
+
+    .submenu {
+        @include inline-list("|");
     }
     
     .form-page {
@@ -1247,12 +1251,6 @@ main {
             }
             .inline-deletable {
                 width: 100%;
-            }
-            .delete-button-block {
-                margin-top: 1.5em;
-                & + button{
-                    margin-bottom: 6px;
-                }
             }
             label {
                 margin-top: 5px;
@@ -1893,10 +1891,6 @@ main {
                 }
             }
         }
-    }
-    .highlight {
-        font-weight: 700;
-        color: $primary;
     }
 }
 

@@ -38,7 +38,7 @@ class Reference(models.Model):
                             'transcription_images', 'transcription_texts'])
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
-    rcin = models.CharField('RCIN', max_length=256, blank=True, null=True)
+    rcin = models.CharField('RCIN', max_length=256, blank=True, null=True, help_text=constants.RCIN_HELP)
     project = models.ForeignKey(
         Project, on_delete=models.SET_NULL, blank=True, null=True,
         help_text='Which project does this record belong to?')

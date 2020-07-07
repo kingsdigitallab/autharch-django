@@ -6,7 +6,7 @@ END_DATE_HELP = 'To assist with improving date searching please always add a dat
 
 START_DATE_HELP = 'To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
 
-IDENTITIES_HELP = 'This element denotes names used by the entity.'
+# IDENTITIES_HELP = 'This element denotes names used by the entity.'
 
 NAME_ENTRY_HELP = 'This element &quot;is used to record a name by which the corporate body, the person, or the family described in the EAC-CPF instance is known&quot;. See name entry at https://eac.staatsbibliothek-berlin.de.'  # noqa
 

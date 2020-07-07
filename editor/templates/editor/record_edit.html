@@ -14,11 +14,13 @@
           <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
           <!-- <li>Maintenance status: <span class="highlight">{{ record.maintenance_status }}</span></li> -->
           <li>Last edited: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
+          <li>
+            <a href="{% url 'editor:record-history' record_id=record.pk %}">
+              <i class="far fa-clock"></i>
+              <span class="dotted-underline">History</span>
+            </a>
+          </li>
         </ul>
-        <a href="{% url 'editor:record-history' record_id=record.pk %}">
-          <i class="far fa-clock"></i>
-          <span class="dotted-underline">History</span>
-        </a>
       </div>
     </div>
     <div class="action-buttons">
@@ -58,7 +60,23 @@
 
     <h1>{{ record }}</h1>
 
-    <h2>{{ record.archival_level }}</h2>
+    <div class="submenu">
+      <ul>
+        <li>Type: <span class="highlight">{{ record.archival_level }}</span></li>
+        <li>
+          <a href="{% url 'editor:record-hierarchy' record_id=record.pk %}">
+            <i class="fal fa-sitemap"></i>
+            <span class="dotted-underline">Hierarchy browser</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'editor:record-related' record_id=record.pk %}">
+            <i class="fal fa-users"></i>
+            <span class="dotted-underline">Related people and corporate bodies</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
     <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
       {% with transcriptions=form.formsets.transcriptions %}
