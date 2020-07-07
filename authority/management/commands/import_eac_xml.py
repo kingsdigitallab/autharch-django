@@ -37,6 +37,7 @@ from jargon.models import (
 
 EAC_CPF_XSD_FILENAME = 'eac_cpf.xsd'
 
+HELP = 'Imports the entity data in the specified GPP EAC XML file(s).'
 PROJECT_ID_HELP = 'ID of project the imported data is to be associated with.'
 XML_PATH_HELP = 'Path to EAC XML file.'
 
@@ -114,7 +115,7 @@ normalise_space = re.compile(r'\s+').sub
 
 class Command(BaseCommand):
 
-    help = 'Imports the entity data in the specified EAC XML file(s).'
+    help = HELP
 
     def add_arguments(self, parser):
         parser.add_argument('project_id', help=PROJECT_ID_HELP, type=int)
@@ -346,7 +347,7 @@ class EntityImport:
             # provides a display name for this name.
             display_name = self._get_text(
                 name_entry_el,
-                '../e:nameEntry[@localType="directOrder"]/e:part/text()')
+                '../e:nameEntry[@localType="directOrder"][1]/e:part/text()')
         if not display_name:
             # Construction of display names is a nightmare of
             # antiquated card catalogue nonsense. Bodge something
