@@ -88,8 +88,3 @@ class GenderSelect(AutocompleteMixin, forms.Select):
 
     def get_url(self):
         return reverse('jargon:jargon_gender_autocomplete')
-
-
-class HTML5DateInput(forms.DateInput):
-
-    input_type = 'date'

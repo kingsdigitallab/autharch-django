@@ -22,8 +22,7 @@ from jargon.models import EntityType, NamePartType, PublicationStatus
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
-from .widgets import (FunctionMultiSelect, FunctionSelect, GenderSelect,
-                      HTML5DateInput)
+from .widgets import FunctionMultiSelect, FunctionSelect, GenderSelect
 
 
 RICHTEXT_ATTRS = {
@@ -168,8 +167,6 @@ class EventEditInlineForm(forms.ModelForm):
             'date_to': 'Event date until',
         }
         widgets = {
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput(),
             'place': PlaceSelect(),
         }
 
@@ -185,8 +182,6 @@ class FunctionEditInlineForm(forms.ModelForm):
             'display_date': 'Date function active',
         }
         widgets = {
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput(),
             'title': FunctionSelect(),
         }
 
@@ -206,8 +201,6 @@ class LegalStatusEditInlineForm(forms.ModelForm):
         widgets = {
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput()
         }
 
 
@@ -223,8 +216,6 @@ class LocalDescriptionEditInlineForm(forms.ModelForm):
         }
         widgets = {
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput(),
             'gender': GenderSelect(),
         }
 
@@ -237,8 +228,6 @@ class MandateEditInlineForm(forms.ModelForm):
         widgets = {
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput()
         }
 
 
@@ -256,8 +245,6 @@ class PlaceEditInlineForm(forms.ModelForm):
         model = Place
         widgets = {
             'place': PlaceSelect(),
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput()
         }
 
 
@@ -280,8 +267,6 @@ class RelationEditInlineForm(forms.ModelForm):
         widgets = {
             'place': PlaceSelect(),
             'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC),
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput()
         }
 
 
@@ -473,8 +458,6 @@ class NameEntryEditInlineForm(ContainerModelForm):
             'display_date': 'Display date name used',
         }
         widgets = {
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput(),
             'authorised_form': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX)
         }
 
@@ -544,8 +527,6 @@ class IdentityEditInlineForm(ContainerModelForm):
             'date_to': ENTITY_END_DATE_HELP,
         }
         widgets = {
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput(),
             'preferred_identity': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX)
         }
 
@@ -633,7 +614,6 @@ class ArchivalRecordEditForm(ContainerModelForm):
             'arrangement': forms.Textarea(attrs={'rows': 4}),
             'creation_places': PlaceSelectMultiple(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'end_date': HTML5DateInput(),
             'languages': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'creators': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
@@ -651,7 +631,6 @@ class ArchivalRecordEditForm(ContainerModelForm):
             'project': forms.HiddenInput(),
             'provenance': forms.Textarea(attrs={'rows': 4}),
             'record_type': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
-            'start_date': HTML5DateInput(),
             'subjects': FunctionMultiSelect(),
             'uuid': forms.HiddenInput(),
             'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS),
@@ -737,10 +716,6 @@ class EntityEditForm(ContainerModelForm):
     class Meta:
         model = Entity
         exclude = []
-        widgets = {
-            'date_from': HTML5DateInput(),
-            'date_to': HTML5DateInput(),
-        }
 
 
 class EntityCreateForm(forms.Form):
