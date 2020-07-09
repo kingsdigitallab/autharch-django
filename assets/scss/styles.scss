@@ -454,7 +454,7 @@ p {
         -moz-border-radius: 5px;
         border-radius: 5px;
         position: absolute;
-        max-width: 250px;
+        max-width: 270px;
         padding: 7px;
         z-index: 8;
         word-break: break-word;
@@ -1047,7 +1047,7 @@ main {
     .table-container {
         width: 100%;
         overflow-x: auto;
-        .admin-table {
+        #admin-table {
             input[type=text], input[type=email], select {
                 width: 100%;
                 border: 1px solid darken($light-grey, 15%);
@@ -1162,14 +1162,6 @@ main {
                     width: 80%;
                     white-space: normal;
                 }
-                a {
-                    border-bottom: 1px dotted $medium-grey;
-                    text-decoration: none;
-                    white-space: normal;
-                    &:hover, &:focus {
-                        border-bottom: 1px dotted $primary;
-                    }
-                }
                 &.entity {
                     &:before {
                         content: '\f0c0';
@@ -1187,6 +1179,14 @@ main {
                         color: darken($medium-grey, 25%);
                         margin-right: 10px;
                    }
+                }
+                a {
+                    border-bottom: 1px dotted $medium-grey;
+                    text-decoration: none;
+                    white-space: normal;
+                    &:hover, &:focus {
+                        border-bottom: 1px dotted $primary;
+                    }
                 }
                 &.button-cell {
                     padding: 1.5em 1em;

@@ -63,6 +63,7 @@ $(document).ready(function() {
   });
 
   // TABLE PAGINATION / TABLESORTER
+
   // sorter for the archival records table - Collection -> Series -> File -> Item
   $.tablesorter.addParser({
     id: 'level',
@@ -79,7 +80,7 @@ $(document).ready(function() {
     type: 'numeric'
   });  
 
-  $('table').each(function(i, el) {
+  $('.tablesorter').each(function(i, el) {
     $.tablesorter.customPagerControls({
       table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
       pager          : $("#"+$(el).parent(".table-container").next('.pager').attr('id')),                   // pager wrapper (string or jQuery object)

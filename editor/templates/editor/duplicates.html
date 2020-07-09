@@ -6,6 +6,48 @@
 
         <h1><span class="highlight">Duplicates of:</span> {{ item|truncatewords:15 }}</h1>
 
+        <form action="." method="post" id="duplicates-table-form">
+            {{ all_users_formset.management_form }}
+            {% if all_users_formset|length > 5 %}
+            <input name="duplicates_submit" aria-label="submit button to save the duplicated records table" type="submit" class="save" value="Save duplicates table" />
+            {% endif %}
+            <div class="table-container">
+              <table id="duplicates-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Primary<br>record</th>
+                    <th scope="col">Duplicate<br>record?</th>
+                    <th scope="col">Record ID</th>
+                    <th scope="col">Record details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-form-type="duplicates">
+                    <td class="button-cell primary-cell">
+                      <label>
+                        <span hidden>Primary</span>
+                        <input type="radio" name="primary_record"/>
+                      </label>
+                    </td>
+                    <td class="duplicate-cell">
+                      <label>
+                        <input type="radio" name="duplicate_[entity_id]" value="true"/>Yes
+                      </label>
+                      <label>
+                        <input type="radio" name="duplicate_[entity_id]" value="falce"/>No
+                      </label>
+                    </td>
+                    <td>[entity_id]</td>
+                    <td class="description">
+                        <span class="highlight">[entity_title]</span><br>
+                        Type: [entity_type] | Publication status: [entity_publication_status] | Updated: [entity_updated]
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <input name="duplicates_submit" aria-label="submit button to save the duplicated records table" type="submit" class="save" value="Save duplicates table" />
+          </form>
   
     {% endblock content %}
 </main>

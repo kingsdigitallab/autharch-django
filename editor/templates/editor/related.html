@@ -6,7 +6,57 @@
 
         <h1><span class="highlight">Related to:</span> {{ item|truncatewords:15 }}</h1>
 
-  
+        <div class="table-container">
+            <table class="tablesorter" id="search-results-table">
+                <thead>
+                  <tr>
+                    <th scope="col" data-label="Title">Title</th>
+                    <th class="filter-select" scope="col" data-label="Relation">Relation</th>
+                    <th class="filter-select" scope="col" data-label="Type/level">Type/level</th>
+                    <th class="filter-select" scope="col" data-label="Publication status">Publication status</th>
+                    <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <!-- TODO: if related archival records -->
+                    <td class="description archival-record"><a href="">[result.description|truncatewords:30 ]</a></td>
+                    <td class="description">Writer</td>
+                    <td>[ result.archival_level ]</td>
+                    <td>[ result.publication_status ]</td>
+                    <td data-text="">[ result.modified ]</td>
+                    <!-- TODO: if related entities -->
+                    <!-- <td class="description entity"><a href="">[result.description|truncatewords:30 ]</a></td>
+                    <td class="description">Writer</td>
+                    <td>[ result.entity_type ]</td>
+                    <td>[ result.publication_status ]</td>
+                    <td data-text="">[ result.modified ]</td> -->
+                  </tr>
+                  <tr>
+                    <td class="description archival-record"><a href="">[result.description|truncatewords:30 ]</a></td>
+                    <td class="description">Addressee</td>
+                    <td>[ result.archival_level ]</td>
+                    <td>[ result.publication_status ]</td>
+                    <td data-text="">[ result.modified ]</td>
+                  </tr>
+                  <tr>
+                    <td class="description archival-record"><a href="">[result.description|truncatewords:30 ]</a></td>
+                    <td class="description">People as subjects</td>
+                    <td>[ result.archival_level ]</td>
+                    <td>[ result.publication_status ]</td>
+                    <td data-text="">[ result.modified ]</td>
+                  </tr>
+                  <tr>
+                    <td class="description archival-record"><a href="">[result.description|truncatewords:30 ]</a></td>
+                    <td class="description">Corporate bodies as subjects</td>
+                    <td>[ result.archival_level ]</td>
+                    <td>[ result.publication_status ]</td>
+                    <td data-text="">[ result.modified ]</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+          <!-- TODO: add pagination -->
     {% endblock content %}
 </main>
 {% endblock main %}

@@ -41,6 +41,12 @@ PSEUDO_CHECKBOX = {
     'class': 'pseudo-checkbox',
 }
 
+DATE_FORMAT = {
+    'placeholder': 'YYYY-MM-DD',
+    'onfocus': "this.placeholder=''", 
+    'onblur': "this.placeholder='YYYY-MM-DD'"
+}
+
 ENTITY_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
     'placeholder': 'Search people and corporate bodies',
@@ -86,8 +92,8 @@ SEARCH_SELECT_ATTRS_DYNAMIC = {
 }
 
 
-ENTITY_START_DATE_HELP = 'This element indicates a date of existence - birth date for people and existence date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
-ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date for people and extinction date for corporate bodies. To assist with improving date searching please always add a date range - for example, if the display date is 1822, include date range start 01/01/1822, end 31/12/1822. NB. Date ranges for years prior to the change in calendar may need to be taken into account. NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
+ENTITY_START_DATE_HELP = 'This element indicates a date of existence - birth date for people and existence date for corporate bodies. <br><br>1. It is required that you follow the date format: <br><strong>(-)YYYY(-MM(-DD))</strong><br><em>e.g., 1822-03-27, 1822-03, 1822, or, if BC, -750.</em><br>2. To also assist with improving date searching, please always add a date range:<br><em>e.g., if the display date is 1822, include Identity existed from: 1822, Identity existed until: 1822.</em><br><br>NB: Date ranges for years prior to the change in calendar may need to be taken into account. <br>NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
+ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date for people and extinction date for corporate bodies. <br><br>1. It is required that you follow the date format: <br><strong>(-)YYYY(-MM(-DD))</strong><br><em>e.g., 1822-03-27, 1822-03, 1822, or, if BC, -750.</em><br>2. To also assist with improving date searching, please always add a date range:<br><em>e.g., if the display date is 1822, include Identity existed from: 1822, Identity existed until: 1822.</em><br><br>NB: Date ranges for years prior to the change in calendar may need to be taken into account. <br>NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
 
 
 class RelatedMaterialRecordChoiceField(forms.ModelChoiceField):
@@ -168,6 +174,8 @@ class EventEditInlineForm(forms.ModelForm):
         }
         widgets = {
             'place': PlaceSelect(),
+            'date_from': forms.TextInput(attrs=DATE_FORMAT),
+            'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
@@ -183,6 +191,8 @@ class FunctionEditInlineForm(forms.ModelForm):
         }
         widgets = {
             'title': FunctionSelect(),
+            'date_from': forms.TextInput(attrs=DATE_FORMAT),
+            'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
@@ -217,6 +227,8 @@ class LocalDescriptionEditInlineForm(forms.ModelForm):
         widgets = {
             'citation': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'gender': GenderSelect(),
+            'date_from': forms.TextInput(attrs=DATE_FORMAT),
+            'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
@@ -245,6 +257,8 @@ class PlaceEditInlineForm(forms.ModelForm):
         model = Place
         widgets = {
             'place': PlaceSelect(),
+            'date_from': forms.TextInput(attrs=DATE_FORMAT),
+            'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
@@ -267,6 +281,8 @@ class RelationEditInlineForm(forms.ModelForm):
         widgets = {
             'place': PlaceSelect(),
             'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC),
+            'date_from': forms.TextInput(attrs=DATE_FORMAT),
+            'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
@@ -458,7 +474,9 @@ class NameEntryEditInlineForm(ContainerModelForm):
             'display_date': 'Display date name used',
         }
         widgets = {
-            'authorised_form': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX)
+            'authorised_form': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX),
+            'date_from': forms.TextInput(attrs=DATE_FORMAT),
+            'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
@@ -527,7 +545,9 @@ class IdentityEditInlineForm(ContainerModelForm):
             'date_to': ENTITY_END_DATE_HELP,
         }
         widgets = {
-            'preferred_identity': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX)
+            'preferred_identity': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX),
+            'date_from': forms.TextInput(attrs=DATE_FORMAT),
+            'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
@@ -634,7 +654,9 @@ class ArchivalRecordEditForm(ContainerModelForm):
             'subjects': FunctionMultiSelect(),
             'uuid': forms.HiddenInput(),
             'rights_declaration': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'publications': forms.Textarea(attrs=RICHTEXT_ATTRS)
+            'publications': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'start_date': forms.TextInput(attrs=DATE_FORMAT),
+            'end_date': forms.TextInput(attrs=DATE_FORMAT)
         }
 
 
