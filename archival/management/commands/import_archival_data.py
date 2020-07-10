@@ -212,6 +212,7 @@ class Command(BaseCommand):
         obj = self._set_field_from_cell_data(obj, 'title', row, 'Title')
         obj = self._set_field_from_cell_data(obj, 'creation_dates', row,
                                              'Date')
+        obj = self._set_creation_date_range(obj, row)
         obj = self._set_field_from_cell_data(obj, 'description', row,
                                              'Description')
         obj = self._set_field_from_cell_data(obj, 'notes', row, 'Notes')
@@ -387,6 +388,47 @@ class Command(BaseCommand):
         if series:
             obj.parent_series = series[0]
 
+        return obj
+
+    def _parse_date_to_iso(self, date):
+        date = self.normalise_space(' ', date).strip()
+        if re.match(r'^\d{4}$', date):
+            return date
+        months = {'January': '01', 'February': '02', 'March': '03',
+                  'April': '04', 'May': '05', 'June': '06', 'July': '07',
+                  'August': '08', 'September': '09', 'October': '10',
+                  'November': '11', 'December': '12'}
+        for month, number in months.items():
+            date = date.replace(month, number)
+        date = date.replace(' ', '-')
+        match = re.match(r'^(?P<month>[01][0-9])-(?P<year>\d{4})$', date)
+        if match is not None:
+            return '{}-{}'.format(match.group('year'), match.group('month'))
+        full = r'^(?P<day>[0-3]?[0-9])-(?P<month>[01][0-9])-(?P<year>\d{4})$'
+        match = re.match(full, date)
+        if match is not None:
+            return '{}-{}-{}'.format(match.group('year'), match.group('month'),
+                                     match.group('day').zfill(2))
+        raise ValueError
+
+    def _set_creation_date_range(self, obj, row):
+        date = row['Date']
+        if pd.isnull(date):
+            return obj
+        date = str(date)
+        unwanted_chars = ['?', '[', ']']
+        for char in unwanted_chars:
+            date = date.replace(char, '')
+        try:
+            dates = [self._parse_date_to_iso(part) for part in date.split('-')]
+        except ValueError:
+            return obj
+        if len(dates) == 1:
+            obj.start_date = dates[0]
+            obj.end_date = dates[0]
+        elif len(dates) == 2:
+            obj.start_date = dates[0]
+            obj.end_date = dates[1]
         return obj
 
     def _set_field_from_cell_data(self, obj, field, row, column, default=None):
