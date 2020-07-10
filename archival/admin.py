@@ -31,7 +31,7 @@ class ArchivalRecordAdmin(PolymorphicParentModelAdmin, VersionAdmin):
     list_display = ['archival_level', 'title']
     list_display_links = list_display
     list_filter = [PolymorphicChildModelFilter, 'repository',
-                   'publication_status', 'description_date', 'project',
+                   'publication_status', 'project',
                    ('languages', admin.RelatedOnlyFieldListFilter)]
 
     search_fields = ['title']
@@ -97,9 +97,6 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         }],
         [None, {
             'fields': ['related_materials']
-        }],
-        [None, {
-            'fields': ['cataloguer', 'description_date']
         }],
         [None, {
             'fields': ['rcin', 'publication_status', 'rights_declaration',

@@ -43,7 +43,7 @@ PSEUDO_CHECKBOX = {
 
 DATE_FORMAT = {
     'placeholder': 'YYYY-MM-DD',
-    'onfocus': "this.placeholder=''", 
+    'onfocus': "this.placeholder=''",
     'onblur': "this.placeholder='YYYY-MM-DD'"
 }
 
@@ -579,10 +579,7 @@ class ArchivalRecordEditForm(ContainerModelForm):
     }
 
     # Fields visible only to admin users.
-    private_fields = [
-        'cataloguer', 'copyright_status', 'description_date',
-        'rights_declaration_abbreviation',
-    ]
+    private_fields = ['copyright_status', 'rights_declaration_abbreviation']
 
     def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
         super().__init__(*args, **kwargs)

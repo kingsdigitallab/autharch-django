@@ -38,7 +38,8 @@ class Reference(models.Model):
                             'transcription_images', 'transcription_texts'])
 class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     uuid = models.CharField(max_length=64, unique=True)
-    rcin = models.CharField('RCIN', max_length=256, blank=True, null=True, help_text=constants.RCIN_HELP)
+    rcin = models.CharField('RCIN', max_length=256, blank=True, null=True,
+                            help_text=constants.RCIN_HELP)
     project = models.ForeignKey(
         Project, on_delete=models.SET_NULL, blank=True, null=True,
         help_text='Which project does this record belong to?')
@@ -102,9 +103,6 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
                                     help_text="Generic Connection Text B")
     connection_c = models.CharField(max_length=2048, blank=True, null=True,
                                     help_text="Generic Connection Text C")
-
-    cataloguer = models.CharField(max_length=512, blank=True, null=True)
-    description_date = models.CharField(max_length=128)
 
     rights_declaration = models.TextField(
         default=settings.ARCHIVAL_RIGHTS_DECLARATION)
@@ -204,7 +202,8 @@ class FileBase(models.Model):
         blank=True, null=True, help_text=constants.PHYSICAL_DESCRIPTION_HELP)
 
     copyright_status = models.CharField(
-        max_length=256, blank=True, help_text=constants.COPYRIGHT_STATUS_HELP, verbose_name='Copyright')
+        max_length=256, blank=True, help_text=constants.COPYRIGHT_STATUS_HELP,
+        verbose_name='Copyright')
     publication_permission = models.TextField(
         'Credit', blank=True, null=True, help_text=constants.CREDIT_HELP)
     withheld = models.CharField(max_length=256, blank=True, null=True,
@@ -309,8 +308,10 @@ class OriginLocation(models.Model):
 class RelatedMaterialReference(models.Model):
     record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
                                related_name='referenced_related_materials')
-    context = models.CharField(max_length=2048,
-                               help_text=constants.RELATED_MATERIALS_LABEL_HELP, verbose_name="Related material label")
+    context = models.CharField(
+        max_length=2048, help_text=constants.RELATED_MATERIALS_LABEL_HELP,
+        verbose_name="Related material label")
     related_record = models.ForeignKey(
         ArchivalRecord, on_delete=models.CASCADE,
-        related_name='referencing_related_materials', verbose_name="Related material")
+        related_name='referencing_related_materials',
+        verbose_name="Related material")

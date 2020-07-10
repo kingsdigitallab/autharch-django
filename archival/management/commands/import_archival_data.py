@@ -24,8 +24,6 @@ PATHS_HELP = 'Path to spreadsheet/CSV file to import.'
 PROJECT_ID_HELP = 'ID of project the imported data is to be associated with.'
 
 # Default values for missing data.
-DEFAULT_CATALOGUER = 'Not available'
-DEFAULT_DESCRIPTION_DATE = 'Not available'
 DEFAULT_PUBLICATION_STATUS = 'published'
 DEFAULT_REPOSITORY_CODE = 262
 
@@ -33,9 +31,7 @@ NON_ESSENTIAL_COLUMNS = {
     'Admin History': None,
     'Addressee': None,
     'Arrangement': None,
-    'Cataloguer': DEFAULT_CATALOGUER,
     'Date': None,
-    'Date of Description': DEFAULT_DESCRIPTION_DATE,
     'Description': None,
     'Extent': None,
     'Notes': None,
@@ -54,9 +50,6 @@ EXISTING_RECORD_IN_DIFFERENT_PROJECT_MSG = (
     'different project "{}".')
 EXISTING_RECORD_MSG = (
     'Record with UUID "{}" in data at "{}" (sheet "{}") already exists.')
-INVALID_DATE_OF_DESCRIPTION_MSG = (
-    'Invalid Date of Description data; cannot convert to a date in data at '
-    '"{}" (sheet "{}").')
 INVALID_INPUT_FILE_TYPE_MSG = (
     'Invalid file type for "{}"; please provide a .csv or .xlsx file.')
 LANGUAGE_NOT_FOUND_MSG = (
@@ -223,11 +216,6 @@ class Command(BaseCommand):
                                              'Description')
         obj = self._set_field_from_cell_data(obj, 'notes', row, 'Notes')
         obj = self._set_field_from_cell_data(obj, 'extent', row, 'Extent')
-        obj = self._set_field_from_cell_data(obj, 'cataloguer', row,
-                                             'Cataloguer', DEFAULT_CATALOGUER)
-        obj = self._set_field_from_cell_data(
-            obj, 'description_date', row, 'Date of Description',
-            DEFAULT_DESCRIPTION_DATE)
 
         # Use a default publication status if none is supplied.
         publication_status = DEFAULT_PUBLICATION_STATUS
@@ -437,14 +425,6 @@ class Command(BaseCommand):
         if 'Repository' not in df.columns:
             if 'Respository' in df.columns:
                 df.rename(columns={'Respository': 'Repository'}, inplace=True)
-
-        if 'Date of Description' in df.columns:
-            try:
-                df['Date of Description'] = pd.to_datetime(
-                    df['Date of Description'])
-            except TypeError:
-                raise CommandError(INVALID_DATE_OF_DESCRIPTION_MSG.format(
-                    self._path, self._sheet))
 
         # Non-essential columns (warning if not present).
 
