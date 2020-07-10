@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.core import serializers
-from django.db.models import Max, Min
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
@@ -319,14 +318,12 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         # Here we go with option #2, having the date range be the full
         # span of dates across all records, not just those in the
         # search results.
-        years = ArchivalRecord.objects.aggregate(Min('start_date'),
-                                                 Max('end_date'))
-        if (years['start_date__min'] and years['end_date__max']):
-            min_year = years['start_date__min'].year
-            max_year = max(min_year, years['end_date__max'].year)
-        else:
-            min_year = None
-            max_year = None
+        start_dates = ArchivalRecord.objects.exclude(
+            start_date='').values_list('start_date', flat=True)
+        min_year = sorted(start_dates, key=lambda x: x[:4])[0][:4]
+        end_dates = ArchivalRecord.objects.exclude(end_date='').values_list(
+            'end_date', flat=True)
+        max_year = sorted(end_dates, key=lambda x: x[:4], reverse=True)[0][:4]
         kwargs.update({'max_year': max_year, 'min_year': min_year})
         return kwargs
 
@@ -523,6 +520,7 @@ def entity_history(request, entity_id):
     }
     return render(request, 'editor/history.html', context)
 
+
 @user_passes_test(is_user_editor_plus)
 def entity_related(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
@@ -534,6 +532,7 @@ def entity_related(request, entity_id):
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/related.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 def entity_duplicates(request, entity_id):
@@ -654,6 +653,7 @@ def record_history(request, record_id):
     }
     return render(request, 'editor/history.html', context)
 
+
 @user_passes_test(is_user_editor_plus)
 def record_hierarchy(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
@@ -665,6 +665,7 @@ def record_hierarchy(request, record_id):
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/hierarchy.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 def record_related(request, record_id):
