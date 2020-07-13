@@ -379,6 +379,8 @@ a {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     cursor: auto;
+    input[type=radio] {
+    }
     &:hover, &:focus {
         text-decoration: none;
         -moz-box-shadow: none !important;
@@ -387,6 +389,7 @@ a {
     }
 }
 
+// make a checkbox look like a radio button
 .pseudo-checkbox {
     -webkit-appearance: none;
 	border: 1px solid $input;
@@ -411,7 +414,6 @@ a {
         }
     }
 }
-
 
 // TEXT
 h2, h3 {
@@ -589,18 +591,18 @@ main {
                 margin: 4em 0em 1em 0em;
             }
         }
-        // displayed when no records in the recently modified table
-        .empty-block {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 1.5em 0.5em;
-            text-align: center;
-            border: 3px solid $light-grey;
-            font-weight: 500;
-        }
         .pager {
             margin-bottom: 3em;
         }
+    }
+
+    .empty-block {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 1.5em 0.5em;
+        text-align: center;
+        border: 3px solid $light-grey;
+        font-weight: 500;
     }
 
     // header for the list pages (i.e., home, archival records, people and corporate bodies, deleted, search results page)
@@ -845,7 +847,7 @@ main {
         }
     }
 
-    .submenu {
+    .subitems {
         @include inline-list("|");
     }
     
@@ -946,21 +948,85 @@ main {
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0px 2px 2px $light-grey;
-            margin: 20px 0px;
+            margin: 20px 0px 40px 0px;
         }
         #user-details {
             margin-right: 40px;
         }
     }
 
-    .admin {
-        margin-top: 40px;
-        form > input[type=submit] {
+    #admin-table-form, #duplicates-table-form {
+        input.save {
             display: block;
             margin-left: auto;
             margin-top: 20px;
         }
     }
+
+    #duplicates-table-form {
+        table {
+            label {
+                border-radius: 5px;
+                padding: 5px;
+                cursor: pointer;
+                transition: 0.2s ease-in-out;
+                text-align: center;
+                &:hover {
+                    background-color: white;
+                    text-decoration: none;
+                }
+                &.disabled {
+                    cursor: auto;
+                    background-color: transparent !important;
+                    border: 1px solid $light-grey !important;
+                    &:hover, &:focus {
+                        background: transparent;
+                    }
+                }
+            }
+            .primary-cell {
+                label {
+                    border: 1px solid white;
+                    color: $primary;
+                    input[type=radio] {
+                        display: inline-block;
+                        vertical-align: text-top;
+                    }
+                }
+                label:hover, label:focus {
+                    border: 1px solid $primary;
+                    color: $primary;
+                }
+                label.selected {
+                    background: $primary;
+                    color: white;
+                }
+            }
+            
+            .duplicate-cell {
+                input[type=radio] {
+                    display: none;
+                }
+                label {
+                    border: 1px solid $add;
+                    color: $add;
+                }
+                input[type=radio]:checked + label {
+                    background: $add;
+                    color: white;
+                }
+                label:first-of-type {
+                    border-bottom-left-radius: 0px;
+                    border-bottom-right-radius: 0px;
+                }
+                label:last-of-type {
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
+                }
+            }
+        }
+    }
+
     .selection {
         font-size: 14px;
     }
@@ -1145,6 +1211,13 @@ main {
             }
         }
         tbody {
+            tr.table-section {
+                font-weight: 500;
+                td {
+                    border: 0;
+                    padding: 2px 0px;
+                }
+            }
             tr:nth-child(even){
                 @include lighten($light-grey);
             }
@@ -1191,7 +1264,7 @@ main {
                 &.button-cell {
                     padding: 1.5em 1em;
                     text-align: center;
-                    .delete-user {
+                    .delete {
                         display: inline-block;
                         color: $danger;
                         cursor: pointer;
@@ -1200,7 +1273,7 @@ main {
                             font-family: $fontawesome;
                         }
                         &:after {
-                            content: "Delete user";
+                            content: "Delete";
                         }   
                     }
                     label {
@@ -2031,7 +2104,7 @@ footer {
         table {
             tbody td {
                 &.button-cell {
-                    .delete-user {
+                    .delete {
                         &:after {
                             content: "";
                         }   

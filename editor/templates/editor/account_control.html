@@ -59,7 +59,7 @@
   </div>
 
   {% if all_users_formset %}
-  <div class="admin">
+  <div>
     <h2>Admin table</h2>
     {% if saved_all_users %}
     <div class="success-notification">
@@ -153,7 +153,7 @@
               </td>
               <td class="button-cell">
                 <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
-                <label for="delete-user-{{ forloop.counter0 }}" class="delete-user" onclick="deleteRow(this)">
+                <label for="delete-user-{{ forloop.counter0 }}" class="delete" onclick="deleteRow(this)">
                     <span hidden>Delete user</span>
                 </label>
               </td>

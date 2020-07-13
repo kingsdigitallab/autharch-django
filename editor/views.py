@@ -323,7 +323,10 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         min_year = sorted(start_dates, key=lambda x: x[:4])[0][:4]
         end_dates = ArchivalRecord.objects.exclude(end_date='').values_list(
             'end_date', flat=True)
-        max_year = sorted(end_dates, key=lambda x: x[:4], reverse=True)[0][:4]
+        if end_dates:
+            max_year = sorted(end_dates, key=lambda x: x[:4], reverse=True)[0][:4]
+        else: 
+            max_year = sorted(start_dates, key=lambda x: x[:4], reverse=True)[0][:4]
         kwargs.update({'max_year': max_year, 'min_year': min_year})
         return kwargs
 
@@ -537,12 +540,17 @@ def entity_related(request, entity_id):
 @user_passes_test(is_user_editor_plus)
 def entity_duplicates(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
+    control = entity.control
     context = {
         'current_section': 'entities',
         'edit_url': reverse('editor:entity-edit',
                             kwargs={'entity_id': entity_id}),
-        'item': entity,
-        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+        'entity_id': entity_id,
+        'maintenance_status': control.maintenance_status,
+        'publication_status': control.publication_status,
+        'entity': entity,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
+        'last_revision': Version.objects.get_for_object(entity)[0].revision,
     }
     return render(request, 'editor/duplicates.html', context)
 

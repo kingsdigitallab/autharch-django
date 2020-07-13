@@ -11,6 +11,7 @@
                 <thead>
                   <tr>
                     <th scope="col" data-label="Title">Title</th>
+
                     <th class="filter-select" scope="col" data-label="Relation">Relation</th>
                     <th class="filter-select" scope="col" data-label="Type/level">Type/level</th>
                     <th class="filter-select" scope="col" data-label="Publication status">Publication status</th>
@@ -19,13 +20,13 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <!-- TODO: if related archival records -->
+                    <!-- if related archival records -->
                     <td class="description archival-record"><a href="">[result.description|truncatewords:30 ]</a></td>
                     <td class="description">Writer</td>
                     <td>[ result.archival_level ]</td>
                     <td>[ result.publication_status ]</td>
                     <td data-text="">[ result.modified ]</td>
-                    <!-- TODO: if related entities -->
+                    <!-- if related entities -->
                     <!-- <td class="description entity"><a href="">[result.description|truncatewords:30 ]</a></td>
                     <td class="description">Writer</td>
                     <td>[ result.entity_type ]</td>

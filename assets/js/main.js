@@ -63,6 +63,31 @@ $(document).ready(function() {
   });
 
   // TABLE PAGINATION / TABLESORTER
+  if (!$('#duplicates-table [name=primary_record]:checked').length) {
+    $('.duplicate-cell').children('label').addClass("disabled");
+  } else {
+    $('#duplicates-table [name=primary_record]:checked').each(function() {
+      $(this).closest('.primary-cell').addClass('border-left');
+      $(this).parent('label').addClass("selected");
+      $(this).closest('.primary-cell').next('.duplicate-cell > label').addClass("disabled");
+    })
+  }
+  
+
+  $('#duplicates-table').on('click','[name=primary_record]', function(el) {
+    //reset to default
+    $('.primary-cell').removeClass('border-left');
+    $('.primary-cell > label').removeClass("selected");
+    $('.duplicate-cell').children('label').removeClass("disabled");
+    $('.duplicate-cell').children('label').show();
+    //update cells
+    $(el.target).closest('.primary-cell').addClass('border-left');
+    if ($(el.target).is(":checked")) {
+      $(el.target).parent('label').addClass("selected");
+      $(el.target).closest('.primary-cell').next('.duplicate-cell').find('input[type=radio]:checked').prop('checked', false);;
+      $(el.target).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
+    }
+  });
 
   // sorter for the archival records table - Collection -> Series -> File -> Item
   $.tablesorter.addParser({
@@ -291,7 +316,6 @@ async function fetchTranscriptions() {
     console.log(err);
   });
 }
-
 
 function exitHandler() {
   if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
