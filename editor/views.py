@@ -106,37 +106,26 @@ class FacetMixin:
             # Some facet field values are a model object ID, so get
             # a display string for them.
             display_values = None
-            if facet == 'addressees':
-                ids = [value[0] for value in values]
-                display_values = Entity.objects.filter(id__in=ids)
-            elif facet == 'writers':
-                ids = [value[0] for value in values]
-                display_values = Entity.objects.filter(id__in=ids)
-            elif facet == 'related_entities':
-                ids = [value[0] for value in values]
-                display_values = Entity.objects.filter(id__in=ids)
+            if facet in ('addressees', 'related_entities', 'writers'):
+                display_values = Entity.objects.filter(
+                    id__in=[value[0] for value in values])
             new_values = []
             for value_data in values:
-                if value_data[0] in selected_facets.get(facet, []):
+                obj_id, obj_count = value_data
+                if obj_id in selected_facets.get(facet, []):
                     link, is_selected = self._create_unapply_link(
                         value_data, query_dict, facet)
                 else:
                     link, is_selected = self._create_apply_link(
                         value_data, query_dict, facet)
                 if display_values is None:
-                    new_values.append((value_data[0], value_data[1], link,
-                                       is_selected))
-                    if value_data[0] in selected_facets.get(facet, []):
-                        selected.append((value_data[0], value_data[1], link,
-                                         is_selected))
+                    new_value = (obj_id, obj_count, link, is_selected)
                 else:
-                    new_values.append(
-                        (str(display_values.get(id=value_data[0])),
-                         value_data[1], link, is_selected))
-                    if value_data[0] in selected_facets.get(facet, []):
-                        selected.append(
-                            (str(display_values.get(id=value_data[0])),
-                             value_data[1], link, is_selected))
+                    new_value = (str(display_values.get(id=obj_id)), obj_count,
+                                 link, is_selected)
+                new_values.append(new_value)
+                if obj_id in selected_facets.get(facet, []):
+                    selected.append(new_value)
             facets['fields'][facet] = new_values
             facets['selected'] = selected
         return facets
@@ -323,10 +312,9 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         min_year = sorted(start_dates, key=lambda x: x[:4])[0][:4]
         end_dates = ArchivalRecord.objects.exclude(end_date='').values_list(
             'end_date', flat=True)
-        if end_dates:
-            max_year = sorted(end_dates, key=lambda x: x[:4], reverse=True)[0][:4]
-        else: 
-            max_year = sorted(start_dates, key=lambda x: x[:4], reverse=True)[0][:4]
+        if not end_dates:
+            end_dates = start_dates
+        max_year = sorted(end_dates, key=lambda x: x[:4], reverse=True)[0][:4]
         kwargs.update({'max_year': max_year, 'min_year': min_year})
         return kwargs
 
