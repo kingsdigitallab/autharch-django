@@ -390,25 +390,64 @@ class Command(BaseCommand):
 
         return obj
 
-    def _parse_date_to_iso(self, date):
+    def _join_iso_date(self, year, month, day):
+        if month is None:
+            return year
+        if day is None:
+            return '-'.join([year, month])
+        return '-'.join([year, month, day])
+
+    def _parse_date_day_month_year(self, date):
+        full = r'^(?P<day>[0-3]?[0-9]) m(?P<month>[01][0-9]) (?P<year>\d{4})$'
+        return re.match(full, date)
+
+    def _parse_date_month_year(self, date):
+        return re.match(r'^m(?P<month>[01][0-9]) (?P<year>\d{4})$', date)
+
+    def _parse_date_to_iso(self, date, substitute_year=None,
+                           substitute_month=None):
         date = self.normalise_space(' ', date).strip()
-        if re.match(r'^\d{4}$', date):
-            return date
-        months = {'January': '01', 'February': '02', 'March': '03',
-                  'April': '04', 'May': '05', 'June': '06', 'July': '07',
-                  'August': '08', 'September': '09', 'October': '10',
-                  'November': '11', 'December': '12'}
+        months = {'January': 'm01', 'February': 'm02', 'March': 'm03',
+                  'April': 'm04', 'May': 'm05', 'June': 'm06', 'July': 'm07',
+                  'August': 'm08', 'September': 'm09', 'October': 'm10',
+                  'November': 'm11', 'December': 'm12'}
         for month, number in months.items():
             date = date.replace(month, number)
-        date = date.replace(' ', '-')
-        match = re.match(r'^(?P<month>[01][0-9])-(?P<year>\d{4})$', date)
-        if match is not None:
-            return '{}-{}'.format(match.group('year'), match.group('month'))
-        full = r'^(?P<day>[0-3]?[0-9])-(?P<month>[01][0-9])-(?P<year>\d{4})$'
-        match = re.match(full, date)
-        if match is not None:
-            return '{}-{}-{}'.format(match.group('year'), match.group('month'),
-                                     match.group('day').zfill(2))
+        parts = date.split()
+        if len(parts) == 1:
+            # One part is either "year", "month" (with year supplied),
+            # or "day" (with month and year supplied).
+            if re.match(r'^\d{4}$', date):
+                return (date, None, None)
+            if substitute_year is not None and substitute_month is not None:
+                match = self._parse_date_day_month_year('{} m{} {}'.format(
+                    date, substitute_month, substitute_year))
+                if match is not None:
+                    return (match.group('year'), match.group('month'),
+                            match.group('day').zfill(2))
+            if substitute_year is not None:
+                match = self._parse_date_month_year('{} {}'.format(
+                    date, substitute_year))
+                if match is not None:
+                    return (match.group('year'), match.group('month'), None)
+        elif len(parts) == 2:
+            # Two parts are either "month year" or "day month" (with
+            # year supplied).
+            match = self._parse_date_month_year(date)
+            if match is not None:
+                return (match.group('year'), match.group('month'), None)
+            if substitute_year is not None:
+                match = self._parse_date_day_month_year('{} {}'.format(
+                    date, substitute_year))
+                if match is not None:
+                    return (match.group('year'), match.group('month'),
+                            match.group('day').zfill(2))
+        elif len(parts) == 3:
+            # Three parts are "day month year".
+            match = self._parse_date_day_month_year(date)
+            if match is not None:
+                return (match.group('year'), match.group('month'),
+                        match.group('day').zfill(2))
         raise ValueError
 
     def _set_creation_date_range(self, obj, row):
@@ -419,16 +458,26 @@ class Command(BaseCommand):
         unwanted_chars = ['?', '[', ']']
         for char in unwanted_chars:
             date = date.replace(char, '')
-        try:
-            dates = [self._parse_date_to_iso(part) for part in date.split('-')]
-        except ValueError:
-            return obj
+        dates = date.split('-')
         if len(dates) == 1:
-            obj.start_date = dates[0]
-            obj.end_date = dates[0]
+            try:
+                iso_date = self._parse_date_to_iso(dates[0])
+            except ValueError:
+                return obj
+            obj.start_date = self._join_iso_date(*iso_date)
+            obj.end_date = self._join_iso_date(*iso_date)
         elif len(dates) == 2:
-            obj.start_date = dates[0]
-            obj.end_date = dates[1]
+            try:
+                iso_end_date = self._parse_date_to_iso(dates[1])
+            except ValueError:
+                return obj
+            try:
+                iso_start_date = self._parse_date_to_iso(
+                    dates[0], iso_end_date[0], iso_end_date[1])
+            except ValueError:
+                return obj
+            obj.start_date = self._join_iso_date(*iso_start_date)
+            obj.end_date = self._join_iso_date(*iso_end_date)
         return obj
 
     def _set_field_from_cell_data(self, obj, field, row, column, default=None):
