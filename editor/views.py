@@ -675,6 +675,13 @@ def record_related(request, record_id):
     }
     return render(request, 'editor/related.html', context)
 
+@user_passes_test(is_user_editor_plus)
+def accessibility_statement(request):
+    context = {
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/accessibility_statement.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 def record_transcriptions(request, record_id):

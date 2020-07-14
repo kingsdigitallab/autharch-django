@@ -86,7 +86,7 @@
           <div class="fieldset-header">
             <h4>Transcription</h4>
             <div>
-              <a class="toggle-tab-button transcription-toggle" onclick="toggleTab(this)"></a>
+              <button class="toggle-tab-button transcription-toggle" onclick="toggleTab(this)"></button>
             </div>
           </div>
           <div class="fieldset-body" id="transcription-div">
@@ -118,7 +118,7 @@
             {% render_field form.project %}
             <h4>{{ record.references.all|join:", " }}</h4>
             <div>
-              <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
+              <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
             </div>
           </div>
           <div class="fieldset-body expand">
@@ -198,7 +198,7 @@
           <div class="fieldset-header">
             <h4>{{ record.title | truncatewords:30 }}</h4>
             <div>
-              <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
+              <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
             </div>
           </div>
           <div class="fieldset-body expand">
@@ -253,7 +253,7 @@
           <div class="fieldset-header">
             <h4>Record ID: {{ record.pk }}</h4>
             <div>
-              <a class="toggle-tab-button active" onclick="toggleTab(this)"></a>
+              <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
             </div>
           </div>
           <div class="fieldset-body expand">

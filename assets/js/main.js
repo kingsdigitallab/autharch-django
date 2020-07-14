@@ -360,6 +360,7 @@ function goToTranscription(i) {
 
 // expand/collapse entity/archival record sections
 function toggleTab(el) {
+  event.preventDefault();
   $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
   $(el).toggleClass('active');
 }

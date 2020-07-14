@@ -5,8 +5,171 @@
         <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ item|truncatewords:15 }}</span></a>
 
         <h1><span class="highlight">Hierarchy browser:</span> {{ item|truncatewords:15 }}</h1>
-
-  
+        <!-- ADD SEARCH -->
+        <div class="hierarchy">
+            <div class="collections-level">
+                <div class="fieldset-header">
+                    <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>
+                    <span>
+                        <a href="" class="dotted-underline">Collection title</a>
+                    </span>
+                    <span>Publication status</span>
+                    <span>Updated</span>
+                </div>
+                <div class="fieldset-body expand">
+                    <div class="series-level">
+                        <div class="fieldset-header">
+                            <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>
+                            <span>
+                                <a href="" class="dotted-underline">Series title</a>
+                            </span>
+                            <span>Publication status</span>
+                            <span>Updated</span>
+                        </div>
+                        <div class="fieldset-body expand">
+                            <div class="files-level">
+                                <div class="fieldset-header">
+                                    <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>
+                                    <span>
+                                        <a href="" class="dotted-underline">File title</a>
+                                    </span>
+                                    <span>Publication status</span>
+                                    <span>Updated</span>
+                                </div>
+                                <div class="fieldset-body expand">
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span class="browsed-item">
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="files-level">
+                                <div class="fieldset-header">
+                                    <button class="toggle-tab-button" onclick="toggleTab(this)"><span hidden>Expand</span></button>
+                                    <span>
+                                        <a href="" class="dotted-underline">File title</a>
+                                    </span>
+                                    <span>Publication status</span>
+                                    <span>Updated</span>
+                                </div>
+                                <div class="fieldset-body">
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="series-level">
+                        <div class="fieldset-header">
+                            <button class="toggle-tab-button" onclick="toggleTab(this)"><span hidden>Expand</span></button>
+                            <span>
+                                <a href="" class="dotted-underline">Series title</a>
+                            </span>
+                            <span>Publication status</span>
+                            <span>Updated</span>
+                        </div>
+                        <div class="fieldset-body">
+                            <div class="files-level">
+                                <div class="fieldset-header">
+                                    <button class="toggle-tab-button" onclick="toggleTab(this)"><span hidden>Expand</span></button>
+                                    <span>
+                                        <a href="" class="dotted-underline">File title</a>
+                                    </span>
+                                    <span>Publication status</span>
+                                    <span>Updated</span>
+                                </div>
+                                <div class="fieldset-body">
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                    <div class="items-level">
+                                        <div class="fieldset-header">
+                                            <span></span>
+                                            <span>
+                                                <a href="" class="dotted-underline">Item title</a>
+                                            </span>
+                                            <span>Publication status</span>
+                                            <span>Updated</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock content %}
 </main>
 {% endblock main %}

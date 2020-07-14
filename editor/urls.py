@@ -8,9 +8,7 @@ from . import views
 app_name = 'editor'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
-    path('accessibility-statement/', TemplateView.as_view(
-        template_name="editor/accessibility_statement.html"),
-        name='accessibility-statement'),
+    path('accessibility-statement/', views.accessibility_statement, name='accessibility-statement'),
     path('account/login/',
          auth_views.LoginView.as_view(
              template_name='editor/login.html'
