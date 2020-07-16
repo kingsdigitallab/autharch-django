@@ -1020,24 +1020,16 @@ main {
             }
             
             .duplicate-cell {
-                input[type=radio] {
+                input[type=checkbox] {
                     display: none;
                 }
                 label {
                     border: 1px solid $add;
                     color: $add;
                 }
-                input[type=radio]:checked + label {
+                input[type=checkbox]:checked + label {
                     background: $add;
                     color: white;
-                }
-                label:first-of-type {
-                    border-bottom-left-radius: 0px;
-                    border-bottom-right-radius: 0px;
-                }
-                label:last-of-type {
-                    border-top-left-radius: 0px;
-                    border-top-right-radius: 0px;
                 }
             }
         }
@@ -1161,7 +1153,7 @@ main {
             background-repeat: no-repeat;
             cursor: pointer;
             // white-space: nowrap;
-            padding: 4px 20px 4px 4px;
+            padding: 10px 20px 4px 0px;
             &:hover {
                 color: $primary;
             }
@@ -1185,7 +1177,6 @@ main {
         }
         &.tablesorter-default .tablesorter-filter {
             font-family: $font-primary;
-            font-size:13px;
             padding: 5px;
             background: white;
             -webkit-border-radius: 4px;
@@ -1250,6 +1241,32 @@ main {
                 &.description {
                     width: 80%;
                     white-space: normal;
+                    label {
+                        cursor: pointer;
+                    }
+                    label:before {
+                        content: '\f05a';
+                        font-family: $fontawesome;
+                        font-weight: 300;
+                        font-size: 14px;
+                        margin-left: 5px;
+                    }
+                    input[type=checkbox] {
+                        display:none;
+                    }
+                    input[type=checkbox]:checked + .more-information {
+                        opacity: 1;
+                        height: auto;
+                    }
+                    .more-information {
+                        margin-left: 27px;
+                        -moz-transition: all .4s;
+                        -webkit-transition: all .4s;
+                        -o-transition: all .4s;
+                        transition: all .4s;
+                        height: 0;
+                        opacity: 0;
+                    }
                 }
                 &.entity {
                     &:before {
@@ -1989,11 +2006,19 @@ main {
         .fieldset-header {
             margin-bottom: 1.1em;
             display: grid;
-            grid-template-columns: 0.01fr 0.8fr 0.15fr 0.2fr;
-            grid-gap: 0.7em;
+            grid-template-columns: 0.01fr 1fr 500px;
+            grid-gap: 0.4em;
             position: relative;
-            span {
+            > span {
                 padding: 0px 8px;
+                a {
+                    white-space: pre-line;
+                }
+            }
+            span.record-details {
+                display: grid;
+                grid-template-columns: 0.5fr 1fr 1.5fr;
+                grid-gap: 0.6em;
             }
             .browsed-item {
                 background-color: lighten($light-grey,3%);
@@ -2017,7 +2042,6 @@ main {
             opacity: 0; 
             height: 0;
             margin-left: 25px;
-            margin-right: 0.5%;
             &.expand {
                 height: auto;
                 opacity: 1;
@@ -2025,7 +2049,7 @@ main {
                     content: '';
                     border-left: 1px dashed $primary;
                     position: absolute;
-                    height: 92%;
+                    height: 95%;
                     width: 30px;
                     top: 0;
                     left: 13px;

@@ -127,7 +127,7 @@ $(document).ready(function() {
             widgets: ["filter"],
             widgetOptions: {
                 filter_columnFilters: true,
-                filter_filterLabel : 'Filter "{{label}}"',
+                filter_filterLabel : 'Filter records by {{label}}',
             }
         })
     } else {
@@ -136,7 +136,7 @@ $(document).ready(function() {
             widgets: ["filter"],
             widgetOptions: {
                 filter_columnFilters: true,
-                filter_filterLabel: 'Filter "{{label}}"'
+                filter_filterLabel: 'Filter records by {{label}}',
             },
             sortList: [[2,0]],
             headers: {
