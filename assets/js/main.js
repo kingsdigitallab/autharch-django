@@ -258,6 +258,21 @@ $(document).ready(function() {
   });
   setUpCreationYearSlider();
 
+  $('#duplicates-search-field').on('keyup change', function(e) {
+    $('.fieldset-header').find('span').removeClass('greyed-out');
+    $('div[class="series-level"]').children('.fieldset-body').removeClass('expand');
+    $('.fieldset-header').find('a.dotted-underline').each(function() {
+      var option = $(this).text().toLowerCase();
+      var query = $(e.target).val().toLowerCase();
+      if (!option.includes(query)) {
+        $(this).parents('.fieldset-header').first().find('span').addClass('greyed-out');
+      } else {
+        $(this).parents('div[class="series-level"]').find('.fieldset-body').addClass('expand');
+      }
+    })
+    
+  })
+
   // RICHTEXT FIELDS
   tinymce.init({
     menubar: '',
@@ -365,8 +380,24 @@ function toggleTab(el) {
   $(el).toggleClass('active');
 }
 
+// expand a hierarchical tree
+function toggleExpand(el) {
+  event.preventDefault();
+  if ($('.collections-level').hasClass('not-expanded')) {
+    $('.fieldset-body').addClass('expand');
+    $('.toggle-tab-button').addClass('active');
+    $(el).text('Collapse all');
+  } else {
+    $('.series-level').find('.fieldset-body').removeClass('expand');
+    $('.series-level').find('.toggle-tab-button').removeClass('active');
+    $(el).text('Expand all');
+  }
+  $('.collections-level').toggleClass('not-expanded');
+}
+
 // show more/less facet options
 function toggleFilters(el) {
+  event.preventDefault();
   var fieldset = $(el).parent('fieldset').first();
   $(fieldset).children(".show-more").remove();
   if ($(fieldset).children("a[style='display: none;']").length) {

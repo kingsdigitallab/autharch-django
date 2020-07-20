@@ -1,22 +1,36 @@
 {% extends "./base.html" %}
 {% block main %}
-<main>
+<main id="hierarchy">
     {% block content %}
         <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ item|truncatewords:15 }}</span></a>
 
-        <h1><span class="highlight">Hierarchy browser:</span> {{ item|truncatewords:15 }}</h1>
-        <!-- ADD SEARCH -->
-        <div class="hierarchy">
-            <div class="collections-level">
+        <div class="page-header">
+            <h1>Hierarchy browser</h1>
+            <div class="search-filter">
+                <form action="." class="search" method="get" id="hierarchy-search-form">
+                    <label>
+                      <span hidden>Search</span>
+                      <input type="search" id="duplicates-search-field" placeholder="Search in this hierarchy by display name" onfocus="this.placeholder=''" onblur="this.placeholder='Search by display name'"/>
+                    </label>
+                    <!-- no action needed onsubmit as the results are searched instantly with jquery; potentially this button can be removed.-->
+                    <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;" disabled/>
+                </form>
+                <div class="expand-collapse">
+                    <button class="default" onclick="toggleExpand(this)">Expand all</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="not-expanded collections-level">
                 <div class="fieldset-header">
                     <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>
                     <span>
-                        <a href="" class="dotted-underline">Collection title</a>
+                        <a href="" class="dotted-underline mgn-right">Collection title</a> (2 series)
                     </span>
                     <span class="record-details">
                         <span>Collection</span>
-                        <span>Publication status</span>
-                        <span>Updated</span>
+                        <span>RA reference</span>
+                        <span>Creation date</span>
                     </span>
                 </div>
                 <div class="fieldset-body expand">
@@ -24,12 +38,12 @@
                         <div class="fieldset-header">
                             <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>
                             <span>
-                                <a href="" class="dotted-underline">Series title</a>
+                                <a href="" class="dotted-underline mgn-right">Series title 1</a> (2 subseries)
                             </span>
                             <span class="record-details">
                                 <span>Series</span>
-                                <span>Publication status</span>
-                                <span>Updated</span>
+                                <span>RA reference</span>
+                                <span>Creation date</span>
                             </span>
                         </div>
                         <div class="fieldset-body expand">
@@ -37,12 +51,12 @@
                                 <div class="fieldset-header">
                                     <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>
                                     <span>
-                                        <a href="" class="dotted-underline">Subseries title</a>
+                                        <a href="" class="dotted-underline mgn-right">Subseries title 1</a> (2 files)
                                     </span>
                                     <span class="record-details">
                                         <span>Subseries</span>
-                                        <span>Publication status</span>
-                                        <span>Updated</span>
+                                        <span>RA reference</span>
+                                        <span>Creation date</span>
                                     </span>
                                 </div>
                                 <div class="fieldset-body expand">
@@ -50,12 +64,12 @@
                                         <div class="fieldset-header">
                                             <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>
                                             <span>
-                                                <a href="" class="dotted-underline">File title</a>
+                                                <a href="" class="dotted-underline mgn-right">File title 1</a> (4 items)
                                             </span>
                                             <span class="record-details">
                                                 <span>File</span>
-                                                <span>Publication status</span>
-                                                <span>Updated</span>
+                                                <span>RA reference</span>
+                                                <span>Creation date</span>
                                             </span>
                                         </div>
                                         <div class="fieldset-body expand">
@@ -63,12 +77,12 @@
                                                 <div class="fieldset-header">
                                                     <span></span>
                                                     <span class="browsed-item">
-                                                        <a href="" class="dotted-underline">Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title Item title</a>
+                                                        <a href="" class="dotted-underline">Item title 1</a>
                                                     </span>
                                                     <span class="record-details">
                                                         <span>Item</span>
-                                                        <span>Publication status</span>
-                                                        <span>Updated</span>
+                                                        <span>RA reference</span>
+                                                        <span>Creation date</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -76,12 +90,12 @@
                                                 <div class="fieldset-header">
                                                     <span></span>
                                                     <span>
-                                                        <a href="" class="dotted-underline">Item title</a>
+                                                        <a href="" class="dotted-underline">Item title 2</a>
                                                     </span>
                                                     <span class="record-details">
                                                         <span>Item</span>
-                                                        <span>Publication status</span>
-                                                        <span>Updated</span>
+                                                        <span>RA reference</span>
+                                                        <span>Creation date</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -89,12 +103,12 @@
                                                 <div class="fieldset-header">
                                                     <span></span>
                                                     <span>
-                                                        <a href="" class="dotted-underline">Item title</a>
+                                                        <a href="" class="dotted-underline">Item title 3</a>
                                                     </span>
                                                     <span class="record-details">
                                                         <span>Item</span>
-                                                        <span>Publication status</span>
-                                                        <span>Updated</span>
+                                                        <span>RA reference</span>
+                                                        <span>Creation date</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -104,12 +118,12 @@
                                         <div class="fieldset-header">
                                             <button class="toggle-tab-button" onclick="toggleTab(this)"><span hidden>Expand</span></button>
                                             <span>
-                                                <a href="" class="dotted-underline">File title</a>
+                                                <a href="" class="dotted-underline mgn-right">File title 2</a> (4 items)
                                             </span>
                                             <span class="record-details">
                                                 <span>File</span>
-                                                <span>Publication status</span>
-                                                <span>Updated</span>
+                                                <span>RA reference</span>
+                                                <span>Creation date</span>
                                             </span>
                                         </div>
                                         <div class="fieldset-body">
@@ -117,12 +131,12 @@
                                                 <div class="fieldset-header">
                                                     <span></span>
                                                     <span>
-                                                        <a href="" class="dotted-underline">Item title</a>
+                                                        <a href="" class="dotted-underline">Item title 1</a>
                                                     </span>
                                                     <span class="record-details">
                                                         <span>Item</span>
-                                                        <span>Publication status</span>
-                                                        <span>Updated</span>
+                                                        <span>RA reference</span>
+                                                        <span>Creation date</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -130,12 +144,12 @@
                                                 <div class="fieldset-header">
                                                     <span></span>
                                                     <span>
-                                                        <a href="" class="dotted-underline">Item title</a>
+                                                        <a href="" class="dotted-underline">Item title 2</a>
                                                     </span>
                                                     <span class="record-details">
                                                         <span>Item</span>
-                                                        <span>Publication status</span>
-                                                        <span>Updated</span>
+                                                        <span>RA reference</span>
+                                                        <span>Creation date</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -143,12 +157,12 @@
                                                 <div class="fieldset-header">
                                                     <span></span>
                                                     <span>
-                                                        <a href="" class="dotted-underline">Item title</a>
+                                                        <a href="" class="dotted-underline">Item title 3</a>
                                                     </span>
                                                     <span class="record-details">
                                                         <span>Item</span>
-                                                        <span>Publication status</span>
-                                                        <span>Updated</span>
+                                                        <span>RA reference</span>
+                                                        <span>Creation date</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -162,12 +176,12 @@
                         <div class="fieldset-header">
                             <button class="toggle-tab-button" onclick="toggleTab(this)"><span hidden>Expand</span></button>
                             <span>
-                                <a href="" class="dotted-underline">Series title</a>
+                                <a href="" class="dotted-underline mgn-right">Series title 2</a> (2 files)
                             </span>
                             <span class="record-details">
                                 <span>Series</span>
-                                <span>Publication status</span>
-                                <span>Updated</span>
+                                <span>RA reference</span>
+                                <span>Creation date</span>
                             </span>
                         </div>
                         <div class="fieldset-body">
@@ -175,12 +189,12 @@
                                 <div class="fieldset-header">
                                     <button class="toggle-tab-button" onclick="toggleTab(this)"><span hidden>Expand</span></button>
                                     <span>
-                                        <a href="" class="dotted-underline">File title</a>
+                                        <a href="" class="dotted-underline mgn-right">File title 1</a> (4 items)
                                     </span>
                                     <span class="record-details">
                                         <span>File</span>
-                                        <span>Publication status</span>
-                                        <span>Updated</span>
+                                        <span>RA reference</span>
+                                        <span>Creation date</span>
                                     </span>
                                 </div>
                                 <div class="fieldset-body">
@@ -188,12 +202,12 @@
                                         <div class="fieldset-header">
                                             <span></span>
                                             <span>
-                                                <a href="" class="dotted-underline">Item title</a>
+                                                <a href="" class="dotted-underline">Item title 1</a>
                                             </span>
                                             <span class="record-details">
                                                 <span>Item</span>
-                                                <span>Publication status</span>
-                                                <span>Updated</span>
+                                                <span>RA reference</span>
+                                                <span>Creation date</span>
                                             </span>
                                         </div>
                                     </div>
@@ -201,12 +215,12 @@
                                         <div class="fieldset-header">
                                             <span></span>
                                             <span>
-                                                <a href="" class="dotted-underline">Item title</a>
+                                                <a href="" class="dotted-underline">Item title 2</a>
                                             </span>
                                             <span class="record-details">
                                                 <span>Item</span>
-                                                <span>Publication status</span>
-                                                <span>Updated</span>
+                                                <span>RA reference</span>
+                                                <span>Creation date</span>
                                             </span>
                                         </div>
                                     </div>
@@ -214,12 +228,12 @@
                                         <div class="fieldset-header">
                                             <span></span>
                                             <span>
-                                                <a href="" class="dotted-underline">Item title</a>
+                                                <a href="" class="dotted-underline">Item title 3</a>
                                             </span>
                                             <span class="record-details">
                                                 <span>Item</span>
-                                                <span>Publication status</span>
-                                                <span>Updated</span>
+                                                <span>RA reference</span>
+                                                <span>Creation date</span>
                                             </span>
                                         </div>
                                     </div>
