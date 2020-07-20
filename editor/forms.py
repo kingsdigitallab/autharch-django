@@ -562,19 +562,21 @@ class ArchivalRecordEditForm(ContainerModelForm):
 
     """
     disabled_fields = {
-        EditorProfile.ADMIN: ['maintenance_status'],
+        EditorProfile.ADMIN: ['maintenance_status', 'parent_collection',
+                              'parent_file', 'parent_series'],
         EditorProfile.MODERATOR: [
-            'arrangement', 'extent', 'maintenance_status',
-            'physical_description', 'provenance', 'publication_permission',
-            'rcin', 'record_type', 'references', 'repository',
-            'rights_declaration', 'rights_declaration_citation', 'withheld'
+            'arrangement', 'extent', 'maintenance_status', 'parent_collection',
+            'parent_file', 'parent_series', 'physical_description',
+            'provenance', 'publication_permission', 'rcin', 'record_type',
+            'references', 'repository', 'rights_declaration',
+            'rights_declaration_citation', 'withheld'
         ],
         EditorProfile.EDITOR: [
-            'arrangement', 'extent', 'maintenance_status',
-            'physical_description', 'provenance', 'publication_permission',
-            'publication_status', 'rcin', 'record_type', 'references',
-            'repository', 'rights_declaration', 'rights_declaration_citation',
-            'withheld'
+            'arrangement', 'extent', 'maintenance_status', 'parent_collection',
+            'parent_file', 'parent_series', 'physical_description',
+            'provenance', 'publication_permission', 'publication_status',
+            'rcin', 'record_type', 'references', 'repository',
+            'rights_declaration', 'rights_declaration_citation', 'withheld'
         ],
     }
 
