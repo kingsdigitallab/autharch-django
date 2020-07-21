@@ -2,6 +2,10 @@ from haystack import indexes
 
 from archival.models import Collection, File, Item, Series
 from authority.models import Entity, Relation
+from jargon.models import ReferenceSource
+
+
+RA_REFERENCE_SOURCE = ReferenceSource.objects.get(title='RA')
 
 
 # The polymorphic ArchivalRecord model subclasses must have their own
@@ -42,6 +46,10 @@ class ArchivalRecordIndex:
     def prepare_languages(self, obj):
         return list(obj.languages.distinct().values_list('name_en', flat=True))
 
+    def prepare_ra_references(self, obj):
+        return list(obj.references.filter(source=RA_REFERENCE_SOURCE)
+                    .values_list('unitid', flat=True))
+
     def prepare_writers(self, obj):
         return list(obj.creators.distinct().values_list('pk', flat=True))
 
@@ -61,9 +69,11 @@ class CollectionIndex(indexes.SearchIndex, indexes.Indexable,
     publication_status = indexes.CharField(model_attr='publication_status')
     maintenance_status = indexes.CharField(model_attr='maintenance_status')
     dates = indexes.MultiValueField()
+    creation_date = indexes.CharField(model_attr='creation_dates', null=True)
     languages = indexes.MultiValueField(faceted=True)
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
+    ra_references = indexes.MultiValueField()
 
     def get_model(self):
         return Collection
@@ -78,11 +88,13 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     maintenance_status = indexes.CharField(model_attr='maintenance_status')
     addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField()
+    creation_date = indexes.CharField(model_attr='creation_dates', null=True)
     languages = indexes.MultiValueField(faceted=True)
     writers = indexes.MultiValueField(faceted=True)
     writers_display = indexes.CharField()
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
+    ra_references = indexes.MultiValueField()
 
     def get_model(self):
         return File
@@ -97,11 +109,13 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     maintenance_status = indexes.CharField(model_attr='maintenance_status')
     addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField()
+    creation_date = indexes.CharField(model_attr='creation_dates', null=True)
     languages = indexes.MultiValueField(faceted=True)
     writers = indexes.MultiValueField(faceted=True)
     writers_display = indexes.CharField()
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
+    ra_references = indexes.MultiValueField()
 
     def get_model(self):
         return Item
@@ -115,9 +129,11 @@ class SeriesIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     publication_status = indexes.CharField(model_attr='publication_status')
     maintenance_status = indexes.CharField(model_attr='maintenance_status')
     dates = indexes.MultiValueField()
+    creation_date = indexes.CharField(model_attr='creation_dates', null=True)
     languages = indexes.MultiValueField(faceted=True)
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
+    ra_references = indexes.MultiValueField()
 
     def get_model(self):
         return Series
@@ -133,6 +149,7 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     related_entities = indexes.MultiValueField(faceted=True)
+    ra_references = indexes.MultiValueField()
 
     def get_model(self):
         return Entity

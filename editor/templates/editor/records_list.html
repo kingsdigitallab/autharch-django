@@ -114,8 +114,8 @@
               <label for="checkbox_{{result.pk}}"><span hidden>More information</span></label>
               <input type="checkbox" id="checkbox_{{result.pk}}">
               <div class="more-information">
-                - RA reference(s): [RA reference];<br>
-                - Creation dates: [Date];
+                - RA reference(s): {{ result.ra_references|join:"; " }}<br>
+                - Creation dates: {{ result.creation_date }}
               </div>
             </td>
             <td class="description">{{ result.writers_display|default_if_none:"" }}</td>
