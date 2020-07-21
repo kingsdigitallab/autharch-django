@@ -543,7 +543,7 @@ def entity_duplicates(request, entity_id):
     return render(request, 'editor/duplicates.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
+@user_passes_test(is_user_admin)
 @create_revision()
 @require_POST
 def record_delete(request, record_id):
@@ -674,6 +674,7 @@ def record_related(request, record_id):
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/related.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 def accessibility_statement(request):
