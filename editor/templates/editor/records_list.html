@@ -108,9 +108,7 @@
           {% for result in object_list %}
           <tr>
             <td class="description archival-record">
-              <a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}
-                <!-- TODO: add RA references -->
-              </a>
+              <a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a>
               <label for="checkbox_{{result.pk}}"><span hidden>More information</span></label>
               <input type="checkbox" id="checkbox_{{result.pk}}">
               <div class="more-information">
