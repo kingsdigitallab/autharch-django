@@ -19,36 +19,36 @@ $(document).ready(function() {
   // since we presumably do want that minimal validation to occur when
   // submitting, and this just stops it from failing on specific
   // fields that aren't editable yet.
-  let dialogueRequiredControls = $("#log-modal").find("*[required]");
+  let dialogueRequiredControls = $('#log-modal').find('*[required]');
   toggleRequiredControls(dialogueRequiredControls, false);
 
   // Cancel buttons on modal dialogues should close the modal and not
   // allow default handling of the event.
-  $(".modal-cancel").click(function(event) {
+  $('.modal-cancel').click(function(event) {
     // Even if this is not the logging dialogue being cancelled, set
     // its required controls to false; this is the most convenient
     // place to perform this sadly necessary operation.
     toggleRequiredControls(dialogueRequiredControls, false);
-    let modal = $(event.target).parents(".modal").first().removeClass("active");
+    let modal = $(event.target).parents('.modal').first().removeClass('active');
     event.preventDefault();
   });
   
   // Open popup to log changes when saving a record, then actually
   // submit the form when submitting from the popup.
-  $("#record-form").submit(function(event) {
-    if ($("#log-modal").hasClass('active')) {
+  $('#record-form').submit(function(event) {
+    if ($('#log-modal').hasClass('active')) {
       event.target.submit();
     } else {
       event.preventDefault();
       toggleRequiredControls(dialogueRequiredControls, true);
-      $("#log-modal").addClass('active');
+      $('#log-modal').addClass('active');
     }
   });
 
   // SELECT-WITH-SEARCH
   // add search bar to the select dropdown
-  $(".select-with-search").select2( {
-    placeholder: "Select",
+  $('.select-with-search').select2( {
+    placeholder: 'Select',
     allowClear: true
   } );
   //add aria-label to select2 input
@@ -63,10 +63,10 @@ $(document).ready(function() {
   });
 
   // TABLE PAGINATION / TABLESORTER
-  if (!$('#duplicates-table [name=primary_record]:checked').length) {
+  if (!$('#duplicates-table [name="primary_record"]:checked').length) {
     $('.duplicate-cell').children('label').addClass("disabled");
   } else {
-    $('#duplicates-table [name=primary_record]:checked').each(function() {
+    $('#duplicates-table [name="primary_record"]:checked').each(function() {
       $(this).closest('.primary-cell').addClass('border-left');
       $(this).parent('label').addClass("selected");
       $(this).closest('.primary-cell').next('.duplicate-cell > label').addClass("disabled");
@@ -74,7 +74,7 @@ $(document).ready(function() {
   }
   
 
-  $('#duplicates-table').on('click','[name=primary_record]', function(el) {
+  $('#duplicates-table').on('click','[name="primary_record"]', function(el) {
     //reset to default
     $('.primary-cell').removeClass('border-left');
     $('.primary-cell > label').removeClass("selected");
@@ -107,8 +107,8 @@ $(document).ready(function() {
 
   $('.tablesorter').each(function(i, el) {
     $.tablesorter.customPagerControls({
-      table          : $("#"+$(el).attr('id')),                   // point at correct table (string or jQuery object)
-      pager          : $("#"+$(el).parent(".table-container").next('.pager').attr('id')),                   // pager wrapper (string or jQuery object)
+      table          : $('#'+$(el).attr('id')),                   // point at correct table (string or jQuery object)
+      pager          : $('#'+$(el).parent('.table-container').next('.pager').attr('id')),                   // pager wrapper (string or jQuery object)
       pageSize       : '.page-size a',                // container for page sizes
       currentPage    : '.page-list a',               // container for page selectors
       ends           : 2,                        // number of pages to show of either end
@@ -122,18 +122,18 @@ $(document).ready(function() {
     });
     //add tablesorter to the tables; had to go with an if-statement because tablesorter parameters cannot be modified once linked to a table
     if ($(el).attr('id') !== 'records-list-table') {
-      $("#"+$(el).attr('id'))
+      $('#'+$(el).attr('id'))
         .tablesorter({
-            widgets: ["filter"],
+            widgets: ['filter'],
             widgetOptions: {
                 filter_columnFilters: true,
                 filter_filterLabel : 'Filter records by {{label}}',
             }
         })
     } else {
-      $("#records-list-table")
+      $('#records-list-table')
         .tablesorter({
-            widgets: ["filter"],
+            widgets: ['filter'],
             widgetOptions: {
                 filter_columnFilters: true,
                 filter_filterLabel: 'Filter records by {{label}}',
@@ -147,13 +147,13 @@ $(document).ready(function() {
         })
     }
 
-    $("#"+$(el).attr('id')).tablesorterPager({
-      container: $("#"+$(el).parent(".table-container").next('.pager').attr('id')),
+    $('#'+$(el).attr('id')).tablesorterPager({
+      container: $('#'+$(el).parent('.table-container').next('.pager').attr('id')),
       size: 10
     });
    
     //  make sure that corrent 'rows per page' number is active
-    var rowsPerPage = $("#"+$(el).attr('id')).find("tbody > tr").filter(function() {
+    var rowsPerPage = $('#'+$(el).attr('id')).find('tbody > tr').filter(function() {
       return $(this).css('display') !== 'none';
     }).length;
     var label = 0;
@@ -164,14 +164,14 @@ $(document).ready(function() {
         break;
       }
     }
-    $("#"+$(el).attr('id')).parent('.table-container').next(".pager").find("a[data-label='"+label+"']").addClass("current");
+    $("#"+$(el).attr('id')).parent('.table-container').next('.pager').find('a[data-label="'+label+'"]').addClass("current");
   });
 
   $('.formset').on('click', 'input[id$="is_royal_name"]', function(e) {
     if ($(e.target).prop("checked")) {
-      $(e.target).next(".namePartField-required").text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
+      $(e.target).next('.namePartField-required').text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
     } else {
-      $(e.target).next(".namePartField-required").text(`A personal name must contain a "surname" part type.`);
+      $(e.target).next('.namePartField-required').text(`A personal name must contain a "surname" part type.`);
     }
   });
 
@@ -179,7 +179,7 @@ $(document).ready(function() {
   $('form').on('click', function(e) {
     if (!$(e.target).is('.additional-info')) {
       if($('.additional-info').length) {
-        $('.additional-info').siblings('[role="button"]').text("");
+        $('.additional-info').siblings('[role=button]').text("");
         $('.additional-info').remove();
       }
     }
@@ -187,8 +187,8 @@ $(document).ready(function() {
 
   // optional functionality (can be removed if needed) - dynamic styling of the sections
   // style border for preferred names and identities
-  $("input[name*='preferred']:checked").parents('fieldset').addClass('border-left');
-  $("input[name*='authorised']:checked").closest('fieldset').addClass('border-left');
+  $('input[name*="preferred"]:checked').parents('fieldset').addClass('border-left');
+  $('input[name*="authorised"]:checked').closest('fieldset').addClass('border-left');
 
   $(document).on('click', 'input[name*="preferred"]', function(e) {
     // find other identities and uncheck their preferred status
@@ -239,7 +239,7 @@ $(document).ready(function() {
       if (query == '') {
         filterOptions.slice(0, 5).show();
         filterOptions.slice(6, filterOptions.length).hide();
-        $(e.target).closest('fieldset').children(".show-more").remove();
+        $(e.target).closest('fieldset').children('.show-more').remove();
         $(e.target).closest('fieldset').append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+$(e.target).closest('fieldset').children("a").length+`)</button>`);
       }
       else {
@@ -261,22 +261,23 @@ $(document).ready(function() {
   $('#duplicates-search-field').on('keyup change', function(e) {
     $('.fieldset-header').find('span').removeClass('greyed-out');
     $('div[class="series-level"]').children('.fieldset-body').removeClass('expand');
+    $('.expand-collapse > button').text('Collapse all');
+    $('.collections-level').removeClass('not-expanded')
     $('.fieldset-header').find('a.dotted-underline').each(function() {
-      var option = $(this).text().toLowerCase();
-      var query = $(e.target).val().toLowerCase();
+      let option = $(this).text().toLowerCase();
+      let query = $(e.target).val().toLowerCase();
       if (!option.includes(query)) {
         $(this).parents('.fieldset-header').first().find('span').addClass('greyed-out');
       } else {
         $(this).parents('div[class="series-level"]').find('.fieldset-body').addClass('expand');
       }
-    })
-    
-  })
+    });
+  });
 
   // RICHTEXT FIELDS
   tinymce.init({
     menubar: '',
-    content_style: ".mce-content-body {font-size:14px;}",
+    content_style: '.mce-content-body {font-size:14px;}',
     plugins: 'charmap image media link table lists code',
     toolbar: 'bold italic underline strikethrough | insertfile image media link | table | formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | charmap | removeformat | undo redo | code',
     setup: function (editor) {
@@ -287,7 +288,7 @@ $(document).ready(function() {
   });
   // initialise TinyMCE for all visible editors
   $('.richtext').each(function () {
-    if (!$(this).attr('id').includes("prefix")) {
+    if (!$(this).attr('id').includes('prefix')) {
       tinymce.EditorManager.execCommand('mceAddEditor', true, $(this).attr('id'));
     }
   });
@@ -343,8 +344,8 @@ function exitHandler() {
   hide all transcriptions and generate ckeditor for the first transcription on the list
 */
 function addCKEditor() {
-  $( 'textarea.richtext-transcription' ).hide();
-  $( 'textarea#id_transcription-0-transcription' ).ckeditor();
+  $('textarea.richtext-transcription').hide();
+  $('textarea#id_transcription-0-transcription').ckeditor();
 }
 
 function addPagination() {
@@ -363,9 +364,38 @@ function addPagination() {
 }
 
 function goToTranscription(i) {
-  $("div[id^=cke_id_transcription]").hide();
-  $("textarea#id_transcription-"+i+"-transcription").ckeditor();
-  $("div[id='cke_id_transcription-"+i+"-transcription']").css('display', 'block');
+  $('div[id^="cke_id_transcription"]').hide();
+  $('textarea#id_transcription-'+i+'-transcription').ckeditor();
+  $('div[id="cke_id_transcription-'+i+'-transcription"]').css('display', 'block');
+}
+
+function addDuplicate() {
+  event.preventDefault();
+  if ($('#duplicates-search-field').val() != '') {
+    let record = {'id': 156, 'entity_title': '[entity_title]', 'entity_type': '[entity_type]', 'publication_status': '[publication_status]', 'updated_date': '[date_updated]', 'updated_by': '[username]'};
+    $('#duplicates-table tbody').append(`
+      <tr>
+        <td class="button-cell primary-cell">
+            <label>
+                <input type="radio" value="`+record['id']+`" name="primary_record"/>Primary record
+            </label>
+        </td>
+        <td class="duplicate-cell">
+            <input type="radio" id="duplicate_`+record['id']+`" name="duplicate_`+record['id']+`" value="true"/>
+            <label for="duplicate_`+record['id']+`" class="disabled">Merge with primary</label>
+            <input type="radio" id="not_duplicate_`+record['id']+`" name="duplicate_`+record['id']+`" value="false"/>
+            <label for="not_duplicate_`+record['id']+`" class="disabled">Not related to primary</label>
+        </td>
+        <td>Record ID: <span class="highlight">`+record['id']+`</span></td>
+        <td class="description">
+            <a href="/editor/entities/`+record['id']+`" target="_blank">`+record['entity_title']+`</a><br>
+            Type: `+record['entity_type']+` | Publication status: `+record['publication_status']+` | Updated: `+record['updated_date']+` by `+record['updated_by']+`
+        </td>
+      </tr>
+    `)
+  }
+  
+
 }
 
 // when the pagination button in full screen mode is clicked, 
@@ -373,7 +403,7 @@ function goToTranscription(i) {
 // update pagination 
 // update transcription in RTE
 
-// expand/collapse entity/archival record sections
+// expand/collapse entity/archival record sections and individual sections on the hierarchy page
 function toggleTab(el) {
   event.preventDefault();
   $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
@@ -395,17 +425,27 @@ function toggleExpand(el) {
   $('.collections-level').toggleClass('not-expanded');
 }
 
+function showAllMoreInformation(el) {
+  $('[id^="checkbox_"]').prop('checked', !$('[id^="checkbox_"]').prop('checked'));
+  if ($('[id^="checkbox_"]').prop('checked')) {
+    $(el).text('Collapse all');
+  } else {
+    $(el).text('Expand all');
+  }
+  
+}
+
 // show more/less facet options
 function toggleFilters(el) {
   event.preventDefault();
   var fieldset = $(el).parent('fieldset').first();
-  $(fieldset).children(".show-more").remove();
-  if ($(fieldset).children("a[style='display: none;']").length) {
-    $(fieldset).children("a").show();
+  $(fieldset).children('.show-more').remove();
+  if ($(fieldset).children('a[style="display: none;"]').length) {
+    $(fieldset).children('a').show();
     $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-minus"></i> Show less</button>`);
   }
   else {
-    $(fieldset).children("a").slice(5, $(fieldset).children("a").length).hide();
+    $(fieldset).children('a').slice(5, $(fieldset).children('a').length).hide();
     $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+ $(fieldset).children("a").length +`)</button>`);
   }
 }
@@ -416,14 +456,14 @@ function toggleHelpText(el, help_text) {
   event.preventDefault();
   if ($(el).siblings('p.additional-info').length) {
     // change icon to 'question mark'
-    $(el).text("");
+    $(el).text('');
     $(el).siblings('p.additional-info').remove();
   }
   else {
     var position = $(el).position();
     $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
     // change icon to 'close'
-    $(el).text("");
+    $(el).text('');
   }
 }
 
@@ -432,7 +472,7 @@ function toggleHelpText(el, help_text) {
  * record (whether Archival Record or Entity).
  */
 function deleteRecord(event) {
-  $("#delete-modal").addClass('active');
+  $('#delete-modal').addClass('active');
   event.preventDefault();
 }
 
@@ -461,17 +501,17 @@ function deleteRecord(event) {
 function addEmptyForm(formType, context) {
   let jContext = $(context);
   let managementFormContainer = getManagementFormContainer(jContext);
-  let maxNumControl = managementFormContainer.children("input[name$='MAX_NUM_FORMS']");
-  let maxNumForms = Number(maxNumControl.attr("value"))
-  let totalControl = managementFormContainer.children("input[name$='TOTAL_FORMS']");
-  let newFormPrefixNumber = Number(totalControl.attr("value"));
-  if ((newFormPrefixNumber+1) >= maxNumControl.attr("value")) {
-    $(jContext).parent("label").hide();
+  let maxNumControl = managementFormContainer.children('input[name$="MAX_NUM_FORMS"]');
+  let maxNumForms = Number(maxNumControl.attr('value'))
+  let totalControl = managementFormContainer.children('input[name$="TOTAL_FORMS"]');
+  let newFormPrefixNumber = Number(totalControl.attr('value'));
+  if ((newFormPrefixNumber+1) >= maxNumControl.attr('value')) {
+    $(jContext).parent('label').hide();
   }
   // Clone the formType form and add it as the last child of the
   // parent of these forms.
   let formParent = getNewFormParent(jContext);
-  let newForm = $("#empty_forms").children("*[data-form-type=" + formType + "]").clone();
+  let newForm = $('#empty_forms').children('*[data-form-type=' + formType + ']').clone();
   newForm.appendTo(formParent);
   // Update the new form's controls' @name and @id to use the correct
   // values for its context in the hierarchy of formsets. Their prefix
@@ -480,30 +520,30 @@ function addEmptyForm(formType, context) {
   // of the containing formset's management form (plus the number of
   // this form), which conveniently already has the full prefix
   // hierarchy in it.
-  let newControls = newForm.find("*[name*='__prefix__']");
-  let newFormPrefixName = generateNewFormPrefix(totalControl, "name", newFormPrefixNumber);
-  let newFormPrefixId = generateNewFormPrefix(totalControl, "id", newFormPrefixNumber);
-  let prefixLength = "__prefix__".length;
+  let newControls = newForm.find('*[name*="__prefix__"]');
+  let newFormPrefixName = generateNewFormPrefix(totalControl, 'name', newFormPrefixNumber);
+  let newFormPrefixId = generateNewFormPrefix(totalControl, 'id', newFormPrefixNumber);
+  let prefixLength = '__prefix__'.length;
   newControls.each(function(index) {
-    $(this).attr("name", function(i, val) {
-      return newFormPrefixName + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
+    $(this).attr('name', function(i, val) {
+      return newFormPrefixName + val.slice(val.lastIndexOf('__prefix__') + prefixLength);
     });
-    $(this).attr("id", function(i, val) {
-      return newFormPrefixId + val.slice(val.lastIndexOf("__prefix__") + prefixLength);
+    $(this).attr('id', function(i, val) {
+      return newFormPrefixId + val.slice(val.lastIndexOf('__prefix__') + prefixLength);
     });
-    if ($(this).hasClass("select-with-search-dynamic")) {
+    if ($(this).hasClass('select-with-search-dynamic')) {
       $(this).select2( {
-        placeholder: "Select",
+        placeholder: 'Select',
         allowClear: true
       } );
     }
-    if ($(this).hasClass("richtext")) {
+    if ($(this).hasClass('richtext')) {
       tinymce.EditorManager.execCommand('mceAddEditor', true, $(this).attr('id'));
     }
   });
   // The management form for the formset of the new form must have its
   // TOTAL_FORMS value incremented by 1 to account for the new form.
-  totalControl.attr("value", newFormPrefixNumber + 1);
+  totalControl.attr('value', newFormPrefixNumber + 1);
   initAutocompleteWidgets();
 }
 
@@ -519,7 +559,7 @@ function addEmptyForm(formType, context) {
  */
 function generateNewFormPrefix(control, attrName, prefixNumber) {
   let attrValue = control.attr(attrName);
-  return attrValue.slice(0, attrValue.indexOf("TOTAL_FORMS")) + String(prefixNumber);
+  return attrValue.slice(0, attrValue.indexOf('TOTAL_FORMS')) + String(prefixNumber);
 }
 
 
@@ -535,7 +575,7 @@ function generateNewFormPrefix(control, attrName, prefixNumber) {
  * @returns {jQuery}
  */
 function getManagementFormContainer(context) {
-  return context.parents(".formset").first().children("div.management_form");
+  return context.parents('.formset').first().children('div.management_form');
 }
 
 
@@ -551,7 +591,7 @@ function getManagementFormContainer(context) {
  * @returns {jQuery}
  */
 function getNewFormParent(context) {
-  return context.parents(".formset").first().children("div.fieldsets").last();
+  return context.parents('.formset').first().children('div.fieldsets').last();
 }
 
 
@@ -559,7 +599,7 @@ function getNewFormParent(context) {
 function deleteField(el, toDelete) {
   event.preventDefault();
   $(el).closest(toDelete).addClass('none');
-  $(el).parents(".formset").first().children("label").show();
+  $(el).parents('.formset').first().children('label').show();
 }
 
 
@@ -574,8 +614,8 @@ function deleteRow(el) {
     $(el).siblings('.confirm-deletion').remove();
   }
   // Find and toggle the DELETE checkbox for the form.
-  let deleteField = $(el).closest("[data-form-type]").find("[class~='delete-form-field']").find("[name$='DELETE']").first();
-  deleteField.prop("checked", !deleteField.prop("checked"));
+  let deleteField = $(el).closest('[data-form-type]').find('[class~="delete-form-field"]').find('[name$="DELETE"]').first();
+  deleteField.prop('checked', !deleteField.prop('checked'));
 }
 
 
@@ -589,8 +629,8 @@ function deleteRow(el) {
  */
 function generateCreationYearURL(startYear, endYear) {
   let searchParams = new URLSearchParams(location.search);
-  searchParams.set("start_year", startYear)
-  searchParams.set("end_year", endYear)
+  searchParams.set('start_year', startYear)
+  searchParams.set('end_year', endYear)
   return '?' + searchParams.toString();
 }
 
@@ -655,10 +695,10 @@ function setUpCreationYearSlider() {
       $('#year-range-anchor').attr('href', queryString);
     }
   });
-  $( "#id_end_year" ).on('keyup change', function(el) {
-    var startYear = parseInt($( "#id_start_year" ).val());
+  $( '#id_end_year' ).on('keyup change', function(el) {
+    var startYear = parseInt($( '#id_start_year' ).val());
     if ($(el.target).val() >= startYear && $(el.target).val() <= maxValue) {
-      $('#year-range').slider("values", 1, $(el.target).val());
+      $('#year-range').slider('values', 1, $(el.target).val());
       let queryString = generateCreationYearURL($('#id_start_year').val(),
                                                 $('#id_end_year').val());
       $('#year-range-anchor').attr('href', queryString);
@@ -715,28 +755,28 @@ function toggleDeleteInline(event, button) {
 
   // Find the element for the part of the form to be shown/hidden,
   // and toggle its visibility.
-  let form_part = jButton.closest("[data-form-type]").find("[class~='inline-deletable']").first();
-  form_part.toggleClass("none");
+  let form_part = jButton.closest('[data-form-type]').find('[class~="inline-deletable"]').first();
+  form_part.toggleClass('none');
 
   // toggle the checkbox button and text label
   if (form_part.hasClass('none')) {
-    jButton.val("");
+    jButton.val('');
     label.removeClass('danger');
     label.addClass('save');
     label.append(`<span>Undo</span>`);
     label.parent().after(`<button class="button-link danger" onclick="deleteField(this, '[data-form-type]')"><i class="fas fa-trash-alt"></i>Delete permanently</button>`)
   }
   else {
-    jButton.val("");
+    jButton.val('');
     label.removeClass('save');
     label.addClass('danger');
     label.children('span').remove();
-    label.parent().siblings('button').remove();
+    label.parent().siblings('button.danger').remove();
   }
 
   // Find and toggle the DELETE checkbox for the form.
-  let deleteField = form_part.children("[class~='inline-delete-form-field']").find("[name$='DELETE']").first();
-  deleteField.prop("checked", !deleteField.prop("checked"));
+  let deleteField = form_part.children('[class~="inline-delete-form-field"]').find('[name$="DELETE"]').first();
+  deleteField.prop('checked', !deleteField.prop('checked'));
 }
 
 
@@ -750,7 +790,7 @@ function toggleDeleteInline(event, button) {
 function toggleRequiredControls(controls, add_required) {
   let value = null;
   if (add_required) {
-    value = "required";
+    value = 'required';
   }
-  controls.attr("required", value);
+  controls.attr('required', value);
 }

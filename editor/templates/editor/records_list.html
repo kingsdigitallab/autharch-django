@@ -27,45 +27,58 @@
                   <a href="" class="checkbox-anchor" id="year-range-anchor">Filter</a>
                 </fieldset>
                 {% endif %}
-                <fieldset class="filter-list" id="document-level-filter">
-                  <legend>Document level</legend>
-                  {% if facets.fields.archival_level|length > 7 %}
-                    <input type="text" name="search-archivalLevel" aria-label="search archival level" class="instant-search" placeholder="Search archival level" onfocus="this.placeholder=''" onblur="this.placeholder='Search archival level'"/>
-                  {% endif %}
-                  {% for archival_level in facets.fields.archival_level %}
-                  {% render_facet archival_level %}
-                  {% endfor %}
-                </fieldset>
-                <fieldset class="filter-list" id="has-transcriptions-filter">
+                {% if facets.fields.archival_level|length > 0 %}
+                  <fieldset class="filter-list" id="document-level-filter">
+                    <legend>Document level</legend>
+                    {% if facets.fields.archival_level|length > 7 %}
+                      <input type="text" name="search-archivalLevel" aria-label="search archival level" class="instant-search" placeholder="Search archival level" onfocus="this.placeholder=''" onblur="this.placeholder='Search archival level'"/>
+                    {% endif %}
+                    {% for archival_level in facets.fields.archival_level %}
+                    {% render_facet archival_level %}
+                    {% endfor %}
+                  </fieldset>
+                {% endif %}
+                <fieldset class="filter-list" id="record-type-filter">
+                  <legend>Record type</legend>
                   <!-- TODO - add a checkbox to filter by records that have transcriptions -->
                 </fieldset>
-                <fieldset class="filter-list" id="writer-filter">
-                  <legend>Writer</legend>
-                  {% if facets.fields.writers|length > 7 %}
-                    <input type="text" name="search-writer" aria-label="search writer" class="instant-search" placeholder="Search writer" onfocus="this.placeholder=''" onblur="this.placeholder='Search writer'"/>
-                  {% endif %}
-                  {% for writer in facets.fields.writers %}
-                  {% render_facet writer %}
-                  {% endfor %}
+                <fieldset class="filter-list" id="has-transcriptions-filter">
+                  <legend>With transcriptions</legend>
+                  <!-- TODO - add a checkbox to filter by records that have transcriptions -->
                 </fieldset>
-                <fieldset class="filter-list" id="addressee-filter">
-                  <legend>Addressee</legend>
-                  {% if facets.fields.addressees|length > 7 %}
-                    <input type="text" name="search-addressee" aria-label="search addressee" class="instant-search" placeholder="Search addressee" onfocus="this.placeholder=''" onblur="this.placeholder='Search addressee'"/>
-                  {% endif %}
-                  {% for addressee in facets.fields.addressees %}
-                  {% render_facet addressee %}
-                  {% endfor %}
-                </fieldset>
-                <fieldset class="filter-list" id="language-filter">
-                  <legend>Language</legend>
-                  {% if facets.fields.languages|length > 7 %}
-                    <input type="text" name="search-language" aria-label="search language" class="instant-search" placeholder="Search language" onfocus="this.placeholder=''" onblur="this.placeholder='Search language'"/>
-                  {% endif %}
-                  {% for language in facets.fields.languages %}
-                  {% render_facet language %}
-                  {% endfor %}
-                </fieldset>
+                {% if facets.fields.writers|length > 0 %}
+                  <fieldset class="filter-list" id="writer-filter">
+                    <legend>Writer</legend>
+                    {% if facets.fields.writers|length > 7 %}
+                      <input type="text" name="search-writer" aria-label="search writer" class="instant-search" placeholder="Search writer" onfocus="this.placeholder=''" onblur="this.placeholder='Search writer'"/>
+                    {% endif %}
+                    {% for writer in facets.fields.writers %}
+                    {% render_facet writer %}
+                    {% endfor %}
+                  </fieldset>
+                {% endif %}
+                {% if facets.fields.addressees|length > 0 %}
+                  <fieldset class="filter-list" id="addressee-filter">
+                    <legend>Addressee</legend>
+                    {% if facets.fields.addressees|length > 7 %}
+                      <input type="text" name="search-addressee" aria-label="search addressee" class="instant-search" placeholder="Search addressee" onfocus="this.placeholder=''" onblur="this.placeholder='Search addressee'"/>
+                    {% endif %}
+                    {% for addressee in facets.fields.addressees %}
+                    {% render_facet addressee %}
+                    {% endfor %}
+                  </fieldset>
+                {% endif %}
+                {% if facets.fields.languages|length > 0 %}
+                  <fieldset class="filter-list" id="language-filter">
+                    <legend>Language</legend>
+                    {% if facets.fields.languages|length > 7 %}
+                      <input type="text" name="search-language" aria-label="search language" class="instant-search" placeholder="Search language" onfocus="this.placeholder=''" onblur="this.placeholder='Search language'"/>
+                    {% endif %}
+                    {% for language in facets.fields.languages %}
+                    {% render_facet language %}
+                    {% endfor %}
+                  </fieldset>
+                {% endif %}
               </div>
           </div>
         </div>
@@ -97,7 +110,9 @@
     <table id="records-list-table" class="tablesorter">
         <thead>
           <tr>
-            <th scope="col" data-label="Title" data-placeholder="Filter records by title">Title</th>
+            <th scope="col" data-label="Title" data-placeholder="Filter records by title">Title 
+            <button class="button-link dotted-underline mgn-left" onclick="showAllMoreInformation(this)">Expand all</button>
+          </th>
             <th scope="col" data-label="Writer" data-placeholder="Filter records by writer">Writer</th>
             <th class="filter-select" scope="col" data-label="Level" data-placeholder="Select">Level</th>
             <th class="filter-select" scope="col" data-label="Publication status" data-placeholder="Publication status">Publication status</th>
@@ -112,8 +127,8 @@
               <label for="checkbox_{{result.pk}}"><span hidden>More information</span></label>
               <input type="checkbox" id="checkbox_{{result.pk}}">
               <div class="more-information">
-                - RA reference(s): {{ result.ra_references|join:"; " }}<br>
-                - Creation dates: {{ result.creation_date }}
+                - RA reference: {{ result.ra_references|join:"; " }}<br>
+                - Creation date: {{ result.creation_date }}
               </div>
             </td>
             <td class="description">{{ result.writers_display|default_if_none:"" }}</td>

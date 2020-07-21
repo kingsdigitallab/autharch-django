@@ -8,7 +8,6 @@ START_DATE_HELP = '1. It is required that you follow the date format: <br><stron
 
 # IDENTITIES_HELP = 'This element denotes names used by the entity.'
 
-PREFERRED_IDENTITY_HELP = '' #noqa
 
 NAME_ENTRY_HELP = 'This element &quot;is used to record a name by which the corporate body, the person, or the family described in the EAC-CPF instance is known&quot;. See name entry at https://eac.staatsbibliothek-berlin.de.'  # noqa
 

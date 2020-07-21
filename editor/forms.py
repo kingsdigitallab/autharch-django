@@ -49,19 +49,19 @@ DATE_FORMAT = {
 
 ENTITY_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
-    'placeholder': 'Search people and corporate bodies',
+    'placeholder': 'Search all people and corporate bodies',
     'type': 'search',
 }
 
 DELETED_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
-    'placeholder': 'Search deleted objects',
+    'placeholder': 'Search all deleted objects',
     'type': 'search',
 }
 
 RECORD_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
-    'placeholder': 'Search archival records',
+    'placeholder': 'Search all archival records',
     'type': 'search',
 }
 

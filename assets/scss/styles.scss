@@ -43,8 +43,9 @@ $fontawesome: 'Font Awesome 5 Pro';
         margin: 0px;
         margin-right: 10px;
         padding: 0px;
-        display: inline-flex;
+        display: flex;
         align-items: center;
+        flex-wrap: wrap;
         li {
             list-style: none;
             margin: 0px 0px 5px 0px;
@@ -62,7 +63,8 @@ $fontawesome: 'Font Awesome 5 Pro';
 body {
     background-color: $background;
     font-family: $font-primary;
-    line-height: 1.4em;
+    font-size: 14px;
+    line-height: 1.6em;
     margin: 0;
     width: 100%;
 }
@@ -129,9 +131,9 @@ body {
 
 // BORDERS
 .dotted-underline {
-    border-bottom: 1px dotted $medium-grey;
+    border-bottom: 1px dotted $medium-grey !important;
     &:hover, &:focus {
-        border-bottom: 1px dotted $primary;
+        border-bottom: 1px dotted $primary !important;
     }
 }
 
@@ -185,7 +187,6 @@ button, .create, input[type=submit] {
     color: white;
     border: none;
     padding: 10px 25px;
-    font-size: 13px;
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     border-radius: 30px;
@@ -223,8 +224,7 @@ span[role=button] {
             margin-right: 5px;
         }
         .icon-only {
-            padding: 0px 5px 0px 0px;
-            font-size: 13px;
+            font-size: 0.93em;
             &:focus {
                 color: $light-grey;
             }
@@ -234,7 +234,7 @@ span[role=button] {
 
 .save {
     @include button($save);
-    min-width: 113px;
+    // min-width: 113px;
 }
 
 .danger {
@@ -303,7 +303,7 @@ span[role=button] {
 
 
 .fa-question-circle {
-    font-size: 16px;
+    font-size: 1.14em;
     margin-left: 5px;
     font-weight: 300;
 }
@@ -317,15 +317,15 @@ span[role=button] {
     background-color: transparent;
     font-family: $fontawesome;
     font-weight: 300;
-    font-size: 16px;
-    margin-left: 5px;
+    font-size: 1.14em;
     margin-bottom: 0px;
-    padding: 3px;
+    padding: 0px 5px 0px 5px;
     &:hover, &:focus {
         -moz-box-shadow: none !important;
         -webkit-box-shadow: none !important;
         box-shadow: none !important;
         outline: none;
+        border-bottom: none !important;
         text-decoration: none !important;
     }
 }
@@ -333,7 +333,7 @@ span[role=button] {
 
 a {
     color: $primary;
-    font-size: 14px;
+    font-size: 1em;
     text-decoration: none;
     &:focus {
         outline: none;
@@ -350,8 +350,12 @@ a {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
+    border-bottom: 1px dotted white;
+    font-size: 1em;
+    cursor: pointer;
     &:hover, &:focus {
-        text-decoration: underline;
+        text-decoration: none;
+        border-bottom: 1px dotted $primary;
         -moz-box-shadow: none !important;
         -webkit-box-shadow: none !important;
         box-shadow: none;
@@ -361,6 +365,7 @@ a {
         color: $danger;
         .icon-only:focus {
             color: darken($danger, 5%);
+            border-bottom: 0px;
         }
     }
 
@@ -369,6 +374,7 @@ a {
         width: fit-content;
         .icon-only:focus {
             text-decoration: underline;
+            border-bottom: 0px;
         }
     }
 
@@ -441,29 +447,29 @@ h2, h3 {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 1.7em;
     font-weight: 500;
     color: $primary;
     line-height: 1.3em;
 }
 
 h2 {
-    font-size: 16px;
+    font-size: 1.14em;
     margin-top: 0px;
     margin-bottom: 10px;
 }
 
 h3 {
-    font-size: 14px;
+    font-size: 1em;
 }
 
 h4 {
-    font-size: 14px;
+    font-size: 1em;
     font-weight: 500;
 }
 
 p {
-    font-size: 14px;
+    font-size: 1em;
     line-height: 1.4em;
     &.additional-info {
         font-family: $font-primary;
@@ -489,7 +495,7 @@ p {
 }
 
 li {
-    font-size: 14px;
+    font-size: 1em;
     line-height: 1.4em;
     margin-bottom: 10px;
 }
@@ -562,7 +568,7 @@ header {
                 color: white;
             }
             .fal, .far {
-                font-size: 16px;
+                font-size: 1.14em;
                 margin: 0px 15px 0px 0px;
             }
             .far {
@@ -644,12 +650,12 @@ main {
         input.save {
             display: block;
             margin-left: auto;
-            margin-top: 20px;
+            margin-top: 3em;
         }
     }
 
     .selection {
-        font-size: 14px;
+        font-size: 1em;
     }
     .select2-selection__choice__remove {
         color: $danger !important;
@@ -658,7 +664,7 @@ main {
         display: none;
     }
     .select2-container--default, .select2-container {
-        width: -webkit-fill-available !important;
+        width: 100%;
         max-width: 500px;
         .select2-selection--single, .select2-selection--multiple {
             border: 1px solid $input;
@@ -684,7 +690,7 @@ main {
         .select2-search {
             padding-top: 9px;
             .select2-search__field {
-                font-size: 14px;
+                font-size: 1em;
                 &:focus {
                     outline: none;
                     text-decoration: underline;
@@ -692,7 +698,7 @@ main {
             }
         }
         .select2-results {
-            font-size: 14px;
+            font-size: 1em;
         }
     }
     select, .select2-selection--single, .select2-selection--multiple {
@@ -733,7 +739,7 @@ main {
                     -webkit-border-radius: 30px;
                     -moz-border-radius: 30px;
                     border-radius: 30px;
-                    font-size: 14px;
+                    font-size: 1em;
                     padding: 10px 60px 10px 20px;
                     border: 1px solid $medium-grey;
                     width: 100%;
@@ -747,7 +753,7 @@ main {
                     color: $primary;
                     font-family: $fontawesome;
                     font-weight: 600;
-                    font-size: 15px;
+                    font-size: 1.14em;
                     &:focus {
                         outline: none;
                         background-color: lighten($light-grey, 4%);
@@ -794,7 +800,6 @@ main {
             -moz-border-radius: 30px;
             border-radius: 30px;
             padding: 10px 25px;
-            font-size: 13px;
             line-height: 1.2em;
             right: 180px;
             transition: right 0.3s;
@@ -842,14 +847,14 @@ main {
                         margin-bottom: 10px;
                     }
                     legend, label {
-                        font-size: 14px;
+                        font-size: 1em;
                         font-weight: 500;
                         color: black;
                         padding: 0;
                     }
                     label, .checkbox-anchor {
                         display: block;
-                        font-size: 14px;
+                        font-size: 1em;
                         white-space: initial;
                         margin-bottom: 3px;
                     }
@@ -868,7 +873,7 @@ main {
                         -webkit-border-radius: 5px;
                         -moz-border-radius: 5px;
                         border-radius: 5px;
-                        font-size: 14px;
+                        font-size: 1em;
                         padding: 5px 10px;
                         border: 1px solid $medium-grey;
                         line-height: 1.4em;
@@ -899,7 +904,7 @@ main {
                             width: 55px;
                             padding: 5px 10px;
                             text-align: center;
-                            font-size: 13px;
+                            font-size: 0.92em;
                         }
                     }
                 }
@@ -972,7 +977,6 @@ main {
     table {
         // margin-top: 20px;
         border-collapse: collapse;
-        font-size: 13px;
         min-width: 600px;
         width: 99.9%;
         &.tablesorter-default .header,
@@ -1036,6 +1040,7 @@ main {
                 font-weight: 500;
                 white-space: nowrap;
                 padding-right: 10px;
+                font-size: 0.92em;
                 &:focus {
                     outline: none;
                     background-color: lighten($light-grey, 4%);
@@ -1066,10 +1071,12 @@ main {
                 padding: 10px;
                 &:not(.description) {
                     white-space: nowrap;
+                    font-size: 0.92em;
                 }
                 &.description {
                     width: 80%;
                     white-space: normal;
+                    font-size: 1em;
                     label {
                         cursor: pointer;
                     }
@@ -1187,7 +1194,6 @@ main {
             font-size: 1em;
             float: left;
             margin-top: 10px;
-            margin-top: 0.5em;
         }
         .action-buttons {
             float: right;
@@ -1196,7 +1202,6 @@ main {
     .form-header{
         margin-top: 70px;
         .breadcrumbs {
-            font-size: 13px;
             margin: 20px 0px;
             @include inline-list("\f0da");
             a {
@@ -1218,7 +1223,6 @@ main {
         }
 
         label {
-            font-size: 13px;
             display: block;
             // position: relative;
             input, select {
@@ -1240,7 +1244,7 @@ main {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 1em;
             padding: 10px;
             border: 1px solid $input;
             line-height: 1.4em;
@@ -1280,14 +1284,14 @@ main {
                     a   {
                         border-right: 1px solid $input;
                         border-bottom: 1px solid $input;
-                        font-size: 12px;
+                        font-size: 0.86em;
                         padding: 5px 12px;
                         &:hover, &:focus {
                             background-color: $light-grey;
                         }
                         &.richText-btn-icon {
                             font-weight: bold;
-                            font-size: 14px;
+                            font-size: 1em;
                         }
                     }
                 }
@@ -1354,6 +1358,7 @@ main {
                         align-items: center;
                         height: 100%;
                         justify-content: flex-end;
+                        overflow: hidden;
                         // margin-right: 60px;
                         .toggle-tab-button {
                             display: -webkit-box;
@@ -1362,6 +1367,7 @@ main {
                             display: flex;
                             align-items: center;
                             justify-content: center;
+                            height: 60px;
                             // position: absolute;
                             // top: 0;
                             // right: 0;
@@ -1405,7 +1411,7 @@ main {
                             grid-column-gap: 10px;
                             justify-content: center;
                             align-items: flex-start !important;
-                            font-size: 14px;
+                            font-size: 1em;
                         }
                         .group-title {
                             margin-bottom: 0;
@@ -1427,7 +1433,7 @@ main {
                             &:after {
                                 display: block;
                                 content: 'This field is required';
-                                font-size: 13px;
+                                font-size: 0.92em;
                                 color: $danger;
                             }
                         }
@@ -1507,7 +1513,7 @@ main {
                                 max-width: 300px;
                                 li {
                                     margin: 0;
-                                    font-size: 13px;
+                                    font-size: 0.92em;
                                     span {
                                         padding: 5px 13px;
                                         cursor: pointer;
@@ -1607,7 +1613,7 @@ main {
                     -moz-border-radius: 30px;
                     border-radius: 30px;
                     padding: 10px 25px;
-                    font-size: 13px;
+                    font-size: 0.92em;
                     white-space: nowrap;
                     display: block;
                     margin: 5px 0px;
@@ -1642,12 +1648,9 @@ main {
         .expand-collapse {
             text-align: right;
             margin-left: 1em;
-            button {
-                width: 120px;
-            }
         }
         div[class*='-level'] {
-            font-size: 14px;
+            font-size: 1em;
             position: relative; 
             &:not(.collections-level):before {
                 content: '';
@@ -1663,7 +1666,7 @@ main {
             }
         }
         .fieldset-header {
-            margin-bottom: 1.1em;
+            margin-bottom: 1em;
             display: grid;
             grid-template-columns: 0.01fr 1fr 500px;
             grid-gap: 0.4em;
@@ -1739,7 +1742,7 @@ main {
                 -webkit-border-radius: 30px;
                 -moz-border-radius: 30px;
                 border-radius: 30px;
-                font-size: 14px;
+                font-size: 1em;
                 padding: 10px 60px 10px 20px;
                 border: 1px solid $medium-grey;
                 width: 100%;
@@ -1817,7 +1820,7 @@ main {
         grid-template-columns: 1fr 1fr;
         grid-column-gap: 30px;
         justify-content: center;
-        font-size: 14px;
+        font-size: 1em;
         p {
             margin-bottom: 15px;
         }
@@ -1837,6 +1840,9 @@ main {
             label {
                 margin-top: 5px;
                 height: auto;
+            }
+            label span:first-of-type {
+                font-size: 0.92em;
             }
             select {
                 padding-right: 30px;
@@ -1919,7 +1925,7 @@ main {
             .modal-body {
                 margin-bottom: 30px;
                 p {
-                    font-size: 16px;
+                    font-size: 1.14em;
                     text-align: center;
                 }
             }
@@ -1996,7 +2002,7 @@ main {
         list-style: none;
         padding-left: 0;
         margin-top: 5px;
-        font-size: 13px;
+        font-size: 0.92em;
         color: $danger;
     }
 
@@ -2065,7 +2071,7 @@ main {
                     font-weight: 600;
                 }
                 .fa-caret-left, .fa-caret-right {
-                    font-size: 20px;
+                    font-size: 1.43em;
                 }
                 &:hover:not(.disabled), &:focus:not(.disabled) {
                     @include darken($primary);
@@ -2127,7 +2133,7 @@ footer {
     padding:10px;
     .select2-search__field{
         padding:10px;
-        font-size: 16px;
+        font-size: 1.14em;
     }   
 }
 
@@ -2267,6 +2273,13 @@ footer {
             }
         }
     }
+    main {
+        &#hierarchy {
+            .fieldset-header {
+                grid-template-columns: 0.01fr 1fr 400px;
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 970px) {
@@ -2287,6 +2300,14 @@ footer {
         animation: opacityChange 0.7s;
     }
     main {
+        &#hierarchy {
+            .fieldset-header {
+                grid-template-columns: 0.01fr 1fr 200px;
+                span.record-details {
+                    grid-template-columns:1fr;
+                }
+            }
+        }
         .two-column-table {
             display: block;
             #openseadragon1 {
@@ -2350,13 +2371,13 @@ footer {
                 label.mobile-only {
                     display: block;
                     color: $primary;
-                    font-size: 14px;
+                    font-size: 1em;
                     &:after {
                         content:'\f078';
                         font-family: $fontawesome;
                         font-weight: 600;
                         margin-left: 10px;
-                        font-size: 14px;
+                        font-size: 1em;
                         right: 0;
                     }
                 }
@@ -2389,8 +2410,8 @@ footer {
                         height: auto;
                         min-height: 60px;
                         h4 {
-                            font-size: 14px;
-                            margin-right: 60px;
+                            font-size: 1em;
+                            margin-right: 2em;
                         }
                     }
                     .fieldset-body {
@@ -2411,6 +2432,21 @@ footer {
 
 @media only screen and (max-width: 620px) {
     main {
+        &#hierarchy {
+            .fieldset-header {
+                grid-template-columns: 0.01fr auto;
+                span.record-details {
+                    display: none;
+                }
+            }
+            .fieldset-body {
+                margin-left: 17px;
+                
+            }
+            div[class*='-level']:not(.collections-level):before {
+                left: -4px;
+            }
+        }
         .header-fixed {
             top: auto;
             bottom: 0;
@@ -2424,6 +2460,11 @@ footer {
         }
         .form-header {
             margin-top: 70px;
+        }
+        .fieldset-header {
+            >div {
+                width: 100%;
+            }
         }
     }
     footer {
@@ -2442,7 +2483,7 @@ footer {
     }
     main {
         h1 {
-            font-size: 20px;
+            font-size: 1.43em;
             line-height: 1.4em;
         }
         .form-page {

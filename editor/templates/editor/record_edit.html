@@ -77,229 +77,228 @@
         </li>
       </ul>
     </div>
-
-    <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
-      {% with transcriptions=form.formsets.transcriptions %}
-      {% if transcriptions|length > 0 %}
-      <div class="form-section">
-        <fieldset id="side-by-side">
-          <div class="fieldset-header">
-            <h4>Transcription</h4>
-            <div>
-              <button class="toggle-tab-button transcription-toggle" onclick="toggleTab(this)"></button>
-            </div>
-          </div>
-          <div class="fieldset-body" id="transcription-div">
-            <div class="two-column-table" id="transcription-section">
-              <div id="openseadragon1" class="image">
-                  <div id="navigation-pane">
-                      <span class="nav-icon" id="zoom-in"></span>
-                      <span class="nav-icon" id="zoom-out"></span>
-                      <span class="nav-icon" id="default"></span>
-                      <span class="nav-icon" id="full-mode"></span>
-                  </div>
-              </div>
-              <div id="transcription">
-                {{ transcriptions.management_form }}
-              </div>
-            </div>
-            <div id="rte-pagination"></div>
-          </div>
-        </fieldset>
-      </div>
-      {% endif %}
-      {% endwith %}
-      <div class="form-section">
-        <h2>SUMMARY</h2>
-        <fieldset id="summary">
-          <div class="fieldset-header">
-            {% csrf_token %}
-            {% render_field form.uuid %}
-            {% render_field form.project %}
-            <h4>{{ record.references.all|join:", " }}</h4>
-            <div>
-              <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
-            </div>
-          </div>
-          <div class="fieldset-body expand">
-            <div class="two-column-table">
-              <div>
-                {% render_field form.references %}
-                {% render_field form.parent_series %}
-                {% render_field form.parent_file %}
-                <div class="formset">
-                  {% with origin_locations=form.formsets.origin_locations %}
-                  <div class="management_form">
-                    {{ origin_locations.management_form }}
-                  </div>
-                  <div class="fieldsets">
-                    {% for origin_location in origin_locations.forms %}
-                    {% include "./includes/origin_location_inline_form.html" with form=origin_location %}
-                    {% endfor %}
-                  </div>
-                  {% endwith %}
-                  <label class="button-link create">
-                    <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('origin_location', this)">Add location of originals
-                  </label>
-                </div>
-                <div class="formset">
-                  {% with related_materials=form.formsets.related_materials %}
-                  <h4 class="group-title">Related materials</h4>
-                  <div class="management_form">
-                    {{ related_materials.management_form }}
-                  </div>
-                  <div class="fieldsets">
-                    {% for related_material in related_materials.forms %}
-                    {% include "./includes/related_material_inline_form.html" with form=related_material %}
-                    {% endfor %}
-                  </div>
-                  {% endwith %}
-                  <label class="button-link create">
-                    <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('related_material', this)">Add related material
-                  </label>
-                </div>
-              </div>
-              <div>
-                {% render_field form.repository %}
-                <label>
-                  <span class="required">Archival level</span>
-                  <select name="archival-level" disabled="disabled">
-                    <option>{{ record.archival_level }}</option>
-                  </select>
-                </label>
-                {% render_field form.record_type %}
-                {% render_field form.url %}
-                {% render_field form.withheld %}
-                {% render_field form.publication_permission %}
-              </div>
-            </div>
-            {% render_field form.publications %}
-            <div class="two-column-table">
-              <div>
-                {% if is_admin %}
-                <label>
-                  <span class="required">Repository code</span>
-                  <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
-                </label>
-                {% endif %}
-                {% render_field form.rcin %}
-              </div>
-              <div>
-                {% render_field form.copyright_status %}
-              </div>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="form-section">
-        <h2>DESCRIPTION</h2>
-        <fieldset id="description">
-          <div class="fieldset-header">
-            <h4>{{ record.title | truncatewords:30 }}</h4>
-            <div>
-              <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
-            </div>
-          </div>
-          <div class="fieldset-body expand">
-            <div class="two-column-table">
-              <div>
-                {% render_field form.title %}
-                {% render_field form.creation_dates %}
-                <div class="two-column-table date">
-                  {% render_field form.start_date %}
-                  {% render_field form.end_date %}
-                </div>
-              </div>
-              <div>
-                {% render_field form.creators %}
-                {% render_field form.persons_as_relations %}
-                {% render_field form.creation_places %}
-                {% render_field form.places_as_relations %}
-              </div>
-            </div>
-            {% render_field form.description %}
-            <div class="two-column-table">
-              <div>
-                {% render_field form.languages %}
-                {% render_field form.physical_description %}
-              </div>
-              <div>
-                {% render_field form.extent %}
-                {% render_field form.provenance %}
-              </div>
-            </div>
-            {% render_field form.administrative_history %}
-            <div class="two-column-table">
-              <div>
-                {% render_field form.subjects %}
-                {% render_field form.places_as_subjects %}
-              </div>
-              <div>
-                {% render_field form.persons_as_subjects %}
-                {% render_field form.organisations_as_subjects %}
-              </div>
-            </div>
-            {% render_field form.notes %}
-            {% render_field form.arrangement %}
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="form-section">
-        <h2>ARCHIVAL RECORD DIGITAL RIGHTS STATEMENT</h2>
-
-        <fieldset>
-          <div class="fieldset-header">
-            <h4>Record ID: {{ record.pk }}</h4>
-            <div>
-              <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
-            </div>
-          </div>
-          <div class="fieldset-body expand">
-            <div class="two-column-table">
-              <div>
-                {% render_field form.language %}
-              </div>
-              <div>
-                {% render_field form.script %}
-              </div>
-            </div>
-            {% render_field form.rights_declaration %}
-            <div class="two-column-table">
-              <div>
-                {% render_field form.rights_declaration_citation %}
-              </div>
-              <div>
-                {% render_field form.rights_declaration_abbreviation %}
-              </div>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-      <div class="modal" id="log-modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2>Log comments</h2>
-            <!-- <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" /> -->
-            <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
-          </div>
-          <div class="modal-body">
-            <div class="two-column-table">
-              <div>
-                {% render_field form.publication_status %}
-              </div>
-            </div>
-            {% render_field log_form.comment %}
-          </div>
-          <div class="modal-footer">
-            <!-- <input type="submit" value="Save" class="save modal-submit" /> -->
-            <input type="submit" value="Save" class="save" />
+  </div>
+  <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
+    {% with transcriptions=form.formsets.transcriptions %}
+    {% if transcriptions|length > 0 %}
+    <div class="form-section">
+      <fieldset id="side-by-side">
+        <div class="fieldset-header">
+          <h4>Transcription</h4>
+          <div>
+            <button class="toggle-tab-button transcription-toggle" onclick="toggleTab(this)"></button>
           </div>
         </div>
+        <div class="fieldset-body" id="transcription-div">
+          <div class="two-column-table" id="transcription-section">
+            <div id="openseadragon1" class="image">
+                <div id="navigation-pane">
+                    <span class="nav-icon" id="zoom-in"></span>
+                    <span class="nav-icon" id="zoom-out"></span>
+                    <span class="nav-icon" id="default"></span>
+                    <span class="nav-icon" id="full-mode"></span>
+                </div>
+            </div>
+            <div id="transcription">
+              {{ transcriptions.management_form }}
+            </div>
+          </div>
+          <div id="rte-pagination"></div>
+        </div>
+      </fieldset>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="form-section">
+      <h2>SUMMARY</h2>
+      <fieldset id="summary">
+        <div class="fieldset-header">
+          {% csrf_token %}
+          {% render_field form.uuid %}
+          {% render_field form.project %}
+          <h4>{{ record.references.all|join:", " }}</h4>
+          <div>
+            <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.references %}
+              {% render_field form.parent_series %}
+              {% render_field form.parent_file %}
+              <div class="formset">
+                {% with origin_locations=form.formsets.origin_locations %}
+                <div class="management_form">
+                  {{ origin_locations.management_form }}
+                </div>
+                <div class="fieldsets">
+                  {% for origin_location in origin_locations.forms %}
+                  {% include "./includes/origin_location_inline_form.html" with form=origin_location %}
+                  {% endfor %}
+                </div>
+                {% endwith %}
+                <label class="button-link create">
+                  <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('origin_location', this)">Add location of originals
+                </label>
+              </div>
+              <div class="formset">
+                {% with related_materials=form.formsets.related_materials %}
+                <h4 class="group-title">Related materials</h4>
+                <div class="management_form">
+                  {{ related_materials.management_form }}
+                </div>
+                <div class="fieldsets">
+                  {% for related_material in related_materials.forms %}
+                  {% include "./includes/related_material_inline_form.html" with form=related_material %}
+                  {% endfor %}
+                </div>
+                {% endwith %}
+                <label class="button-link create">
+                  <input type="button" class="icon-only" value="&#xf067;" onclick="addEmptyForm('related_material', this)">Add related material
+                </label>
+              </div>
+            </div>
+            <div>
+              {% render_field form.repository %}
+              <label>
+                <span class="required">Archival level</span>
+                <select name="archival-level" disabled="disabled">
+                  <option>{{ record.archival_level }}</option>
+                </select>
+              </label>
+              {% render_field form.record_type %}
+              {% render_field form.url %}
+              {% render_field form.withheld %}
+              {% render_field form.publication_permission %}
+            </div>
+          </div>
+          {% render_field form.publications %}
+          <div class="two-column-table">
+            <div>
+              {% if is_admin %}
+              <label>
+                <span class="required">Repository code</span>
+                <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
+              </label>
+              {% endif %}
+              {% render_field form.rcin %}
+            </div>
+            <div>
+              {% render_field form.copyright_status %}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="form-section">
+      <h2>DESCRIPTION</h2>
+      <fieldset id="description">
+        <div class="fieldset-header">
+          <h4>{{ record.title | truncatewords:30 }}</h4>
+          <div>
+            <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.title %}
+              {% render_field form.creation_dates %}
+              <div class="two-column-table date">
+                {% render_field form.start_date %}
+                {% render_field form.end_date %}
+              </div>
+            </div>
+            <div>
+              {% render_field form.creators %}
+              {% render_field form.persons_as_relations %}
+              {% render_field form.creation_places %}
+              {% render_field form.places_as_relations %}
+            </div>
+          </div>
+          {% render_field form.description %}
+          <div class="two-column-table">
+            <div>
+              {% render_field form.languages %}
+              {% render_field form.physical_description %}
+            </div>
+            <div>
+              {% render_field form.extent %}
+              {% render_field form.provenance %}
+            </div>
+          </div>
+          {% render_field form.administrative_history %}
+          <div class="two-column-table">
+            <div>
+              {% render_field form.subjects %}
+              {% render_field form.places_as_subjects %}
+            </div>
+            <div>
+              {% render_field form.persons_as_subjects %}
+              {% render_field form.organisations_as_subjects %}
+            </div>
+          </div>
+          {% render_field form.notes %}
+          {% render_field form.arrangement %}
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="form-section">
+      <h2>ARCHIVAL RECORD DIGITAL RIGHTS STATEMENT</h2>
+
+      <fieldset>
+        <div class="fieldset-header">
+          <h4>Record ID: {{ record.pk }}</h4>
+          <div>
+            <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
+          </div>
+        </div>
+        <div class="fieldset-body expand">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.language %}
+            </div>
+            <div>
+              {% render_field form.script %}
+            </div>
+          </div>
+          {% render_field form.rights_declaration %}
+          <div class="two-column-table">
+            <div>
+              {% render_field form.rights_declaration_citation %}
+            </div>
+            <div>
+              {% render_field form.rights_declaration_abbreviation %}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="modal" id="log-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Log comments</h2>
+          <!-- <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" /> -->
+          <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
+        </div>
+        <div class="modal-body">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.publication_status %}
+            </div>
+          </div>
+          {% render_field log_form.comment %}
+        </div>
+        <div class="modal-footer">
+          <!-- <input type="submit" value="Save" class="save modal-submit" /> -->
+          <input type="submit" value="Save" class="save" />
+        </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
   {% include "./includes/delete_modal.html" with delete_url=delete_url %}
   <div id="empty_forms" style="display: none;">
     {% comment %}Include an empty form for each sub-form on the page,
