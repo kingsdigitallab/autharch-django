@@ -1,5 +1,10 @@
 {% extends "./base.html" %}
 {% load editor_form_tags %}
+
+{% block extra_head %}
+{{ form_media }}
+{% endblock extra_head %}
+
 {% block main %}
 <main>
   {% block page_header %}

@@ -4,7 +4,7 @@ from authority.models import Entity, Identity
 from editor.forms import EntityEditForm
 from jargon.models import EntityType, NamePartType
 
-from languages_plus.models import Language
+from controlled_vocabulary.utils import search_term_or_none
 from script_codes.models import Script
 
 
@@ -21,10 +21,7 @@ class ContainerModelFormTestCase(TestCase):
         cls.entity_type1.save()
         cls.entity_type2 = EntityType(title='corporateBody')
         cls.entity_type2.save()
-        cls.language1 = Language(
-            iso_639_1='en', name_en='English', name_native='English',
-            family='sigh', iso_639_2T='eng', iso_639_2B='eng')
-        cls.language1.save()
+        cls.language1 = search_term_or_none('iso639-2', 'eng', exact=True)
         cls.script1 = Script.objects.all()[0]
         cls.name_part_type1 = NamePartType(title='Stage name')
         cls.name_part_type1.save()

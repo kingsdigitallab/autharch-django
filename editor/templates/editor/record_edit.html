@@ -2,6 +2,10 @@
 {% load editor_form_tags %}
 {% load compress static %}
 
+{% block extra_head %}
+{{ form_media }}
+{% endblock extra_head %}
+
 {% block main %}
 <main>
   {% block page_header %}
@@ -38,7 +42,6 @@
         <li>{% if current_section == 'records' %}<a href="{% url 'editor:records-list' %}" class="dotted-underline">Archival records</a>{% else %}<a href="{% url 'editor:deleted-list' %}" class="dotted-underline">Deleted</a>{% endif %}</li>
       </ul>
     </div>
-
     {% if form.errors %}
     <div class="error-notifications">
       {% for field, errors in form.errors.items %}

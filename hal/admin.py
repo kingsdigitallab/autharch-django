@@ -1,27 +1,17 @@
 from countries_plus.models import Country
 from django.contrib import admin
 from geonames_place.models import Place
-from languages_plus.admin import LanguageAdmin as LanguagePlusAdmin
-from languages_plus.models import CultureCode, Language
 
 admin.site.unregister(Country)
-admin.site.unregister(CultureCode)
-admin.site.unregister(Language)
 
 
 @admin.register(Country)
-@admin.register(CultureCode)
 class ThirdPartyModelsAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         if request.user.is_superuser:
             return super().get_model_perms(request)
 
         return {}
-
-
-@admin.register(Language)
-class LanguageAdmin(ThirdPartyModelsAdmin):
-    search_fields = LanguagePlusAdmin.search_fields
 
 
 admin.site.unregister(Place)

@@ -44,7 +44,7 @@ class ArchivalRecordIndex:
         return str(obj)
 
     def prepare_languages(self, obj):
-        return list(obj.languages.distinct().values_list('name_en', flat=True))
+        return list(obj.languages.distinct().values_list('label', flat=True))
 
     def prepare_ra_references(self, obj):
         return list(obj.references.filter(source=RA_REFERENCE_SOURCE)

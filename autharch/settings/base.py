@@ -114,6 +114,7 @@ INSTALLED_APPS += [
     'autharch.apps.AuthArchAdminConfig',
     'jargon.apps.JargonConfig',
     'kdl_wagtail.core',
+    'controlled_vocabulary',
     'languages_plus',
     'media.apps.MediaConfig',
     'nested_admin',
@@ -351,6 +352,13 @@ REST_FRAMEWORK = {
 
 # Geonames.
 GEONAMES_MAX_RESULTS = 20
+
+
+# Controlled Vocabularies.
+# List of import paths to vocabularies lookup classes.
+CONTROLLED_VOCABULARY_VOCABULARIES = [
+    'controlled_vocabulary.vocabularies.iso639_2',
+]
 
 
 # Haystack.

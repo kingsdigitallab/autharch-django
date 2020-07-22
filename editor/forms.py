@@ -134,6 +134,13 @@ class ContainerModelForm(forms.ModelForm):
         return super().is_valid() and \
             all(formset.is_valid() for formset in self.formsets.values())
 
+    @property
+    def media(self):
+        media = super().media
+        for formset in self.formsets.values():
+            media += formset.media
+        return media
+
     def save(self, commit=True):
         result = super().save(commit)
         for formset in self.formsets.values():

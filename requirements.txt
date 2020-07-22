@@ -3,6 +3,7 @@ coreapi
 django-adminactions
 django-ckeditor
 django-compressor
+django-controlled-vocabulary
 django-cors-headers
 django-extensions
 django-filter
@@ -10,7 +11,6 @@ django-geonames-place>=0.6.0
 django-haystack
 django-kdl-ldap
 django-kdl-wagtail
-django-languages-plus
 django-libsass
 django-model-utils
 django-nested-admin

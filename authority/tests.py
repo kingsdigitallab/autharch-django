@@ -1,17 +1,15 @@
 from authority.models import Entity, Identity, NameEntry
+from controlled_vocabulary.utils import search_term_or_none
 from django.test import TestCase
 from django.utils import timezone
 from jargon.models import EntityType
-from languages_plus.models import Language
 from script_codes.models import Script
 
 
 class TestEntity(TestCase):
 
     def setUp(self):
-        self.language, _ = Language.objects.get_or_create(
-            iso_639_1='en', name_en='English', name_native='English',
-            family='Indo-European')
+        self.language = search_term_or_none('iso639-2', 'eng', exact=True)
 
         self.script, _ = Script.objects.get_or_create(
             code='Latn', number=215, name='Latin')

@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('editor/', include('editor.urls')),
     path('geonames/', include('geonames_place.urls')),
+    path('vocabularies/', include('controlled_vocabulary.urls')),
 
     path('api/_docs/', include_docs_urls(
         title='AuthArch API Documentation', permission_classes=[])),

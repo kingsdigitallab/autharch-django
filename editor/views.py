@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 from haystack.generic_views import FacetedSearchView, SearchView
 from haystack.query import SearchQuerySet
 
-from languages_plus.models import Language
+from controlled_vocabulary.utils import search_term_or_none
 from script_codes.models import Script
 
 import reversion
@@ -382,7 +382,7 @@ def entity_create(request):
             entity = Entity()
             entity.entity_type = form.cleaned_data['entity_type']
             entity.save()
-            language = Language.objects.filter(name_en='English').first()
+            language = search_term_or_none('iso639-2', 'eng', exact=True)
             script = Script.objects.get(name='Latin')
             ms = MaintenanceStatus.objects.get(title='new')
             ps = PublicationStatus.objects.get(title='inProcess')
@@ -484,6 +484,7 @@ def entity_edit(request, entity_id):
         'entity': entity,
         'form_errors': form_errors,
         'form': form,
+        'form_media': form.media,
         'is_deleted': is_deleted,
         'is_corporate_body': is_corporate_body,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
@@ -621,6 +622,7 @@ def record_edit(request, record_id):
         'delete_url': reverse('editor:record-delete',
                               kwargs={'record_id': record_id}),
         'form': form,
+        'form_media': form.media,
         'images': record.transcription_images.all(),
         'is_admin': is_admin,
         'is_deleted': is_deleted,

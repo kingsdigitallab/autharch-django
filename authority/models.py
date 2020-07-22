@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.db import models
 
+from controlled_vocabulary.models import ControlledTermField
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (
     EntityRelationType, EntityType, Function, Gender, MaintenanceStatus,
     NamePartType, PublicationStatus, ResourceRelationType
 )
-from languages_plus.models import Language
 from model_utils.models import TimeStampedModel
 import reversion
 from script_codes.models import Script
@@ -41,9 +41,8 @@ class DateRangeMixin(models.Model):
 
 
 class LanguageScriptMixin(models.Model):
-    language = models.ForeignKey(
-        Language, on_delete=models.PROTECT,
-        help_text=constants.LANGUAGE_HELP)
+    language = ControlledTermField(['iso639-2'], on_delete=models.PROTECT,
+                                   help_text=constants.LANGUAGE_HELP)
     script = models.ForeignKey(Script, on_delete=models.PROTECT)
 
     class Meta:
@@ -195,7 +194,8 @@ class Place(DateRangeMixin, TimeStampedModel):
 
     place = models.ForeignKey(GeoPlace, on_delete=models.CASCADE)
     address = models.TextField(blank=True)
-    role = models.CharField(blank=True, max_length=256, help_text=constants.PLACE_ROLE_HELP)
+    role = models.CharField(blank=True, max_length=256,
+                            help_text=constants.PLACE_ROLE_HELP)
 
 
 @reversion.register()
@@ -289,7 +289,9 @@ class Relation(DateRangeMixin, TimeStampedModel):
         Entity, verbose_name="Related person or corporate body",
         on_delete=models.CASCADE, null=True,
         related_name='related_to_relations')
-    relation_detail = models.TextField(verbose_name="Description", help_text=constants.RELATION_DESCRIPTION_HELP)
+    relation_detail = models.TextField(
+        verbose_name="Description",
+        help_text=constants.RELATION_DESCRIPTION_HELP)
     place = models.ForeignKey(
         GeoPlace, verbose_name="Place related to relationship", blank=True,
         null=True, on_delete=models.CASCADE)
@@ -325,9 +327,9 @@ class Control(TimeStampedModel):
     rights_declaration_citation = models.URLField(
         blank=True, default=settings.AUTHORITY_RIGHTS_DECLARATION_CITATION)
 
-    language = models.ForeignKey(
-        Language, on_delete=models.PROTECT,
-        help_text=constants.LANGUAGE_HELP, verbose_name="Record language")
+    language = ControlledTermField(
+        ['iso639-2'], on_delete=models.PROTECT,
+        help_text=constants.LANGUAGE_HELP, verbose_name='Record language')
     script = models.ForeignKey(Script, on_delete=models.PROTECT,
                                verbose_name="Record script")
 

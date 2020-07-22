@@ -4,12 +4,13 @@ from django.db import models
 import reversion
 from authority.fields import PartialDateField
 from authority.models import Entity
+from controlled_vocabulary.models import (
+    ControlledTermField, ControlledTermsField)
 from geonames_place.models import Place
 from jargon.models import (
     Function, MaintenanceStatus, PublicationStatus, RecordType,
     ReferenceSource, Repository
 )
-from languages_plus.models import Language
 from media.models import Media
 from model_utils.models import TimeStampedModel
 from polymorphic.models import PolymorphicModel
@@ -79,8 +80,8 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
                                    help_text=constants.DESCRIPTION_HELP)
     notes = models.TextField(blank=True, null=True,
                              help_text=constants.NOTES_HELP)
-    languages = models.ManyToManyField(Language, blank=True,
-                                       help_text=constants.LANGUAGES_HELP)
+    languages = ControlledTermsField(['iso639-2'], blank=True,
+                                     help_text=constants.LANGUAGES_HELP)
     extent = models.CharField(max_length=1024, null=True,
                               help_text=constants.EXTENT_HELP)
 
@@ -113,9 +114,9 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
         MaintenanceStatus, on_delete=models.PROTECT)
     publication_status = models.ForeignKey(
         PublicationStatus, on_delete=models.PROTECT)
-    language = models.ForeignKey(Language, on_delete=models.PROTECT,
-                                 related_name='record_control_languages',
-                                 verbose_name="Record language")
+    language = ControlledTermField(['iso639-2'], on_delete=models.PROTECT,
+                                   related_name='record_control_languages',
+                                   verbose_name="Record language")
     script = models.ForeignKey(Script, on_delete=models.PROTECT,
                                related_name='record_control_scripts',
                                verbose_name="Record script")
