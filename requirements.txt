@@ -11,6 +11,7 @@ django-geonames-place>=0.6.0
 django-haystack
 django-kdl-ldap
 django-kdl-wagtail
+django-languages-plus
 django-libsass
 django-model-utils
 django-nested-admin
