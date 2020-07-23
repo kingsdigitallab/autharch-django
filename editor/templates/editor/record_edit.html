@@ -83,6 +83,7 @@
   </div>
   <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
     {% with transcriptions=form.formsets.transcriptions %}
+    {{ transcriptions.management_form }}
     {% if transcriptions|length > 0 %}
     <div class="form-section">
       <fieldset id="side-by-side">
@@ -103,7 +104,6 @@
                 </div>
             </div>
             <div id="transcription">
-              {{ transcriptions.management_form }}
             </div>
           </div>
           <div id="rte-pagination"></div>
