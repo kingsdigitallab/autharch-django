@@ -371,31 +371,39 @@ function goToTranscription(i) {
 
 function addDuplicate() {
   event.preventDefault();
-  if ($('#duplicates-search-field').val() != '') {
     let record = {'id': 156, 'entity_title': '[entity_title]', 'entity_type': '[entity_type]', 'publication_status': '[publication_status]', 'updated_date': '[date_updated]', 'updated_by': '[username]'};
-    $('#duplicates-table tbody').append(`
-      <tr>
-        <td class="button-cell primary-cell">
-            <label>
-                <input type="radio" value="`+record['id']+`" name="primary_record"/>Primary record
-            </label>
-        </td>
-        <td class="duplicate-cell">
-            <input type="radio" id="duplicate_`+record['id']+`" name="duplicate_`+record['id']+`" value="true"/>
-            <label for="duplicate_`+record['id']+`" class="disabled">Merge with primary</label>
-            <input type="radio" id="not_duplicate_`+record['id']+`" name="duplicate_`+record['id']+`" value="false"/>
-            <label for="not_duplicate_`+record['id']+`" class="disabled">Not related to primary</label>
-        </td>
-        <td>Record ID: <span class="highlight">`+record['id']+`</span></td>
-        <td class="description">
-            <a href="/editor/entities/`+record['id']+`" target="_blank">`+record['entity_title']+`</a><br>
-            Type: `+record['entity_type']+` | Publication status: `+record['publication_status']+` | Updated: `+record['updated_date']+` by `+record['updated_by']+`
-        </td>
-      </tr>
-    `)
-  }
-  
-
+    let exists = false;
+    $('#duplicates-search-form-notification').remove();
+    $('input:radio[name="primary_record"]').each(function() {
+      if ($(this).val() == record.id) {
+        exists = true;
+      }
+    })
+    if (!exists) {
+      $('#duplicates-table tbody').append(`
+        <tr>
+          <td class="button-cell primary-cell">
+              <label>
+                  <input type="radio" value="`+record.id+`" name="primary_record"/>Primary record
+              </label>
+          </td>
+          <td class="duplicate-cell">
+              <input type="radio" id="duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="true"/>
+              <label for="duplicate_`+record.id+`" class="disabled">Merge with primary</label>
+              <input type="radio" id="not_duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="false"/>
+              <label for="not_duplicate_`+record.id+`" class="disabled">Not related to primary</label>
+          </td>
+          <td>Record ID: <span class="highlight">`+record.id+`</span></td>
+          <td class="description">
+              <a href="/editor/entities/`+record.id+`" target="_blank">`+record.entity_title+`</a><br>
+              Type: `+record.entity_type+` | Publication status: `+record.publication_status+` | Updated: `+record.updated_date+` by `+record.updated_by+`
+          </td>
+        </tr>
+      `);
+      $('#duplicates-search-form').after('<div id="duplicates-search-form-notification" class="success-notification">The record ' + record.id + ' has been added to the table.</div>');
+    } else {
+      $('#duplicates-search-form').after('<div id="duplicates-search-form-notification" class="error-notification">The record ' + record.id + ' is already included in the table.</div>');
+    }
 }
 
 // when the pagination button in full screen mode is clicked, 

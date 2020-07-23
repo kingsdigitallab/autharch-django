@@ -70,7 +70,7 @@
   <div class="subitems">
     <ul>
       <li>Type: <span class="highlight">{{ entity.entity_type }}</span></li>
-      <!-- TODO: display only if duplicates were detected and only to moderators and admins -->
+      <!-- TODO: display only to moderators and admins -->
       <li>
         <a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}">
           <i class="fal fa-copy"></i>
