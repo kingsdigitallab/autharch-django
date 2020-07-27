@@ -43,7 +43,7 @@
       </ul>
     </div>
     {% if form.errors %}
-    <div class="error-notifications">
+    <div class="error-notification">
       {% for field, errors in form.errors.items %}
       <h4>{{ field }}</h4>
       <p>{% for error in errors %}{{ error }} {% endfor %}</p>

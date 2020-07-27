@@ -575,7 +575,7 @@ class ArchivalRecordEditForm(ContainerModelForm):
             attrs=SEARCH_SELECT_ATTRS))
     ra_references = forms.models.ModelMultipleChoiceField(
         queryset=Reference.objects.filter(source__title='RA'),
-        label='References', widget=forms.SelectMultiple(
+        label='RA References', widget=forms.SelectMultiple(
             attrs=SEARCH_SELECT_ATTRS))
 
     disabled_fields = {

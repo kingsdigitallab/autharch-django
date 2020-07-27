@@ -47,8 +47,7 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     repository = models.ForeignKey(Repository, on_delete=models.CASCADE,
                                    help_text=constants.REPOSITORY_HELP)
 
-    references = models.ManyToManyField(Reference, blank=True,
-                                        help_text=constants.REFERENCES_HELP)
+    references = models.ManyToManyField(Reference, blank=True)
 
     title = models.CharField(max_length=1024, help_text=constants.TITLE_HELP)
 
