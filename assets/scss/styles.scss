@@ -2046,35 +2046,35 @@ main {
         }
     }
 
-    input:invalid {
-        border: 1px solid $danger !important;
-        border-left: 5px solid $danger !important;
-        background-color: lighten($danger, 60%);
-        height: 100%;
-    }
+    // input:invalid {
+    //     border: 1px solid $danger !important;
+    //     border-left: 5px solid $danger !important;
+    //     background-color: lighten($danger, 60%);
+    //     height: 100%;
+    // }
 
-    select:invalid {
-        border: 1px solid $danger !important;
-        border-left: 5px solid $danger !important;
-        background-color: lighten($danger, 60%);
-        background-image: linear-gradient(45deg, transparent 50%, $primary 50%), linear-gradient(135deg, $primary 50%, transparent 50%) !important;
-        background-position: calc(100% - 20px) calc(1.1em + 2px), calc(100% - 15px) calc(1.1em + 2px) !important;
-        background-size: 5px 5px, 5px 5px !important;
-        background-repeat: no-repeat !important;
-        height: 100%;
-        + .select2 {
-            .select2-selection--single, .select2-selection--multiple {
-                border: 1px solid $danger;
-                border-left: 5px solid $danger;
-                background-color: lighten($danger, 60%);
-                background-image: linear-gradient(45deg, transparent 50%, $primary 50%), linear-gradient(135deg, $primary 50%, transparent 50%) !important;
-                background-position: calc(100% - 20px) calc(1.1em + 2px), calc(100% - 15px) calc(1.1em + 2px) !important;
-                background-size: 5px 5px, 5px 5px !important;
-                background-repeat: no-repeat !important;
-                height: 100%;
-            }
-        }
-    }
+    // select:invalid {
+    //     border: 1px solid $danger !important;
+    //     border-left: 5px solid $danger !important;
+    //     background-color: lighten($danger, 60%);
+    //     background-image: linear-gradient(45deg, transparent 50%, $primary 50%), linear-gradient(135deg, $primary 50%, transparent 50%) !important;
+    //     background-position: calc(100% - 20px) calc(1.1em + 2px), calc(100% - 15px) calc(1.1em + 2px) !important;
+    //     background-size: 5px 5px, 5px 5px !important;
+    //     background-repeat: no-repeat !important;
+    //     height: 100%;
+    //     + .select2 {
+    //         .select2-selection--single, .select2-selection--multiple {
+    //             border: 1px solid $danger;
+    //             border-left: 5px solid $danger;
+    //             background-color: lighten($danger, 60%);
+    //             background-image: linear-gradient(45deg, transparent 50%, $primary 50%), linear-gradient(135deg, $primary 50%, transparent 50%) !important;
+    //             background-position: calc(100% - 20px) calc(1.1em + 2px), calc(100% - 15px) calc(1.1em + 2px) !important;
+    //             background-size: 5px 5px, 5px 5px !important;
+    //             background-repeat: no-repeat !important;
+    //             height: 100%;
+    //         }
+    //     }
+    // }
 
     .errorlist {
         list-style: none;

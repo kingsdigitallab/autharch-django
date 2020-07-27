@@ -572,7 +572,7 @@ class ArchivalRecordEditForm(ContainerModelForm):
     calm_references = forms.models.ModelMultipleChoiceField(
         queryset=Reference.objects.filter(source__title='CALM'),
         label='CALM References', widget=forms.SelectMultiple(
-            attrs=SEARCH_SELECT_ATTRS))
+            attrs=SEARCH_SELECT_ATTRS), required=False)
     ra_references = forms.models.ModelMultipleChoiceField(
         queryset=Reference.objects.filter(source__title='RA'),
         label='RA References', widget=forms.SelectMultiple(
