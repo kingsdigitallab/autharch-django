@@ -11,7 +11,7 @@ from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import (
     ArchivalRecord, ArchivalRecordTranscription, Collection, File, Item,
-    OriginLocation, RelatedMaterialReference, Series
+    OriginLocation, Reference, RelatedMaterialReference, Series
 )
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
@@ -568,30 +568,45 @@ class ArchivalRecordEditForm(ContainerModelForm):
     change.
 
     """
+
+    calm_references = forms.models.ModelMultipleChoiceField(
+        queryset=Reference.objects.filter(source__title='CALM'),
+        label='CALM References', widget=forms.SelectMultiple(
+            attrs=SEARCH_SELECT_ATTRS))
+    ra_references = forms.models.ModelMultipleChoiceField(
+        queryset=Reference.objects.filter(source__title='RA'),
+        label='References', widget=forms.SelectMultiple(
+            attrs=SEARCH_SELECT_ATTRS))
+
     disabled_fields = {
-        EditorProfile.ADMIN: ['maintenance_status', 'parent_collection',
-                              'parent_file', 'parent_series'],
+        EditorProfile.ADMIN: [
+            'calm_references', 'maintenance_status', 'parent_collection',
+            'parent_file', 'parent_series', 'ra_references'],
         EditorProfile.MODERATOR: [
             'arrangement', 'extent', 'maintenance_status', 'parent_collection',
             'parent_file', 'parent_series', 'physical_description',
-            'provenance', 'publication_permission', 'rcin', 'record_type',
-            'references', 'repository', 'rights_declaration',
+            'provenance', 'publication_permission', 'ra_references', 'rcin',
+            'record_type', 'repository', 'rights_declaration',
             'rights_declaration_citation', 'withheld'
         ],
         EditorProfile.EDITOR: [
             'arrangement', 'extent', 'maintenance_status', 'parent_collection',
             'parent_file', 'parent_series', 'physical_description',
             'provenance', 'publication_permission', 'publication_status',
-            'rcin', 'record_type', 'references', 'repository',
+            'ra_references', 'rcin', 'record_type', 'repository',
             'rights_declaration', 'rights_declaration_citation', 'withheld'
         ],
     }
 
     # Fields visible only to admin users.
-    private_fields = ['copyright_status', 'rights_declaration_abbreviation']
+    private_fields = ['calm_references', 'copyright_status',
+                      'rights_declaration_abbreviation']
 
     def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
         super().__init__(*args, **kwargs)
+        # We are displaying RA and CALM references separately, so
+        # remove the field matching the model.
+        del self.fields['references']
         if editor_role != EditorProfile.ADMIN:
             for field in self.private_fields:
                 try:
@@ -612,6 +627,11 @@ class ArchivalRecordEditForm(ContainerModelForm):
                 title='inProcess')
             self.fields['publication_status'].widget = forms.Select(
                 choices=[(in_process_status.pk, 'inProcess')])
+        references = self.instance.references.all()
+        self.fields['calm_references'].initial = references.filter(
+            source__title='CALM')
+        self.fields['ra_references'].initial = references.filter(
+            source__title='RA')
 
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
@@ -635,7 +655,6 @@ class ArchivalRecordEditForm(ContainerModelForm):
     class Meta:
         exclude = []
         widgets = {
-            'references': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
             'administrative_history': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'arrangement': forms.Textarea(attrs={'rows': 4}),
             'creation_places': PlaceSelectMultiple(),

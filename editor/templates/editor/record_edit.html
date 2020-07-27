@@ -119,7 +119,7 @@
           {% csrf_token %}
           {% render_field form.uuid %}
           {% render_field form.project %}
-          <h4>{{ record.references.all|join:", " }}</h4>
+          <h4>{{ ra_references|join:", " }}</h4>
           <div>
             <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
           </div>
@@ -127,7 +127,8 @@
         <div class="fieldset-body expand">
           <div class="two-column-table">
             <div>
-              {% render_field form.references %}
+              {% render_field form.ra_references %}
+              {% render_field form.calm_references %}
               {% render_field form.parent_series %}
               {% render_field form.parent_file %}
               <div class="formset">

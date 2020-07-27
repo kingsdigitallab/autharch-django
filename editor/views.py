@@ -19,8 +19,8 @@ from reversion.models import Revision, Version
 from reversion.views import create_revision
 
 from archival.models import (
-    ArchivalRecord, ArchivalRecordTranscription, Collection, Series, File,
-    Item)
+    ArchivalRecord, ArchivalRecordTranscription, Collection, File, Item,
+    Series)
 from authority.models import Control, Entity
 from jargon.models import (
     CollaborativeWorkspaceEditorType as CWEditorType, EditingEventType,
@@ -309,6 +309,9 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         # search results.
         start_dates = ArchivalRecord.objects.exclude(
             start_date='').values_list('start_date', flat=True)
+        if len(start_dates) == 0:
+            kwargs.update({'max_year': None, 'min_year': None})
+            return kwargs
         min_year = sorted(start_dates, key=lambda x: x[:4])[0][:4]
         end_dates = ArchivalRecord.objects.exclude(end_date='').values_list(
             'end_date', flat=True)
@@ -591,6 +594,8 @@ def record_edit(request, record_id):
     saved = request.GET.get('saved', False)
     current_section = 'records'
     is_deleted = False
+    ra_references = record.references.filter(source__title='RA').values_list(
+        'unitid', flat=True)
     if record.maintenance_status == MaintenanceStatus.objects.get(
             title='deleted'):
         current_section = 'deleted'
@@ -628,6 +633,7 @@ def record_edit(request, record_id):
         'is_deleted': is_deleted,
         'last_revision': Version.objects.get_for_object(record)[0].revision,
         'log_form': log_form,
+        'ra_references': ra_references,
         'record': record,
         'reverted': reverted,
         'saved': saved,
