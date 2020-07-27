@@ -3,7 +3,7 @@ coreapi
 django-adminactions
 django-ckeditor
 django-compressor
-django-controlled-vocabulary
+django-controlled-vocabulary>=0.8
 django-cors-headers
 django-extensions
 django-filter
