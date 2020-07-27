@@ -1,12 +1,15 @@
 import logging
 
+from django.db import transaction
+
 import pandas as pd
+
 from archival.models import (Item, Project)
 from authority.models import Entity
+from controlled_vocabulary.utils import search_term_or_none
 from django.core.management.base import BaseCommand, CommandError
-from jargon.models import (PublicationStatus, EntityType,
+from jargon.models import (MaintenanceStatus, PublicationStatus, EntityType,
                            Repository, RecordType)
-from languages_plus.models import Language
 from script_codes.models import Script
 import datetime
 import re
@@ -18,7 +21,7 @@ class Command(BaseCommand):
     logger = logging.getLogger(__name__)
 
     delim = 'QQQQQ'
-    language = Language.objects.get(name_en='English')
+    language = search_term_or_none('iso639-2', 'eng', exact=True)
     script = Script.objects.get(name='Latin')
     project, _ = Project.objects.get_or_create(
         title='Shakespeare in the Royal Collections',
@@ -31,6 +34,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('spreadsheet_path', nargs=1, type=str)
 
+    @transaction.atomic
     def handle(self, *args, **options):
         path = options['spreadsheet_path'][0]
 
@@ -44,6 +48,7 @@ class Command(BaseCommand):
 
         for i, row in df.iterrows():
             self._import_row(row)
+        raise Exception
 
     def _import_row(self, row):
 
@@ -51,6 +56,9 @@ class Command(BaseCommand):
         rcin = 'RCIN {}'.format(self._obj_or_none(
             row, 'Inventory Number (RCIN)'))
         uuid = 'sharc_{}'.format(rcin)
+        if Item.objects.filter(uuid=uuid).count() > 0:
+            self.stdout.write('Skipping duplicate.')
+            return
         category = self._obj_or_none(row, 'Category')
         location = self._obj_or_none(row, 'Location')
         title = self._obj_or_none(row, 'Short Title')
@@ -117,6 +125,10 @@ class Command(BaseCommand):
         ps, _ = PublicationStatus.objects.get_or_create(
             title='published')
         obj.publication_status = ps
+        ms, _ = MaintenanceStatus.objects.get_or_create(title='new')
+        obj.maintenance_status = ms
+        obj.language = self.language
+        obj.script = self.script
         obj.rights_declaration = """
             <p>
             Images: © HM Queen Elizabeth II - <a
@@ -161,12 +173,16 @@ class Command(BaseCommand):
 
         # Associated people -> persons as relations
         for assocpers in associated_people:
+            name = re.sub(r'\(.*\)', '', assocpers)
             a, _ = Entity.get_or_create_by_display_name(
-                re.sub(r'\(.*\)', '', assocpers), self.language, self.script,
+                name, self.language, self.script,
                 self.project)
             if _:
                 a.project = self.project
                 a.save()
+            if a is None:
+                self.stderr.write('Failed creating entity "{}" for {}.'.format(
+                    name, rcin))
             obj.persons_as_relations.add(a)
 
     # There's a reason for this method name... I promise.
@@ -177,11 +193,13 @@ class Command(BaseCommand):
             return [o.strip() for o in str(obj).split(self.delim)]
 
     def _obj_or_none(self, row, key):
+        if key not in row:
+            return None
         if pd.isnull(row[key]):
             return None
         else:
             data = row[key]
             if isinstance(data, str):
-                return data.strip()
+                return data.strip() or None
             else:
                 return data

@@ -8,13 +8,14 @@ from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
+from controlled_vocabulary.utils import search_term_or_none
+from jargon.models import (
+    MaintenanceStatus, PublicationStatus, ReferenceSource, Repository)
+from script_codes.models import Script
+
 from archival.models import (
     ArchivalRecord, Collection, File, Item, Project, Reference, Series)
 from authority.models import Entity
-from jargon.models import (
-    MaintenanceStatus, PublicationStatus, ReferenceSource, Repository)
-from languages_plus.models import Language
-from script_codes.models import Script
 
 
 # Parser help.
@@ -82,7 +83,7 @@ class Command(BaseCommand):
     help = HELP
     logger = logging.getLogger(__name__)
 
-    language = Language.objects.filter(name_en='English').first()
+    language = search_term_or_none('iso639-2', 'eng', exact=True)
     script = Script.objects.get(name='Latin')
     normalise_space = re.compile(r'\s+').sub
 
@@ -254,13 +255,13 @@ class Command(BaseCommand):
                     languages.append(lang_string)
             for lang in languages:
                 if lang == 'Greek':
-                    lang = 'Greek, Modern'
-                try:
-                    language = Language.objects.get(name_en=lang)
-                    obj.languages.add(language)
-                except Language.DoesNotExist:
+                    lang = 'Greek, Modern (1453-)'
+                language = search_term_or_none('iso639-2', lang, exact=True)
+                if language is None:
                     self.logger.warning(LANGUAGE_NOT_FOUND_MSG.format(
                         lang, self._path, self._sheet))
+                else:
+                    obj.languages.add(language)
 
         return obj
 

@@ -20,8 +20,8 @@ from django.db import transaction
 
 from lxml import etree
 
+from controlled_vocabulary.utils import search_term_or_none
 from geonames_place.models import Place as GeoPlace
-from languages_plus.models import Language
 from script_codes.models import Script
 
 from archival.models import Project
@@ -108,7 +108,7 @@ NAME_PARTS_ORDER = ['surname', 'forename', 'ordinalNumber', 'DATE',
                     'properTitle', 'epithet']
 
 
-default_language = Language.objects.filter(name_en='English').first()
+default_language = search_term_or_none('iso639-2', 'eng', exact=True)
 default_script = Script.objects.get(name='Latin')
 normalise_space = re.compile(r'\s+').sub
 
@@ -231,16 +231,15 @@ class EntityImport:
         return term
 
     def _get_language(self, lang_code):
-        """Return the `Language` object corresponding to `lang_code`.
+        """Return the `ControlledTerm` object corresponding to `lang_code`.
 
-        :param lang_code: three letter ISO 639-3 language code
+        :param lang_code: three letter ISO 639-2 language code
         :type lang_code: `str`
-        :rtype: `Language`
+        :rtype: `ControlledTerm`
 
         """
-        try:
-            language = Language.objects.get(iso_639_3=lang_code)
-        except Language.DoesNotExist:
+        language = search_term_or_none('iso639-2', lang_code, exact=True)
+        if language is None:
             raise CommandError(MISSING_LANGUAGE_ERROR.format(
                 self._xml_path, lang_code))
         return language
@@ -278,7 +277,7 @@ class EntityImport:
                 '"biogHist"]/e:descriptiveNote/e:p', namespaces=NS_MAP):
             copyright_parts.append('<p>{}</p>'.format(
                 self._get_text(p, './/text()')))
-        copyright = ''.join(copyright_parts)
+        copyright = '\n'.join(copyright_parts)
         biog_hist = BiographyHistory(
             description=description, abstract=abstract, sources=sources,
             content=content, copyright=copyright)
@@ -452,11 +451,9 @@ class EntityImport:
             # the last is used.
             self._import_date_range(name_entry, date_range)
         name_entry.save()
-        parts = []
         for name_part in name_entry_el.xpath('e:part[@localType]',
                                              namespaces=NS_MAP):
-            part, part_type = self._import_name_part(name_entry, name_part)
-            parts.append(part)
+            self._import_name_part(name_entry, name_part)
 
     def _import_name_part(self, name_entry, name_part_el):
         part = name_part_el.text
@@ -464,7 +461,6 @@ class EntityImport:
         name_part = NamePart(name_entry=name_entry, part=part,
                              name_part_type=name_part_type)
         name_part.save()
-        return part, name_part_type
 
     def _import_place(self, description, place_el):
         place_name = place_el.xpath('e:placeEntry', namespaces=NS_MAP)[0].text

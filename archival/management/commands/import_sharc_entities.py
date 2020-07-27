@@ -4,10 +4,10 @@ import pandas as pd
 from archival.models import Project
 from authority.models import (Entity, Identity, Relation, NameEntry,
                               Control, Source)
+from controlled_vocabulary.utils import search_term_or_none
 from django.core.management.base import BaseCommand, CommandError
 from jargon.models import (PublicationStatus, EntityRelationType,
                            EntityType, MaintenanceStatus)
-from languages_plus.models import Language
 from script_codes.models import Script
 import re
 
@@ -22,7 +22,7 @@ class Command(BaseCommand):
     publication_status, _ = PublicationStatus.objects.get_or_create(
         title='published'
     )
-    language = Language.objects.get(name_en='English')
+    language = search_term_or_none('iso639-2', 'eng', exact=True)
     script = Script.objects.get(name='Latin')
 
     project, _ = Project.objects.get_or_create(
