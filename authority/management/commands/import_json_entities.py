@@ -6,8 +6,8 @@ from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
+from controlled_vocabulary.utils import search_term_or_none
 from geonames_place.models import Place as GeoPlace
-from languages_plus.models import Language
 from script_codes.models import Script
 
 from archival.models import Project
@@ -60,7 +60,7 @@ TITLE_MAP = {
 UKAT_BASE_URL = 'http://www.ukat.org.uk/thesaurus/concept/'
 
 
-default_language = Language.objects.filter(name_en='English').first()
+default_language = search_term_or_none('iso639-2', 'eng', exact=True)
 default_script = Script.objects.get(name='Latin')
 extract_language_script = re.compile(
     r'(?P<language>[^(]+) \((?P<script>[^)]+)\)').fullmatch
@@ -152,9 +152,8 @@ class EntityImport:
         :rtype: `Language`
 
         """
-        try:
-            language = Language.objects.get(name_en=lang_name)
-        except Language.DoesNotExist:
+        language = search_term_or_none('iso639-2', lang_name, exact=True)
+        if language is None:
             raise CommandError(MISSING_LANGUAGE_ERROR.format(
                 self._path, lang_name))
         return language

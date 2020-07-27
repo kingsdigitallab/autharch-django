@@ -18,8 +18,8 @@ from django.db import transaction
 
 from lxml import etree
 
+from controlled_vocabulary.utils import search_term_or_none
 from geonames_place.models import Place as GeoPlace
-from languages_plus.models import Language
 from script_codes.models import Script
 
 from archival.models import Project
@@ -182,7 +182,7 @@ TITLE_MAP = {
 NAME_PARTS_ORDER = ['100a', '100b', '100d', '100c']
 
 
-default_language = Language.objects.filter(name_en='English').first()
+default_language = search_term_or_none('iso639-2', 'eng', exact=True)
 default_publication_status = PublicationStatus.objects.get(title='published')
 default_script = Script.objects.get(name='Latin')
 normalise_space = re.compile(r'\s+').sub
@@ -325,9 +325,8 @@ class EntityImport:
         if not lang_code:
             return default_language
         lang_code = LANG_CODE_MAP.get(lang_code, lang_code)
-        try:
-            language = Language.objects.get(iso_639_3=lang_code)
-        except Language.DoesNotExist:
+        language = search_term_or_none('iso639-2', lang_code, exact=True)
+        if language is None:
             raise CommandError(MISSING_LANGUAGE_ERROR.format(
                 self._xml_path, lang_code))
         return language

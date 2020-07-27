@@ -7,7 +7,7 @@ from django.db import transaction
 
 from lxml import etree
 
-from languages_plus.models import Language
+from controlled_vocabulary.utils import search_term_or_none
 from script_codes.models import Script
 
 from archival.models import Project
@@ -43,6 +43,9 @@ NAME_PARTS_ORDER = ['family', 'given', 'date', 'termsOfAddress']
 LIPARM_SOURCE_NAME = (
     'Gartner, Richard and Blaney, Jonathan LIPARM: Linking Parliamentary '
     'Records through Metadata. [Dataset] (Unpublished)')
+LIPARM_SOURCE_NOTES = (
+    'Licensed under CC-BY-NC-SA (https://creativecommons.org/licenses/by-nc-'
+    'sa/4.0/)')
 LIPARM_SOURCE_URL = 'https://sas-space.sas.ac.uk/4315/'
 
 
@@ -61,7 +64,7 @@ VALID_START_DATE = datetime.date(*from_iso_format('1714-01-01'))
 VALID_END_DATE = datetime.date(*from_iso_format('1837-12-31'))
 
 
-default_language = Language.objects.filter(name_en='English').first()
+default_language = search_term_or_none('iso639-2', 'eng', exact=True)
 default_maintenance_status = MaintenanceStatus.objects.get(title='new')
 default_publication_status = PublicationStatus.objects.get(title='inProcess')
 default_script = Script.objects.get(name='Latin')
@@ -131,7 +134,7 @@ class Command(BaseCommand):
             language=default_language, script=default_script)
         control.save()
         source = Source(control=control, name=LIPARM_SOURCE_NAME,
-                        url=LIPARM_SOURCE_URL)
+                        url=LIPARM_SOURCE_URL, notes=LIPARM_SOURCE_NOTES)
         source.save()
 
     def _import_entity(self, mads_el, project):
