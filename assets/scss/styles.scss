@@ -1448,6 +1448,9 @@ main {
                     label, input, textarea {
                         margin-bottom: 10px;
                     }
+                    label > span:first-of-type {
+                        font-size: 0.92em;
+                    }
                     textarea.richtext:invalid {
                         & + .tox-tinymce {
                             border: 1px solid $danger;
@@ -1885,9 +1888,6 @@ main {
             label {
                 margin-top: 5px;
                 height: auto;
-            }
-            label > span:first-of-type {
-                font-size: 0.92em;
             }
             select {
                 padding-right: 30px;
