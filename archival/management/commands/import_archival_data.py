@@ -127,7 +127,7 @@ class Command(BaseCommand):
     def _import_row(self, row, project):
         uuid = row['ID']
         if pd.isnull(uuid):
-            self.logger.warn(MISSING_ID_FOR_RECORD.format(
+            self.logger.warning(MISSING_ID_FOR_RECORD.format(
                 self._path, self._sheet))
             return
         level = row['Level'].lower()
@@ -305,7 +305,7 @@ class Command(BaseCommand):
             self.logger.debug('Found reference: {}: {}'.format(source, unitid))
             return reference
         except Reference.DoesNotExist:
-            self.logger.debug('Reference {}: {} not found'.format(
+            self.logger.warning('Reference {}: {} not found'.format(
                 source, unitid))
             return None
 
@@ -517,6 +517,17 @@ class Command(BaseCommand):
         if 'Repository' not in df.columns:
             if 'Respository' in df.columns:
                 df.rename(columns={'Respository': 'Repository'}, inplace=True)
+
+        if 'CALM_reference' not in df.columns:
+            if 'CALM Reference' in df.columns:
+                df.rename(columns={'CALM Reference': 'CALM_reference'},
+                          inplace=True)
+            elif 'Calm_Reference' in df.columns:
+                df.rename(columns={'Calm_Reference': 'CALM_reference'},
+                          inplace=True)
+            else:
+                raise CommandError(MISSING_REQUIRED_COL_MSG.format(
+                    self._path, self._sheet, 'CALM_reference'))
 
         # Non-essential columns (warning if not present).
 
