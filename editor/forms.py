@@ -628,8 +628,9 @@ class ArchivalRecordEditForm(ContainerModelForm):
             self.fields['publication_status'].widget = forms.Select(
                 choices=[(in_process_status.pk, 'inProcess')])
         references = self.instance.references.all()
-        self.fields['calm_references'].initial = references.filter(
-            source__title='CALM')
+        if 'calm_references' in self.fields:
+            self.fields['calm_references'].initial = references.filter(
+                source__title='CALM')
         self.fields['ra_references'].initial = references.filter(
             source__title='RA')
 
