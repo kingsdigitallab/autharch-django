@@ -115,6 +115,14 @@ body {
     float: left;
 }
 
+.divider:after {
+    content: "|";
+    margin: 0px 10px;
+    color: $medium-grey;
+    font-family: $fontawesome;
+    font-weight: 600;
+}
+
 .inline {
     display: inline;
 }
@@ -617,8 +625,8 @@ main {
         margin-left: 210px;
     } 
 
-    // ACCESSIBILITY PAGE
-    &.accessibility-page {
+    // SECONDARY PAGES (accessibility, documentation)
+    &.secondary-page {
         h2 {
             margin: 2em 0em 1em 0em;
             font-weight: 500;
@@ -811,7 +819,7 @@ main {
             }
         }
     }
-
+    
     .filter-block {
         position: relative;
         //to prevent the search bar from taking up the filter button space once filters are expanded.
@@ -984,6 +992,13 @@ main {
     .table-container {
         width: 100%;
         overflow-x: auto;
+        h2 {
+            font-weight: 500;
+            .clear-filters {
+                font-weight: 400;
+                font-size: 0.92em;
+            }
+        }
         #admin-table {
             input[type=text], input[type=email], select {
                 width: 100%;

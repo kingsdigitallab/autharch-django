@@ -708,6 +708,12 @@ def accessibility_statement(request):
     }
     return render(request, 'editor/accessibility_statement.html', context)
 
+@user_passes_test(is_user_editor_plus)
+def documentation(request):
+    context = {
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/documentation.html', context)
 
 @user_passes_test(is_user_editor_plus)
 def record_transcriptions(request, record_id):

@@ -58,10 +58,10 @@
         <a href="." class="dotted-underline clear-filters">Clear all filters</a>
     </div>
   {% endif %}
-  {% if query %}
-    <h2>Search results for "{{query}}" <a href="." class="dotted-underline clear-filters active mgn-left">Clear search</a></h2>
-  {% endif %}
   <div class="table-container">
+    {% if query %}
+      <h2>Search results for "{{query}}" <a href="." class="dotted-underline clear-filters active mgn-left">Clear search</a></h2>
+    {% endif %}
     <table id="records-table" class="tablesorter">
         <thead>
           <tr>

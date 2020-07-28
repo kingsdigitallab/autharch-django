@@ -9,6 +9,7 @@ app_name = 'editor'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('accessibility-statement/', views.accessibility_statement, name='accessibility-statement'),
+    path('documentation/', views.documentation, name='documentation'),
     path('account/login/',
          auth_views.LoginView.as_view(
              template_name='editor/login.html'
