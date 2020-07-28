@@ -59,113 +59,111 @@
   </div>
 
   {% if all_users_formset %}
-  <div>
-    <h2>Admin table</h2>
-    {% if saved_all_users %}
-    <div class="success-notification">
-      <h4>Your updates were successfully saved.</h4>
-    </div>
-    {% endif %}
-
-    {% if all_users_formset.errors or all_users_formset.non_form_errors %}
-    <div class="error-notification">
-    {% for error_dict in all_users_formset.errors %}
-    {% for key, msgs in error_dict.items %}
-    {% if key == "__all__" %}
-    <ul>
-      {% for msg in msgs %}
-      <li>{{ msg }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endfor %}
-    {% endfor %}
-    {% for error in all_users_formset.non_form_errors %}
-    <p>{{ error }}</p>
-    {% endfor %}
-    </div>
-    {% endif %}
-
-    <form action="." method="post" id="admin-table-form">
-      {% csrf_token %}
-      {{ all_users_formset.management_form }}
-      {% if all_users_formset|length > 5 %}
-      <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
-      {% endif %}
-      <div class="table-container">
-        <table id="admin-table">
-          <thead>
-            <tr>
-              <th scope="col">Username</th>
-              <th scope="col">First name</th>
-              <th scope="col">Last name</th>
-              <th scope="col">Email address</th>
-              <th scope="col">Permission level</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for form in all_users_formset %}
-            <tr data-form-type="user">
-              <td>
-                <span class="delete-form-field none">
-                  <label>
-                    <span hidden>Delete widget</span>
-                    {{ form.DELETE.as_widget }}
-                  </label>
-                </span>
-                {% render_field form.id %}
-                <label>
-                  <span hidden>Username</span>
-                  {{ form.username }}
-                </label>
-                {{ form.username.errors }}
-              </td>
-              <td>
-                <label>
-                  <span hidden>First name</span>
-                  {{ form.first_name }}
-                </label>
-                {{ form.first_name.errors }}
-              </td>
-              <td>
-                <label>
-                  <span hidden>Last name</span>
-                  {{ form.last_name }}
-                </label>
-                {{ form.last_name.errors }}
-              </td>
-              <td>
-                <label>
-                  <span hidden>Email</span>
-                  {{ form.email }}
-                </label>{{ form.email.errors }}
-              </td>
-              <td>
-                  {% with profile=form.formsets.editor_profile %}
-                  {{ profile.management_form }}
-                  {% render_field profile.forms.0.id %}
-                  <label>
-                      <span hidden>Permission level</span>
-                    {{ profile.forms.0.role }}
-                  </label>
-                  {% endwith %}
-              </td>
-              <td class="button-cell">
-                <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
-                <label for="delete-user-{{ forloop.counter0 }}" class="delete" onclick="deleteRow(this)">
-                    <span hidden>Delete user</span>
-                </label>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <a href="{% url 'editor:user-create' %}" aria-label="add user" class="create linked-button"><i class="fal fa-plus"></i>Add user</a>
-      <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
-    </form>
+  {% if saved_all_users %}
+  <div class="success-notification">
+    <h4>Your updates were successfully saved.</h4>
   </div>
+  {% endif %}
+
+  {% if all_users_formset.errors or all_users_formset.non_form_errors %}
+  <div class="error-notification">
+  {% for error_dict in all_users_formset.errors %}
+  {% for key, msgs in error_dict.items %}
+  {% if key == "__all__" %}
+  <ul>
+    {% for msg in msgs %}
+    <li>{{ msg }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {% for error in all_users_formset.non_form_errors %}
+  <p>{{ error }}</p>
+  {% endfor %}
+  </div>
+  {% endif %}
+
+  <form action="." method="post" id="admin-table-form">
+    {% csrf_token %}
+    {{ all_users_formset.management_form }}
+    <h2>Admin table</h2>
+    {% if all_users_formset|length > 5 %}
+    <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
+    {% endif %}
+    <div class="table-container">
+      <table id="admin-table">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col">Email address</th>
+            <th scope="col">Permission level</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for form in all_users_formset %}
+          <tr data-form-type="user">
+            <td>
+              <span class="delete-form-field none">
+                <label>
+                  <span hidden>Delete widget</span>
+                  {{ form.DELETE.as_widget }}
+                </label>
+              </span>
+              {% render_field form.id %}
+              <label>
+                <span hidden>Username</span>
+                {{ form.username }}
+              </label>
+              {{ form.username.errors }}
+            </td>
+            <td>
+              <label>
+                <span hidden>First name</span>
+                {{ form.first_name }}
+              </label>
+              {{ form.first_name.errors }}
+            </td>
+            <td>
+              <label>
+                <span hidden>Last name</span>
+                {{ form.last_name }}
+              </label>
+              {{ form.last_name.errors }}
+            </td>
+            <td>
+              <label>
+                <span hidden>Email</span>
+                {{ form.email }}
+              </label>{{ form.email.errors }}
+            </td>
+            <td>
+                {% with profile=form.formsets.editor_profile %}
+                {{ profile.management_form }}
+                {% render_field profile.forms.0.id %}
+                <label>
+                    <span hidden>Permission level</span>
+                  {{ profile.forms.0.role }}
+                </label>
+                {% endwith %}
+            </td>
+            <td class="button-cell">
+              <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
+              <label for="delete-user-{{ forloop.counter0 }}" class="delete" onclick="deleteRow(this)">
+                  <span hidden>Delete user</span>
+              </label>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <a href="{% url 'editor:user-create' %}" aria-label="add user" class="create linked-button"><i class="fal fa-plus"></i>Add user</a>
+    <input name="all_users_submit" aria-label="save admin table" type="submit" class="save" value="Save admin table" />
+  </form>
   {% endif %}
   {% endblock content %}
 </main>

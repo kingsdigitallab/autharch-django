@@ -111,7 +111,7 @@ body {
     margin-top: 10px;
 }
 
-.float-left {
+.flt-left {
     float: left;
 }
 
@@ -660,6 +660,16 @@ main {
         }
     }
 
+    #admin-table-form {
+        h2 {
+            float:left;
+            margin-bottom: 0;
+            margin-top: 0.92em;
+        }
+        h2 + input[type=submit] {
+            margin-bottom: 2em;
+        }
+    }
     #admin-table-form, #duplicates-table-form {
         input.save {
             display: block;
@@ -1255,6 +1265,9 @@ main {
             // &:not(.button-link) {
             //     margin-bottom: 10px;
             // }
+            > span:first-of-type:not([role=button]) {
+                font-size: 0.92em;
+            }
         }
         .tox-tinymce {
             -webkit-border-radius: 5px;
@@ -1447,9 +1460,6 @@ main {
                     }
                     label, input, textarea {
                         margin-bottom: 10px;
-                    }
-                    label > span:first-of-type {
-                        font-size: 0.92em;
                     }
                     textarea.richtext:invalid {
                         & + .tox-tinymce {
