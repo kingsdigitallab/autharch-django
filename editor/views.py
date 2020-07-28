@@ -520,11 +520,17 @@ def entity_history(request, entity_id):
 def entity_related(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     context = {
+        'addressees': entity.files_as_relations.all(),
+        'corporate_body_subjects':
+        entity.organisation_subject_for_records.all(),
         'current_section': 'entities',
         'edit_url': reverse('editor:entity-edit',
                             kwargs={'entity_id': entity_id}),
         'item': entity,
-        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+        'object_type': 'entity',
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
+        'person_subjects': entity.person_subject_for_records.all(),
+        'writers': entity.files_created.all(),
     }
     return render(request, 'editor/related.html', context)
 
@@ -675,11 +681,16 @@ def record_hierarchy(request, record_id):
 def record_related(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     context = {
+        'addressees': record.persons_as_relations.all(),
+        'corporate_body_subjects': record.organisations_as_subjects.all(),
         'current_section': 'records',
         'edit_url': reverse('editor:record-edit',
                             kwargs={'record_id': record_id}),
         'item': record,
-        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+        'object_type': 'record',
+        'person_subjects': record.persons_as_subjects.all(),
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
+        'writers': record.creators.all(),
     }
     return render(request, 'editor/related.html', context)
 
