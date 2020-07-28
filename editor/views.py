@@ -680,8 +680,14 @@ def record_hierarchy(request, record_id):
 @user_passes_test(is_user_editor_plus)
 def record_related(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
+    addressees = []
+    writers = []
+    if record.organisations_as_subjects.all():
+        addressees = record.organisations_as_subjects.all()
+    if record.organisations_as_subjects.all():
+        writers = record.creators.all()
     context = {
-        'addressees': record.persons_as_relations.all(),
+        'addressees': addressees,
         'corporate_body_subjects': record.organisations_as_subjects.all(),
         'current_section': 'records',
         'edit_url': reverse('editor:record-edit',
@@ -690,7 +696,7 @@ def record_related(request, record_id):
         'object_type': 'record',
         'person_subjects': record.persons_as_subjects.all(),
         'show_delete': can_show_delete_page(request.user.editor_profile.role),
-        'writers': record.creators.all(),
+        'writers': writers,
     }
     return render(request, 'editor/related.html', context)
 
