@@ -570,13 +570,11 @@ class ArchivalRecordEditForm(ContainerModelForm):
     """
 
     calm_references = forms.models.ModelMultipleChoiceField(
-        queryset=Reference.objects.filter(source__title='CALM'),
-        label='CALM References', widget=forms.SelectMultiple(
-            attrs=SEARCH_SELECT_ATTRS))
+        queryset=Reference.objects.none(), label='CALM References',
+        widget=forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS))
     ra_references = forms.models.ModelMultipleChoiceField(
-        queryset=Reference.objects.filter(source__title='RA'),
-        label='RA References', widget=forms.SelectMultiple(
-            attrs=SEARCH_SELECT_ATTRS))
+        queryset=Reference.objects.none(), label='RA References',
+        widget=forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS))
 
     disabled_fields = {
         EditorProfile.ADMIN: [
@@ -629,10 +627,12 @@ class ArchivalRecordEditForm(ContainerModelForm):
                 choices=[(in_process_status.pk, 'inProcess')])
         references = self.instance.references.all()
         if 'calm_references' in self.fields:
-            self.fields['calm_references'].initial = references.filter(
-                source__title='CALM')
-        self.fields['ra_references'].initial = references.filter(
-            source__title='RA')
+            calm_references = references.filter(source__title='CALM')
+            self.fields['calm_references'].queryset = calm_references
+            self.fields['calm_references'].initial = calm_references
+        ra_references = references.filter(source__title='RA')
+        self.fields['ra_references'].queryset = ra_references
+        self.fields['ra_references'].initial = ra_references
 
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
