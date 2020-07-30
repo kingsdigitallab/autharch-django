@@ -313,6 +313,9 @@ span[role=button] {
     .select2-results__option--highlighted[aria-selected] {
         background-color: $add !important;
     }
+    .select2-dropdown {
+        z-index: 8 !important;
+    }
 }
 
 // ICONS

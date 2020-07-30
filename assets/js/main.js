@@ -36,6 +36,7 @@ $(document).ready(function() {
   // Open popup to log changes when saving a record, then actually
   // submit the form when submitting from the popup.
   $('#record-form').submit(function(event) {
+    event.preventDefault();
     if ($('#log-modal').hasClass('active')) {
       event.target.submit();
     } else {
@@ -539,10 +540,24 @@ function addEmptyForm(formType, context) {
     $(this).attr('id', function(i, val) {
       return newFormPrefixId + val.slice(val.lastIndexOf('__prefix__') + prefixLength);
     });
+    if ($(this).attr('data-voc-prefix')) {
+      $(this).select2( {
+        allowClear: true,
+        ajax: {
+          url: '/vocabularies/terms',
+          data: function (params) {
+            var query = {
+              prefix: $(this).attr('data-voc-prefix'),
+            }
+    
+            return query;
+          }
+        }
+      } );
+    }
     if ($(this).hasClass('select-with-search-dynamic')) {
       $(this).select2( {
-        placeholder: 'Select',
-        allowClear: true
+        allowClear: true,
       } );
     }
     if ($(this).hasClass('richtext')) {
