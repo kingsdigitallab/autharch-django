@@ -1,6 +1,5 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path, reverse_lazy
-from django.views.generic import TemplateView
 
 from . import views
 
@@ -8,7 +7,8 @@ from . import views
 app_name = 'editor'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
-    path('accessibility-statement/', views.accessibility_statement, name='accessibility-statement'),
+    path('accessibility-statement/', views.accessibility_statement,
+         name='accessibility-statement'),
     path('documentation/', views.documentation, name='documentation'),
     path('account/login/',
          auth_views.LoginView.as_view(
@@ -40,6 +40,11 @@ urlpatterns = [
     path('account-control/', views.account_control, name='account-control'),
     path('account-control/new_user/', views.user_create, name='user-create'),
     path('entities/', views.EntityListView.as_view(), name='entities-list'),
+    path('entities/autocomplete/', views.EntityAutocompleteJsonView.as_view(),
+         name='editor_entity_autocomplete'),
+    path('entities/autocomplete/<str:entity_type>/',
+         views.EntityAutocompleteJsonView.as_view(),
+         name='editor_entity_autocomplete_by_type'),
     path('entities/<int:entity_id>/', views.entity_edit, name='entity-edit'),
     path('entities/<int:entity_id>/delete/', views.entity_delete,
          name='entity-delete'),

@@ -22,7 +22,9 @@ from jargon.models import EntityType, NamePartType, PublicationStatus
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
-from .widgets import FunctionMultiSelect, FunctionSelect, GenderSelect
+from .widgets import (
+    EntityMultiSelect, EntityCorporateBodyMultiSelect, EntityPersonMultiSelect,
+    FunctionMultiSelect, FunctionSelect, GenderSelect)
 
 
 RICHTEXT_ATTRS = {
@@ -661,16 +663,13 @@ class ArchivalRecordEditForm(ContainerModelForm):
             'creation_places': PlaceSelectMultiple(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'languages': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
-            'creators': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
+            'creators': EntityMultiSelect(),
             'notes': forms.Textarea(attrs=RICHTEXT_ATTRS),
-            'organisations_as_subjects': forms.SelectMultiple(
-                attrs=SEARCH_SELECT_ATTRS),
+            'organisations_as_subjects': EntityCorporateBodyMultiSelect(),
             'parent_file': forms.Select(attrs=SEARCH_SELECT_ATTRS),
             'parent_series': forms.Select(attrs=SEARCH_SELECT_ATTRS),
-            'persons_as_relations': forms.SelectMultiple(
-                attrs=SEARCH_SELECT_ATTRS),
-            'persons_as_subjects': forms.SelectMultiple(
-                attrs=SEARCH_SELECT_ATTRS),
+            'persons_as_relations': EntityMultiSelect(),
+            'persons_as_subjects': EntityPersonMultiSelect(),
             'physical_description': forms.Textarea(attrs={'rows': 4}),
             'places_as_relations': PlaceSelectMultiple(),
             'places_as_subjects': PlaceSelectMultiple(),

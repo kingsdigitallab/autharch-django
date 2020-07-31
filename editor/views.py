@@ -2,11 +2,13 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.paginator import Paginator
 from django.forms import modelformset_factory
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from django.views.generic.list import BaseListView
 
 from haystack.generic_views import FacetedSearchView, SearchView
 from haystack.query import SearchQuerySet
@@ -323,6 +325,53 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     def test_func(self):
         return is_user_editor_plus(self.request.user)
+
+
+class EntityAutocompleteJsonView(BaseListView):
+
+    """View to provide autocompletion search results for Entity objects.
+
+    Adapted from django.contrib.admin.views.autocomplete and
+    django.contrib.admin.options.
+
+    """
+
+    paginate_by = 20
+
+    def get(self, request, *args, **kwargs):
+        """Return a JsonResponse with search results of the form:
+
+        {
+            results: [{id: "123", text: "foo"}],
+            pagination: {more: true}
+        }
+
+        """
+        self.term = request.GET.get('term', '')
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        return JsonResponse({
+            'results': [
+                {'id': str(obj.pk), 'text': obj.description}
+                for obj in context['object_list']
+            ],
+            'pagination': {'more': context['page_obj'].has_next()},
+        })
+
+    def get_paginator(self, queryset, per_page, orphans=0,
+                      allow_empty_first_page=True):
+        return Paginator(queryset, per_page, orphans, allow_empty_first_page)
+
+    def get_queryset(self):
+        if not self.term:
+            return SearchQuerySet().none()
+        qs = SearchQuerySet().models(Entity).exclude(
+            maintenance_status='deleted').filter(
+                content__contains=self.term)
+        entity_type = self.kwargs.get('entity_type')
+        if entity_type:
+            qs = qs.filter(entity_type=entity_type)
+        return qs.order_by('description')
 
 
 @user_passes_test(is_user_editor_plus)
@@ -708,12 +757,14 @@ def accessibility_statement(request):
     }
     return render(request, 'editor/accessibility_statement.html', context)
 
+
 @user_passes_test(is_user_editor_plus)
 def documentation(request):
     context = {
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/documentation.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 def record_transcriptions(request, record_id):

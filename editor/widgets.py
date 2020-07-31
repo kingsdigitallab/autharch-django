@@ -58,6 +58,31 @@ class AutocompleteMixin:
         return groups
 
 
+class EntityAutocomplete(AutocompleteMixin):
+
+    def get_url(self):
+        return reverse('editor:editor_entity_autocomplete')
+
+
+class EntityMultiSelect(EntityAutocomplete, forms.SelectMultiple):
+
+    pass
+
+
+class EntityCorporateBodyMultiSelect(EntityAutocomplete, forms.SelectMultiple):
+
+    def get_url(self):
+        return reverse('editor:editor_entity_autocomplete_by_type',
+                       args=('corporateBody',))
+
+
+class EntityPersonMultiSelect(EntityAutocomplete, forms.SelectMultiple):
+
+    def get_url(self):
+        return reverse('editor:editor_entity_autocomplete_by_type',
+                       args=('person',))
+
+
 class FunctionAutocomplete(AutocompleteMixin):
 
     def build_attrs(self, base_attrs, extra_attrs=None):
