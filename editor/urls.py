@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('accessibility-statement/', views.accessibility_statement,
          name='accessibility-statement'),
-    path('documentation/', views.documentation, name='documentation'),
+    path('how-to-use/', views.how_to_use, name='how-to-use'),
     path('account/login/',
          auth_views.LoginView.as_view(
              template_name='editor/login.html'
@@ -68,5 +68,6 @@ urlpatterns = [
     path('records/<int:record_id>/transcriptions/',
          views.record_transcriptions, name='record-transcriptions'),
     path('deleted/', views.DeletedListView.as_view(), name='deleted-list'),
+    path('duplicates/', views.duplicates_list, name='duplicates-list'),
     path('revert/', views.revert, name='revert'),
 ]

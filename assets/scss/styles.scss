@@ -277,7 +277,7 @@ span[role=button] {
     background-color: transparent !important;
     color: $primary !important;
     border: 1px solid $primary !important;
-    padding: 10px 25px;
+    padding: 9px 15px;
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     border-radius: 30px;
@@ -760,7 +760,7 @@ main {
     .page-header {
         display: grid;
         grid-template-columns: 0.5fr 1fr;
-        grid-column-gap: 0px;
+        column-gap: 0px;
         align-items: center;
         margin-bottom: 2em;
         :not(:first-child) {
@@ -769,11 +769,12 @@ main {
         h1 {
             margin-right: 1em;
         }
-        .search-filter {
+        .search-filter, .add-duplicate {
             display: grid;
             grid-template-columns: 3fr auto auto;
             align-items: center;
             width: 100%;
+            column-gap: 1em;
             .search {
                 position: relative;
                 max-width: 700px;
@@ -804,20 +805,13 @@ main {
                     }
                 }
             }
-            .filter-block {
-                margin-left: 1em;
-            }
             .create {
                 display: inline-block;
-                margin-left: 20px;
                 &:before {
                     content: "\f067";
                     font-weight: 300;
                     font-family: $fontawesome;
                     margin-right: 5px;
-                }
-                &:after {
-                    content: 'Create';
                 }
             }
         }
@@ -1400,7 +1394,7 @@ main {
                 .fieldset-header {
                     display: grid;
                     grid-template-columns: 1fr auto;
-                    grid-column-gap: 10px;
+                    column-gap: 10px;
                     align-items: center;
                     justify-content: space-between;
                     // position: relative;
@@ -1462,7 +1456,7 @@ main {
                         .name-part {
                             display: grid;
                             grid-template-columns: 1fr 2fr;
-                            grid-column-gap: 10px;
+                            column-gap: 10px;
                             justify-content: center;
                             align-items: flex-start !important;
                             font-size: 1em;
@@ -1723,7 +1717,7 @@ main {
             margin-bottom: 1em;
             display: grid;
             grid-template-columns: 0.01fr 1fr 500px;
-            grid-gap: 0.4em;
+            gap: 0.4em;
             position: relative;
             > span {
                 padding: 0px 8px;
@@ -1740,7 +1734,7 @@ main {
             span.record-details {
                 display: grid;
                 grid-template-columns: 1fr 1.5fr 1fr;
-                grid-gap: 0.6em;
+                gap: 0.6em;
             }
             .browsed-item {
                 background-color: lighten($light-grey,3%);
@@ -1785,48 +1779,115 @@ main {
 
     // DUPLICATES PAGE
     &#duplicates-page {
-        #manually-removed-checkbox {
+        p {
+            margin-bottom: 0.3em;
+            font-size: 0.92em;
+            font-weight: 500;
+        }
+        .page-header{
+            margin-bottom: 0;
+            label[for="add-checkbox"] {
+                line-height: 1.4em;
+                cursor: pointer;
+                &:before {
+                    content: "\f107";
+                    font-weight: 300;
+                    font-family: $fontawesome;
+                    margin-right: 5px;
+                    font-size: 1.32em;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+                &:hover, &:focus {
+                    background-color: lighten($light-grey, 5%) !important;
+                }
+            }
+        }
+        #add-checkbox {
             display: none;
         }
-        label[for="manually-removed-checkbox"] {
-            cursor: pointer;
-            text-align: right;
-            font-size: 0.92em;
-            color: $primary;
-            margin-top: 0.5em;
-            display: block;
+        #add-checkbox:checked {
+            + .add-section {
+                height: auto;
+                opacity: 1;
+                margin-bottom: 2em;
+                visibility: visible;
+            }
         }
-        .manually-removed-section {
+        .add-section {
             height: 0;
             opacity: 0;
             transition: 0.2s;
-        }
-        #manually-removed-checkbox:checked {
-            + .manually-removed-section {
-                height: auto;
-                opacity: 1;
+            visibility: hidden;
+            #duplicates-search-form {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                margin: 1em 0 0.5em 0;
+                input[type=search] {
+                    font-family: $font-primary;
+                    -webkit-border-radius: 30px;
+                    -moz-border-radius: 30px;
+                    border-radius: 30px;
+                    font-size: 1em;
+                    padding: 10px 60px 10px 20px;
+                    border: 1px solid $medium-grey;
+                    width: 100%;
+                    height: 40px;
+                    max-width: 500px;
+                }
+                .create {
+                    margin-left: 1em;
+                }
             }
-        }
-        #duplicates-search-form {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            grid-column-gap: 2em;
-            align-items: flex-start;
-            margin: 2em 0 1em 0;
-            input[type=search] {
-                font-family: $font-primary;
-                -webkit-border-radius: 30px;
-                -moz-border-radius: 30px;
-                border-radius: 30px;
-                font-size: 1em;
-                padding: 10px 60px 10px 20px;
-                border: 1px solid $medium-grey;
-                width: 100%;
-                height: 40px;
+            .removed-record {
+                display: grid;
+                grid-template-columns: 0.3fr 1fr auto;
+                border: 1px solid darken($light-grey, 5%); 
+                margin-bottom: 4em;
+                &:first-of-type {
+                    border-top-left-radius: 7px;
+                    border-top-right-radius: 7px;
+                }
+                &:last-of-type {
+                    border-bottom-left-radius: 7px;
+                    border-bottom-right-radius: 7px;
+                }
+                > span {
+                    padding: 1em;
+                    &:first-of-type {
+                        font-size: 0.92em;
+                    }
+                    &:not(:last-of-type) {
+                        border-right: 1px solid darken($light-grey, 5%);
+                    }
+                }
             }
         }
         #duplicates-table-form {
-            table {
+            .record {
+                display: grid;
+                grid-template-columns: auto auto 0.25fr 1fr;
+                border: 1px solid darken($light-grey, 5%);
+                border-left: 9px solid $light-grey;
+                &:first-of-type {
+                    border-top-left-radius: 10px;
+                    border-top-right-radius: 10px;
+                }
+                &:last-of-type {
+                    border-bottom-left-radius: 10px;
+                    border-bottom-right-radius: 10px;
+                }
+                &:nth-of-type(even) {
+                    background-color: lighten($light-grey, 5%);
+                }
+                > span {
+                    padding: 1em;
+                    &:not(:last-of-type) {
+                        border-right: 1px solid darken($light-grey, 5%);
+                        font-size: 0.92em;
+                    }
+                }
                 label {
                     border-radius: 5px;
                     padding: 5px;
@@ -1848,7 +1909,7 @@ main {
                 }
                 .primary-cell {
                     label {
-                        border: 1px solid white;
+                        border: 1px solid $primary;
                         color: $primary;
                         input[type=radio] {
                             display: inline-block;
@@ -1856,8 +1917,8 @@ main {
                         }
                     }
                     label:hover, label:focus {
-                        border: 1px solid $primary;
-                        color: $primary;
+                        background: $primary;
+                        color: white;
                     }
                     label.selected {
                         background: $primary;
@@ -1894,7 +1955,7 @@ main {
     .two-column-table {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-column-gap: 30px;
+        column-gap: 30px;
         justify-content: center;
         font-size: 1em;
         p {
@@ -1938,7 +1999,7 @@ main {
     .editable-field {
         display: grid;
         grid-template-columns: 1fr auto;
-        grid-column-gap: 5px;
+        column-gap: 5px;
         align-items: center !important;
         &.group-field {
             label {
@@ -2313,9 +2374,9 @@ footer {
             margin-right: 0px;
         }
         #menu-account {
-            #logout {
+            #logout, .link {
                 h4 {
-                    @include hidden;
+                    display: none;
                 }
                 .far {
                     margin: 0px 5px;
@@ -2327,6 +2388,11 @@ footer {
         box-sizing: border-box; 
         margin-left: 0px !important;
         padding: 0px 30px 30px 30px;
+        &#hierarchy {
+            .fieldset-header {
+                grid-template-columns: 0.01fr 1fr 400px;
+            }
+        }
         &:not(.no-sidebar) {
             margin-left: 250px;
             margin-top: 80px;
@@ -2368,36 +2434,14 @@ footer {
 
 @media only screen and (max-width: 1070px) {
     header {
-        #menu-account {
-            .link {
-                h4 {
-                    display: none;
-                }
-                .far {
-                    margin: 0px 5px;
-                }
-            }
-        }
-    }
-    main {
-        &#hierarchy {
-            .fieldset-header {
-                grid-template-columns: 0.01fr 1fr 400px;
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 970px) {
-    header {
         h4 {
             display: none;
-       }
-       #menu-account .link, #menu-links .link {
-           .fal, .far {
-               margin: 0px 5px;
-           }
-       }
+        }
+        #menu-account .link, #menu-links .link {
+            .fal, .far {
+                margin: 0px 5px;
+            }
+        }
    }
 }
 @media only screen and (max-width: 880px) {
@@ -2411,6 +2455,29 @@ footer {
                 grid-template-columns: 0.01fr 1fr 200px;
                 span.record-details {
                     grid-template-columns:1fr;
+                }
+            }
+        }
+        &#duplicates-page {
+            .add-section {
+                .removed-record {
+                    display: block;
+                    > span {
+                        display: block;
+                    }
+                }
+            }
+            #duplicates-table-form {
+                .record {
+                    grid-template-columns: 1fr 1fr 0.7fr;
+                    .description {
+                        border-top: 1px solid $medium-grey;
+                        grid-column: span 3;
+                        padding-bottom: 2em;
+                    }
+                    &:not(:first-of-type):not(:last-of-type) {
+                        border-bottom: 1px solid $dark-grey;
+                    }
                 }
             }
         }
@@ -2613,6 +2680,10 @@ footer {
                     grid-column-start: 2;
                     margin-top: 1em;
                 }
+            }
+        }
+        #duplicates-page {
+            .page-header {
             }
         }
         .name-part {

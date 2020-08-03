@@ -51,6 +51,13 @@
           </a>
         </div>
         {% endif %}
+        <!-- TODO: display for moderators and admins only; display if > 0 -->
+        <div class="link{% if current_section == 'duplicates' %} active{% endif %}">
+          <a href="{% url 'editor:duplicates-list' %}">
+            <i class="fal fa-copy"></i>
+            <h4>Duplicates</h4>
+          </a>
+        </div>
       </div>
       <div id="menu-account">
         <div class="link{% if current_section == 'account' %} active{% endif %}">
@@ -76,7 +83,7 @@
     {% endblock main %}
     {% block footer %}
     <footer>
-      <p><a href="{% url 'editor:documentation' %}" class="highlight">How to use</a><span class="divider"></span><a href="{% url 'editor:accessibility-statement' %}">Accessibility statement</a></p>
+      <p><a href="{% url 'editor:how-to-use' %}" class="highlight">How to use</a><span class="divider"></span><a href="{% url 'editor:accessibility-statement' %}">Accessibility statement</a></p>
       <p>© {% now "Y" %} Designed, developed and maintained by <a href="https://www.kdl.kcl.ac.uk/">King's Digital Lab</a></p>
     </footer>
     {% endblock footer %}

@@ -1,0 +1,125 @@
+{% extends "./base.html" %}
+{% block main %}
+<main id="duplicates-page">
+    {% block content %}
+        <!-- if not deleted as a duplciate-->
+        <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ entity|truncatewords:15 }}</span></a>
+        <!-- else: display a link to the primary record? -->
+
+        <!-- <div class="success-notification">
+            <h4>Your updates were successfully saved.</h4>
+        </div> -->
+        <div class="page-header">
+            <h1>Detected duplicates</h1>
+            <div class="add-duplicate">
+                <span></span>
+                <label for="add-checkbox" class="default">Add a record</label>
+                <input form="duplicates-table-form" name="duplicates_submit" aria-label="submit button to save the duplicated records table" type="submit" class="save" value="Save table" />
+            </div>
+        </div>
+    
+        <input type="checkbox" id="add-checkbox"/>
+        <div class="add-section">
+            <form id="duplicates-search-form" class="search" onsubmit="addDuplicate()">
+                <!-- add instant search -->
+                <input type="search" name="keyword" aria-label="Find a record by record id or display name" placeholder="Find a record by record id or display name" onfocus="this.placeholder=''" onblur="this.placeholder='Find a record by record id or display name'"/>
+                <input type="submit" class="create" aria-label="Search button" value="Add"/>
+            </form>
+            <!-- if manually_removed > 0 -->
+            <p>Manually removed records:</p>
+            <div class="removed-record">
+                <span>Record ID: [entity_id]</span>
+                <span class="description">
+                    <a href="" target="_blank">[entity_title]</a><br>
+                    Type: [entity_type]<span class="divider"></span>Publication status: [entity_publication_status]<span class="divider"></span>Updated: [entity_updated] by [username]
+                </span>
+                <span><input type="submit" class="create" form="duplicates-search-form" aria-label="Restore this record in the duplicates table" value="Add"/></span> 
+            </div>
+        </div>
+        
+        <!-- if duplicates.length > 0 -->
+        <form id="duplicates-table-form">
+            <!-- if duplicates.length > 7 -->
+            <p>Browsed record:</p>
+            <div class="record">
+                <span class="primary-cell">
+                    <label>
+                        <input type="radio" value="{{entity_id}}" name="primary_record" onclick="selectedPrimaryRecord(this)"/>Primary record
+                    </label>
+                </span>
+                <span class="duplicate-cell">
+                    <input type="radio" id="duplicate_[entity_id]" name="duplicate_[entity_id]" value="true"/>
+                    <label for="duplicate_[entity_id]">Merge with primary</label>
+                    <input type="radio" id="not_duplicate_[entity_id]" name="duplicate_[entity_id]" value="false"/>
+                    <label for="not_duplicate_[entity_id]">Not related to primary</label>
+                </span>
+                <span>Record ID: {{entity_id}}</span>
+                <span class="description">
+                    <a href="" target="_blank">{{ entity|truncatewords:15 }}</a><br>
+                    Type: {{entity.entity_type}}<span class="divider"></span>Publication status: {{publication_status}}<span class="divider"></span>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}
+                </span>
+            </div>
+            <p>Related records:</p>
+            <div class="record">
+                <span class="primary-cell">
+                    <label>
+                        <input type="radio" value="[entity_id1]" name="primary_record" onclick="selectedPrimaryRecord(this)"/>Primary record
+                    </label>
+                </span>
+                <span class="duplicate-cell">
+                    <input type="radio" id="duplicate_[entity_id1]" name="duplicate_[entity_id1]" value="true"/>
+                    <label for="duplicate_[entity_id1]">Merge with primary</label>
+                    <input type="radio" id="not_duplicate_[entity_id1]" name="not_duplicate_[entity_id1]" value="false"/>
+                    <label for="not_duplicate_[entity_id1]">Not related to primary</label>
+                </span>
+                <span>Record ID: [entity_id1]</span>
+                <span class="description">
+                    <a href="" target="_blank">[entity_title]</a><br>
+                    Type: [entity_type]<span class="divider"></span>Publication status: [entity_publication_status]<span class="divider"></span>Updated: [entity_updated] by [username]
+                </span>
+            </div>
+            <div class="record">
+                <span class="primary-cell">
+                    <label>
+                        <input type="radio" value="[entity_id2]" name="primary_record" onclick="selectedPrimaryRecord(this)"/>Primary record
+                    </label>
+                </span>
+                <span class="duplicate-cell">
+                    <input type="radio" id="duplicate_[entity_id2]" name="duplicate_[entity_id2]" value="true"/>
+                    <label for="duplicate_[entity_id2]">Merge with primary</label>
+                    <input type="radio" id="not_duplicate_[entity_id2]" name="not_duplicate_[entity_id2]" value="false"/>
+                    <label for="not_duplicate_[entity_id2]">Not related to primary</label>
+                </span>
+                <span>Record ID: [entity_id2]</span>
+                <span class="description">
+                    <a href="" target="_blank">[entity_title]</a><br>
+                    Type: [entity_type]<span class="divider"></span>Publication status: [entity_publication_status]<span class="divider"></span>Updated: [entity_updated] by [username]
+                </span>
+            </div>
+            <div class="record">
+                <span class="primary-cell">
+                    <label>
+                        <input type="radio" value="[entity_id3]" name="primary_record" onclick="selectedPrimaryRecord(this)"/>Primary record
+                    </label>
+                </span>
+                <span class="duplicate-cell">
+                    <input type="radio" id="duplicate_[entity_id3]" name="duplicate_[entity_id3]" value="true"/>
+                    <label for="duplicate_[entity_id3]">Merge with primary</label>
+                    <input type="radio" id="not_duplicate_[entity_id3]" name="duplicate_[entity_id3]" value="false"/>
+                    <label for="not_duplicate_[entity_id3]">Not related to primary</label>
+                </span>
+                <span>Record ID: [entity_id3]</span>
+                <span class="description">
+                    <a href="" target="_blank">[entity_title]</a><br>
+                    Type: [entity_type]<span class="divider"></span>Publication status: [entity_publication_status]<span class="divider"></span>Updated: [entity_updated] by [username]
+                </span>
+            </div>
+            <input name="duplicates_submit" aria-label="submit button to save the duplicated records table" type="submit" class="save" value="Save table" />
+        </form>
+        <!-- else -->
+        <!-- <div class="empty-block">
+            <p>You don't have duplicates for this record. &#127881;</p>
+        </div> -->
+    {% endblock content %}
+</main>
+{% endblock main %}

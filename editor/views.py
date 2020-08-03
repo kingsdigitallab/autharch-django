@@ -599,7 +599,7 @@ def entity_duplicates(request, entity_id):
         'show_delete': can_show_delete_page(request.user.editor_profile.role),
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
     }
-    return render(request, 'editor/duplicates.html', context)
+    return render(request, 'editor/duplicates_subpage.html', context)
 
 
 @user_passes_test(is_user_admin)
@@ -759,12 +759,18 @@ def accessibility_statement(request):
 
 
 @user_passes_test(is_user_editor_plus)
-def documentation(request):
+def how_to_use(request):
     context = {
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
-    return render(request, 'editor/documentation.html', context)
+    return render(request, 'editor/how_to_use.html', context)
 
+@user_passes_test(is_user_editor_plus)
+def duplicates_list(request):
+    context = {
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/duplicates_list.html', context)
 
 @user_passes_test(is_user_editor_plus)
 def record_transcriptions(request, record_id):

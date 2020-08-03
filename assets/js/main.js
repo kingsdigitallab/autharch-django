@@ -64,31 +64,15 @@ $(document).ready(function() {
   });
 
   // TABLE PAGINATION / TABLESORTER
-  if (!$('#duplicates-table [name="primary_record"]:checked').length) {
+  if (!$('.record [name="primary_record"]:checked').length) {
     $('.duplicate-cell').children('label').addClass("disabled");
   } else {
-    $('#duplicates-table [name="primary_record"]:checked').each(function() {
+    $('.record [name="primary_record"]:checked').each(function() {
       $(this).closest('.primary-cell').addClass('border-left');
       $(this).parent('label').addClass("selected");
       $(this).closest('.primary-cell').next('.duplicate-cell > label').addClass("disabled");
     })
   }
-  
-
-  $('#duplicates-table').on('click','[name="primary_record"]', function(el) {
-    //reset to default
-    $('.primary-cell').removeClass('border-left');
-    $('.primary-cell > label').removeClass("selected");
-    $('.duplicate-cell').children('label').removeClass("disabled");
-    $('.duplicate-cell').children('label').show();
-    //update cells
-    $(el.target).closest('.primary-cell').addClass('border-left');
-    if ($(el.target).is(":checked")) {
-      $(el.target).parent('label').addClass("selected");
-      $(el.target).closest('.primary-cell').next('.duplicate-cell').find('input[type=radio]:checked').prop('checked', false);;
-      $(el.target).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
-    }
-  });
 
   // sorter for the archival records table - Collection -> Series -> File -> Item
   $.tablesorter.addParser({
@@ -259,7 +243,7 @@ $(document).ready(function() {
   });
   setUpCreationYearSlider();
 
-  $('#duplicates-search-field').on('keyup change', function(e) {
+  $('#hierarchy-search-field').on('keyup change', function(e) {
     $('.fieldset-header').find('span').removeClass('greyed-out');
     $('div[class="series-level"]').children('.fieldset-body').removeClass('expand');
     $('.expand-collapse > button').text('Collapse all');
@@ -381,30 +365,48 @@ function addDuplicate() {
       }
     })
     if (!exists) {
-      $('#duplicates-table tbody').append(`
-        <tr>
-          <td class="button-cell primary-cell">
-              <label>
-                  <input type="radio" value="`+record.id+`" name="primary_record"/>Primary record
-              </label>
-          </td>
-          <td class="duplicate-cell">
+      $('#duplicates-table-form .record:last-of-type').after(`
+        <div class="record">
+            <span class="primary-cell">
+                <label>
+                  <input type="radio" value="`+record.id+`" name="primary_record" onclick="selectedPrimaryRecord(this)"/>Primary record
+                </label>
+            </span>
+            <span class="duplicate-cell">
               <input type="radio" id="duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="true"/>
               <label for="duplicate_`+record.id+`" class="disabled">Merge with primary</label>
               <input type="radio" id="not_duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="false"/>
               <label for="not_duplicate_`+record.id+`" class="disabled">Not related to primary</label>
-          </td>
-          <td>Record ID: <span class="highlight">`+record.id+`</span></td>
-          <td class="description">
+            </span>
+            <span>Record ID: `+record.id+`</span>
+            <span class="description">
               <a href="/editor/entities/`+record.id+`" target="_blank">`+record.entity_title+`</a><br>
               Type: `+record.entity_type+` | Publication status: `+record.publication_status+` | Updated: `+record.updated_date+` by `+record.updated_by+`
-          </td>
-        </tr>
+          </span>
+        </div>
       `);
-      $('#duplicates-search-form').after('<div id="duplicates-search-form-notification" class="success-notification">The record ' + record.id + ' has been added to the table.</div>');
+      if ($('.record [name="primary_record"]:checked').length > 0) {
+        $('.record:last-of-type .duplicate-cell').children('label').removeClass("disabled");
+      }
+      $('#duplicates-search-form').before('<div id="duplicates-search-form-notification" class="success-notification">The record ' + record.id + ' has been added to the table.</div>');
     } else {
-      $('#duplicates-search-form').after('<div id="duplicates-search-form-notification" class="error-notification">The record ' + record.id + ' is already included in the table.</div>');
+      $('#duplicates-search-form').before('<div id="duplicates-search-form-notification" class="error-notification">The record ' + record.id + ' has already been added to the table.</div>');
     }
+}
+
+function selectedPrimaryRecord(el) {
+  //reset to default
+  $('.record').removeClass('border-left');
+  $('.primary-cell > label').removeClass("selected");
+  $('.duplicate-cell').children('label').removeClass("disabled");
+  $('.duplicate-cell').children('label').show();
+  //update cells
+  $(el).closest('.record').addClass('border-left');
+  if ($(el).is(":checked")) {
+    $(el).parent('label').addClass("selected");
+    $(el).closest('.primary-cell').next('.duplicate-cell').find('input[type=radio]:checked').prop('checked', false);;
+    $(el).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
+  }
 }
 
 // when the pagination button in full screen mode is clicked, 
