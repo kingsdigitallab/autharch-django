@@ -56,6 +56,8 @@ urlpatterns = [
          name='entity-duplicates'),
     path('entities/new/', views.entity_create, name='entity-create'),
     path('records/', views.RecordListView.as_view(), name='records-list'),
+    path('records/autocomplete/', views.RecordAutocompleteJsonView.as_view(),
+         name='editor_record_autocomplete'),
     path('records/<int:record_id>/', views.record_edit, name='record-edit'),
     path('records/<int:record_id>/delete/', views.record_delete,
          name='record-delete'),

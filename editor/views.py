@@ -332,12 +332,12 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
         return is_user_editor_plus(self.request.user)
 
 
-class EntityAutocompleteJsonView(BaseListView):
+class BaseAutocompleteJsonView(BaseListView):
 
-    """View to provide autocompletion search results for Entity objects.
+    """Base view to provide autocompletion search results.
 
-    Adapted from django.contrib.admin.views.autocomplete and
-    django.contrib.admin.options.
+    Subclasses must provide a get_queryset method that performs the
+    actual search.
 
     """
 
@@ -367,6 +367,16 @@ class EntityAutocompleteJsonView(BaseListView):
                       allow_empty_first_page=True):
         return Paginator(queryset, per_page, orphans, allow_empty_first_page)
 
+
+class EntityAutocompleteJsonView(BaseAutocompleteJsonView):
+
+    """View to provide autocompletion search results for Entity objects.
+
+    Adapted from django.contrib.admin.views.autocomplete and
+    django.contrib.admin.options.
+
+    """
+
     def get_queryset(self):
         if not self.term:
             return SearchQuerySet().none()
@@ -376,6 +386,38 @@ class EntityAutocompleteJsonView(BaseListView):
         entity_type = self.kwargs.get('entity_type')
         if entity_type:
             qs = qs.filter(entity_type=entity_type)
+        return qs.order_by('description')
+
+
+class RecordAutocompleteJsonView(BaseAutocompleteJsonView):
+
+    """View to provide autocompletion search results for ArchivalRecord
+    objects.
+
+    Adapted from django.contrib.admin.views.autocomplete and
+    django.contrib.admin.options.
+
+    """
+
+    def get(self, request, *args, **kwargs):
+        self.term = request.GET.get('term', '')
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        return JsonResponse({
+            'results': [
+                {'id': str(obj.pk), 'text': ', '.join(obj.ra_references)}
+                for obj in context['object_list']
+            ],
+            'pagination': {'more': context['page_obj'].has_next()},
+        })
+
+    def get_queryset(self):
+        if not self.term:
+            return SearchQuerySet().none()
+        qs = SearchQuerySet().models(
+            Collection, Entity, File, Item, Series).exclude(
+            maintenance_status='deleted').filter(
+            ra_references__contains=self.term)
         return qs.order_by('description')
 
 

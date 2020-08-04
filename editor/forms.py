@@ -10,7 +10,7 @@ import haystack.forms
 from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import (
-    ArchivalRecord, ArchivalRecordTranscription, Collection, File, Item,
+    ArchivalRecordTranscription, Collection, File, Item,
     OriginLocation, Reference, RelatedMaterialReference, Series
 )
 from authority.models import (
@@ -23,8 +23,8 @@ from jargon.models import EntityType, NamePartType, PublicationStatus
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
 from .widgets import (
-    EntityMultiSelect, EntityCorporateBodyMultiSelect, EntityPersonMultiSelect,
-    FunctionMultiSelect, FunctionSelect, GenderSelect)
+    ArchivalRecordSelect, EntityMultiSelect, EntityCorporateBodyMultiSelect,
+    EntityPersonMultiSelect, FunctionMultiSelect, FunctionSelect, GenderSelect)
 
 
 RICHTEXT_ATTRS = {
@@ -96,12 +96,6 @@ SEARCH_SELECT_ATTRS_DYNAMIC = {
 
 ENTITY_START_DATE_HELP = 'This element indicates a date of existence - birth date for people and existence date for corporate bodies. <br><br>1. It is required that you follow the date format: <br><strong>(-)YYYY(-MM(-DD))</strong><br><em>e.g., 1822-03-27, 1822-03, 1822, or, if BC, -750.</em><br>2. To also assist with improving date searching, please always add a date range:<br><em>e.g., if the display date is 1822, include Identity existed from: 1822, Identity existed until: 1822.</em><br><br>NB: Date ranges for years prior to the change in calendar may need to be taken into account. <br>NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
 ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date for people and extinction date for corporate bodies. <br><br>1. It is required that you follow the date format: <br><strong>(-)YYYY(-MM(-DD))</strong><br><em>e.g., 1822-03-27, 1822-03, 1822, or, if BC, -750.</em><br>2. To also assist with improving date searching, please always add a date range:<br><em>e.g., if the display date is 1822, include Identity existed from: 1822, Identity existed until: 1822.</em><br><br>NB: Date ranges for years prior to the change in calendar may need to be taken into account. <br>NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
-
-
-class RelatedMaterialRecordChoiceField(forms.ModelChoiceField):
-
-    def label_from_instance(self, obj):
-        return ', '.join([str(ref) for ref in obj.references.all()])
 
 
 class ContainerModelForm(forms.ModelForm):
@@ -273,13 +267,12 @@ class PlaceEditInlineForm(forms.ModelForm):
 
 class RelatedMaterialEditInlineForm(forms.ModelForm):
 
-    related_record = RelatedMaterialRecordChoiceField(
-        label='Related material', queryset=ArchivalRecord.objects.all(),
-        widget=forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC))
-
     class Meta:
         exclude = []
         model = RelatedMaterialReference
+        widgets = {
+            'related_record': ArchivalRecordSelect(),
+        }
 
 
 class RelationEditInlineForm(forms.ModelForm):
