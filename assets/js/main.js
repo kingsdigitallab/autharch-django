@@ -52,7 +52,7 @@ $(document).ready(function() {
     placeholder: 'Select',
     allowClear: true
   } );
-  //add aria-label to select2 input
+  // add aria-label to select2 input
   $('.select2-search__field').attr('aria-label', 'select with search');
   $('.select2-selection__rendered').attr('aria-label', 'select2-selection__rendered');
   $('.select2-selection--multiple').attr({
@@ -63,17 +63,7 @@ $(document).ready(function() {
     'role': 'list'
   });
 
-  // TABLE PAGINATION / TABLESORTER
-  if (!$('.record [name="primary_record"]:checked').length) {
-    $('.duplicate-cell').children('label').addClass("disabled");
-  } else {
-    $('.record [name="primary_record"]:checked').each(function() {
-      $(this).closest('.primary-cell').addClass('border-left');
-      $(this).parent('label').addClass("selected");
-      $(this).closest('.primary-cell').next('.duplicate-cell > label').addClass("disabled");
-    })
-  }
-
+  // TABLESORTER
   // sorter for the archival records table - Collection -> Series -> File -> Item
   $.tablesorter.addParser({
     id: 'level',
@@ -89,7 +79,6 @@ $(document).ready(function() {
     },
     type: 'numeric'
   });  
-
   $('.tablesorter').each(function(i, el) {
     $.tablesorter.customPagerControls({
       table          : $('#'+$(el).attr('id')),                   // point at correct table (string or jQuery object)
@@ -152,6 +141,7 @@ $(document).ready(function() {
     $("#"+$(el).attr('id')).parent('.table-container').next('.pager').find('a[data-label="'+label+'"]').addClass("current");
   });
 
+  // toggle name part message
   $('.formset').on('click', 'input[id$="is_royal_name"]', function(e) {
     if ($(e.target).prop("checked")) {
       $(e.target).next('.namePartField-required').text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
@@ -160,7 +150,7 @@ $(document).ready(function() {
     }
   });
 
-  // close tooltips on click anywhere in the document
+  // close tooltips when clicked anywhere on the page
   $('form').on('click', function(e) {
     if (!$(e.target).is('.additional-info')) {
       if($('.additional-info').length) {
@@ -243,22 +233,6 @@ $(document).ready(function() {
   });
   setUpCreationYearSlider();
 
-  $('#hierarchy-search-field').on('keyup change', function(e) {
-    $('.fieldset-header').find('span').removeClass('greyed-out');
-    $('div[class="series-level"]').children('.fieldset-body').removeClass('expand');
-    $('.expand-collapse > button').text('Collapse all');
-    $('.collections-level').removeClass('not-expanded')
-    $('.fieldset-header').find('a.dotted-underline').each(function() {
-      let option = $(this).text().toLowerCase();
-      let query = $(e.target).val().toLowerCase();
-      if (!option.includes(query)) {
-        $(this).parents('.fieldset-header').first().find('span').addClass('greyed-out');
-      } else {
-        $(this).parents('div[class="series-level"]').find('.fieldset-body').addClass('expand');
-      }
-    });
-  });
-
   // RICHTEXT FIELDS
   tinymce.init({
     menubar: '',
@@ -278,11 +252,6 @@ $(document).ready(function() {
     }
   });
   
-
-  // TRANSCRIPTIONS - if expanded by default (WILL BE REMOVED ONCE THE RTE DEVELOPMENT IS COMPLETED)
-  if ($('#transcription-div').hasClass('expand') && $( 'textarea.richtext-transcription' ).length == 0) {
-    fetchTranscriptions();
-  }
   
   // TRANSCRIPTIONS - if collapsed by default
   $('.transcription-toggle').on('click', function() {
@@ -291,7 +260,20 @@ $(document).ready(function() {
       fetchTranscriptions();
     }
   });
-  
+
+
+  // DUPLICATES PAGE
+  $('.duplicates-group').each(function() {
+    if (!$(this).find('[name^="primary_record"]:checked').length) {
+      $(this).find('.duplicate-cell > label').addClass("disabled");
+    } else {
+      $(this).find('[name^="primary_record"]:checked').each(function() {
+        $(this).closest('.record').addClass('border-left');
+        $(this).parent('label').addClass("selected");
+        $(this).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
+      })
+    }
+  })
 });
 
 // TRANSCRIPTIONS
@@ -317,22 +299,18 @@ async function fetchTranscriptions() {
     console.log(err);
   });
 }
-
+// exit fullscreen mode and update the browsed page
 function exitHandler() {
   if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-    var index = viewer.currentPage();
-    $('#rte-pagination').pagination('selectPage', parseInt(index+1));
+    $('#rte-pagination').pagination('selectPage', parseInt(viewer.currentPage()+1));
   }
 } 
-
-/** 
-  hide all transcriptions and generate ckeditor for the first transcription on the list
-*/
+// hide all transcriptions and generate ckeditor for the first transcription on the list
 function addCKEditor() {
   $('textarea.richtext-transcription').hide();
   $('textarea#id_transcription-0-transcription').ckeditor();
 }
-
+// add pagination
 function addPagination() {
   $('#rte-pagination').pagination({
     items: $("textarea.richtext-transcription").length,
@@ -347,144 +325,107 @@ function addPagination() {
     }
   });
 }
-
 function goToTranscription(i) {
   $('div[id^="cke_id_transcription"]').hide();
   $('textarea#id_transcription-'+i+'-transcription').ckeditor();
   $('div[id="cke_id_transcription-'+i+'-transcription"]').css('display', 'block');
 }
 
+
+// DUPLICATES PAGE
+// update duplicates page when the primary record is selected
+function selectedPrimaryRecord() {
+  let $duplicatesGroup = $(event.target).closest('.duplicates-group');
+  //reset to default
+  $duplicatesGroup.find('.record').removeClass('border-left');
+  $duplicatesGroup.find('.primary-cell > label').removeClass("selected");
+  $duplicatesGroup.find('.duplicate-cell').children('label').removeClass("disabled");
+  $duplicatesGroup.find('.duplicate-cell').children('label').show();
+  //update cells
+  $(event.target).closest('.record').addClass('border-left');
+  if ($(event.target).is(":checked")) {
+    $(event.target).parent('label').addClass("selected");
+    $(event.target).closest('.primary-cell').next('.duplicate-cell').find('input[type=radio]:checked').prop('checked', false);
+    $(event.target).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
+  }
+}
+// add a duplicate to the table
 function addDuplicate() {
   event.preventDefault();
-    let record = {'id': 156, 'entity_title': '[entity_title]', 'entity_type': '[entity_type]', 'publication_status': '[publication_status]', 'updated_date': '[date_updated]', 'updated_by': '[username]'};
-    let exists = false;
-    $('#duplicates-search-form-notification').remove();
-    $('input:radio[name="primary_record"]').each(function() {
-      if ($(this).val() == record.id) {
-        exists = true;
-      }
-    })
-    if (!exists) {
-      $('#duplicates-table-form .record:last-of-type').after(`
-        <div class="record">
-            <span class="primary-cell">
-                <label>
-                  <input type="radio" value="`+record.id+`" name="primary_record" onclick="selectedPrimaryRecord(this)"/>Primary record
-                </label>
-            </span>
-            <span class="duplicate-cell">
-              <input type="radio" id="duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="true"/>
-              <label for="duplicate_`+record.id+`" class="disabled">Merge with primary</label>
-              <input type="radio" id="not_duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="false"/>
-              <label for="not_duplicate_`+record.id+`" class="disabled">Not related to primary</label>
-            </span>
-            <span>Record ID: `+record.id+`</span>
-            <span class="description">
-              <a href="/editor/entities/`+record.id+`" target="_blank">`+record.entity_title+`</a><br>
-              Type: `+record.entity_type+` | Publication status: `+record.publication_status+` | Updated: `+record.updated_date+` by `+record.updated_by+`
-          </span>
-        </div>
-      `);
-      if ($('.record [name="primary_record"]:checked').length > 0) {
-        $('.record:last-of-type .duplicate-cell').children('label').removeClass("disabled");
-      }
-      $('#duplicates-search-form').before('<div id="duplicates-search-form-notification" class="success-notification">The record ' + record.id + ' has been added to the table.</div>');
-    } else {
-      $('#duplicates-search-form').before('<div id="duplicates-search-form-notification" class="error-notification">The record ' + record.id + ' has already been added to the table.</div>');
+
+  let id, record, notification;
+  let inTable = false;
+  let $duplicatesGroup = $(event.target).closest('.duplicates-group');
+
+  $('#duplicates-search-form-notification').remove();
+  $('.empty-block').remove();
+
+  // check if a record was added from the search bar...
+  if ($(event.target).prev('input').length && $(event.target).prev('input').val() != '') {
+    id = $(event.target).prev('input').val();
+  } 
+  // ... or from the manually removed table
+  else if ($(event.target).parents('.removed-record').find('.record-id').length > 0) {
+    id = $(event.target).parents('.removed-record').find('.record-id > span').attr('id');
+  } 
+  else {
+    return false;
+  }
+
+  /* 
+      if a record was manually added via search, we need to check if this record is already listed in the table 
+      in case the user tries to add the same record twice. 
+      We can try and dynamically update the records in the database and not suggest the records which are already in the duplicates table, but I don't think it is needed.
+  */
+  $('input:radio[name^="primary_record"]').each(function() {
+    if ($(this).val() == id) {
+      inTable = true;
+      notification = $duplicatesGroup.find('.duplicates-search-form').before('<div id="duplicates-search-form-notification" class="error-notification">The record ' + id + ' has already been added to the table.</div>');
     }
-}
+  })
 
-function selectedPrimaryRecord(el) {
-  //reset to default
-  $('.record').removeClass('border-left');
-  $('.primary-cell > label').removeClass("selected");
-  $('.duplicate-cell').children('label').removeClass("disabled");
-  $('.duplicate-cell').children('label').show();
-  //update cells
-  $(el).closest('.record').addClass('border-left');
-  if ($(el).is(":checked")) {
-    $(el).parent('label').addClass("selected");
-    $(el).closest('.primary-cell').next('.duplicate-cell').find('input[type=radio]:checked').prop('checked', false);;
-    $(el).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
+  // RECORD PLACEHOLDER
+  record = {'id': id, 'entity_title': '[entity_title]', 'entity_type': '[entity_type]', 'publication_status': '[publication_status]', 'updated_date': '[date_updated]', 'updated_by': '[username]'};
+
+  // if a record is not in the table, append it to the list of records
+  if (!inTable) {
+    $duplicatesGroup.find('.records').append(`
+      <div class="record">
+          <span class="primary-cell">
+              <label>
+                <input type="radio" value="`+record.id+`" name="primary_record_`+ $duplicatesGroup.index('.duplicates-group') + `" onclick="selectedPrimaryRecord(this)"/>Primary record
+              </label>
+          </span>
+          <span class="duplicate-cell">
+            <input type="radio" id="duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="true"/>
+            <label for="duplicate_`+record.id+`" class="disabled">Merge with primary</label>
+            <input type="radio" id="not_duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="false"/>
+            <label for="not_duplicate_`+record.id+`" class="disabled">Not related to primary</label>
+          </span>
+          <span>Record ID: `+record.id+`</span>
+          <span class="description">
+            <a href="/editor/entities/`+record.id+`" target="_blank">`+record.entity_title+`</a><br>
+            Type: `+record.entity_type+` | Publication status: `+record.publication_status+` | Updated: `+record.updated_date+` by `+record.updated_by+`
+        </span>
+      </div>
+    `);
+    if ($duplicatesGroup.find('[name^="primary_record"]:checked').length > 0) {
+      $duplicatesGroup.find('.record:last-of-type .duplicate-cell').children('label').removeClass("disabled");
+    }
+
+    /* 
+      if a record was manually added via search and it is also available in the manually removed table,
+      we need to remove this record from the manually removed table to make sure the user doesn't add the same record twice.
+      We can try and not suggest the manually removed records via the search bar, but I don't think it is needed either.
+    */
+    $duplicatesGroup.find('span[id='+record.id+']').closest('.removed-record').remove();
+    if (!$duplicatesGroup.find('.removed-record').length) {
+      $duplicatesGroup.find('.removed-records').prev('p').remove();
+    }
+
+    notification = $duplicatesGroup.find('.duplicates-search-form').before('<div id="duplicates-search-form-notification" class="success-notification">The record ' + record.id + ' has been added to the table.</div>');
   }
-}
-
-// when the pagination button in full screen mode is clicked, 
-// get index of an image 
-// update pagination 
-// update transcription in RTE
-
-// expand/collapse entity/archival record sections and individual sections on the hierarchy page
-function toggleTab(el) {
-  event.preventDefault();
-  $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
-  $(el).toggleClass('active');
-}
-
-// expand a hierarchical tree
-function toggleExpand(el) {
-  event.preventDefault();
-  if ($('.collections-level').hasClass('not-expanded')) {
-    $('.fieldset-body').addClass('expand');
-    $('.toggle-tab-button').addClass('active');
-    $(el).text('Collapse all');
-  } else {
-    $('.series-level').find('.fieldset-body').removeClass('expand');
-    $('.series-level').find('.toggle-tab-button').removeClass('active');
-    $(el).text('Expand all');
-  }
-  $('.collections-level').toggleClass('not-expanded');
-}
-
-function showAllMoreInformation(el) {
-  $('[id^="checkbox_"]').prop('checked', !$('[id^="checkbox_"]').prop('checked'));
-  if ($('[id^="checkbox_"]').prop('checked')) {
-    $(el).text('Collapse all');
-  } else {
-    $(el).text('Expand all');
-  }
-  
-}
-
-// show more/less facet options
-function toggleFilters(el) {
-  event.preventDefault();
-  var fieldset = $(el).parent('fieldset').first();
-  $(fieldset).children('.show-more').remove();
-  if ($(fieldset).children('a[style="display: none;"]').length) {
-    $(fieldset).children('a').show();
-    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-minus"></i> Show less</button>`);
-  }
-  else {
-    $(fieldset).children('a').slice(5, $(fieldset).children('a').length).hide();
-    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+ $(fieldset).children("a").length +`)</button>`);
-  }
-}
-
-// hide/show help text on single entity and archival records pages
-function toggleHelpText(el, help_text) {
-  event.stopPropagation();
-  event.preventDefault();
-  if ($(el).siblings('p.additional-info').length) {
-    // change icon to 'question mark'
-    $(el).text('');
-    $(el).siblings('p.additional-info').remove();
-  }
-  else {
-    var position = $(el).position();
-    $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
-    // change icon to 'close'
-    $(el).text('');
-  }
-}
-
-/**
- * Create confirmation modal dialogue with form to delete the current
- * record (whether Archival Record or Entity).
- */
-function deleteRecord(event) {
-  $('#delete-modal').addClass('active');
-  event.preventDefault();
+  return notification;
 }
 
 /**
@@ -513,7 +454,7 @@ function addEmptyForm(formType, context) {
   let jContext = $(context);
   let managementFormContainer = getManagementFormContainer(jContext);
   let maxNumControl = managementFormContainer.children('input[name$="MAX_NUM_FORMS"]');
-  let maxNumForms = Number(maxNumControl.attr('value'))
+  let maxNumForms = Number(maxNumControl.attr('value'));
   let totalControl = managementFormContainer.children('input[name$="TOTAL_FORMS"]');
   let newFormPrefixNumber = Number(totalControl.attr('value'));
   if ((newFormPrefixNumber+1) >= maxNumControl.attr('value')) {
@@ -619,28 +560,15 @@ function getNewFormParent(context) {
   return context.parents('.formset').first().children('div.fieldsets').last();
 }
 
-
-// this won't delete the field(s), just hide them. The deletion needs to be executed in the backend, once the form is submitted.
-function deleteField(el, toDelete) {
-  event.preventDefault();
-  $(el).closest(toDelete).addClass('none');
-  $(el).parents('.formset').first().children('label').show();
-}
-
-
-function deleteRow(el) {
-  if (!$(el).parent().siblings('td').hasClass('none')) {
-    $(el).parent().siblings('td').addClass('none');
-    $(el).parent().attr('colspan', '6');
-    $(el).after(`<span class="confirm-deletion"><i class="fas fa-trash-alt"></i><input name="all_users_submit" aria-label="save admin table" type="submit" class="button-link danger" value="Delete permanently and save table" /></span>`)
-  } else {
-    $(el).parent().attr('colspan', '1');
-    $(el).parent().siblings('td').removeClass('none');
-    $(el).siblings('.confirm-deletion').remove();
-  }
-  // Find and toggle the DELETE checkbox for the form.
-  let deleteField = $(el).closest('[data-form-type]').find('[class~="delete-form-field"]').find('[name$="DELETE"]').first();
-  deleteField.prop('checked', !deleteField.prop('checked'));
+/**
+ * Initialise all autocomplete widgets except ones in an empty
+ * template form.
+ *
+ * Multiple initialisations of the same widgets does not appear to
+ * cause problems.
+ */
+function initAutocompleteWidgets() {
+  $('.autocomplete').not('[name*=__prefix__]').select2();
 }
 
 
@@ -657,18 +585,6 @@ function generateCreationYearURL(startYear, endYear) {
   searchParams.set('start_year', startYear)
   searchParams.set('end_year', endYear)
   return '?' + searchParams.toString();
-}
-
-
-/**
- * Initialise all autocomplete widgets except ones in an empty
- * template form.
- *
- * Multiple initialisations of the same widgets does not appear to
- * cause problems.
- */
-function initAutocompleteWidgets() {
-  $('.autocomplete').not('[name*=__prefix__]').select2();
 }
 
 
@@ -707,10 +623,6 @@ function setUpCreationYearSlider() {
     }
   });
 
-  /* these values should be specified via start_year and end_year in the template:
-     $( "#id_start_year" ).val( $( "#year-range" ).slider( "values", 0 ));
-     $( "#id_end_year" ).val( $( "#year-range" ).slider( "values", 1 ));
-  */
   $( "#id_start_year" ).on('keyup change', function(el) {
     var endYear = parseInt($( "#id_end_year" ).val());
     if ($(el.target).val() >= minValue && $(el.target).val() <= endYear) {
@@ -727,6 +639,23 @@ function setUpCreationYearSlider() {
       let queryString = generateCreationYearURL($('#id_start_year').val(),
                                                 $('#id_end_year').val());
       $('#year-range-anchor').attr('href', queryString);
+    }
+  });
+}
+
+
+function hierarchyInstantSearch() {
+  let query = $(event.target).val().toLowerCase();
+  $('.fieldset-header').find('span').removeClass('greyed-out');
+  $('div[class="series-level"]').children('.fieldset-body').removeClass('expand');
+  $('.expand-collapse > button').text('Collapse all');
+  $('.collections-level').removeClass('not-expanded')
+  $('.fieldset-header').find('a.dotted-underline').each(function() {
+    let option = $(this).text().toLowerCase();
+    if (!option.includes(query)) {
+      $(this).parents('.fieldset-header').first().find('span').addClass('greyed-out');
+    } else {
+      $(this).parents('div[class="series-level"]').find('.fieldset-body').addClass('expand');
     }
   });
 }
@@ -818,4 +747,100 @@ function toggleRequiredControls(controls, add_required) {
     value = 'required';
   }
   controls.attr('required', value);
+}
+
+// expand/collapse entity/archival record sections and individual sections on the hierarchy page
+function toggleTab(el) {
+  event.preventDefault();
+  $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
+  $(el).toggleClass('active');
+}
+
+// expand a hierarchical tree
+function toggleExpand(el) {
+  event.preventDefault();
+  if ($('.collections-level').hasClass('not-expanded')) {
+    $('.fieldset-body').addClass('expand');
+    $('.toggle-tab-button').addClass('active');
+    $(el).text('Collapse all');
+  } else {
+    $('.series-level').find('.fieldset-body').removeClass('expand');
+    $('.series-level').find('.toggle-tab-button').removeClass('active');
+    $(el).text('Expand all');
+  }
+  $('.collections-level').toggleClass('not-expanded');
+}
+
+// show all information on the table pages
+function toggleAllMoreInformation(el) {
+  $('[id^="checkbox_"]').prop('checked', !$('[id^="checkbox_"]').prop('checked'));
+  if ($('[id^="checkbox_"]').prop('checked')) {
+    $(el).text('Collapse all');
+  } else {
+    $(el).text('Expand all');
+  }
+}
+
+// show more/less facet options
+function toggleFilters(el) {
+  event.preventDefault();
+  var fieldset = $(el).parent('fieldset').first();
+  $(fieldset).children('.show-more').remove();
+  if ($(fieldset).children('a[style="display: none;"]').length) {
+    $(fieldset).children('a').show();
+    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-minus"></i> Show less</button>`);
+  }
+  else {
+    $(fieldset).children('a').slice(5, $(fieldset).children('a').length).hide();
+    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+ $(fieldset).children("a").length +`)</button>`);
+  }
+}
+
+// hide/show help text on single entity and archival records pages
+function toggleHelpText(el, help_text) {
+  event.stopPropagation();
+  event.preventDefault();
+  if ($(el).siblings('p.additional-info').length) {
+    // change icon to 'question mark'
+    $(el).text('');
+    $(el).siblings('p.additional-info').remove();
+  }
+  else {
+    var position = $(el).position();
+    $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
+    // change icon to 'close'
+    $(el).text('');
+  }
+}
+
+
+/**
+ * Create confirmation modal dialogue with form to delete the current
+ * record (whether Archival Record or Entity).
+ */
+function deleteRecord(event) {
+  $('#delete-modal').addClass('active');
+  event.preventDefault();
+}
+
+// this won't delete the field(s), just hide them. The deletion needs to be executed in the backend, once the form is submitted.
+function deleteField(el, toDelete) {
+  event.preventDefault();
+  $(el).closest(toDelete).addClass('none');
+  $(el).parents('.formset').first().children('label').show();
+}
+
+function deleteRow(el) {
+  if (!$(el).parent().siblings('td').hasClass('none')) {
+    $(el).parent().siblings('td').addClass('none');
+    $(el).parent().attr('colspan', '6');
+    $(el).after(`<span class="confirm-deletion"><i class="fas fa-trash-alt"></i><input name="all_users_submit" aria-label="save admin table" type="submit" class="button-link danger" value="Delete permanently and save table" /></span>`)
+  } else {
+    $(el).parent().attr('colspan', '1');
+    $(el).parent().siblings('td').removeClass('none');
+    $(el).siblings('.confirm-deletion').remove();
+  }
+  // Find and toggle the DELETE checkbox for the form.
+  let deleteField = $(el).closest('[data-form-type]').find('[class~="delete-form-field"]').find('[name$="DELETE"]').first();
+  deleteField.prop('checked', !deleteField.prop('checked'));
 }

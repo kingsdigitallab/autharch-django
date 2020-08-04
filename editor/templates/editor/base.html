@@ -43,6 +43,7 @@
             <h4>Archival records</h4>
           </a>
         </div>
+        <!-- TODO: display if deleted > 0 -->
         {% if show_delete %}
         <div class="link{% if current_section == 'deleted' %} active{% endif %}">
           <a href="{% url 'editor:deleted-list' %}">
@@ -51,7 +52,7 @@
           </a>
         </div>
         {% endif %}
-        <!-- TODO: display for moderators and admins only; display if > 0 -->
+        <!-- TODO: display for moderators and admins only; display if duplicates > 0 -->
         <div class="link{% if current_section == 'duplicates' %} active{% endif %}">
           <a href="{% url 'editor:duplicates-list' %}">
             <i class="fal fa-copy"></i>

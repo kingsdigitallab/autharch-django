@@ -1,7 +1,7 @@
 {% extends "./base.html" %}
 {% load editor_form_tags %}
 {% block main %}
-<main>
+<main id="records-list">
   {% block page_header %}
   <div class="page-header">
     <h1>Archival records ({{ object_list.count }})</h1>
@@ -38,20 +38,22 @@
                     {% endfor %}
                   </fieldset>
                 {% endif %}
-                  {% if facets.fields.transcription_text|length > 0 %}
-                  <fieldset class="filter-list" id="has-transcriptions-filter">
-                    <legend>Transcriptions</legend>
-                    {% for transcription_text in facets.fields.transcription_text %}
-                    {% render_facet transcription_text %}
-                    {% endfor %}
-                  </fieldset>
-                  {% endif %}
-                  <fieldset class="filter-list" id="record-type-filter">
-                    <legend>Record type</legend>
-                    {% for record_type in facets.fields.record_types %}
-                    {% render_facet record_type %}
-                    {% endfor %}
-                  </fieldset>
+                {% if facets.fields.transcription_text|length > 0 %}
+                <fieldset class="filter-list" id="has-transcriptions-filter">
+                  <legend>Transcriptions</legend>
+                  {% for transcription_text in facets.fields.transcription_text %}
+                  {% render_facet transcription_text %}
+                  {% endfor %}
+                </fieldset>
+                {% endif %}
+                {% if facets.fields.record_types|length > 0 %}
+                <fieldset class="filter-list" id="record-type-filter">
+                  <legend>Record type</legend>
+                  {% for record_type in facets.fields.record_types %}
+                  {% render_facet record_type %}
+                  {% endfor %}
+                </fieldset>
+                {% endif %}
                 {% if facets.fields.writers|length > 0 %}
                   <fieldset class="filter-list" id="writer-filter">
                     <legend>Writer</legend>
@@ -117,7 +119,7 @@
         <thead>
           <tr>
             <th scope="col" data-label="Title" data-placeholder="Filter records by title">Title 
-              <button class="button-link dotted-underline mgn-left" onclick="showAllMoreInformation(this)">Expand all</button>
+              <button class="button-link dotted-underline mgn-left" onclick="toggleAllMoreInformation(this)">Expand all</button>
             </th>
             <th scope="col" data-label="Writer" data-placeholder="Filter records by writer">Writer</th>
             <th class="filter-select" scope="col" data-label="Level" data-placeholder="Select">Level</th>

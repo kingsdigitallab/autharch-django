@@ -6,7 +6,7 @@
 {% endblock extra_head %}
 
 {% block main %}
-<main>
+<main id="entity-edit">
   {% block page_header %}
   <div class="header-fixed">
     <div class="status-bar">
@@ -78,6 +78,7 @@
           <span class="dotted-underline">Detected duplicates (0)</span>
         </a>
       </li>
+      <!-- TODO: display if related > 0 -->
       <li>
         <a href="{% url 'editor:entity-related' entity_id=entity.pk %}">
           <i class="fal fa-archive"></i>
