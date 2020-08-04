@@ -50,6 +50,10 @@ class ArchivalRecordIndex:
         return list(obj.references.filter(source=RA_REFERENCE_SOURCE)
                     .values_list('unitid', flat=True))
 
+    def prepare_transcription_text(self, obj):
+        if obj.transcription_texts.count():
+            return True
+
     def prepare_writers(self, obj):
         return list(obj.creators.distinct().values_list('pk', flat=True))
 
@@ -74,6 +78,7 @@ class CollectionIndex(indexes.SearchIndex, indexes.Indexable,
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     ra_references = indexes.MultiValueField()
+    transcription_text = indexes.BooleanField(faceted=True)
 
     def get_model(self):
         return Collection
@@ -97,6 +102,7 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     ra_references = indexes.MultiValueField()
     record_types = indexes.MultiValueField(
         faceted=True, model_attr='record_type__title')
+    transcription_text = indexes.BooleanField(faceted=True)
 
     def get_model(self):
         return File
@@ -118,6 +124,7 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     ra_references = indexes.MultiValueField()
+    transcription_text = indexes.BooleanField(faceted=True)
 
     def get_model(self):
         return Item
@@ -136,6 +143,7 @@ class SeriesIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     ra_references = indexes.MultiValueField()
+    transcription_text = indexes.BooleanField(faceted=True)
 
     def get_model(self):
         return Series

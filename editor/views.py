@@ -111,6 +111,8 @@ class FacetMixin:
             if facet in ('addressees', 'related_entities', 'writers'):
                 display_values = Entity.objects.filter(
                     id__in=[value[0] for value in values])
+            elif facet == 'transcription_text':
+                display_values = 'Records with transcriptions'
             new_values = []
             for value_data in values:
                 obj_id, obj_count = value_data
@@ -122,6 +124,8 @@ class FacetMixin:
                         value_data, query_dict, facet)
                 if display_values is None:
                     new_value = (obj_id, obj_count, link, is_selected)
+                elif isinstance(display_values, str):
+                    new_value = (display_values, obj_count, link, is_selected)
                 else:
                     new_value = (str(display_values.get(id=obj_id)), obj_count,
                                  link, is_selected)
@@ -250,8 +254,9 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series).exclude(
         maintenance_status='deleted').facet('addressees', size=0).facet(
-            'archival_level').facet('languages', size=0).facet(
-                'writers', size=0).facet('record_types', size=0)
+        'archival_level').facet('languages', size=0).facet(
+        'writers', size=0).facet('record_types', size=0).facet(
+        'transcription_text', size=0)
     form_class = ArchivalRecordFacetedSearchForm
     facet_fields = []
 

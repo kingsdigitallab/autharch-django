@@ -38,14 +38,14 @@
                     {% endfor %}
                   </fieldset>
                 {% endif %}
-                <!-- TODO: 'with transcriptions' filter -->
-                <!-- <fieldset class="filter-list" id="has-transcriptions-filter">
-                  <legend>Transcriptions</legend>
-                  <a href="" class="checkbox-anchor">
-                    <input type="checkbox" aria-label="" onclick=''/>Records with transcriptions
-                  </a>
-                </fieldset> -->
-                  
+                  {% if facets.fields.transcription_text|length > 0 %}
+                  <fieldset class="filter-list" id="has-transcriptions-filter">
+                    <legend>Transcriptions</legend>
+                    {% for transcription_text in facets.fields.transcription_text %}
+                    {% render_facet transcription_text %}
+                    {% endfor %}
+                  </fieldset>
+                  {% endif %}
                   <fieldset class="filter-list" id="record-type-filter">
                     <legend>Record type</legend>
                     {% for record_type in facets.fields.record_types %}
