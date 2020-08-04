@@ -251,7 +251,7 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     queryset = SearchQuerySet().models(Collection, File, Item, Series).exclude(
         maintenance_status='deleted').facet('addressees', size=0).facet(
             'archival_level').facet('languages', size=0).facet(
-                'writers', size=0)
+                'writers', size=0).facet('record_types', size=0)
     form_class = ArchivalRecordFacetedSearchForm
     facet_fields = []
 
@@ -765,12 +765,14 @@ def how_to_use(request):
     }
     return render(request, 'editor/how_to_use.html', context)
 
+
 @user_passes_test(is_user_editor_plus)
 def duplicates_list(request):
     context = {
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/duplicates_list.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 def record_transcriptions(request, record_id):
