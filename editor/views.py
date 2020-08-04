@@ -734,12 +734,15 @@ def record_hierarchy(request, record_id):
 @user_passes_test(is_user_editor_plus)
 def record_related(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
-    addressees = []
-    writers = []
-    if record.organisations_as_subjects.all():
+    # Only File and Item objects have addressees and writers.
+    try:
         addressees = record.organisations_as_subjects.all()
-    if record.organisations_as_subjects.all():
+    except AttributeError:
+        addressees = Entity.objects.none()
+    try:
         writers = record.creators.all()
+    except AttributeError:
+        writers = Entity.objects.none()
     context = {
         'addressees': addressees,
         'corporate_body_subjects': record.organisations_as_subjects.all(),
