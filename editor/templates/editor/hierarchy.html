@@ -1,4 +1,5 @@
 {% extends "./base.html" %}
+{% load editor_form_tags %}
 {% block main %}
 <main id="hierarchy">
     {% block content %}
@@ -21,6 +22,11 @@
             </div>
         </div>
         <div class="error-notification">This page is currently under development.</div>
+
+        <div class="not-expanded collections-level">
+          {% render_record_hierarchy_item root_ancestor item ancestors %}
+        </div>
+
         <div class="not-expanded collections-level">
             <div class="fieldset-header">
                 <button class="toggle-tab-button active" onclick="toggleTab(this)"><span hidden>Expand</span></button>

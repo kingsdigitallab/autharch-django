@@ -1,0 +1,27 @@
+{% load editor_form_tags %}
+<div class="fieldset-header">
+  {% if children %}
+  <button class="toggle-tab-button{% if is_ancestor %} active{% endif %}" onclick="toggleTab(this)">
+    <span hidden="hidden">Expand</span>
+  </button>
+  {% else %}
+  <span></span>
+  {% endif %}
+  <span{% if is_selected %} class="browsed-item"{% endif %}>
+    <a href="{% url 'editor:record-edit' record_id=current.pk %}" class="dotted-underline{% if children %} mgn-right{% endif %}">{{ current }}</a>{% if children %} {{ children_desc }}{% endif %}
+  </span>
+  <span class="record-details">
+    <span>{{ current.archival_level }}</span>
+    <span>{{ ra_references }}</span>
+    <span>{{ current.creation_dates }}</span>
+  </span>
+</div>
+{% if children %}
+<div class="fieldset-body{% if is_ancestor %} expand{% endif %}">
+  {% for child in children %}
+  <div class="series-level">
+    {% render_record_hierarchy_item child selected_record ancestors %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

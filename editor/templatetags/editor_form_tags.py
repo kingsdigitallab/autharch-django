@@ -94,3 +94,39 @@ def render_form_delete_widget(field):
     context['widget'] = field.as_widget(
         attrs={'aria-label': 'delete field checkbox'})
     return context
+
+
+@register.inclusion_tag('editor/includes/record_hierarchy_item.html')
+def render_record_hierarchy_item(current_record, selected_record, ancestors):
+    context = {
+        'ancestors': ancestors,
+        'current': current_record,
+        'is_ancestor': False,
+        'is_selected': False,
+        'selected_record': selected_record,
+    }
+    children = []
+    children_desc = []
+    if isinstance(current_record, Collection):
+        children = list(current_record.series_set.all())
+        children_desc.append('{} series'.format(len(children)))
+    elif isinstance(current_record, Series):
+        series = list(current_record.series_set.all())
+        files = list(current_record.file_set.all())
+        items = list(current_record.item_set.all())
+        children = series + files + items
+        children_desc.append('{} series'.format(len(series)))
+        children_desc.append('{} files'.format(len(files)))
+        children_desc.append('{} items'.format(len(items)))
+    elif isinstance(current_record, File):
+        children = list(current_record.item_set.all())
+        children_desc.append('{} items'.format(len(children)))
+    context['children'] = children
+    context['children_desc'] = '({})'.format(', '.join(children_desc))
+    if current_record == selected_record:
+        context['is_selected'] = True
+    elif current_record in ancestors:
+        context['is_ancestor'] = True
+    context['ra_references'] = '; '.join(current_record.references.filter(
+        source__title='RA').values_list('unitid', flat=True))
+    return context

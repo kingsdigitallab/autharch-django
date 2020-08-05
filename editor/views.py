@@ -763,14 +763,43 @@ def record_history(request, record_id):
 @user_passes_test(is_user_editor_plus)
 def record_hierarchy(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
+    ancestors = get_ancestors(record)
+    root_ancestor = ancestors[-1]
     context = {
+        'ancestors': ancestors,
         'current_section': 'records',
         'edit_url': reverse('editor:record-edit',
                             kwargs={'record_id': record_id}),
         'item': record,
+        'root_ancestor': root_ancestor,
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/hierarchy.html', context)
+
+
+def get_ancestors(record, ancestors=None):
+    """Returns a list of ancestors-and-self of `record`, in ascending
+    order from `record`.
+
+    This function does not enforce that the highest ancestor is a
+    Collection.
+
+    """
+    if ancestors is None:
+        ancestors = [record]
+    else:
+        ancestors.append(record)
+    if isinstance(record, Series):
+        if record.parent_collection is not None:
+            ancestors = get_ancestors(record.parent_collection, ancestors)
+        elif record.parent_series is not None:
+            ancestors = get_ancestors(record.parent_series, ancestors)
+    elif isinstance(record, (File, Item)):
+        if record.parent_series is not None:
+            ancestors = get_ancestors(record.parent_series, ancestors)
+        elif record.parent_file is not None:
+            ancestors = get_ancestors(record.parent_file, ancestors)
+    return ancestors
 
 
 @user_passes_test(is_user_editor_plus)
