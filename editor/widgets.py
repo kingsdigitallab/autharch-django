@@ -70,6 +70,11 @@ class EntityAutocomplete(AutocompleteMixin):
         return reverse('editor:editor_entity_autocomplete')
 
 
+class EntitySelect(EntityAutocomplete, forms.Select):
+
+    pass
+
+
 class EntityMultiSelect(EntityAutocomplete, forms.SelectMultiple):
 
     pass

@@ -24,7 +24,8 @@ from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
 from .widgets import (
     ArchivalRecordSelect, EntityMultiSelect, EntityCorporateBodyMultiSelect,
-    EntityPersonMultiSelect, FunctionMultiSelect, FunctionSelect, GenderSelect)
+    EntityPersonMultiSelect, EntitySelect, FunctionMultiSelect, FunctionSelect,
+    GenderSelect)
 
 
 RICHTEXT_ATTRS = {
@@ -282,7 +283,7 @@ class RelationEditInlineForm(forms.ModelForm):
         model = Relation
         widgets = {
             'place': PlaceSelect(),
-            'related_entity': forms.Select(attrs=SEARCH_SELECT_ATTRS_DYNAMIC),
+            'related_entity': EntitySelect(),
             'date_from': forms.TextInput(attrs=DATE_FORMAT),
             'date_to': forms.TextInput(attrs=DATE_FORMAT)
         }
