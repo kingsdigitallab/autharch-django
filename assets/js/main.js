@@ -647,15 +647,15 @@ function setUpCreationYearSlider() {
 function hierarchyInstantSearch() {
   let query = $(event.target).val().toLowerCase();
   $('.fieldset-header').find('span').removeClass('greyed-out');
-  $('div[class="series-level"]').children('.fieldset-body').removeClass('expand');
+  $('div[class="child-level"]').children('.fieldset-body').removeClass('expand');
   $('.expand-collapse > button').text('Collapse all');
-  $('.collections-level').removeClass('not-expanded')
+  $('.parent-level').removeClass('not-expanded')
   $('.fieldset-header').find('a.dotted-underline').each(function() {
     let option = $(this).text().toLowerCase();
     if (!option.includes(query)) {
       $(this).parents('.fieldset-header').first().find('span').addClass('greyed-out');
     } else {
-      $(this).parents('div[class="series-level"]').find('.fieldset-body').addClass('expand');
+      $(this).parents('div[class="child-level"]').find('.fieldset-body').addClass('expand');
     }
   });
 }
@@ -759,16 +759,16 @@ function toggleTab(el) {
 // expand a hierarchical tree
 function toggleExpand(el) {
   event.preventDefault();
-  if ($('.collections-level').hasClass('not-expanded')) {
+  if ($('.parent-level').hasClass('not-expanded')) {
     $('.fieldset-body').addClass('expand');
     $('.toggle-tab-button').addClass('active');
     $(el).text('Collapse all');
   } else {
-    $('.series-level').find('.fieldset-body').removeClass('expand');
-    $('.series-level').find('.toggle-tab-button').removeClass('active');
+    $('.child-level').find('.fieldset-body').removeClass('expand');
+    $('.child-level').find('.toggle-tab-button').removeClass('active');
     $(el).text('Expand all');
   }
-  $('.collections-level').toggleClass('not-expanded');
+  $('.parent-level').toggleClass('not-expanded');
 }
 
 // show all information on the table pages
