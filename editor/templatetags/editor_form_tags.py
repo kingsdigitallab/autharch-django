@@ -110,6 +110,7 @@ def render_record_hierarchy_item(current_record, selected_record, ancestors):
     if isinstance(current_record, Collection):
         children = list(current_record.series_set.all())
         children_desc.append('{} series'.format(len(children)))
+        context['is_ancestor'] = True
     elif isinstance(current_record, Series):
         series = list(current_record.series_set.all())
         files = list(current_record.file_set.all())

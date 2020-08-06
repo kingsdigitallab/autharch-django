@@ -647,7 +647,7 @@ function setUpCreationYearSlider() {
 function hierarchyInstantSearch() {
   let query = $(event.target).val().toLowerCase();
   $('.fieldset-header').find('span').removeClass('greyed-out');
-  $('div[class="child-level"]').children('.fieldset-body').removeClass('expand');
+  $('.child-level').children('.fieldset-body').removeClass('expand');
   $('.expand-collapse > button').text('Collapse all');
   $('.parent-level').removeClass('not-expanded')
   $('.fieldset-header').find('a.dotted-underline').each(function() {
@@ -655,7 +655,7 @@ function hierarchyInstantSearch() {
     if (!option.includes(query)) {
       $(this).parents('.fieldset-header').first().find('span').addClass('greyed-out');
     } else {
-      $(this).parents('div[class="child-level"]').find('.fieldset-body').addClass('expand');
+      $(this).parents('.child-level').find('.fieldset-body').addClass('expand');
     }
   });
 }

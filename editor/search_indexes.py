@@ -124,6 +124,8 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     ra_references = indexes.MultiValueField()
+    record_types = indexes.MultiValueField(
+        faceted=True, model_attr='record_type__title')
     transcription_text = indexes.BooleanField(faceted=True)
 
     def get_model(self):
