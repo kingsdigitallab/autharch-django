@@ -1122,6 +1122,9 @@ main {
                     white-space: nowrap;
                     font-size: 0.92em;
                 }
+                &:last-of-type {
+                    min-width: 158px;
+                }
                 &.description {
                     width: 80%;
                     white-space: normal;
@@ -1726,6 +1729,19 @@ main {
                 display: none;
             }
         }
+        .hierarchy-header {
+            margin-bottom: 1em;
+            display: grid;
+            grid-template-columns: 1fr 500px;
+            gap: 0.8em;
+            font-weight: 500;
+        }
+        span.record-details {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            gap: 0.6em;
+            font-size: 0.92em;
+        }
         .fieldset-header {
             margin-bottom: 1em;
             display: grid;
@@ -1742,12 +1758,6 @@ main {
                         color: darken($medium-grey, 20%);
                     }
                 }
-            }
-            span.record-details {
-                display: grid;
-                grid-template-columns: 1fr 1.5fr 1fr;
-                gap: 0.6em;
-                font-size: 0.92em;
             }
             .browsed-item {
                 background-color: lighten($light-grey,3%);
@@ -2314,7 +2324,7 @@ footer {
     padding:10px;
     .select2-search__field{
         padding:10px;
-        font-size: 1.14em;
+        font-size: 1em;
     }   
 }
 
@@ -2403,6 +2413,9 @@ footer {
         margin-left: 0px !important;
         padding: 0px 30px 30px 30px;
         &#hierarchy {
+            .hierarchy-header {
+                grid-template-columns: 1fr 400px;
+            }
             .fieldset-header {
                 grid-template-columns: 0.01fr 1fr 400px;
             }
@@ -2465,6 +2478,9 @@ footer {
     }
     main {
         &#hierarchy {
+            .hierarchy-header {
+                display: none;
+            }
             .fieldset-header {
                 grid-template-columns: 0.01fr 1fr 200px;
                 span.record-details {

@@ -10,14 +10,15 @@
                 <thead>
                   <tr>
                     {% if object_type == 'entity' %}
-                    <th scope="col" data-label="Title">Title</th>
+                    <th scope="col" data-label="Title" data-placeholder="Filter records by title">Title</th>
                     {% else %}
-                    <th scope="col" data-label="Name">Name</th>
+                    <th scope="col" data-label="Name" data-placeholder="Filter records by name">Name</th>
                     {% endif %}
-                    <th class="filter-select" scope="col" data-label="Relation">Relation</th>
-                    <th class="filter-select" scope="col" data-label="Type/level">Type/level</th>
-                    <th class="filter-select" scope="col" data-label="Publication status">Publication status</th>
-                    <th scope="col" data-label="Updated" class="sorter-sugar">Updated</th>
+                    
+                    <th class="filter-select" scope="col" data-label="Relation" data-placeholder="Select">Relation</th>
+                    <th class="filter-select" scope="col" data-label="Type/level" data-placeholder="Select">Type/level</th>
+                    <th class="filter-select" scope="col" data-label="Publication status" data-placeholder="Select">Publication status</th>
+                    <th scope="col" data-label="Updated" class="sorter-sugar" data-placeholder="Filter records by date">Updated</th>
                   </tr>
                 </thead>
                 <tbody>

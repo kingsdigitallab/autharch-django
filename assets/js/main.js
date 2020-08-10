@@ -62,6 +62,11 @@ $(document).ready(function() {
   $('.select2-selection--single').attr({
     'role': 'list'
   });
+  $('.fieldset-body').on('select2:opening', function(e) {
+    setTimeout(function() {
+      $('.select2-search__field').attr('placeholder', 'Enter your search term...');
+    }, 500);
+  });
 
   // TABLESORTER
   // sorter for the archival records table - Collection -> Series -> File -> Item
