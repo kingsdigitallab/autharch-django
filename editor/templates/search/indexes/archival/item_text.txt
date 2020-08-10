@@ -7,3 +7,8 @@
 {% for person in object.persons_as_relations.all %}
 {{ person }}
 {% endfor %}
+{% for reference in object.references.all %}
+{% if reference.source.title == 'RA' %}
+{{ reference.unitid }}
+{% endif %}
+{% endfor %}
