@@ -132,6 +132,9 @@ class FacetMixin:
                 new_values.append(new_value)
                 if obj_id in selected_facets.get(facet, []):
                     selected.append(new_value)
+                if facet == 'transcription_text' and selected_facets.get(
+                        facet, []):
+                    selected.append(new_value)
             facets['fields'][facet] = new_values
             facets['selected'] = selected
         return facets
