@@ -1,0 +1,12 @@
+{{ object.title }}
+{{ object.description }}
+{{ object.creation_dates }}
+{% for reference in object.references.all %}
+{% if reference.source.title == 'RA' %}
+{{ reference.unitid }}
+{% endif %}
+{% endfor %}
+{% for subject in object.subjects.all %}
+{{ subject.title }}
+{{ subject.alt_labels }}
+{% endfor %}

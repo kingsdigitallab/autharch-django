@@ -1,8 +1,1 @@
-{{ object.title }}
-{{ object.description }}
-{{ object.creation_dates }}
-{% for reference in object.references.all %}
-{% if reference.source.title == 'RA' %}
-{{ reference.unitid }}
-{% endif %}
-{% endfor %}
+{% extends "./archival_record.txt" %}
