@@ -1,7 +1,7 @@
 from archival.models import (
     ArchivalRecord, ArchivalRecordImage, ArchivalRecordSet,
     ArchivalRecordTranscription, Collection, File, Item, OriginLocation,
-    Reference, Series, Project)
+    Reference, RelatedMaterialReference, Series, Project)
 from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django.db import models
@@ -21,6 +21,11 @@ class ArchivalRecordTranscriptionInline(admin.TabularInline):
 
 class OriginLocationInline(admin.TabularInline):
     model = OriginLocation
+
+
+class RelatedMaterialReferenceInline(admin.TabularInline):
+    model = RelatedMaterialReference
+    fk_name = 'record'
 
 
 @admin.register(ArchivalRecord)
@@ -59,7 +64,8 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
                            'persons_as_subjects', 'organisations_as_subjects',
                            'places_as_subjects', 'media', 'related_entities']
     inlines = [OriginLocationInline, ArchivalRecordImageInline,
-               ArchivalRecordTranscriptionInline]
+               ArchivalRecordTranscriptionInline,
+               RelatedMaterialReferenceInline]
 
     base_fieldsets = [
         ['Repository', {
@@ -94,9 +100,6 @@ class ArchivalRecordChildAdmin(PolymorphicChildModelAdmin, VersionAdmin):
         ['Subjects', {
             'fields': ['subjects', 'persons_as_subjects',
                        'organisations_as_subjects', 'places_as_subjects']
-        }],
-        [None, {
-            'fields': ['related_materials']
         }],
         [None, {
             'fields': ['rcin', 'publication_status', 'rights_declaration',
