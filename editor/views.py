@@ -810,7 +810,7 @@ def record_related(request, record_id):
     record = get_object_or_404(ArchivalRecord, pk=record_id)
     # Only File and Item objects have addressees and writers.
     try:
-        addressees = record.organisations_as_subjects.all()
+        addressees = record.persons_as_relations.all()
     except AttributeError:
         addressees = Entity.objects.none()
     try:
