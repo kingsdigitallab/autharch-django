@@ -697,6 +697,11 @@ main {
         input.save {
             display: block;
             margin-left: auto;
+        }
+    }
+
+    #admin-table-form {
+        input.save {
             margin-top: 3em;
         }
     }
@@ -1802,176 +1807,159 @@ main {
     }
 
     // DUPLICATES PAGES
-    &#duplicates-list, &#duplicates-subpage {
-        p {
-            margin-bottom: 0.3em;
-            font-size: 0.92em;
-            font-weight: 500;
-        }
-        label[for^="add-checkbox"] {
-            line-height: 1.4em;
-            max-width: 100px;
-            margin-left: auto;
-            cursor: pointer;
-            &:before {
-                content: "\f107";
-                font-weight: 300;
-                font-family: $fontawesome;
-                margin-right: 5px;
-                font-size: 1.32em;
-                display: inline-block;
-                vertical-align: middle;
-            }
-            &:hover, &:focus {
-                box-shadow: 0px 2px 2px $medium-grey;
-            }
-        }
-        input[id^="add-checkbox"] {
-            display: none;
-        }
-        input[id^="add-checkbox"]:checked {
-            + .add-section {
-                opacity: 1;
-                height: auto;
-                font-size: 1em;
-                margin-bottom: 2em;
-                visibility: visible;
-            }
-        }
-        .add-section {
-            height: 0;
-            opacity: 0;
-            font-size: 0px;
-            -moz-transition: opacity .3s;
-            -webkit-transition: opacity .3s;
-            -o-transition: opacity .3s;
-            transition: opacity .3s;
-            visibility: hidden;
-            .duplicates-search-form {
-                display: flex;
-                align-items: center;
-                justify-content: flex-end;
-                margin: 1em 0 0.5em 0;
-                input[type=search] {
-                    max-width: 500px;
-                    padding: 10px 20px 10px 20px;
-                }
-                .create {
-                    margin-left: 1em;
-                }
-            }
-            .removed-record {
-                display: grid;
-                grid-template-columns: 0.3fr 1fr auto;
-                border: 1px solid darken($light-grey, 5%); 
-                margin-bottom: 2em;
-                &:first-of-type {
-                    border-top-left-radius: 7px;
-                    border-top-right-radius: 7px;
-                }
-                &:last-of-type {
-                    border-bottom-left-radius: 7px;
-                    border-bottom-right-radius: 7px;
-                }
-                > span {
-                    padding: 1em;
-                    &:first-of-type {
-                        font-size: 0.92em;
-                    }
-                    &:not(:last-of-type) {
-                        border-right: 1px solid darken($light-grey, 5%);
-                    }
-                }
-            }
-        }
-        .record {
-            display: grid;
-            grid-template-columns: auto auto 0.25fr 1fr;
-            border: 1px solid darken($light-grey, 5%);
-            border-left: 9px solid $light-grey;
-            &:first-of-type {
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px;
-            }
-            &:last-of-type {
-                border-bottom-left-radius: 10px;
-                border-bottom-right-radius: 10px;
-            }
-            &:nth-of-type(even) {
-                background-color: lighten($light-grey, 5%);
-            }
-            > span {
-                padding: 1em;
-                &:not(:last-of-type) {
-                    border-right: 1px solid darken($light-grey, 5%);
-                    font-size: 0.92em;
-                }
-            }
-            label {
-                border-radius: 5px;
-                padding: 5px;
-                cursor: pointer;
-                transition: 0.2s ease-in-out;
-                text-align: center;
-                &:hover {
-                    background-color: white;
-                    text-decoration: none;
-                }
-                &.disabled {
-                    cursor: auto;
-                    background-color: transparent !important;
-                    border: 1px solid $light-grey !important;
-                    &:hover, &:focus {
-                        background: transparent;
-                    }
-                }
-            }
-            .primary-cell {
-                label {
-                    border: 1px solid $primary;
-                    color: $primary;
-                    input[type=radio] {
-                        display: inline-block;
-                        vertical-align: text-top;
-                    }
-                }
-                label:hover, label:focus {
-                    background: $primary;
-                    color: white;
-                }
-                label.selected {
-                    background: $primary;
-                    color: white;
-                }
-            }
-            
-            .duplicate-cell {
-                input[type=checkbox], input[type=radio] {
-                    display: none;
-                }
-                label {
-                    border: 1px solid $add;
-                    color: $add;
-                    &:first-of-type {
-                        border-bottom-left-radius: 0px;
-                        border-bottom-right-radius: 0px;
-                        margin-bottom: -1px;
-                    }
-                    &:last-of-type {
-                        border-top-left-radius: 0px;
-                        border-top-right-radius: 0px;
-                    }
-                }
-                input[type=radio]:checked + label {
-                    background: $add;
-                    color: white;
-                }
-            }
-        }
-    }
     &#duplicates-subpage {
         .page-header{
-            margin-bottom: 0;
+            grid-template-columns: auto auto;
+            .search-button {
+                font-family: $font-primary;
+                font-size: 1em;
+                font-weight: 400;
+                top: 1px;
+                background-color: $add;
+                color: white;
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+            }
+        }
+        .current-record {
+            padding-bottom: 1em;
+            border-bottom: 3px solid $primary;
+            border-bottom-left-radius: 5px;
+            p {
+                margin-top: 0em;
+                margin-bottom: 0.6em;
+            }
+        }
+        #add-record-form {
+            display: flex;
+            position: relative;
+            float: right;
+            max-width: 500px;
+            input[type=text] {
+                border: 1px solid $medium-grey;
+                width: 100%;
+                padding-right: 40px;
+                border-radius: 0;
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+            input[type=submit] {
+                position: absolute;
+                right: 1px;
+                top: 1px;
+                background-color: white;
+                color: $primary;
+                font-weight: 500;
+                border: 0;
+                border-radius: 0;
+                border-bottom-right-radius: 5px;
+                border-top-right-radius: 5px;
+                padding-left: 5px;
+            }
+        }
+        #duplicates-form {
+            .duplicates-list, .manually-removed {
+                padding: 2em 0em 0em 2em;
+                margin-left: 1em;
+                border-left: 1px dashed $primary;
+            }
+            .record {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                gap: 1.5em;
+                position: relative;
+                margin-bottom: 1em;
+                .cta {
+                    label[for^="duplicate"] {
+                        border-top-left-radius: 5px;
+                        border-bottom-left-radius: 5px;
+                        margin-right: -4px;
+                        color: $add;
+                        border: 1px solid $add;
+                        &:hover {
+                            background-color: $add;
+                        }
+                    }
+                    label[for^="not_duplicate"] {
+                        border-top-right-radius: 5px;
+                        border-bottom-right-radius: 5px;
+                        color: $danger;
+                        border: 1px solid $danger;
+                        &:hover {
+                            background-color: $danger;
+                        }
+                    }
+                    input[type=radio] {
+                        display: none;
+                        & + label {
+                            padding: 3px 10px;
+                            text-align: center;
+                            display: inline-block;
+                            cursor: pointer;
+                            &:hover {
+                                color: white;
+                            }
+                        }
+                        &:checked + label {
+                            color: white;
+                            &[for^="duplicate"] {
+                                background-color: $add;
+                            }
+                            &[for^="not_duplicate"] {
+                                background-color: $danger;
+                            }
+                        }
+                    }
+                }
+                &:before {
+                    content: '';
+                    border-top: 1px dashed $primary;
+                    position: absolute;
+                    height: 100%;
+                    width: 24px;
+                    top: 13px;
+                    left: -26px;
+                }
+            }
+            label[for="show-removed-checkbox"] {
+                line-height: 1.4em;
+                max-width: 285px;
+                margin: 2em 0em 1em 3em;
+                font-weight: 500;
+                color: $primary;
+                cursor: pointer;
+                &:before {
+                    content: "\f107";
+                    font-weight: 300;
+                    font-family: $fontawesome;
+                    margin-right: 5px;
+                    font-size: 1.32em;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+            }
+            input[id="show-removed-checkbox"] {
+                display: none;
+            }
+            input[id="show-removed-checkbox"]:checked {
+                + .manually-removed {
+                    opacity: 1;
+                    height: auto;
+                    font-size: 1em;
+                    margin-bottom: 2em;
+                    visibility: visible;
+                }
+            }
+            .manually-removed {
+                height: 0;
+                opacity: 0;
+                font-size: 0px;
+                -moz-transition: opacity .3s;
+                -webkit-transition: opacity .3s;
+                -o-transition: opacity .3s;
+                transition: opacity .3s;
+                visibility: hidden;
+            }
         }
     }
 
@@ -2470,6 +2458,15 @@ footer {
             }
         }
    }
+   main {
+        &#duplicates-subpage {
+            #duplicates-form {
+                .duplicates-list {
+                    padding-top: 3em;
+                }
+            }
+        }
+   }
 }
 @media only screen and (max-width: 880px) {
     .mobile-hide {
@@ -2485,19 +2482,6 @@ footer {
                 grid-template-columns: 0.01fr 1fr 200px;
                 span.record-details {
                     grid-template-columns:1fr;
-                }
-            }
-        }
-        &#duplicates-list, &#duplicates-subpage {
-            .record {
-                grid-template-columns: 1fr 1fr 0.7fr;
-                .description {
-                    border-top: 1px solid $medium-grey;
-                    grid-column: span 3;
-                    padding-bottom: 2em;
-                }
-                &:not(:first-of-type):not(:last-of-type) {
-                    border-bottom: 1px solid $dark-grey;
                 }
             }
         }
@@ -2648,6 +2632,22 @@ footer {
             }
             div[class*='-level']:not(.collections-level):before {
                 left: -4px;
+            }
+        }
+        &#duplicates-subpage {
+            #duplicates-form {
+                .duplicates-list {
+                    .record {
+                        display: block;
+                        > span {
+                            margin-bottom: 1em;
+                            display: block;
+                            &:last-of-type {
+                                margin-bottom: 2em;
+                            }
+                        }
+                    }
+                }
             }
         }
         .header-fixed {

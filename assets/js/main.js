@@ -267,18 +267,7 @@ $(document).ready(function() {
   });
 
 
-  // DUPLICATES PAGE
-  $('.duplicates-group').each(function() {
-    if (!$(this).find('[name^="primary_record"]:checked').length) {
-      $(this).find('.duplicate-cell > label').addClass("disabled");
-    } else {
-      $(this).find('[name^="primary_record"]:checked').each(function() {
-        $(this).closest('.record').addClass('border-left');
-        $(this).parent('label').addClass("selected");
-        $(this).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
-      })
-    }
-  })
+  
 });
 
 // TRANSCRIPTIONS
@@ -336,102 +325,6 @@ function goToTranscription(i) {
   $('div[id="cke_id_transcription-'+i+'-transcription"]').css('display', 'block');
 }
 
-
-// DUPLICATES PAGE
-// update duplicates page when the primary record is selected
-function selectedPrimaryRecord() {
-  let $duplicatesGroup = $(event.target).closest('.duplicates-group');
-  //reset to default
-  $duplicatesGroup.find('.record').removeClass('border-left');
-  $duplicatesGroup.find('.primary-cell > label').removeClass("selected");
-  $duplicatesGroup.find('.duplicate-cell').children('label').removeClass("disabled");
-  $duplicatesGroup.find('.duplicate-cell').children('label').show();
-  //update cells
-  $(event.target).closest('.record').addClass('border-left');
-  if ($(event.target).is(":checked")) {
-    $(event.target).parent('label').addClass("selected");
-    $(event.target).closest('.primary-cell').next('.duplicate-cell').find('input[type=radio]:checked').prop('checked', false);
-    $(event.target).closest('.primary-cell').next('.duplicate-cell').children('label').addClass("disabled");
-  }
-}
-// add a duplicate to the table
-function addDuplicate() {
-  event.preventDefault();
-
-  let id, record, notification;
-  let inTable = false;
-  let $duplicatesGroup = $(event.target).closest('.duplicates-group');
-
-  $('#duplicates-search-form-notification').remove();
-  $('.empty-block').remove();
-
-  // check if a record was added from the search bar...
-  if ($(event.target).prev('input').length && $(event.target).prev('input').val() != '') {
-    id = $(event.target).prev('input').val();
-  } 
-  // ... or from the manually removed table
-  else if ($(event.target).parents('.removed-record').find('.record-id').length > 0) {
-    id = $(event.target).parents('.removed-record').find('.record-id > span').attr('id');
-  } 
-  else {
-    return false;
-  }
-
-  /* 
-      if a record was manually added via search, we need to check if this record is already listed in the table 
-      in case the user tries to add the same record twice. 
-      We can try and dynamically update the records in the database and not suggest the records which are already in the duplicates table, but I don't think it is needed.
-  */
-  $('input:radio[name^="primary_record"]').each(function() {
-    if ($(this).val() == id) {
-      inTable = true;
-      notification = $duplicatesGroup.find('.duplicates-search-form').before('<div id="duplicates-search-form-notification" class="error-notification">The record ' + id + ' has already been added to the table.</div>');
-    }
-  })
-
-  // RECORD PLACEHOLDER
-  record = {'id': id, 'entity_title': '[entity_title]', 'entity_type': '[entity_type]', 'publication_status': '[publication_status]', 'updated_date': '[date_updated]', 'updated_by': '[username]'};
-
-  // if a record is not in the table, append it to the list of records
-  if (!inTable) {
-    $duplicatesGroup.find('.records').append(`
-      <div class="record">
-          <span class="primary-cell">
-              <label>
-                <input type="radio" value="`+record.id+`" name="primary_record_`+ $duplicatesGroup.index('.duplicates-group') + `" onclick="selectedPrimaryRecord(this)"/>Primary record
-              </label>
-          </span>
-          <span class="duplicate-cell">
-            <input type="radio" id="duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="true"/>
-            <label for="duplicate_`+record.id+`" class="disabled">Merge with primary</label>
-            <input type="radio" id="not_duplicate_`+record.id+`" name="duplicate_`+record.id+`" value="false"/>
-            <label for="not_duplicate_`+record.id+`" class="disabled">Not related to primary</label>
-          </span>
-          <span>Record ID: `+record.id+`</span>
-          <span class="description">
-            <a href="/editor/entities/`+record.id+`" target="_blank">`+record.entity_title+`</a><br>
-            Type: `+record.entity_type+` | Publication status: `+record.publication_status+` | Updated: `+record.updated_date+` by `+record.updated_by+`
-        </span>
-      </div>
-    `);
-    if ($duplicatesGroup.find('[name^="primary_record"]:checked').length > 0) {
-      $duplicatesGroup.find('.record:last-of-type .duplicate-cell').children('label').removeClass("disabled");
-    }
-
-    /* 
-      if a record was manually added via search and it is also available in the manually removed table,
-      we need to remove this record from the manually removed table to make sure the user doesn't add the same record twice.
-      We can try and not suggest the manually removed records via the search bar, but I don't think it is needed either.
-    */
-    $duplicatesGroup.find('span[id='+record.id+']').closest('.removed-record').remove();
-    if (!$duplicatesGroup.find('.removed-record').length) {
-      $duplicatesGroup.find('.removed-records').prev('p').remove();
-    }
-
-    notification = $duplicatesGroup.find('.duplicates-search-form').before('<div id="duplicates-search-form-notification" class="success-notification">The record ' + record.id + ' has been added to the table.</div>');
-  }
-  return notification;
-}
 
 /**
  * Add a new empty form of the specified form_type.
