@@ -54,12 +54,10 @@ $(document).ready(function() {
   } );
   // add aria-label to select2 input
   $('.select2-search__field').attr('aria-label', 'select with search');
-  $('.select2-selection__rendered').attr('aria-label', 'select2-selection__rendered');
+  $('.select2-selection__rendered').attr('aria-label', 'selected option');
+  $('.select2-selection--single').attr('role', 'list');
   $('.select2-selection--multiple').attr({
-    'aria-label': 'select2-selection--multiple',
-    'role': 'list'
-  });
-  $('.select2-selection--single').attr({
+    'aria-label': 'select multiple options',
     'role': 'list'
   });
   $('.fieldset-body').on('select2:opening', function(e) {
@@ -266,7 +264,10 @@ $(document).ready(function() {
     }
   });
 
-
+  // TODO
+  $('input[name^="duplicate').on('click', function() {
+    
+  })
   
 });
 

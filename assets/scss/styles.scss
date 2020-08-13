@@ -1835,26 +1835,41 @@ main {
             position: relative;
             float: right;
             max-width: 500px;
-            input[type=text] {
-                border: 1px solid $medium-grey;
-                width: 100%;
-                padding-right: 40px;
-                border-radius: 0;
-                border-bottom-left-radius: 5px;
-                border-bottom-right-radius: 5px;
+            width: 100%;
+            .select2-container {
+                width: 100% !important;
+                .select2-selection--single, .select2-selection--multiple {
+                    border: 1px solid $medium-grey;
+                    border-radius: 0;
+                    border-bottom-left-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                    padding-right: 4em; 
+                    background-position: calc(100% - 73px) calc(1.1em + 2px), calc(100% - 68px) calc(1.1em + 2px) !important;
+                }
+                
             }
-            input[type=submit] {
+            button.create {
                 position: absolute;
                 right: 1px;
                 top: 1px;
-                background-color: white;
+                background-color: transparent;
                 color: $primary;
                 font-weight: 500;
                 border: 0;
                 border-radius: 0;
                 border-bottom-right-radius: 5px;
-                border-top-right-radius: 5px;
-                padding-left: 5px;
+                padding-left: 1em;
+                padding-right: 1em;
+                &:before {
+                    content: '\f067';
+                    font-family: $fontawesome;
+                    margin-right: 0.3em;
+                    font-weight: 300;
+                }
+                &:hover {
+                    background-color: $add;
+                    color: white;
+                }
             }
         }
         #duplicates-form {

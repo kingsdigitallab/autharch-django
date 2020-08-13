@@ -17,10 +17,11 @@
             <a href="{{ edit_url }}" target="_blank" class="dotted-underline">{{entity}}</a><br>
             Record ID: {{entity.id}}<span class="divider"></span>Type: {{entity.entity_type}}<span class="divider"></span>Publication status: {{publication_status}}<span class="divider"></span>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}
         </div>
-        <form action="." id="add-record-form">
-            <input type="text" name="add_record" aria-label="Add a record by record id or display name" placeholder="Add a record by record id or display name" onfocus="this.placeholder=''" onblur="this.placeholder='Add a record by record id or display name'"/>
-            <input type="submit" class="create" aria-label="Add a record" value="Add"/>
-        </form>
+        <div id="add-record-form">
+            <select name="add_record" class="select-with-search" aria-label="Add a record by record id or display name" >
+            </select>
+            <button class="create">Add</button>
+        </div>
         <form action="." id="duplicates-form">
             <div class="duplicates-list">
                 <p class="highlight">Merge data from duplicates into browsed record:</p>
