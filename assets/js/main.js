@@ -263,11 +263,6 @@ $(document).ready(function() {
       fetchTranscriptions();
     }
   });
-
-  // TODO
-  $('input[name^="duplicate').on('click', function() {
-    
-  })
   
 });
 
@@ -715,11 +710,20 @@ function toggleHelpText(el, help_text) {
 
 /**
  * Create confirmation modal dialogue with form to delete the current
- * record (whether Archival Record or Entity).
+ * record (whether Archival Record or Entity), to merge two records, or to mark them as not related.
  */
-function deleteRecord(event) {
-  $('#delete-modal').addClass('active');
+function showModal(modalName) {
+  $(event.target).prop('checked', true);
   event.preventDefault();
+  $('#'+modalName).addClass('active');
+  if (modalName == 'merge-modal' || modalName == 'notRelated-modal') {
+    $('#'+modalName).find('.data-from')
+                    .html($(event.target).parent('.cta').next('.record').children('a:first-of-type').clone())
+                    .append(`, `+ $(event.target).parent('.cta').next('.record').find('li:first-of-type').text());
+    $('.modal-cancel').on('click', function() {
+      $(event.target).prop('checked', false);
+    })
+  }
 }
 
 // this won't delete the field(s), just hide them. The deletion needs to be executed in the backend, once the form is submitted.

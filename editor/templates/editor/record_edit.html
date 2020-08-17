@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="action-buttons">
-      {% if is_admin and not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="deleteRecord(event)">Delete</button>{% endif %}
+      {% if is_admin and not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="deleteRecord()">Delete</button>{% endif %}
       <input type="submit" value="{% if is_deleted %}Restore{% else %}Save{% endif %}" form="record-form" class="save"/>
     </div>
   </div>
