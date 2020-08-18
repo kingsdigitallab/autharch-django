@@ -8,11 +8,12 @@
 
   {% block content %}
   <p>Permission level: <span class="highlight">{{ user.editor_profile.get_role_display }}</span></p>
-  <div class="user-control">
+  <div id="user-control">
     <div id="user-details">
       <h2>Personal details</h2>
       {% if saved_user %}
       <div class="success-notification">
+        <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
         <h4>Your personal details were successfully saved.</h4>
       </div>
       {% endif %}
@@ -33,6 +34,7 @@
       <h2>Change password</h2>
       {% if saved_password %}
       <div class="success-notification">
+        <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
         <h4>Your password was successfully changed.</h4>
       </div>
       {% endif %}
@@ -40,6 +42,7 @@
           {% csrf_token %}
           {% if password_form.errors %}
           <div class="error-notification">
+            <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
             {{ password_form.errors }}
           </div>
           {% endif %}
@@ -61,26 +64,28 @@
   {% if all_users_formset %}
   {% if saved_all_users %}
   <div class="success-notification">
+    <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
     <h4>Your updates were successfully saved.</h4>
   </div>
   {% endif %}
 
   {% if all_users_formset.errors or all_users_formset.non_form_errors %}
   <div class="error-notification">
-  {% for error_dict in all_users_formset.errors %}
-  {% for key, msgs in error_dict.items %}
-  {% if key == "__all__" %}
-  <ul>
-    {% for msg in msgs %}
-    <li>{{ msg }}</li>
+    <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+    {% for error_dict in all_users_formset.errors %}
+      {% for key, msgs in error_dict.items %}
+        {% if key == "__all__" %}
+        <ul>
+          {% for msg in msgs %}
+          <li>{{ msg }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      {% endfor %}
     {% endfor %}
-  </ul>
-  {% endif %}
-  {% endfor %}
-  {% endfor %}
-  {% for error in all_users_formset.non_form_errors %}
-  <p>{{ error }}</p>
-  {% endfor %}
+    {% for error in all_users_formset.non_form_errors %}
+      <p>{{ error }}</p>
+    {% endfor %}
   </div>
   {% endif %}
 

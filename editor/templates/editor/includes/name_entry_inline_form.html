@@ -38,6 +38,7 @@
         {% with errors=form.non_field_errors %}
         {% if errors %}
         <div class="error-notification">
+          <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
           <ul>
             {% for error in errors %}
             <li>{{ error }}</li>

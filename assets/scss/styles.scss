@@ -123,10 +123,6 @@ body {
     font-weight: 600;
 }
 
-.inline {
-    display: inline;
-}
-
 // VISIBILITY
 .hidden {
     visibility: hidden !important;
@@ -167,9 +163,9 @@ input[type=search] {
     -webkit-appearance: textfield;
     &:not(.select2-search__field):not(.tablesorter-filter) {
         height: 40px;
-         -webkit-border-radius: 30px;
-        -moz-border-radius: 30px;
-        border-radius: 30px;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em;
         padding: 10px 60px 10px 20px;
     }
     font-family: $font-primary;
@@ -210,9 +206,9 @@ button, .create, input[type=submit] {
     color: white;
     border: none;
     padding: 10px 25px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    border-radius: 30px;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
 }
 
 input, button {
@@ -288,17 +284,17 @@ span[role=button] {
     color: $primary !important;
     border: 1px solid $primary !important;
     padding: 9px 15px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    border-radius: 30px;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
 }
 
 .toggle-tab-button {
     color: $primary;
     background-color: $light-grey;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
     height: inherit;
     &:after{
         font-family: $fontawesome;
@@ -345,9 +341,9 @@ span[role=button] {
 
 .icon-only {
     border: none;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
     color: inherit;
     background-color: transparent;
     font-family: $fontawesome;
@@ -382,9 +378,9 @@ a {
     padding: 0;
     text-align: center;
     white-space: nowrap;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
     border-bottom: 1px dotted white;
     font-size: 1em;
     cursor: pointer;
@@ -454,7 +450,7 @@ a {
 .pseudo-checkbox {
     -webkit-appearance: none;
 	border: 1px solid $input;
-    border-radius: 50%;
+    border-radius: 1em;
     padding: 0;
     width: 16px;
     height: 16px;
@@ -467,7 +463,7 @@ a {
             content: ' ';
             width: 10px;
             height: 10px;
-            border-radius: 50%;
+            border-radius: 1em;
             position: absolute;
             background-color: $add;
             top: 2px;
@@ -513,9 +509,9 @@ p {
         -moz-box-shadow: 0px 0px 2px black;
         -webkit-box-shadow: 0px 0px 2px black;
         box-shadow: 0px 0px 2px black;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
+        -webkit-border-radius: 0.3em;
+        -moz-border-radius: 0.3em;
+        border-radius: 0.3em;
         position: absolute;
         max-width: 270px;
         padding: 7px;
@@ -534,7 +530,9 @@ li {
     margin-bottom: 10px;
 }
 
-// SECTIONS
+.subitems {
+    @include inline-list("|");
+}
 
 // HEADER
 header {
@@ -617,10 +615,10 @@ header {
         bottom: 0;
         width: 100%;
         #logout {
-            -webkit-border-radius: 0px;
-            -moz-border-radius: 0px;
-            border-radius: 0px;
-            margin-bottom: 0px;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            margin-bottom: 0;
             background-color: darken($primary, 7%);
             &:hover, &:focus {
                 @include darken($danger);
@@ -648,7 +646,7 @@ main {
     }
 
     // DASHBOARD
-    .home {
+    #home {
         h2 {
             margin: 0em 0em 1em 0em;
             font-weight: 500;
@@ -662,7 +660,7 @@ main {
     }
 
     // ACCOUNT CONTROL PAGE
-    .user-control {
+    #user-control {
         display: -webkit-box;
         display: -ms-flexbox;
         display: -webkit-flex;
@@ -670,9 +668,9 @@ main {
         #user-details, #change-password {
             width: 50%;
             background-color: white;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
+            -webkit-border-radius: 0.8em;
+            -moz-border-radius: 0.8em;
+            border-radius: 0.8em;
             padding: 30px;
             box-shadow: 0px 2px 2px $light-grey;
             margin: 20px 0px 40px 0px;
@@ -687,11 +685,15 @@ main {
             float:left;
             margin-bottom: 0;
             margin-top: 0.92em;
+            + input[type=submit] {
+                margin-bottom: 2em;
+            }
         }
-        h2 + input[type=submit] {
-            margin-bottom: 2em;
+        input.save {
+            margin-top: 3em;
         }
     }
+
     #admin-table-form, #duplicates-form {
         input.save {
             display: block;
@@ -699,12 +701,7 @@ main {
         }
     }
 
-    #admin-table-form {
-        input.save {
-            margin-top: 3em;
-        }
-    }
-
+    // SELECT2 ELEMENTS
     .selection {
         font-size: 1em;
     }
@@ -739,7 +736,7 @@ main {
             padding-top: 5px;
             white-space: normal !important;
             li {
-                margin-bottom: 0px;
+                margin-bottom: 0;
             }
         }
         &.select2-container--disabled {
@@ -776,7 +773,7 @@ main {
     .page-header {
         display: grid;
         grid-template-columns: 0.5fr 1fr;
-        column-gap: 0px;
+        column-gap: 0;
         align-items: center;
         margin-bottom: 2em;
         :not(:first-child) {
@@ -784,6 +781,10 @@ main {
         }
         h1 {
             margin-right: 1em;
+        }
+        h2 {
+            margin-top: 1em;
+            margin-bottom: 0;
         }
         .search-filter, .add-duplicate {
             display: grid;
@@ -802,7 +803,7 @@ main {
                     position: absolute;
                     background: none;
                     top: -1px;
-                    right: 0px;
+                    right: 0;
                     color: $primary;
                     font-family: $fontawesome;
                     font-weight: 600;
@@ -842,9 +843,9 @@ main {
             background-color: $background;
             color: $primary;
             border: 1px solid $primary;
-            -webkit-border-radius: 30px;
-            -moz-border-radius: 30px;
-            border-radius: 30px;
+            -webkit-border-radius: 2em;
+            -moz-border-radius: 2em;
+            border-radius: 2em;
             padding: 10px 25px;
             line-height: 1.2em;
             right: 180px;
@@ -883,14 +884,14 @@ main {
             .filters {
                 height:80vh;
                 margin-top: 1em;
-                margin-bottom: 20px;
+                margin-bottom: 2em;
                 overflow-y: auto;
                 border-bottom: 1px solid $medium-grey;
                 .filter-list {
                     border: 0;
-                    padding-left: 0px;
+                    padding-left: 0;
                     &:not(:last-of-type) {
-                        margin-bottom: 10px;
+                        margin-bottom: 1em;
                     }
                     legend, label {
                         font-size: 1em;
@@ -915,9 +916,9 @@ main {
                     }
                     input[type=number], input[type=text] {
                         font-family: $font-primary;
-                        -webkit-border-radius: 5px;
-                        -moz-border-radius: 5px;
-                        border-radius: 5px;
+                        -webkit-border-radius: 0.3em;
+                        -moz-border-radius: 0.3em;
+                        border-radius: 0.3em;
                         font-size: 1em;
                         padding: 5px 10px;
                         border: 1px solid $medium-grey;
@@ -1065,9 +1066,9 @@ main {
             font-family: $font-primary;
             padding: 5px;
             background: white;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
+            -webkit-border-radius: 0.3em;
+            -moz-border-radius: 0.3em;
+            border-radius: 0.3em;
             border: 1px solid #BABABA;
             min-width: 100%;
 
@@ -1115,10 +1116,6 @@ main {
             tr:nth-child(even){
                 @include lighten($light-grey);
             }
-            // tr:hover {
-            //     background-color: lighten($light-grey, 15%);
-            //     cursor: pointer;
-            // }
             td {
                 border: 1px solid darken($light-grey, 5%);
                 padding: 10px;
@@ -1239,9 +1236,6 @@ main {
             margin-bottom: 1.4em;
         }
     }
-    .subitems {
-        @include inline-list("|");
-    }
     .header-fixed {
         background-color: white;
         border-bottom: 1px solid $medium-grey;
@@ -1300,26 +1294,26 @@ main {
             }
         }
         .tox-tinymce {
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
+            -webkit-border-radius: 0.4em;
+            -moz-border-radius: 0.4em;
+            border-radius: 0.4em;
             border: 1px solid $input;
         }
         input, select, textarea {
             font-family: $font-primary;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
+            -webkit-border-radius: 0.4em;
+            -moz-border-radius: 0.4em;
+            border-radius: 0.4em;
             font-size: 1em;
             padding: 10px;
             border: 1px solid $input;
             line-height: 1.4em;
             &[type=date] {
-                margin-right: 5px;
+                margin-right: 0.4em;
             }
             &[type=radio], &[type=checkbox] {
                 margin: 0px;
-                margin-right: 5px;
+                margin-right: 0.4em;
             }
         }
 
@@ -1333,9 +1327,9 @@ main {
         .richText {
             margin-bottom: 10px;
             border: 1px solid $input;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
+            -webkit-border-radius: 0.4em;
+            -moz-border-radius: 0.4em;
+            border-radius: 0.4em;
             overflow: scroll;
             .richText-help-popup {
                 overflow: scroll;
@@ -1451,12 +1445,6 @@ main {
 
                 }
                 .fieldset-body {
-                    -moz-transition: all .4s;
-                    -webkit-transition: all .4s;
-                    -o-transition: all .4s;
-                    transition: all .4s;
-                    opacity: 0; 
-                    height: 0;
                     overflow: hidden;
                     .formset {
                         margin-bottom: 1.5em;
@@ -1484,9 +1472,7 @@ main {
                         }
                     }
                     &.expand {
-                        opacity: 1;
                         padding: 30px;
-                        height: auto;
                     }
                     label, input, textarea {
                         margin-bottom: 10px;
@@ -1626,7 +1612,7 @@ main {
     }
 
     // SECONDARY FORM PAGES
-    .form-page {
+    #form-page {
         height: 85vh;
         margin: auto;
         display: -webkit-box;
@@ -1676,9 +1662,9 @@ main {
                     color: $primary;
                     // margin-right: 10px;
                     border: 1px solid $primary;
-                    -webkit-border-radius: 30px;
-                    -moz-border-radius: 30px;
-                    border-radius: 30px;
+                    -webkit-border-radius: 2em;
+                    -moz-border-radius: 2em;
+                    border-radius: 2em;
                     padding: 10px 25px;
                     font-size: 0.92em;
                     white-space: nowrap;
@@ -1779,16 +1765,8 @@ main {
             }
         }
         .fieldset-body {
-            -moz-transition: all .4s;
-            -webkit-transition: all .4s;
-            -o-transition: all .4s;
-            transition: all .4s;
-            opacity: 0; 
-            height: 0;
             margin-left: 25px;
             &.expand {
-                height: auto;
-                opacity: 1;
                 &:before {
                     content: '';
                     border-left: 1px dashed $primary;
@@ -1806,9 +1784,50 @@ main {
     }
 
     // DUPLICATES PAGES
+    &#duplicates-list-page {
+        .page-header {
+            margin-bottom: 1em;
+        }
+        .duplicate-group {
+            border: 1px solid $light-grey;
+            overflow: hidden;
+            &:nth-of-type(even) {
+                @include lighten($light-grey);
+            }
+            &:last-of-type {
+                border-bottom-left-radius: 0.3em;
+                border-bottom-right-radius: 0.3em;
+            }
+            .fieldset-header {
+                .toggle-tab-button {
+                    background-color: inherit;
+                    padding: 1em;
+                }
+            }
+            .fieldset-body {
+                background-color: white;
+                padding: 0 3em;
+                &.expand {
+                    padding-top: 1em;
+                    padding-bottom: 1em;
+                }
+                .subitems {
+                    margin-top: 0.5em;
+                }
+                .record {
+                    padding: 0.5em 1em;
+                    &:nth-of-type(even) {
+                        @include lighten($light-grey);
+                    }
+                }
+            }   
+        }
+    }
+
     &#duplicates-subpage {
         .page-header{
             grid-template-columns: auto auto;
+            margin-bottom: 1em;
             .search-button {
                 font-family: $font-primary;
                 font-size: 1em;
@@ -1823,7 +1842,7 @@ main {
         .current-record {
             padding-bottom: 1em;
             border-bottom: 3px solid $primary;
-            border-bottom-left-radius: 5px;
+            border-bottom-left-radius: 0.3em;
             p {
                 margin-top: 0em;
                 margin-bottom: 0.6em;
@@ -1833,20 +1852,21 @@ main {
             margin-top: 0.5em;
         }
         #add-record-form {
-            display: flex;
+            display: block;
             position: relative;
-            max-width: 50em;
-            width: 100%;
             float: left;
+            width: 100%;
+            max-width: 50em;
+            padding-left: 2em;
             margin-top: 1em;
-            margin-left: 3em;
+            margin-left: 1em;
             .select2-container {
                 width: 100% !important;
                 max-width: 50em;
                 .select2-selection--single, .select2-selection--multiple {
                     border: 1px solid $medium-grey;
-                    border-radius: 0.3em;
-                    padding-right: 4em; 
+                    border-radius: 0.4em;
+                    padding-right: 6em; 
                     background-position: calc(100% - 142px) calc(1.1em + 2px),calc(100% - 137px) calc(1.1em + 2px) !important;
                 }
                 
@@ -1856,19 +1876,14 @@ main {
                 right: 1px;
                 top: 1px;
                 background-color: transparent;
-                color: $primary;
+                color: $add;
                 font-weight: 500;
                 border: 0;
                 border-radius: 0;
-                border-bottom-right-radius: 5px;
+                border-top-right-radius: 0.3em;
+                border-bottom-right-radius: 0.3em;
                 padding-left: 1em;
                 padding-right: 1em;
-                &:before {
-                    content: '\f067';
-                    font-family: $fontawesome;
-                    margin-right: 0.3em;
-                    font-weight: 300;
-                }
                 &:hover {
                     background-color: $add;
                     color: white;
@@ -1889,35 +1904,33 @@ main {
                 grid-template-columns: auto 1fr;
                 gap: 1.5em;
                 position: relative;
-                margin-bottom: 1em;
+                &:not(:last-of-type) {
+                    margin-bottom: 1em;
+                }
                 .cta {
                     label {
                         color: $add;
                         border: 1px solid $add;
+                        padding: 0.2em 0.8em;
+                        text-align: center;
+                        display: inline-block;
+                        cursor: pointer;
                         &:hover {
                             background-color: $add;
+                            color: white;
                         }
                     }
                     label[for^="duplicate"] {
-                        border-top-left-radius: 5px;
-                        border-bottom-left-radius: 5px;
+                        border-top-left-radius: 0.4em;
+                        border-bottom-left-radius: 0.4em;
                         margin-right: -4px;
                     }
                     label[for^="not_duplicate"] {
-                        border-top-right-radius: 5px;
-                        border-bottom-right-radius: 5px;
+                        border-top-right-radius: 0.4em;
+                        border-bottom-right-radius: 0.4em;
                     }
                     input[type=checkbox] {
                         display: none;
-                        & + label {
-                            padding: 3px 10px;
-                            text-align: center;
-                            display: inline-block;
-                            cursor: pointer;
-                            &:hover {
-                                color: white;
-                            }
-                        }
                         &:checked + label {
                             color: white;
                             background-color: $add;
@@ -1928,7 +1941,6 @@ main {
                     content: '';
                     border-top: 1px dashed $primary;
                     position: absolute;
-                    height: 100%;
                     width: 24px;
                     top: 13px;
                     left: -26px;
@@ -1936,10 +1948,12 @@ main {
             }
             label[for="show-removed-checkbox"] {
                 line-height: 1.4em;
-                max-width: 22.5em;
-                margin: 2em 0em 1em 3em;
+                max-width: 20em;
+                margin-left: 1em;
+                padding: 2em 0em 1em 2em;
                 font-weight: 500;
                 color: $primary;
+                border-left: 1px dashed $primary;
                 cursor: pointer;
                 &:before {
                     content: "\f107";
@@ -1948,13 +1962,25 @@ main {
                     margin-right: 5px;
                     font-size: 1.32em;
                     display: inline-block;
-                    vertical-align: middle;
+                    vertical-align: bottom;
+                }
+                &:after {
+                    content: 'Show records marked as "not a duplicate":';
+                    font-family: $font-primary;
+                    border-bottom: 1px dotted $primary;
                 }
             }
             input[id="show-removed-checkbox"] {
                 display: none;
             }
-            input[id="show-removed-checkbox"]:checked {
+            input[id="show-removed-checkbox"]:checked + label {
+                &:before {
+                    content: "\f106";
+                }
+                &:after {
+                    content: 'Hide records marked as "not a duplicate":';
+                    font-family: $font-primary;
+                }
                 + .manually-removed {
                     opacity: 1;
                     height: auto;
@@ -2036,7 +2062,20 @@ main {
             margin-bottom: 10px !important;
         }
     }
-    
+
+    .fieldset-body {
+        -moz-transition: all .4s;
+        -webkit-transition: all .4s;
+        -o-transition: all .4s;
+        transition: all .4s;
+        opacity: 0; 
+        height: 0;
+        overflow: hidden;
+        &.expand {
+            height: auto;
+            opacity: 1;
+        }
+    }
 
     // DIALOG BOXES
     .modal {
@@ -2086,12 +2125,12 @@ main {
             }
             .modal-body {
                 margin-bottom: 2em;
-                p {
-                    font-size: 1.14em;
-                    text-align: center;
-                }
+                // p {
+                //     font-size: 1.14em;
+                //     text-align: center;
+                // }
                 .data-from, .data-to {
-                    padding: 0.3em 0em;
+                    padding: 0.3em 0;
                 }
                 .action {
                     font-weight: 500;
@@ -2142,25 +2181,37 @@ main {
     }
 
     // ERROR HANDLING/NOTIFICATIONS
+    .success-notification, .error-notification {
+        -webkit-border-radius: 0.3em;
+        -moz-border-radius: 0.3em;
+        border-radius: 0.3em;
+        padding: 0.5em 1em;
+        margin: 1em 0em 2em 0em;
+        h4 {
+            margin: 0;
+        }
+        button {
+            float: right;
+            margin: 0.2em 0;
+        }
+        p {
+            margin-bottom: 0;
+        }
+    }
+    .success-notification {
+        border-left: 10px solid $save;
+        background-color: lighten($save, 53%);
+    }
     .error-notification{
-        -webkit-border-radius: 0.5em;
-        -moz-border-radius: 0.5em;
-        border-radius: 0.5em;
         border-left: 10px solid $danger;
         background-color: lighten($danger, 60%);
-        padding: 10px 20px;
-        margin: 1em 0em 2em 0em;
         ul {
+            margin-top: 1em;
             padding: 0;
             list-style: none;
         }
-        h4 {
-            margin: 0px;
-            margin-bottom: 10px;
-            color: darken($danger, 10%);
-        }
         p {
-            margin: 0px;
+            margin: 0;
             &:not(:last-child) {
                 margin-bottom: 5px;
             }
@@ -2192,58 +2243,12 @@ main {
         }
     }
 
-    // input:invalid {
-    //     border: 1px solid $danger !important;
-    //     border-left: 5px solid $danger !important;
-    //     background-color: lighten($danger, 60%);
-    //     height: 100%;
-    // }
-
-    // select:invalid {
-    //     border: 1px solid $danger !important;
-    //     border-left: 5px solid $danger !important;
-    //     background-color: lighten($danger, 60%);
-    //     background-image: linear-gradient(45deg, transparent 50%, $primary 50%), linear-gradient(135deg, $primary 50%, transparent 50%) !important;
-    //     background-position: calc(100% - 20px) calc(1.1em + 2px), calc(100% - 15px) calc(1.1em + 2px) !important;
-    //     background-size: 5px 5px, 5px 5px !important;
-    //     background-repeat: no-repeat !important;
-    //     height: 100%;
-    //     + .select2 {
-    //         .select2-selection--single, .select2-selection--multiple {
-    //             border: 1px solid $danger;
-    //             border-left: 5px solid $danger;
-    //             background-color: lighten($danger, 60%);
-    //             background-image: linear-gradient(45deg, transparent 50%, $primary 50%), linear-gradient(135deg, $primary 50%, transparent 50%) !important;
-    //             background-position: calc(100% - 20px) calc(1.1em + 2px), calc(100% - 15px) calc(1.1em + 2px) !important;
-    //             background-size: 5px 5px, 5px 5px !important;
-    //             background-repeat: no-repeat !important;
-    //             height: 100%;
-    //         }
-    //     }
-    // }
-
     .errorlist {
         list-style: none;
         padding-left: 0;
         margin-top: 5px;
         font-size: 0.92em;
         color: $danger;
-    }
-
-    .success-notification {
-        -webkit-border-radius: 10px;
-        -moz-border-radius: 10px;
-        border-radius: 10px;
-        border-left: 10px solid $save;
-        background-color: lighten($save, 53%);
-        padding: 10px 20px;
-        margin: 1em 0em 2em 0em;
-        h4 {
-            margin: 0px;
-        }
-        p {
-            margin-bottom: 0px;
-        }
     }
     .empty-block {
         width: 100%;
@@ -2278,17 +2283,17 @@ main {
             display: flex;
             // box-shadow: 0px 2px 2px $medium-grey;
             max-width: max-content;
-            margin: 1em auto 0px auto;
-            -webkit-border-radius: 30px;
-            -moz-border-radius: 30px;
-            border-radius: 30px;
+            margin: 1em auto 0 auto;
+            -webkit-border-radius: 2em;
+            -moz-border-radius: 2em;
+            border-radius: 2em;
             .first, .last, .prev, .next {
                 background-color: $primary;
                 border: none;
-                -webkit-border-radius: 0px;
-                -moz-border-radius: 0px;
-                border-radius: 0px;
-                margin: 0px;
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                border-radius: 0;
+                margin: 0;
                 .fal {
                     margin: auto;
                     font-weight: 600;

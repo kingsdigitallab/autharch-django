@@ -48,10 +48,14 @@ $(document).ready(function() {
 
   // SELECT-WITH-SEARCH
   // add search bar to the select dropdown
-  $('.select-with-search').select2( {
+  $('.select-with-search').select2({
     placeholder: 'Select',
     allowClear: true
-  } );
+  });
+  $('select[name="add_record"]').select2({
+    placeholder: 'Add a duplicate by record ID or display name',
+    allowClear: true
+  });
   // add aria-label to select2 input
   $('.select2-search__field').attr('aria-label', 'select with search');
   $('.select2-selection__rendered').attr('aria-label', 'selected option');
@@ -535,6 +539,7 @@ function setUpCreationYearSlider() {
       $('#year-range-anchor').attr('href', queryString);
     }
   });
+ 
 }
 
 
@@ -646,7 +651,7 @@ function toggleRequiredControls(controls, add_required) {
 // expand/collapse entity/archival record sections and individual sections on the hierarchy page
 function toggleTab(el) {
   event.preventDefault();
-  $(el).parents('.fieldset-header').siblings('.fieldset-body').toggleClass('expand');
+  $(el).parents('.fieldset-header').siblings('.fieldset-body').first().toggleClass('expand');
   $(el).toggleClass('active');
 }
 
@@ -713,16 +718,69 @@ function toggleHelpText(el, help_text) {
  * record (whether Archival Record or Entity), to merge two records, or to mark them as not related.
  */
 function showModal(modalName) {
-  $(event.target).prop('checked', true);
-  event.preventDefault();
-  $('#'+modalName).addClass('active');
+  let checkbox = $(event.target);
+  $('.modal').addClass('active');
   if (modalName == 'merge-modal' || modalName == 'notRelated-modal') {
-    $('#'+modalName).find('.data-from')
-                    .html($(event.target).parent('.cta').next('.record').children('a:first-of-type').clone())
-                    .append(`, `+ $(event.target).parent('.cta').next('.record').find('li:first-of-type').text());
+    $('.modal').find('.data-from')
+              .html($(event.target).parent('.cta').next('.record').children('a:first-of-type').text());
+    if (modalName == 'merge-modal') {
+      $('.modal').find('.action').text('merge into:');
+    }
+    if (modalName == 'notRelated-modal') {
+      $('.modal').find('.action').text('is not a duplicate of:');
+    }
     $('.modal-cancel').on('click', function() {
-      $(event.target).prop('checked', false);
+      $(checkbox).prop('checked', false);
     })
+  }
+}
+
+function addDuplicate() {
+  let id = $('select[name="add_record"]').select2('val');
+  
+  if (id) {
+    // clear all previous notifications if any
+    $('div[class$="-notification"]').remove();
+
+    // check if the entity is already listed; if listed, display an error message
+    let listed = false;
+    $('input[name="duplicate"]').each(function() {
+      if ($(this).val() == id) {
+        listed = true;
+      };
+    });
+    if (listed) {
+      $('.duplicates-list').prepend (`<div class="error-notification"><button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button><h4>The record with an ID `+ id +` is already in the list. </h4></div> `);
+      return false;
+    }
+
+    // if not listed
+    // TODO - request display name, type, publication status, last updated date and username by id
+    // placeholder of the response:
+    let entity = {'id': id, 'title': 'placeholder', 'entity_type': '[entity_type]', 'publication_status': '[publication_status]', 'last_revision_date_created': '[entity_updated]'};
+
+    // add a new entity to the duplicates list and display the success message
+    $('.duplicates-list').append(`
+      <div class="duplicate">
+        <div class="cta">
+            <input type="checkbox" name="duplicate" id="duplicate_`+ entity.id +`" value="`+ entity.id +`" onclick="showModal('merge-modal')">
+            <label for="duplicate_`+ entity.id +`">Merge</label>
+            <input type="checkbox" name="not_duplicate"  id="not_duplicate_`+ entity.id +`" value="`+ entity.id +`" onclick="showModal('notRelated-modal')">
+            <label for="not_duplicate_`+ entity.id +`">Not a duplicate</label>
+        </div>
+        <div class="record">
+          <a href="/editor/entities/`+ entity.id +`/" target="_blank" class="dotted-underline highlight">Record ID: `+ entity.id +` - `+ entity.title +`</a>
+          <div class="subitems">
+            <ul>
+              <li><a href="/editor/entities/`+ entity.id +`/duplicates/"><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of this record</span></a></li>
+              <li>Type: `+ entity.entity_type +`</li>
+              <li>Publication status: `+ entity.publication_status +`</li>
+              <li>Updated: `+ entity.last_revision_date_created + `</li>
+            </ul>
+          </div> 
+        </div>
+      </div>
+    `).prepend (`<div class="success-notification"><button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button><h4>Record "`+ entity.title +`" (ID: `+ entity.id +`) was added to the duplicates list.</h4></div> `);
   }
 }
 
@@ -746,4 +804,8 @@ function deleteRow(el) {
   // Find and toggle the DELETE checkbox for the form.
   let deleteField = $(el).closest('[data-form-type]').find('[class~="delete-form-field"]').find('[name$="DELETE"]').first();
   deleteField.prop('checked', !deleteField.prop('checked'));
+}
+
+function removeNotification() {
+  $(event.target).parent().remove();
 }

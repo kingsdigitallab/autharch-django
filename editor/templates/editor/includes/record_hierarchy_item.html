@@ -1,9 +1,7 @@
 {% load editor_form_tags %}
 <div class="fieldset-header">
   {% if children %}
-  <button class="toggle-tab-button{% if is_ancestor %} active{% endif %}" onclick="toggleTab(this)">
-    <span hidden="hidden">Expand</span>
-  </button>
+  <button class="toggle-tab-button{% if is_ancestor %} active{% endif %}" onclick="toggleTab(this)" aria-label="expand"></button>
   {% else %}
   <span></span>
   {% endif %}

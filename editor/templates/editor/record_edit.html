@@ -44,6 +44,7 @@
     </div>
     {% if form.errors %}
     <div class="error-notification">
+      <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
       {% for field, errors in form.errors.items %}
       <h4>{{ field }}</h4>
       <p>{% for error in errors %}{{ error }} {% endfor %}</p>
@@ -53,10 +54,12 @@
 
     {% if saved %}
     <div class="success-notification">
+      <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
       <h4>Your edits were successfully saved.</h4>
     </div>
     {% elif restored %}
     <div class="success-notification">
+      <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
       <h4>The version was sucessfully restored, (version id: {{ reverted }}).</h4>
     </div>
     {% endif %}
