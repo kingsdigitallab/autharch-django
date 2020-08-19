@@ -5,7 +5,7 @@ from authority.models import Entity, Relation
 from jargon.models import ReferenceSource
 
 
-RA_REFERENCE_SOURCE = ReferenceSource.objects.get(title='RA')
+RA_REFERENCE_SOURCE, _ = ReferenceSource.objects.get_or_create(title='RA')
 
 
 # The polymorphic ArchivalRecord model subclasses must have their own

@@ -2,8 +2,10 @@ from django.conf import settings
 from django.db import models
 
 from controlled_vocabulary.models import ControlledTermField
+from editor.signals import view_post_save
 from geonames_place.models import Place as GeoPlace
 from jargon.models import (
+    CollaborativeWorkspaceEditorType as CWEditorType, EditingEventType,
     EntityRelationType, EntityType, Function, Gender, MaintenanceStatus,
     NamePartType, PublicationStatus, ResourceRelationType
 )
@@ -12,6 +14,7 @@ import reversion
 from script_codes.models import Script
 
 from . import constants
+from .exceptions import EntityMergeException
 from .fields import PartialDateField
 
 
@@ -127,6 +130,172 @@ class Entity(TimeStampedModel, DateRangeMixin):
 
     def is_deleted(self):
         return self.control.maintenance_status.title == 'deleted'
+
+    def merge(self, entity):
+        """Merges `entity` into `self`.
+
+        This does the following:
+
+        * Marks `entity` as deleted, with a comment mentioning the merge.
+
+        * Creates a copy of every Identity (and recursively its
+          related objects) of `entity` on `self`, setting
+          preferred_identity to False on each of them.
+
+        * Creates a copy of every Source of `entity` on `self`.
+
+        * Creates a copy of every association of `entity` with
+          ArchivalRecord objects on `self`.
+
+        Raises an exception if the two entities are of different
+        entity_types, or are associated with different projects, or
+        are the same entity, or one is not an entity at all.
+
+        """
+        if not isinstance(entity, Entity):
+            raise EntityMergeException(
+                'An entity may only merge with another entity.')
+        if self == entity:
+            raise EntityMergeException('Cannot merge an entity into itself.')
+        if self.project != entity.project:
+            raise EntityMergeException(
+                'Cannot merge entities that belong to different projects.')
+        if self.entity_type != entity.entity_type:
+            raise EntityMergeException(
+                'Cannot merge entities that have different entity types.')
+        from editor.models import RevisionMetadata
+        with reversion.create_revision():
+            records_to_update = self._merge(entity)
+            reversion.set_comment('Merged in entity {}.'.format(entity.pk))
+            event_type = EditingEventType.objects.get(title='revised')
+            editor_type = CWEditorType.objects.get(title='human')
+            reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                               collaborative_workspace_editor_type=editor_type)
+            entity.save()
+        # Mark the merged entity as deleted.
+        with reversion.create_revision():
+            event_type = EditingEventType.objects.get(title='deleted')
+            editor_type = CWEditorType.objects.get(title='human')
+            reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                               collaborative_workspace_editor_type=editor_type)
+            reversion.set_comment(
+                'Deleted entity due to merge into entity {}.'.format(self.pk))
+            control = entity.control
+            control.publication_status = PublicationStatus.objects.get(
+                title='inProcess')
+            control.maintenance_status = MaintenanceStatus.objects.get(
+                title='deleted')
+            control.save()
+            entity.save()
+        view_post_save.send(sender=Entity, instance=self)
+        view_post_save.send(sender=Entity, instance=entity)
+        for record in records_to_update:
+            view_post_save.send(sender=record.get_real_instance_class(),
+                                instance=record)
+
+    def _merge(self, entity):
+        """Perform the data copying for a merge of `entity` into `self`."""
+        for identity in entity.identities.all():
+            name_entries = identity.name_entries.all()
+            descriptions = identity.descriptions.all()
+            relations = identity.relations.all()
+            resources = identity.resources.all()
+            identity.pk = None
+            identity.preferred_identity = False
+            identity.entity = self
+            identity.save()
+            for name_entry in name_entries:
+                name_parts = name_entry.parts.all()
+                name_entry.pk = None
+                name_entry.identity = identity
+                name_entry.save()
+                for name_part in name_parts:
+                    name_part.pk = None
+                    name_part.name_entry = name_entry
+                    name_part.save()
+            for description in descriptions:
+                try:
+                    biography = description.biography_history
+                except BiographyHistory.DoesNotExist:
+                    biography = None
+                events = description.events.all()
+                functions = description.functions.all()
+                languages_scripts = description.languages_scripts.all()
+                legal_statuses = description.legal_statuses.all()
+                local_descriptions = description.local_descriptions.all()
+                mandates = description.mandates.all()
+                places = description.places.all()
+                description.pk = None
+                description.identity = identity
+                description.save()
+                if biography is not None:
+                    biography.pk = None
+                    biography.description = description
+                    biography.save()
+                for event in events:
+                    event.pk = None
+                    event.description = description
+                    event.save()
+                for function in functions:
+                    function.pk = None
+                    function.description = description
+                    function.save()
+                for language_script in languages_scripts:
+                    language_script.pk = None
+                    language_script.description = description
+                    language_script.save()
+                for legal_status in legal_statuses:
+                    legal_status.pk = None
+                    legal_status.description = description
+                    legal_status.save()
+                for local_description in local_descriptions:
+                    local_description.pk = None
+                    local_description.description = description
+                    local_description.save()
+                for mandate in mandates:
+                    mandate.pk = None
+                    mandate.description = description
+                    mandate.save()
+                for place in places:
+                    place.pk = None
+                    place.description = description
+                    place.save()
+            for relation in relations:
+                relation.pk = None
+                relation.identity = identity
+                relation.save()
+            for resource in resources:
+                resource.pk = None
+                resource.identity = identity
+                resource.save()
+        control = self.control
+        for source in entity.control.sources.all():
+            source.pk = None
+            source.control = control
+            source.save()
+        records_to_update = set()
+        for record in entity.person_subject_for_records.all():
+            record.persons_as_subjects.add(self)
+            records_to_update.add(record)
+        for record in entity.related_entities.all():
+            record.related_entities.add(self)
+            records_to_update.add(record)
+        for record in entity.organisation_subject_for_records.all():
+            record.organisations_as_subjects.add(self)
+            records_to_update.add(record)
+        for record in entity.files_created.all():
+            record.creators.add(self)
+            records_to_update.add(record)
+        for record in entity.files_as_relations.all():
+            record.persons_as_relations.add(self)
+            records_to_update.add(record)
+        for record in entity.items_created.all():
+            record.creators.add(self)
+            records_to_update.add(record)
+        for record in entity.items_as_relations.all():
+            record.persons_as_relations.add(self)
+            records_to_update.add(record)
+        return records_to_update
 
 
 @reversion.register(follow=['descriptions', 'name_entries', 'relations',

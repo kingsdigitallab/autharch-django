@@ -1,0 +1,3 @@
+class EntityMergeException(Exception):
+
+    pass
