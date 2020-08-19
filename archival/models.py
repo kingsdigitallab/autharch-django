@@ -221,6 +221,8 @@ class FileBase(models.Model):
 
 @reversion.register(follow=['archivalrecord_ptr'])
 class File(ArchivalRecord, SeriesBase, FileBase):
+    parent_collection = models.ForeignKey(
+        Collection, blank=True, null=True, on_delete=models.CASCADE)
     parent_series = models.ForeignKey(
         Series, blank=True, null=True, on_delete=models.CASCADE)
     parent_file = models.ForeignKey(
@@ -245,6 +247,8 @@ class File(ArchivalRecord, SeriesBase, FileBase):
 
 @reversion.register(follow=['archivalrecord_ptr'])
 class Item(ArchivalRecord, SeriesBase, FileBase):
+    parent_collection = models.ForeignKey(
+        Collection, blank=True, null=True, on_delete=models.CASCADE)
     parent_series = models.ForeignKey(
         Series, blank=True, null=True, on_delete=models.CASCADE)
     parent_file = models.ForeignKey(
