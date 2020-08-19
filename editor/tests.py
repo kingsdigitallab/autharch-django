@@ -12,8 +12,8 @@ from editor.forms import EntityEditForm
 from jargon.models import (
     CollaborativeWorkspaceEditorType as CWEditorType, EditingEventType,
     EntityRelationType, EntityType, Function as JFunction, Gender,
-    MaintenanceStatus, NamePartType, PublicationStatus, Repository,
-    ResourceRelationType)
+    MaintenanceStatus, NamePartType, PublicationStatus, ReferenceSource,
+    Repository, ResourceRelationType)
 
 from controlled_vocabulary.utils import search_term_or_none
 from script_codes.models import Script
@@ -334,6 +334,7 @@ class MergeEntitiesTestCase(TestCase):
         deleted_maintenance_status.save()
         cls.repository, _ = Repository.objects.get_or_create(
             title='Royal Archives', code=262)
+        ra_ref_source, _ = ReferenceSource.objects.get_or_create(title='RA')
 
     def _create_entity(self):
         entity = Entity(entity_type=self.entity_type1, project=self.project1)
