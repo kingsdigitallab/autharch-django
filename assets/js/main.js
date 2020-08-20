@@ -726,11 +726,10 @@ function showModal(modalName) {
   $('.modal').addClass('active');
   if (modalName == 'merge-modal' || modalName == 'notRelated-modal') {
     $('.modal').find('.data-from')
-              .html($(event.target).parent('.cta').next('.record').children('a:first-of-type').text());
+              .html($(checkbox).parent('.cta').next('.record').children('a:first-of-type').text());
     if (modalName == 'merge-modal') {
       $('.modal').find('.action').text('merge into:');
-    }
-    if (modalName == 'notRelated-modal') {
+    } else if (modalName == 'notRelated-modal') {
       $('.modal').find('.action').text('is not a duplicate of:');
     }
     $('.modal-cancel').on('click', function() {
