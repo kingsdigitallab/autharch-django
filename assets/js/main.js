@@ -660,12 +660,14 @@ function toggleTab() {
 function toggleExpand() {
   event.preventDefault();
   let action = $(event.target).attr('data-toggle');
-  $('.fieldset-body').not('.parent-level > .fieldset-body').toggleClass('expand');
-  $('.toggle-tab-button').not('.parent-level .fieldset-header .toggle-tab-button').toggleClass('active');
   if (action == 'expand') {
+    $('.fieldset-body').not('.parent-level > .fieldset-body').addClass('expand');
+    $('.toggle-tab-button').not('.parent-level .fieldset-header .toggle-tab-button').addClass('active');
     $(event.target).text('Collapse all');
     $(event.target).attr('data-toggle', 'collapse');
   } else {
+    $('.fieldset-body').not('.parent-level > .fieldset-body').removeClass('expand');
+    $('.toggle-tab-button').not('.parent-level .fieldset-header .toggle-tab-button').removeClass('active');
     $(event.target).text('Expand all');
     $(event.target).attr('data-toggle', 'expand');
   }
