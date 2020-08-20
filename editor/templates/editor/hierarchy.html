@@ -16,9 +16,7 @@
                     <!-- no action needed onsubmit as the results are searched instantly with jquery; potentially this button can be removed.-->
                     <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;" disabled/>
                 </form>
-                <div class="expand-collapse">
-                    <button class="button-link dotted-underline" onclick="toggleExpand(this)">Expand all</button>
-                </div>
+                <button class="default" data-toggle="expand" onclick="toggleExpand()">Expand all</button>
             </div>
         </div>
         <div class="hierarchy-header">
@@ -29,7 +27,7 @@
               <span>Creation dates</span>
             </span>
         </div>
-        <div class="not-expanded parent-level">
+        <div class="parent-level">
           {% render_record_hierarchy_item root_ancestor item ancestors %}
         </div>
     {% endblock content %}

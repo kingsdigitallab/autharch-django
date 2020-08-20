@@ -66,23 +66,26 @@
 
     <h1>{{ record }}</h1>
 
-    <div class="subitems">
-      <ul>
-        <li>Level: <span class="highlight">{{ record.archival_level }}</span></li>
-        <li>
-          <a href="{% url 'editor:record-hierarchy' record_id=record.pk %}">
-            <i class="fal fa-sitemap"></i>
-            <span class="dotted-underline">Hierarchy browser</span>
-          </a>
-        </li>
-        <!-- TODO: display if related people and corporate bodies > 0 -->
-        <li>
-          <a href="{% url 'editor:record-related' record_id=record.pk %}">
-            <i class="fal fa-users"></i>
-            <span class="dotted-underline">Related people and corporate bodies</span>
-          </a>
-        </li>
-      </ul>
+    <div class="submenu">
+      <div class="subitems">
+        <ul>
+          <li>Level: <span class="highlight">{{ record.archival_level }}</span></li>
+          <li>
+            <a href="{% url 'editor:record-hierarchy' record_id=record.pk %}">
+              <i class="fal fa-sitemap"></i>
+              <span class="dotted-underline">Hierarchy browser</span>
+            </a>
+          </li>
+          <!-- TODO: display if related people and corporate bodies > 0 -->
+          <li>
+            <a href="{% url 'editor:record-related' record_id=record.pk %}">
+              <i class="fal fa-users"></i>
+              <span class="dotted-underline">Related people and corporate bodies</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <button class="default" data-toggle="collapse" onclick="toggleExpand()">Collapse all</button>
     </div>
   </div>
   <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">
@@ -94,7 +97,7 @@
         <div class="fieldset-header">
           <h4>Transcription</h4>
           <div>
-            <button class="toggle-tab-button transcription-toggle" onclick="toggleTab(this)"></button>
+            <button class="toggle-tab-button transcription-toggle" onclick="toggleTab()"></button>
           </div>
         </div>
         <div class="fieldset-body" id="transcription-div">
@@ -124,9 +127,7 @@
           {% render_field form.uuid %}
           {% render_field form.project %}
           <h4>{{ ra_references|join:", " }}</h4>
-          <div>
-            <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
-          </div>
+          <button class="toggle-tab-button active" onclick="toggleTab()" aria-label="toggle tab"></button>
         </div>
         <div class="fieldset-body expand">
           <div class="two-column-table">
@@ -206,7 +207,7 @@
         <div class="fieldset-header">
           <h4>{{ record.title | truncatewords:30 }}</h4>
           <div>
-            <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
+            <button class="toggle-tab-button active" onclick="toggleTab()" aria-label="toggle tab"></button>
           </div>
         </div>
         <div class="fieldset-body expand">
@@ -261,7 +262,7 @@
         <div class="fieldset-header">
           <h4>Record ID: {{ record.pk }}</h4>
           <div>
-            <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
+            <button class="toggle-tab-button active" onclick="toggleTab()" aria-label="toggle tab"></button>
           </div>
         </div>
         <div class="fieldset-body expand">

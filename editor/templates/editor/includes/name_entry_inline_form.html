@@ -14,13 +14,13 @@
         <label>
             {{ form.authorised_form }}
             {{ form.authorised_form.label }}
-            <span role="button" aria-label="additional info" onclick="toggleHelpText(this, 'This element indicates which name entry is the preferred one when referring to an identity.')" class="icon-only additional-info-icon">&#xf059;</span>
+            <span role="button" aria-label="additional info" onclick="toggleHelpText('This element indicates which name entry is the preferred one when referring to an identity.')" class="icon-only additional-info-icon">&#xf059;</span>
         </label>
       </div>
       <div>
         {% include "./delete_inline_button.html" %}
       </div>
-      <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
+      <button class="toggle-tab-button active" onclick="toggleTab()" aria-label="toggle tab" aria-label="toggle tab"></button>
     </div>
   </div>
   <div class="fieldset-body expand inline-deletable">

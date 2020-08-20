@@ -108,7 +108,7 @@ $(document).ready(function() {
             widgets: ['filter'],
             widgetOptions: {
                 filter_columnFilters: true,
-                filter_filterLabel : 'Filter records by {{label}}',
+                filter_filterLabel : 'Filter by {{label}}',
             }
         })
     } else {
@@ -117,7 +117,7 @@ $(document).ready(function() {
             widgets: ['filter'],
             widgetOptions: {
                 filter_columnFilters: true,
-                filter_filterLabel: 'Filter records by {{label}}',
+                filter_filterLabel: 'Filter by {{label}}',
             },
             sortList: [[2,0]],
             headers: {
@@ -210,7 +210,7 @@ $(document).ready(function() {
   $('.filter-list').each(function() {
     if ($(this).children("a").length > 5) {
       $(this).children("a").slice(5, $(this).children("a").length).hide();
-      $(this).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+$(this).children("a").length+`)</button>`);
+      $(this).append(`<button class="button-link show-more" onclick="toggleFilters()"><i class="far fa-plus"></i> Show all (`+$(this).children("a").length+`)</button>`);
     }
   });
   // search in filter options and display options that match the query
@@ -222,7 +222,7 @@ $(document).ready(function() {
         filterOptions.slice(0, 5).show();
         filterOptions.slice(6, filterOptions.length).hide();
         $(e.target).closest('fieldset').children('.show-more').remove();
-        $(e.target).closest('fieldset').append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+$(e.target).closest('fieldset').children("a").length+`)</button>`);
+        $(e.target).closest('fieldset').append(`<button class="button-link show-more" onclick="toggleFilters()"><i class="far fa-plus"></i> Show all (`+$(e.target).closest('fieldset').children("a").length+`)</button>`);
       }
       else {
         $(e.target).closest('fieldset').children('button.show-more').hide();
@@ -649,66 +649,68 @@ function toggleRequiredControls(controls, add_required) {
 }
 
 // expand/collapse entity/archival record sections and individual sections on the hierarchy page
-function toggleTab(el) {
+function toggleTab() {
   event.preventDefault();
-  $(el).parents('.fieldset-header').siblings('.fieldset-body').first().toggleClass('expand');
-  $(el).toggleClass('active');
+  let header = $(event.target).closest('.fieldset-header');
+  $(header).siblings('.fieldset-body').first().toggleClass('expand');
+  $(header).find('.toggle-tab-button').toggleClass('active');
 }
 
 // expand a hierarchical tree
-function toggleExpand(el) {
+function toggleExpand() {
   event.preventDefault();
-  if ($('.parent-level').hasClass('not-expanded')) {
-    $('.fieldset-body').addClass('expand');
-    $('.toggle-tab-button').addClass('active');
-    $(el).text('Collapse all');
+  let action = $(event.target).attr('data-toggle');
+  $('.fieldset-body').not('.parent-level > .fieldset-body').toggleClass('expand');
+  $('.toggle-tab-button').not('.parent-level .fieldset-header .toggle-tab-button').toggleClass('active');
+  if (action == 'expand') {
+    $(event.target).text('Collapse all');
+    $(event.target).attr('data-toggle', 'collapse');
   } else {
-    $('.child-level').find('.fieldset-body').removeClass('expand');
-    $('.child-level').find('.toggle-tab-button').removeClass('active');
-    $(el).text('Expand all');
+    $(event.target).text('Expand all');
+    $(event.target).attr('data-toggle', 'expand');
   }
-  $('.parent-level').toggleClass('not-expanded');
 }
 
 // show all information on the table pages
-function toggleAllMoreInformation(el) {
+function toggleAllMoreInformation() {
   $('[id^="checkbox_"]').prop('checked', !$('[id^="checkbox_"]').prop('checked'));
   if ($('[id^="checkbox_"]').prop('checked')) {
-    $(el).text('Collapse all');
+    $(event.target).text('Collapse all');
   } else {
-    $(el).text('Expand all');
+    $(event.target).text('Expand all');
   }
 }
 
 // show more/less facet options
-function toggleFilters(el) {
+function toggleFilters() {
   event.preventDefault();
-  var fieldset = $(el).parent('fieldset').first();
+  var fieldset = $(event.target).parent('fieldset').first();
   $(fieldset).children('.show-more').remove();
   if ($(fieldset).children('a[style="display: none;"]').length) {
     $(fieldset).children('a').show();
-    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-minus"></i> Show less</button>`);
+    $(fieldset).children('a:first-of-type').before(`<button class="button-link show-more" onclick="toggleFilters()"><i class="far fa-minus"></i> Show less</button>`);
+    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters()"><i class="far fa-minus"></i> Show less</button>`);
   }
   else {
     $(fieldset).children('a').slice(5, $(fieldset).children('a').length).hide();
-    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters(this)"><i class="far fa-plus"></i> Show all (`+ $(fieldset).children("a").length +`)</button>`);
+    $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters()"><i class="far fa-plus"></i> Show all (`+ $(fieldset).children("a").length +`)</button>`);
   }
 }
 
 // hide/show help text on single entity and archival records pages
-function toggleHelpText(el, help_text) {
+function toggleHelpText(help_text) {
   event.stopPropagation();
   event.preventDefault();
-  if ($(el).siblings('p.additional-info').length) {
+  if ($(event.target).siblings('p.additional-info').length) {
     // change icon to 'question mark'
-    $(el).text('');
-    $(el).siblings('p.additional-info').remove();
+    $(event.target).text('');
+    $(event.target).siblings('p.additional-info').remove();
   }
   else {
-    var position = $(el).position();
-    $(el).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
+    var position = $(event.target).position();
+    $(event.target).before('<p class="additional-info" style="top:'+ (position.top - 40) + 'px; left:' + (position.left + 25) + 'px">' + help_text + '</p>');
     // change icon to 'close'
-    $(el).text('');
+    $(event.target).text('');
   }
 }
 
@@ -769,15 +771,15 @@ function addDuplicate() {
             <label for="not_duplicate_`+ entity.id +`">Not a duplicate</label>
         </div>
         <div class="record">
-          <a href="/editor/entities/`+ entity.id +`/" target="_blank" class="dotted-underline highlight">Record ID: `+ entity.id +` - `+ entity.title +`</a>
           <div class="subitems">
             <ul>
-              <li><a href="/editor/entities/`+ entity.id +`/duplicates/"><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of this record</span></a></li>
+              <li class="highlight">Record ID: `+ entity.id +`</li>
               <li>Type: `+ entity.entity_type +`</li>
               <li>Publication status: `+ entity.publication_status +`</li>
               <li>Updated: `+ entity.last_revision_date_created + `</li>
             </ul>
-          </div> 
+          </div>
+          <a href="/editor/entities/`+ entity.id +`/duplicates/"><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: `+ entity.id +`</span></a><span class="divider"></span><a href="/editor/entities/`+ entity.id +`/" target="_blank" class="dotted-underline">See `+ entity.title +`</a>
         </div>
       </div>
     `).prepend (`<div class="success-notification"><button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button><h4>Record "`+ entity.title +`" (ID: `+ entity.id +`) was added to the duplicates list.</h4></div> `);

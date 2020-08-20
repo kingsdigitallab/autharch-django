@@ -217,10 +217,9 @@ input, button {
 
 input[type=submit]:not(.search-button):not(.create) {
     min-width: 80px;
-}
-
-span[role=button] {
-    margin: auto;
+    &:hover, &:focus {
+        box-shadow: 0px 2px 2px $medium-grey;
+    }
 }
 
 .create {
@@ -246,6 +245,9 @@ span[role=button] {
                 color: $light-grey;
             }
         }
+    }
+    &:hover, &:focus {
+        box-shadow: 0px 2px 2px $medium-grey;
     }
 }
 
@@ -287,6 +289,9 @@ span[role=button] {
     -webkit-border-radius: 2em;
     -moz-border-radius: 2em;
     border-radius: 2em;
+    &:hover, &:focus {
+        box-shadow: 0px 2px 2px $medium-grey;
+    }
 }
 
 .toggle-tab-button {
@@ -414,15 +419,19 @@ a {
     }
 
     &.show-more {
-        float: right;
+        // float: right;
+        display: block;
+        margin-left: auto;
         margin-right: 0px;
         color: $add;
+        border-bottom: 0;
         text-decoration: underline;
         .far {
             font-weight: 300;
         }
         &:hover, &:focus {
             color: darken($add, 10%);
+            border-bottom: 0;
         }
     }
 }
@@ -1123,9 +1132,6 @@ main {
                     white-space: nowrap;
                     font-size: 0.92em;
                 }
-                &:last-of-type {
-                    min-width: 158px;
-                }
                 &.description {
                     width: 80%;
                     white-space: normal;
@@ -1257,7 +1263,7 @@ main {
         }
     }
     .form-header{
-        margin-top: 70px;
+        margin-top: 5em;
         .breadcrumbs {
             margin: 20px 0px;
             @include inline-list("\f0da");
@@ -1267,6 +1273,16 @@ main {
                 &:hover, &:focus {
                     border-bottom: 1px dotted $dark-grey;
                 }
+            }
+        }
+        .submenu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            button.default {
+                text-align: center;
+                width: 9em;
             }
         }
     }
@@ -1289,7 +1305,7 @@ main {
             // &:not(.button-link) {
             //     margin-bottom: 10px;
             // }
-            > span:first-of-type:not([role=button]) {
+            > span:first-of-type:not[role=button] {
                 font-size: 0.92em;
             }
         }
@@ -1446,6 +1462,7 @@ main {
                 }
                 .fieldset-body {
                     overflow: hidden;
+                    padding: 0 2em;
                     .formset {
                         margin-bottom: 1.5em;
                         .namePartField-required {
@@ -1472,7 +1489,8 @@ main {
                         }
                     }
                     &.expand {
-                        padding: 30px;
+                        padding-top: 2em;
+                        padding-bottom: 2em;
                     }
                     label, input, textarea {
                         margin-bottom: 10px;
@@ -1698,10 +1716,10 @@ main {
 
     // HIERARCHY PAGE
     &#hierarchy {
-        .expand-collapse {
-            text-align: right;
+        .search-filter > button.default {
+            text-align: center;
             margin-left: 1em;
-            width: 75px;
+            width: 9em;
         }
         div[class*='-level'] {
             font-size: 1em;
@@ -1799,9 +1817,18 @@ main {
                 border-bottom-right-radius: 0.3em;
             }
             .fieldset-header {
+                cursor: pointer;
+                &:hover {
+                    background-color: lighten($light-grey, 3%);
+                }
                 .toggle-tab-button {
                     background-color: inherit;
-                    padding: 1em;
+                    display: inline-block;
+                    padding: 0.7em 1em;
+                }
+                h2 {
+                    display: inline-block;
+                    font-size: 1em;
                 }
             }
             .fieldset-body {
@@ -1811,11 +1838,9 @@ main {
                     padding-top: 1em;
                     padding-bottom: 1em;
                 }
-                .subitems {
-                    margin-top: 0.5em;
-                }
                 .record {
                     padding: 0.5em 1em;
+                    margin-bottom: 1em;
                     &:nth-of-type(even) {
                         @include lighten($light-grey);
                     }
@@ -1847,9 +1872,6 @@ main {
                 margin-top: 0em;
                 margin-bottom: 0.6em;
             }
-        }
-        .subitems {
-            margin-top: 0.5em;
         }
         #add-record-form {
             display: block;
@@ -1905,7 +1927,7 @@ main {
                 gap: 1.5em;
                 position: relative;
                 &:not(:last-of-type) {
-                    margin-bottom: 1em;
+                    margin-bottom: 1.5em;
                 }
                 .cta {
                     label {
@@ -2070,7 +2092,6 @@ main {
         transition: all .4s;
         opacity: 0; 
         height: 0;
-        overflow: hidden;
         &.expand {
             height: auto;
             opacity: 1;
@@ -2472,7 +2493,7 @@ footer {
         //     }
         // }
         .form-header {
-            margin-top: 150px;
+            margin-top: 10em;
         }
         .filter-block {
             .filters-hidden {
@@ -2711,7 +2732,7 @@ footer {
             }
         }
         .form-header {
-            margin-top: 70px;
+            margin-top: 5em;
         }
         .fieldset-header {
             >div {

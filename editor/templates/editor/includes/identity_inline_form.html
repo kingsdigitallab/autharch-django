@@ -14,13 +14,13 @@
         <label>
             {{ form.preferred_identity }}
             {{ form.preferred_identity.label }}
-            <span role="button" aria-label="additional info" onclick="toggleHelpText(this, 'This element indicates which identity is the preferred one when displaying an entity.')" class="icon-only additional-info-icon">&#xf059;</span>
+            <span role="button" aria-label="additional info" onclick="toggleHelpText('This element indicates which identity is the preferred one when displaying an entity.')" class="icon-only additional-info-icon">&#xf059;</span>
         </label>
       </div>
       <div>
         {% include "./delete_inline_button.html" %}
       </div>
-      <button class="toggle-tab-button active" onclick="toggleTab(this)"></button>
+      <button class="toggle-tab-button active" onclick="toggleTab()" aria-label="toggle tab"></button>
     </div>
   </div>
   <div class="fieldset-body expand inline-deletable">
