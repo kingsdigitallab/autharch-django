@@ -770,6 +770,13 @@ class EntityDuplicateForm(forms.Form):
     action = forms.ChoiceField(choices=ACTION_CHOICES)
 
 
+class EntityDuplicateSelectForm(forms.Form):
+
+    entity = forms.ModelChoiceField(
+        queryset=Entity.objects.exclude(
+            control__maintenance_status__title='deleted'), widget=EntitySelect)
+
+
 class EntityCreateForm(forms.Form):
 
     entity_type = forms.ModelChoiceField(

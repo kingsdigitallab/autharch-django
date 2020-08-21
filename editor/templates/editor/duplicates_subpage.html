@@ -42,13 +42,10 @@
 
   <!-- #add-record-form adds a new duplicate to the duplicates form; the template to append is available in main.js, line 762 -->
   <div id="add-record-form">
-    <select name="add_record" class="select-with-search" aria-label="Add a record by record id or display name">
-      <option></option>
-      <!-- value = [entity.id]; we need to display record id and display name of each record -->
-      <option value="29">Record ID: 29, Display name: Prescott, Robert, Maj-Gen.</option>
-      <option value="42">Record ID: 42, Display name: Pigot, Hugh, Adm. Hood, Samuel, Rear-Adm. Lord</option>
-    </select>
-    <button class="create" onclick="addDuplicate()">Add to the list</button>
+    <form action="." method="get">
+      {% for field in select_form %}{{ field }}{% endfor %}
+      <button class="create" type="submit">Add to the list</button>
+    </form>
   </div>
 
   <div id="duplicates-form">

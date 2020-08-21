@@ -32,8 +32,8 @@ from jargon.models import (
 
 from .forms import (
     ArchivalRecordFacetedSearchForm, BaseUserFormset, EditorProfileForm,
-    EntityCreateForm, EntityDuplicateForm, EntityEditForm,
-    EntityFacetedSearchForm, DeletedFacetedSearchForm, LogForm,
+    EntityCreateForm, EntityDuplicateForm, EntityDuplicateSelectForm,
+    EntityEditForm, EntityFacetedSearchForm, DeletedFacetedSearchForm, LogForm,
     PasswordChangeForm, SearchForm, UserCreateForm, UserEditForm, UserForm,
     assemble_form_errors, get_archival_record_edit_form_for_subclass,
 )
@@ -640,6 +640,19 @@ def entity_related(request, entity_id):
 def entity_duplicates(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     control = entity.control
+    context = {
+        'current_section': 'entities',
+        'edit_url': reverse('editor:entity-edit',
+                            kwargs={'entity_id': entity_id}),
+        'entity': entity,
+        'entity_id': entity_id,
+        'last_revision': Version.objects.get_for_object(entity)[0].revision,
+        'maintenance_status': control.maintenance_status,
+        'marked': request.GET.get('marked'),
+        'merged': request.GET.get('merged'),
+        'publication_status': control.publication_status,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
+    }
     duplicate_data = get_duplicates(entity)
     not_duplicates = entity.not_duplicates.all()
     unmarked_duplicates = set()
@@ -650,26 +663,22 @@ def entity_duplicates(request, entity_id):
                 marked_duplicates.add(duplicate)
             else:
                 unmarked_duplicates.add(duplicate)
-    context = {
-        'current_section': 'entities',
-        'edit_url': reverse('editor:entity-edit',
-                            kwargs={'entity_id': entity_id}),
-        'entity': entity,
-        'entity_id': entity_id,
-        'last_revision': Version.objects.get_for_object(entity)[0].revision,
-        'maintenance_status': control.maintenance_status,
-        'marked': request.GET.get('marked'),
-        'marked_duplicates': marked_duplicates,
-        'merged': request.GET.get('merged'),
-        'publication_status': control.publication_status,
-        'show_delete': can_show_delete_page(request.user.editor_profile.role),
-        'unmarked_duplicates': unmarked_duplicates,
-    }
+    select_form = EntityDuplicateSelectForm(request.GET)
+    if select_form.is_valid():
+        added_entity = select_form.cleaned_data['entity']
+        if added_entity == entity:
+            context['error'] = ('Cannot add the entity itself to list of '
+                                'duplicates.')
+        else:
+            unmarked_duplicates.add(added_entity)
+    context['unmarked_duplicates'] = unmarked_duplicates
+    context['marked_duplicates'] = marked_duplicates
+    select_form = EntityDuplicateSelectForm()
     if request.method == 'POST':
-        form = EntityDuplicateForm(request.POST)
-        if form.is_valid():
-            action = form.cleaned_data['action']
-            other_entity_id = form.cleaned_data['entity_id']
+        duplicate_form = EntityDuplicateForm(request.POST)
+        if duplicate_form.is_valid():
+            action = duplicate_form.cleaned_data['action']
+            other_entity_id = duplicate_form.cleaned_data['entity_id']
             other_entity = Entity.objects.get(pk=other_entity_id)
             redirect_url = reverse('editor:entity-duplicates',
                                    kwargs={'entity_id': entity_id})
@@ -686,8 +695,9 @@ def entity_duplicates(request, entity_id):
                                 str(other_entity_id))
 
     else:
-        form = EntityDuplicateForm()
-    context['duplicate_form'] = form
+        duplicate_form = EntityDuplicateForm()
+    context['duplicate_form'] = duplicate_form
+    context['select_form'] = select_form
     return render(request, 'editor/duplicates_subpage.html', context)
 
 

@@ -539,7 +539,6 @@ function setUpCreationYearSlider() {
       $('#year-range-anchor').attr('href', queryString);
     }
   });
- 
 }
 
 
@@ -648,6 +647,7 @@ function toggleRequiredControls(controls, add_required) {
   controls.attr('required', value);
 }
 
+
 // expand/collapse entity/archival record sections and individual sections on the hierarchy page
 function toggleTab() {
   event.preventDefault();
@@ -655,6 +655,7 @@ function toggleTab() {
   $(header).siblings('.fieldset-body').first().toggleClass('expand');
   $(header).find('.toggle-tab-button').toggleClass('active');
 }
+
 
 // expand a hierarchical tree
 function toggleExpand() {
@@ -673,6 +674,7 @@ function toggleExpand() {
   }
 }
 
+
 // show all information on the table pages
 function toggleAllMoreInformation() {
   $('[id^="checkbox_"]').prop('checked', !$('[id^="checkbox_"]').prop('checked'));
@@ -682,6 +684,7 @@ function toggleAllMoreInformation() {
     $(event.target).text('Expand all');
   }
 }
+
 
 // show more/less facet options
 function toggleFilters() {
@@ -698,6 +701,7 @@ function toggleFilters() {
     $(fieldset).append(`<button class="button-link show-more" onclick="toggleFilters()"><i class="far fa-plus"></i> Show all (`+ $(fieldset).children("a").length +`)</button>`);
   }
 }
+
 
 // hide/show help text on single entity and archival records pages
 function toggleHelpText(help_text) {
@@ -725,6 +729,7 @@ function showModal(modalName) {
   $('.modal').addClass('active');
 }
 
+
 /**
  * Populate confirmation modal with form data and then show it.
  */
@@ -741,54 +746,6 @@ function confirmMergeAction(modalName, action, entityId) {
   showModal(modalName);
 }
 
-function addDuplicate() {
-  let id = $('select[name="add_record"]').select2('val');
-  
-  if (id) {
-    // clear all previous notifications if any
-    $('div[class$="-notification"]').remove();
-
-    // check if the entity is already listed; if listed, display an error message
-    let listed = false;
-    $('input[name="duplicate"]').each(function() {
-      if ($(this).val() == id) {
-        listed = true;
-      };
-    });
-    if (listed) {
-      $('.duplicates-list').prepend (`<div class="error-notification"><button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button><h4>The record with an ID `+ id +` is already in the list. </h4></div> `);
-      return false;
-    }
-
-    // if not listed
-    // TODO - request display name, type, publication status, last updated date and username by id
-    // placeholder of the response:
-    let entity = {'id': id, 'title': 'placeholder', 'entity_type': '[entity_type]', 'publication_status': '[publication_status]', 'last_revision_date_created': '[entity_updated]'};
-
-    // add a new entity to the duplicates list and display the success message
-    $('.duplicates-list').append(`
-      <div class="duplicate">
-        <div class="cta">
-            <input type="checkbox" name="duplicate" id="duplicate_`+ entity.id +`" value="`+ entity.id +`" onclick="showModal('merge-modal')">
-            <label for="duplicate_`+ entity.id +`">Merge</label>
-            <input type="checkbox" name="not_duplicate"  id="not_duplicate_`+ entity.id +`" value="`+ entity.id +`" onclick="showModal('notRelated-modal')">
-            <label for="not_duplicate_`+ entity.id +`">Not a duplicate</label>
-        </div>
-        <div class="record">
-          <div class="subitems">
-            <ul>
-              <li class="highlight">Record ID: `+ entity.id +`</li>
-              <li>Type: `+ entity.entity_type +`</li>
-              <li>Publication status: `+ entity.publication_status +`</li>
-              <li>Updated: `+ entity.last_revision_date_created + `</li>
-            </ul>
-          </div>
-          <a href="/editor/entities/`+ entity.id +`/duplicates/"><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: `+ entity.id +`</span></a><span class="divider"></span><a href="/editor/entities/`+ entity.id +`/" target="_blank" class="dotted-underline">See `+ entity.title +`</a>
-        </div>
-      </div>
-    `).prepend (`<div class="success-notification"><button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button><h4>Record "`+ entity.title +`" (ID: `+ entity.id +`) was added to the duplicates list.</h4></div> `);
-  }
-}
 
 // this won't delete the field(s), just hide them. The deletion needs to be executed in the backend, once the form is submitted.
 function deleteField(el, toDelete) {
@@ -796,6 +753,7 @@ function deleteField(el, toDelete) {
   $(el).closest(toDelete).addClass('none');
   $(el).parents('.formset').first().children('label').show();
 }
+
 
 function deleteRow(el) {
   if (!$(el).parent().siblings('td').hasClass('none')) {
@@ -811,6 +769,7 @@ function deleteRow(el) {
   let deleteField = $(el).closest('[data-form-type]').find('[class~="delete-form-field"]').find('[name$="DELETE"]').first();
   deleteField.prop('checked', !deleteField.prop('checked'));
 }
+
 
 function removeNotification() {
   $(event.target).parent().remove();
