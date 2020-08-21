@@ -722,20 +722,23 @@ function toggleHelpText(help_text) {
  * record (whether Archival Record or Entity), to merge two records, or to mark them as not related.
  */
 function showModal(modalName) {
-  let checkbox = $(event.target);
   $('.modal').addClass('active');
-  if (modalName == 'merge-modal' || modalName == 'notRelated-modal') {
-    $('.modal').find('.data-from')
-              .html($(checkbox).parent('.cta').next('.record').children('a:first-of-type').text());
-    if (modalName == 'merge-modal') {
-      $('.modal').find('.action').text('merge into:');
-    } else if (modalName == 'notRelated-modal') {
-      $('.modal').find('.action').text('is not a duplicate of:');
-    }
-    $('.modal-cancel').on('click', function() {
-      $(checkbox).prop('checked', false);
-    })
+}
+
+/**
+ * Populate confirmation modal with form data and then show it.
+ */
+function confirmMergeAction(modalName, action, entityId) {
+  $('.modal').find('.data-from').html($(event.target).parent('.cta').next(
+    '.record').children('a:first-of-type').text());
+  $('.modal').find('#id_entity_id').attr('value', entityId);
+  $('.modal').find('#id_action').attr('value', action);
+  if (action == 'merge') {
+    $('.modal').find('.action').text('merge into:');
+  } else if (action == 'mark') {
+    $('.modal').find('.action').text('is not a duplicate of:');
   }
+  showModal(modalName);
 }
 
 function addDuplicate() {

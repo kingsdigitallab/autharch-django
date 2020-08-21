@@ -1,138 +1,103 @@
 {% extends "./base.html" %}
 {% block main %}
 <main id="duplicates-subpage">
-    {% block page_header %}
-        <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ entity|truncatewords:15 }}</span></a>
+  {% block page_header %}
+  <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ entity|truncatewords:15 }}</span></a>
 
-        <div class="page-header">
-            <h2>Manage duplicates of:</h2>
-        </div>
-    {% endblock page_header %}
-    {% block content %}
-        <!--         
-        <div class="success-notification">
-            <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
-            if merge
-            <h4>The record [record_id] was merged into the record [record_id].</h4>
-            if unrelated
-            <h4>The record [record_id] was marked as "not a duplicate" of the record [record_id].</h4>
-        </div> 
-        -->
-        <div class="current-record">
-            <h1>{{entity}}</h1>
-            <div class="subitems">
-                <ul>
-                    <li class="highlight">Record ID: {{entity.id}}</li>
-                    <li>Type: {{entity.entity_type}}</li>
-                    <li>Publication status: {{publication_status}}</li>
-                    <li>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}</li>
-                </ul>
-            </div>
-        </div>
-        <!-- #add-record-form adds a new duplicate to the duplicates form; the template to append is available in main.js, line 762 -->
-        <div id="add-record-form">
-            <select name="add_record" class="select-with-search" aria-label="Add a record by record id or display name">
-                <option></option>
-                <!-- value = [entity.id]; we need to display record id and display name of each record -->
-                <option value="29">Record ID: 29, Display name: Prescott, Robert, Maj-Gen.</option>
-                <option value="42">Record ID: 42, Display name: Pigot, Hugh, Adm. Hood, Samuel, Rear-Adm. Lord</option>
-            </select>
-            <button class="create" onclick="addDuplicate()">Add to the list</button>
-        </div>
-        <form action="." id="duplicates-form">
-            <div class="duplicates-list">
-                <!-- if duplicates > 0 -->
-                <p>Merge the following duplicates into the browsed record:</p>
-                <div class="duplicate">
-                    <div class="cta">
-                        <input type="checkbox" name="duplicate" id="duplicate_1" value="1" onclick="showModal('merge-modal')">
-                        <label for="duplicate_1">Merge</label>
-                        <input type="checkbox" name="not_duplicate"  id="not_duplicate_1" value="1" onclick="showModal('notRelated-modal')">
-                        <label for="not_duplicate_1">Not a duplicate</label>
-                    </div>
-                    <div class="record">
-                       <div class="subitems">
-                           <ul>
-                                <li class="highlight">Record ID: 1</li>
-                                <li>Type: [entity_type]</li>
-                                <li>Publication status: [publication_status]</li>
-                                <li>Updated: [ entity_updated ]</li>
-                            </ul>
-                        </div> 
-                        <a href=""><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: 1</span></a><span class="divider"></span><a href="" target="_blank" class="dotted-underline">See [entity_display_name]</a>
-                    </div>
-                </div>
-                <div class="duplicate">
-                    <div class="cta">
-                        <input type="checkbox" name="duplicate" id="duplicate_2" value="2" onclick="showModal('merge-modal')">
-                        <label for="duplicate_2">Merge</label>
-                        <input type="checkbox" name="not_duplicate"  id="not_duplicate_2" value="2" onclick="showModal('notRelated-modal')">
-                        <label for="not_duplicate_2">Not a duplicate</label>
-                    </div>
-                    <div class="record">
-                        <div class="subitems">
-                            <ul>
-                                <li class="highlight">Record ID: 2</li>
-                                <li>Type: [entity_type]</li>
-                                <li>Publication status: [publication_status]</li>
-                                <li>Updated: [ entity_updated ]</li>
-                            </ul>
-                        </div>
-                        <a href=""><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: 2</span></a><span class="divider"></span><a href="" target="_blank" class="dotted-underline">See [entity_display_name]</a>
-                    </div>
-                </div>
-            </div>
-            <!-- if manually_removed > 0 -->
-            <input type="checkbox" id="show-removed-checkbox"/>
-            <label for="show-removed-checkbox"><span hidden>Show/hide records marked as "not a duplicate":</span></label>
-            <div class="manually-removed">
-                <div class="duplicate">
-                    <div class="cta">
-                        <input type="checkbox" name="duplicate" id="duplicate_3" value="3" onclick="showModal('merge-modal')">
-                        <label for="duplicate_3">Merge</label>
-                        <input type="checkbox" name="not_duplicate"  id="not_duplicate_3" value="3" checked disabled>
-                        <label for="not_duplicate_3">Not a duplicate</label>
-                    </div>
-                    <div class="record">
-                        <div class="subitems">
-                            <ul>
-                                <li class="highlight">Record ID: 3</li>
-                                <li>Type: [entity_type]</li>
-                                <li>Publication status: [publication_status]</li>
-                                <li>Updated: [ entity_updated ]</li>
-                            </ul>
-                        </div>
-                        <a href=""><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: 3</span></a><span class="divider"></span><a href="" target="_blank" class="dotted-underline">See [entity_display_name]</a>
-                    </div>
-                </div>
-            </div>
+  <div class="page-header">
+    <h2>Manage duplicates of:</h2>
+  </div>
+  {% endblock page_header %}
+
+  {% block content %}
+  {% if error %}
+  <div class="error-notification">
+    <p>{{ error }}</p>
+  </div>
+  {% endif %}
+
+  {% if marked or merged %}
+  <div class="success-notification">
+    <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+    {% if merged %}
+    <h4>The record {{ merged }} was merged into this entity.</h4>
+    {% endif %}
+    {% if marked %}
+    <h4>The record {{ marked }} was marked as "not a duplicate" of this entity.</h4>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="current-record">
+    <h1>{{ entity }}</h1>
+    <div class="subitems">
+      <ul>
+        <li class="highlight">Record ID: {{ entity.id }}</li>
+        <li>Type: {{ entity.entity_type }}</li>
+        <li>Publication status: {{ publication_status }}</li>
+        <li>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- #add-record-form adds a new duplicate to the duplicates form; the template to append is available in main.js, line 762 -->
+  <div id="add-record-form">
+    <select name="add_record" class="select-with-search" aria-label="Add a record by record id or display name">
+      <option></option>
+      <!-- value = [entity.id]; we need to display record id and display name of each record -->
+      <option value="29">Record ID: 29, Display name: Prescott, Robert, Maj-Gen.</option>
+      <option value="42">Record ID: 42, Display name: Pigot, Hugh, Adm. Hood, Samuel, Rear-Adm. Lord</option>
+    </select>
+    <button class="create" onclick="addDuplicate()">Add to the list</button>
+  </div>
+
+  <div id="duplicates-form">
+    <div class="duplicates-list">
+      {% if unmarked_duplicates %}
+      <p>Merge the following duplicates into the browsed record:</p>
+      {% for duplicate in unmarked_duplicates %}
+      {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=1 %}
+      {% endfor %}
+      {% else %}
+      <div class="empty-block">
+        <p>You don't have duplicates for this record. &#127881;</p>
+      </div>
+      {% endif %}
+    </div>
+    {% if marked_duplicates %}
+    <input type="checkbox" id="show-removed-checkbox"/>
+    <label for="show-removed-checkbox"><span hidden>Show/hide records marked as "not a duplicate":</span></label>
+    <div class="manually-removed">
+      {% for duplicate in marked_duplicates %}
+      {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=0 %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- CONFIRMATION POP-UP -->
+  <div class="modal" id="confirm-action-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Confirm action</h2>
+      </div>
+      <div class="modal-body">
+        <p class="data-from"></p>
+        <span class="action"></span>
+        <p class="data-to">Record ID: {{entity.id}} - {{entity}}</p>
+      </div>
+      <div class="modal-footer">
+        <form action="." method="post">
+          {% csrf_token %}
+          {% for field in duplicate_form %}
+          {{ field.as_hidden }}
+          {% endfor %}
+          <input type="button" value="Cancel" class="default modal-cancel"/>
+          <input type="submit" value="Submit" class="save"/>
         </form>
-        <!-- if duplicates.length == 0 -->
-        <!-- <div class="empty-block">
-            <p>You don't have duplicates for this record. &#127881;</p>
-        </div> -->
-
-
-        <!-- CONFIRMATION POP-UP -->
-        <div class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Confirm action</h2>
-                </div>
-                <div class="modal-body">
-                    <p class="data-from"></p>
-                    <span class="action"></span>
-                    <p class="data-to">Record ID: {{entity.id}} - {{entity}}</p>
-                </div>
-                <div class="modal-footer">
-                    <form action="." method="post">
-                        {% csrf_token %}
-                        <input type="button" value="Cancel" class="default modal-cancel"/>
-                        <input type="submit" value="Submit" class="save" form="duplicates-form"/>
-                    </form>
-                </div>
-            </div>
-        </div>
-    {% endblock content %}
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
 </main>
 {% endblock main %}

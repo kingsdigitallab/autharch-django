@@ -1,0 +1,17 @@
+<div class="duplicate">
+  <div class="cta">
+    <button type="button" onclick="confirmMergeAction('merge-modal', 'merge', {{ duplicate.id }})">Merge</button>
+    {% if unmarked %}<button type="button" onclick="confirmMergeAction('merge-modal', 'mark', {{ duplicate.id }})">Not a duplicate</button>{% endif %}
+  </div>
+  <div class="record">
+    <div class="subitems">
+      <ul>
+        <li class="highlight">Record ID: {{ duplicate.id }}</li>
+        <li>Type: {{ duplicate.entity_type }}</li>
+        <li>Publication status: {{ duplicate.control.publication_status }}</li>
+        <li>Updated: {{ duplicate.modified }}</li>
+      </ul>
+    </div>
+    <a href="{% url 'editor:entity-duplicates' entity_id=duplicate.pk %}"><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: {{ duplicate.id }}</span></a><span class="divider"></span><a href="{% url 'editor:entity-edit' entity_id=duplicate.pk %}" target="_blank" class="dotted-underline">See {{ duplicate }}</a>
+  </div>
+</div>

@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -23,17 +24,18 @@ from reversion.views import create_revision
 from archival.models import (
     ArchivalRecord, ArchivalRecordTranscription, Collection, File, Item,
     Series)
-from authority.models import Control, Entity
+from authority.exceptions import EntityMergeException
+from authority.models import Control, Entity, NameEntry
 from jargon.models import (
     CollaborativeWorkspaceEditorType as CWEditorType, EditingEventType,
     MaintenanceStatus, PublicationStatus)
 
 from .forms import (
     ArchivalRecordFacetedSearchForm, BaseUserFormset, EditorProfileForm,
-    EntityCreateForm, EntityEditForm, EntityFacetedSearchForm,
-    DeletedFacetedSearchForm, LogForm, PasswordChangeForm, SearchForm,
-    UserCreateForm, UserEditForm, UserForm, assemble_form_errors,
-    get_archival_record_edit_form_for_subclass,
+    EntityCreateForm, EntityDuplicateForm, EntityEditForm,
+    EntityFacetedSearchForm, DeletedFacetedSearchForm, LogForm,
+    PasswordChangeForm, SearchForm, UserCreateForm, UserEditForm, UserForm,
+    assemble_form_errors, get_archival_record_edit_form_for_subclass,
 )
 from .models import EditorProfile, RevisionMetadata
 from .signals import view_post_save
@@ -638,17 +640,54 @@ def entity_related(request, entity_id):
 def entity_duplicates(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     control = entity.control
+    duplicate_data = get_duplicates(entity)
+    not_duplicates = entity.not_duplicates.all()
+    unmarked_duplicates = set()
+    marked_duplicates = set()
+    for duplicate_list in duplicate_data.values():
+        for duplicate in duplicate_list:
+            if duplicate in not_duplicates:
+                marked_duplicates.add(duplicate)
+            else:
+                unmarked_duplicates.add(duplicate)
     context = {
         'current_section': 'entities',
         'edit_url': reverse('editor:entity-edit',
                             kwargs={'entity_id': entity_id}),
-        'entity_id': entity_id,
-        'maintenance_status': control.maintenance_status,
-        'publication_status': control.publication_status,
         'entity': entity,
-        'show_delete': can_show_delete_page(request.user.editor_profile.role),
+        'entity_id': entity_id,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
+        'maintenance_status': control.maintenance_status,
+        'marked': request.GET.get('marked'),
+        'marked_duplicates': marked_duplicates,
+        'merged': request.GET.get('merged'),
+        'publication_status': control.publication_status,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
+        'unmarked_duplicates': unmarked_duplicates,
     }
+    if request.method == 'POST':
+        form = EntityDuplicateForm(request.POST)
+        if form.is_valid():
+            action = form.cleaned_data['action']
+            other_entity_id = form.cleaned_data['entity_id']
+            other_entity = Entity.objects.get(pk=other_entity_id)
+            redirect_url = reverse('editor:entity-duplicates',
+                                   kwargs={'entity_id': entity_id})
+            if action == 'merge':
+                try:
+                    entity.merge(other_entity)
+                    return redirect(redirect_url + '?merged=' +
+                                    str(other_entity_id))
+                except EntityMergeException as e:
+                    context['error'] = str(e)
+            elif action == 'mark':
+                entity.not_duplicates.add(other_entity)
+                return redirect(redirect_url + '?marked=' +
+                                str(other_entity_id))
+
+    else:
+        form = EntityDuplicateForm()
+    context['duplicate_form'] = form
     return render(request, 'editor/duplicates_subpage.html', context)
 
 
@@ -854,6 +893,37 @@ def duplicates_list(request):
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/duplicates_list.html', context)
+
+
+def get_duplicates(entity=None):
+    """Return a dictionary of possible duplicate entities, keyed by shared
+    display name.
+
+    If `entity` is provided it must be an Entity whose display names
+    will be used as the basis for finding duplicates (rather than
+    looking for duplicates across all display names for all entities).
+
+    """
+    duplicates = {}
+    if entity is None:
+        name_entries = NameEntry.objects.all()
+    else:
+        entity_names = [name.display_name for name in
+                        entity.get_all_name_entries()]
+        name_entries = NameEntry.objects.filter(display_name__in=entity_names)
+    display_names = name_entries.values('display_name').annotate(
+        Count('identity__entity')).filter(
+            identity__entity__count__gt=1).order_by()
+    for name in display_names:
+        display_name = name['display_name']
+        entities = Entity.objects.filter(
+            identities__name_entries__display_name=display_name).exclude(
+                control__maintenance_status__title='deleted').distinct()
+        if entities.count() > 1:
+            if entity is not None:
+                entities = entities.exclude(pk=entity.pk)
+            duplicates[display_name] = list(entities)
+    return duplicates
 
 
 @user_passes_test(is_user_editor_plus)

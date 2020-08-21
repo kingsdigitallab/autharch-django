@@ -759,6 +759,17 @@ class EntityEditForm(ContainerModelForm):
         exclude = []
 
 
+class EntityDuplicateForm(forms.Form):
+
+    ACTION_CHOICES = (
+        ('merge', 'Merge'),
+        ('mark', 'Not related'),
+    )
+
+    entity_id = forms.IntegerField()
+    action = forms.ChoiceField(choices=ACTION_CHOICES)
+
+
 class EntityCreateForm(forms.Form):
 
     entity_type = forms.ModelChoiceField(
