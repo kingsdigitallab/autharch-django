@@ -274,6 +274,7 @@ class Entity(TimeStampedModel, DateRangeMixin):
             source.pk = None
             source.control = control
             source.save()
+        self.not_duplicates.remove(entity)
         records_to_update = set()
         for record in entity.person_subject_for_records.all():
             record.persons_as_subjects.add(self)

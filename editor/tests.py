@@ -723,6 +723,14 @@ class MergeEntitiesTestCase(TestCase):
         e1.merge(e2)
         self.assertTrue(e2.is_deleted())
 
+    def test_merge_marked_as_duplicate(self):
+        e1, e1_i1, e1_c = self._create_entity()
+        e2, e2_i1, e2_c = self._create_entity()
+        e1.not_duplicates.add(e2)
+        self.assertTrue(e2 in e1.not_duplicates.all())
+        e1.merge(e2)
+        self.assertTrue(e2 not in e1.not_duplicates.all())
+
     def test_merge_different_entity_types(self):
         e1 = Entity(entity_type=self.entity_type1, project=self.project1)
         e1.save()
