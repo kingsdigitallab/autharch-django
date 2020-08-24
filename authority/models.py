@@ -58,7 +58,7 @@ class Entity(TimeStampedModel, DateRangeMixin):
     project = models.ForeignKey(
         'archival.Project', on_delete=models.SET_NULL, blank=True, null=True,
         help_text='Which project does this record belong to?')
-    not_duplicates = models.ManyToManyField('self')
+    not_duplicates = models.ManyToManyField('self', blank=True)
 
     objects = models.Manager()
 

@@ -2,62 +2,59 @@
 {% block main %}
 <main id="duplicates-subpage">
   {% block page_header %}
-  <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ entity|truncatewords:15 }}</span></a>
+    <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ entity|truncatewords:15 }}</span></a>
 
-  <div class="page-header">
+    <div class="page-header">
     <h2>Manage duplicates of:</h2>
-  </div>
-  {% endblock page_header %}
-
-  {% block content %}
-  {% if error %}
-  <div class="error-notification">
-    <p>{{ error }}</p>
-  </div>
-  {% endif %}
-
-  {% if marked or merged %}
-  <div class="success-notification">
-    <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
-    {% if merged %}
-    <h4>The record {{ merged }} was merged into this entity.</h4>
-    {% endif %}
-    {% if marked %}
-    <h4>The record {{ marked }} was marked as "not a duplicate" of this entity.</h4>
-    {% endif %}
-  </div>
-  {% endif %}
-
-  <div class="current-record">
-    <h1>{{ entity }}</h1>
-    <div class="subitems">
-      <ul>
-        <li class="highlight">Record ID: {{ entity.id }}</li>
-        <li>Type: {{ entity.entity_type }}</li>
-        <li>Publication status: {{ publication_status }}</li>
-        <li>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}</li>
-      </ul>
     </div>
-  </div>
+    {% endblock page_header %}
 
-  <!-- #add-record-form adds a new duplicate to the duplicates form; the template to append is available in main.js, line 762 -->
-  <div id="add-record-form">
-    <form action="." method="get">
-      {% for field in select_form %}{{ field }}{% endfor %}
-      <button class="create" type="submit">Add to the list</button>
+    {% block content %}
+    {% if error %}
+    <div class="error-notification">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+
+    {% if marked or merged %}
+    <div class="success-notification">
+        <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+        {% if merged %}
+            <h4>The record {{ merged }} was merged into this entity.</h4>
+        {% endif %}
+        {% if marked %}
+            <h4>The record {{ marked }} was marked as "not a duplicate" of this entity.</h4>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="current-record">
+        <h1>{{ entity }}</h1>
+        <div class="subitems">
+            <ul>
+            <li class="highlight">Record ID: {{ entity.id }}</li>
+            <li>Type: {{ entity.entity_type }}</li>
+            <li>Publication status: {{ publication_status }}</li>
+            <li>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- #add-record-form adds a new duplicate to the duplicates form; the template to append is available in main.js, line 762 -->
+    <form action="." method="get" id="add-record-form">
+        {% for field in select_form %}{{ field }}{% endfor %}
+        <input type="submit" class="create" value="Add to the list" />
     </form>
-  </div>
 
-  <div id="duplicates-form">
     <div class="duplicates-list">
       {% if unmarked_duplicates %}
       <p>Merge the following duplicates into the browsed record:</p>
       {% for duplicate in unmarked_duplicates %}
-      {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=1 %}
+        {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=1 %}
       {% endfor %}
       {% else %}
       <div class="empty-block">
-        <p>You don't have duplicates for this record. &#127881;</p>
+        <p>No duplicates for this record were found.</p>
       </div>
       {% endif %}
     </div>
@@ -70,18 +67,17 @@
       {% endfor %}
     </div>
     {% endif %}
-  </div>
 
   <!-- CONFIRMATION POP-UP -->
-  <div class="modal" id="confirm-action-modal">
+  <div class="modal" id="merge-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2>Confirm action</h2>
       </div>
       <div class="modal-body">
-        <p class="data-from"></p>
+        <p class="move-from"></p>
         <span class="action"></span>
-        <p class="data-to">Record ID: {{entity.id}} - {{entity}}</p>
+        <p class="move-to">Record ID: {{entity.id}} - {{entity}}</p>
       </div>
       <div class="modal-footer">
         <form action="." method="post">

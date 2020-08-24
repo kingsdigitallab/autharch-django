@@ -52,21 +52,19 @@ $(document).ready(function() {
     placeholder: 'Select',
     allowClear: true
   });
-  $('select[name="add_record"]').select2({
+  $('select[name="entity"]').select2({
     placeholder: 'Add a duplicate by record ID or display name',
     allowClear: true
   });
-  // add aria-label to select2 input
-  $('.select2-search__field').attr('aria-label', 'select with search');
-  $('.select2-selection__rendered').attr('aria-label', 'selected option');
-  $('.select2-selection--single').attr('role', 'list');
-  $('.select2-selection--multiple').attr({
-    'aria-label': 'select multiple options',
-    'role': 'list'
+  $('.select2-search__field').each(function() {
+    if ($(this).attr('placeholder') == '') {
+      $(this).attr('placeholder', 'Enter your search term...');
+    }
   });
-  $('.fieldset-body').on('select2:opening', function(e) {
+  // add aria-label to select2 input
+  $('form').on('select2:opening', function(e) {
     setTimeout(function() {
-      $('.select2-search__field').attr('placeholder', 'Enter your search term...');
+      $('.select2-container--open').find('.select2-search__field').attr('placeholder', 'Enter your search term...').focus();
     }, 500);
   });
 
@@ -396,8 +394,11 @@ function addEmptyForm(formType, context) {
         }
       } );
     }
+    if ($(this).hasClass('admin-autocomplete')) {
+      $(this).next('.select2').find('.select2-selection__placeholder').text('Select');
+    }
     if ($(this).hasClass('select-with-search-dynamic')) {
-      $(this).select2( {
+      $(this).select2({
         allowClear: true,
       } );
     }
@@ -726,7 +727,7 @@ function toggleHelpText(help_text) {
  * record (whether Archival Record or Entity), to merge two records, or to mark them as not related.
  */
 function showModal(modalName) {
-  $('.modal').addClass('active');
+  $('#'+modalName).addClass('active');
 }
 
 
@@ -734,8 +735,7 @@ function showModal(modalName) {
  * Populate confirmation modal with form data and then show it.
  */
 function confirmMergeAction(modalName, action, entityId) {
-  $('.modal').find('.data-from').html($(event.target).parent('.cta').next(
-    '.record').children('a:first-of-type').text());
+  $('.modal').find('.move-from').text('Record ID: ' + entityId + ' - ').append($(event.target).parent('.cta').next('.record').children('a:first-of-type').text());
   $('.modal').find('#id_entity_id').attr('value', entityId);
   $('.modal').find('#id_action').attr('value', action);
   if (action == 'merge') {

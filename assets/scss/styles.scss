@@ -48,7 +48,7 @@ $fontawesome: 'Font Awesome 5 Pro';
         flex-wrap: wrap;
         li {
             list-style: none;
-            margin: 0px 0px 5px 0px;
+            margin: 0;
             &:not(:last-of-type):after {
                 content: $value;
                 margin: 0px 10px;
@@ -757,9 +757,9 @@ main {
             padding-top: 9px;
             .select2-search__field {
                 font-size: 1em;
+                width: 100% !important;
                 &:focus {
                     outline: none;
-                    text-decoration: underline;
                 }
             }
         }
@@ -1079,8 +1079,9 @@ main {
             -moz-border-radius: 0.3em;
             border-radius: 0.3em;
             border: 1px solid #BABABA;
-            min-width: 100%;
-
+            &[type=search] {
+                min-width: 10em;
+            }
         }
         &.tablesorter-default .tablesorter-filter-row td {
             background-color: lighten($light-grey, 5%);
@@ -1784,6 +1785,9 @@ main {
         }
         .fieldset-body {
             margin-left: 25px;
+            .subitems ul li {
+                margin: 0.3em 0;
+            }
             &.expand {
                 &:before {
                     content: '';
@@ -1840,7 +1844,10 @@ main {
                 }
                 .record {
                     padding: 0.5em 1em;
-                    margin-bottom: 1em;
+                    margin-bottom: 0.5em;
+                    .subitems ul li {
+                        margin-top: 0.3em;
+                    }
                     &:nth-of-type(even) {
                         @include lighten($light-grey);
                     }
@@ -1893,13 +1900,12 @@ main {
                 }
                 
             }
-            button.create {
+            input.create {
                 position: absolute;
                 right: 1px;
                 top: 1px;
                 background-color: transparent;
                 color: $add;
-                font-weight: 500;
                 border: 0;
                 border-radius: 0;
                 border-top-right-radius: 0.3em;
@@ -1912,7 +1918,6 @@ main {
                 }
             }
         }
-        #duplicates-form {
             .duplicates-list, .manually-removed {
                 padding: 1em 0em 0em 2em;
                 margin-left: 1em;
@@ -1929,34 +1934,12 @@ main {
                 &:not(:last-of-type) {
                     margin-bottom: 1.5em;
                 }
+                .subitems ul li {
+                    margin: 0.3em 0;
+                }
                 .cta {
-                    label {
-                        color: $add;
-                        border: 1px solid $add;
-                        padding: 0.2em 0.8em;
-                        text-align: center;
-                        display: inline-block;
-                        cursor: pointer;
-                        &:hover {
-                            background-color: $add;
-                            color: white;
-                        }
-                    }
-                    label[for^="duplicate"] {
-                        border-top-left-radius: 0.4em;
-                        border-bottom-left-radius: 0.4em;
-                        margin-right: -4px;
-                    }
-                    label[for^="not_duplicate"] {
-                        border-top-right-radius: 0.4em;
-                        border-bottom-right-radius: 0.4em;
-                    }
-                    input[type=checkbox] {
-                        display: none;
-                        &:checked + label {
-                            color: white;
-                            background-color: $add;
-                        }
+                    button:first-of-type {
+                        margin-right: 0.4em;
                     }
                 }
                 &:before {
@@ -1964,7 +1947,7 @@ main {
                     border-top: 1px dashed $primary;
                     position: absolute;
                     width: 24px;
-                    top: 13px;
+                    top: 15px;
                     left: -26px;
                 }
             }
@@ -1976,6 +1959,7 @@ main {
                 font-weight: 500;
                 color: $primary;
                 border-left: 1px dashed $primary;
+                display: block;
                 cursor: pointer;
                 &:before {
                     content: "\f107";
@@ -2021,7 +2005,6 @@ main {
                 transition: opacity .3s;
                 visibility: hidden;
             }
-        }
     }
 
     // SECTIONS
@@ -2150,26 +2133,31 @@ main {
                 //     font-size: 1.14em;
                 //     text-align: center;
                 // }
-                .data-from, .data-to {
-                    padding: 0.3em 0;
+                .move-from, .move-to {
+                    padding: 0;
+                    margin: 0.2em;
+                }
+                .move-to {
+                    color: $primary;
+                    font-size: 1.1em;
+                    font-weight: 500;
                 }
                 .action {
-                    font-weight: 500;
                     font-size: 0.92em;
                     border: 1px solid $dark-grey;
                     border-radius: 0.3em;
                     background-color: white;
                     padding: 0.1em 1em;
-                    margin: 1em 0em;
+                    margin: 0.5em 0em 1.5em 0em;
                     display: inline-block;
                     position: relative;
                     &:before {
                         content: '';
                         position: absolute;
                         border-left: 1px dashed #001e57;
-                        top: -1.3em;
+                        top: -0.5em;
                         left: 1em;
-                        height: 1em;
+                        height: 0.5em;
                     }
                     &:after {
                         content: '';
@@ -2177,7 +2165,7 @@ main {
                         border-left: 1px dashed #001e57;
                         top: 2.2em;
                         left: 1em;
-                        height: 1em;
+                        height: 1.5em;
                     }
                 }
             }
@@ -2203,9 +2191,9 @@ main {
 
     // ERROR HANDLING/NOTIFICATIONS
     .success-notification, .error-notification {
-        -webkit-border-radius: 0.3em;
-        -moz-border-radius: 0.3em;
-        border-radius: 0.3em;
+        -webkit-border-radius: 0.6em;
+        -moz-border-radius: 0.6em;
+        border-radius: 0.6em;
         padding: 0.5em 1em;
         margin: 1em 0em 2em 0em;
         h4 {
@@ -2233,6 +2221,7 @@ main {
         }
         p {
             margin: 0;
+            margin-top: 1em;
             &:not(:last-child) {
                 margin-bottom: 5px;
             }
@@ -2381,7 +2370,7 @@ footer {
 .select2-search--dropdown {
     padding:10px;
     .select2-search__field{
-        padding:10px;
+        padding: 0.7em !important;
         font-size: 1em;
     }   
 }
