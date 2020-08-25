@@ -684,6 +684,7 @@ def entity_duplicates(request, entity_id):
                 marked_duplicates.add(duplicate)
             else:
                 unmarked_duplicates.add(duplicate)
+    unmarked_duplicates = list(unmarked_duplicates)
     select_form = EntityDuplicateSelectForm(request.GET)
     if select_form.is_valid():
         added_entity = select_form.cleaned_data['entity']
@@ -691,7 +692,7 @@ def entity_duplicates(request, entity_id):
             context['error'] = ('Cannot add the entity itself to list of '
                                 'duplicates.')
         else:
-            unmarked_duplicates.add(added_entity)
+            unmarked_duplicates.insert(0, added_entity)
             context['added'] = added_entity.pk
     context['unmarked_duplicates'] = unmarked_duplicates
     context['marked_duplicates'] = marked_duplicates
