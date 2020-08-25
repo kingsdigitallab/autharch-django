@@ -397,7 +397,7 @@ class EntityAutocompleteJsonView(BaseAutocompleteJsonView):
         return JsonResponse({
             'results': [
                 {'id': str(obj.pk), 'text': 'ID: {}, {}'.format(
-                     obj.pk, obj.description)}
+                    obj.pk, obj.description)}
                 for obj in context['object_list']
             ],
             'pagination': {'more': context['page_obj'].has_next()},
@@ -922,6 +922,7 @@ def how_to_use(request):
 @user_passes_test(is_user_editor_plus)
 def duplicates_list(request):
     context = {
+        'duplicates_data': get_duplicates(),
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/duplicates_list.html', context)

@@ -4,85 +4,35 @@
 <main id="duplicates-list-page">
     {% block page_header %}
     <div class="page-header">
-        <h1>Duplicates (2)</h1>
+        <h1>Duplicates ({{ duplicates_data|length }})</h1>
     </div>
     {% endblock page_header %}
     {% block content %}
-    <div class="error-notification">
-        This page is under development.
+    <p>This page lists records that share a display name.</p>
+
+    {% for display_name, duplicates in duplicates_data.items %}
+    <div class="duuplicate-group">
+      <div class="fieldset-header" role="button" onclick="toggleTab()">
+        <span class="toggle-tab-button active" aria-label="expand"></span>
+        <h2>{{ display_name }} ({{ duplicates|length }} duplicates)</h2>
+      </div>
+      <div class="fieldset-body expand">
+        {% for duplicate in duplicates %}
+        <div class="record">
+          <a href="{% url 'editor:entity-edit' entity_id=duplicate.pk %}" class="dotted-underline">{{ duplicate.display_name }}</a><span class="divider"></span><a href="{% url 'editor:entity-duplicates' entity_id=duplicate.pk %}"><i class="fal fa-copy"></i> <span class="dotted-underline highlight">Manage duplicates of Record ID: {{ duplicate.pk }}</span></a>
+          <div class="subitems">
+            <ul>
+              <li>Record ID: {{ duplicate.pk }}</li>
+              <li>Type: {{ duplicate.entity_type }}</li>
+              <li>Publication status: {{ duplicate.control.publication_status }}</li>
+              <li>Updated: {{ duplicate.modified }}</li>
+            </ul>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    <p>This page lists records that share the same display name.</p>
-    <div class="duplicate-group">
-        <div class="fieldset-header" role="button" onclick="toggleTab()">
-            <span class="toggle-tab-button active" aria-label="expand"></span>
-            <h2>Entity display name 1 (3 duplicates)</h2>
-        </div>
-        <div class="fieldset-body expand">
-            <div class="record">
-                <a href="" class="dotted-underline">[entity_display_name]</a><span class="divider"></span><a href=""><i class="fal fa-copy"></i> <span class="dotted-underline highlight">Manage duplicates of Record ID: 1</span></a>
-                <div class="subitems">
-                    <ul>
-                        <li>Record ID: 1</li>
-                        <li>Type: [entity_type]</li>
-                        <li>Publication status: [publication_status]</li>
-                        <li>Updated: [ entity_updated ]</li>
-                    </ul>
-                </div> 
-            </div>
-            <div class="record">
-                <a href="" class="dotted-underline">[entity_display_name]</a><span class="divider"></span><a href=""><i class="fal fa-copy"></i> <span class="dotted-underline highlight">Manage duplicates of Record ID: 44</span></a>
-                <div class="subitems">
-                    <ul>
-                        <li>Record ID: 44</li>
-                        <li>Type: [entity_type]</li>
-                        <li>Publication status: [publication_status]</li>
-                        <li>Updated: [ entity_updated ]</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="record">
-                <a href="" class="dotted-underline">[entity_display_name]</a><span class="divider"></span><a href=""><i class="fal fa-copy"></i> <span class="dotted-underline highlight">Manage duplicates of Record ID: 35</span></a>
-                <div class="subitems">
-                    <ul>
-                        <li>Record ID: 35</li>
-                        <li>Type: [entity_type]</li>
-                        <li>Publication status: [publication_status]</li>
-                        <li>Updated: [ entity_updated ]</li>
-                    </ul>
-                </div> 
-            </div>
-        </div>
-    </div>
-    <div class="duplicate-group">
-        <div class="fieldset-header" role="button" onclick="toggleTab()">
-            <span class="toggle-tab-button" aria-label="expand"></span>
-            <span>Entity display name 2 (2 duplicates)</span>
-        </div>
-        <div class="fieldset-body">
-            <div class="record">
-                <a href="" class="dotted-underline">[entity_display_name]</a><span class="divider"></span><a href=""><i class="fal fa-copy"></i> <span class="dotted-underline highlight">Manage duplicates of Record ID: 3</span></a>
-                <div class="subitems">
-                    <ul>
-                        <li>Record ID: 3</li>
-                        <li>Type: [entity_type]</li>
-                        <li>Publication status: [publication_status]</li>
-                        <li>Updated: [ entity_updated ]</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="record">
-                <a href="" class="dotted-underline">[entity_display_name]</a><span class="divider"></span><a href=""><i class="fal fa-copy"></i> <span class="dotted-underline highlight">Manage duplicates of Record ID: 7</span></a>
-                <div class="subitems">
-                    <ul>
-                        <li>Record ID: 7</li>
-                        <li>Type: [entity_type]</li>
-                        <li>Publication status: [publication_status]</li>
-                        <li>Updated: [ entity_updated ]</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
     {% endblock content %}
 </main>
 {% endblock main %}
