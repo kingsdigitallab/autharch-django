@@ -3,10 +3,6 @@
 <main id="duplicates-subpage">
   {% block page_header %}
     <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ entity|truncatewords:15 }}</span></a>
-
-    <div class="page-header">
-    <h2>Manage duplicates of:</h2>
-    </div>
     {% endblock page_header %}
 
     {% block content %}
@@ -16,29 +12,26 @@
     </div>
     {% endif %}
 
-    {% if added or marked or merged %}
+    {% if marked or merged %}
     <div class="success-notification">
       <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
-      {% if added %}
-      <h4>The record {{ added }} was added to this list of duplicates.</h4>
-      {% endif %}
         {% if merged %}
-            <h4>The record {{ merged }} was merged into this entity.</h4>
+            <h4>The record (ID: {{ merged }}) was merged into this entity.</h4>
         {% endif %}
         {% if marked %}
-            <h4>The record {{ marked }} was marked as "not a duplicate" of this entity.</h4>
+            <h4>The record (ID: {{ marked }}) was marked as "not a duplicate" of this entity.</h4>
         {% endif %}
     </div>
     {% endif %}
-
     <div class="current-record">
+        <h2>Manage duplicates of the following browsed record:</h2>
         <h1>{{ entity }}</h1>
         <div class="subitems">
             <ul>
-            <li class="highlight">Record ID: {{ entity.id }}</li>
-            <li>Type: {{ entity.entity_type }}</li>
-            <li>Publication status: {{ publication_status }}</li>
-            <li>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}</li>
+                <li class="highlight">Record ID: {{ entity.id }}</li>
+                <li>Type: {{ entity.entity_type }}</li>
+                <li>Publication status: {{ publication_status }}</li>
+                <li>Updated: {{ last_revision.date_created }} by {{ last_revision.user }}</li>
             </ul>
         </div>
     </div>
@@ -48,17 +41,22 @@
         {% for field in select_form %}{{ field }}{% endfor %}
         <input type="submit" class="create" value="Add to the list" />
     </form>
-
     <div class="duplicates-list">
+      {% if added %}
+        <div class="success-notification">
+            <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+            <h4>The record (ID: {{ added }}) was added to this list of duplicates.<a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}" class="dotted-underline mgn-left">Undo</a></h4>
+        </div>
+      {% endif %}
       {% if unmarked_duplicates %}
-      <p>Merge the following duplicates into the browsed record:</p>
-      {% for duplicate in unmarked_duplicates %}
-        {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=1 added=added %}
-      {% endfor %}
-      {% else %}
-      <div class="empty-block">
-        <p>No duplicates for this record were found.</p>
-      </div>
+        <p>Merge the following duplicates into the browsed record:</p>
+        {% for duplicate in unmarked_duplicates %}
+            {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=1 added=added %}
+        {% endfor %}
+        {% else %}
+        <div class="empty-block">
+            <p>No duplicates for this record were found.</p>
+        </div>
       {% endif %}
     </div>
     {% if marked_duplicates %}

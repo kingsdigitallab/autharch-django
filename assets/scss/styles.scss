@@ -217,9 +217,6 @@ input, button {
 
 input[type=submit]:not(.search-button):not(.create) {
     min-width: 80px;
-    &:hover, &:focus {
-        box-shadow: 0px 2px 2px $medium-grey;
-    }
 }
 
 .create {
@@ -246,9 +243,6 @@ input[type=submit]:not(.search-button):not(.create) {
             }
         }
     }
-    &:hover, &:focus {
-        box-shadow: 0px 2px 2px $medium-grey;
-    }
 }
 
 .save {
@@ -265,11 +259,6 @@ input[type=submit]:not(.search-button):not(.create) {
     background-color: transparent;
     display: inline-block;
     border: 1px solid white;
-    &:before {
-        content: "\f2ed";
-        font-family: $fontawesome;
-        margin-right: 7px;
-    }
     &:focus {
         outline: none;
         box-shadow: 0px 0px 1px darken($danger, 20%);
@@ -285,12 +274,22 @@ input[type=submit]:not(.search-button):not(.create) {
     background-color: transparent !important;
     color: $primary !important;
     border: 1px solid $primary !important;
-    padding: 9px 15px;
     -webkit-border-radius: 2em;
     -moz-border-radius: 2em;
     border-radius: 2em;
+    padding: 9px 15px;
     &:hover, &:focus {
-        box-shadow: 0px 2px 2px $medium-grey;
+        background-color: $primary !important;
+        color: white !important;
+    }
+    &.inactive {
+        background-color: lighten($light-grey, 3%) !important;
+        color: $primary !important;
+        border: 1px solid lighten($light-grey, 3%) !important;
+        cursor: auto;
+        &:hover, &:focus {
+            box-shadow: none;
+        }
     }
 }
 
@@ -461,6 +460,7 @@ a {
 	border: 1px solid $input;
     border-radius: 1em;
     padding: 0;
+    margin-left: 1px !important;
     width: 16px;
     height: 16px;
     position: relative;
@@ -795,7 +795,7 @@ main {
             margin-top: 1em;
             margin-bottom: 0;
         }
-        .search-filter, .add-duplicate {
+        .search-filter {
             display: grid;
             grid-template-columns: 3fr auto auto;
             align-items: center;
@@ -811,15 +811,18 @@ main {
                 .search-button {
                     position: absolute;
                     background: none;
-                    top: -1px;
-                    right: 0;
+                    top: 1px;
+                    right: 1px;
                     color: $primary;
                     font-family: $fontawesome;
                     font-weight: 600;
                     font-size: 1.14em;
-                    &:focus {
-                        outline: none;
-                        background-color: lighten($light-grey, 4%);
+                    padding: 8px 25px;
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                    &:focus, &:hover {
+                        background-color: $primary;
+                        color: white;
                     }
                 }
             }
@@ -858,11 +861,12 @@ main {
             padding: 10px 25px;
             line-height: 1.2em;
             right: 180px;
-            transition: right 0.3s;
-            -moz-transition: right 0.3s;
+            transition: right 0.3s, background-color 0.3s;
+            -moz-transition: right 0.3s, background-color 0.3s;
             cursor: pointer;
             &:hover, &:focus {
-                box-shadow: 0px 2px 2px $medium-grey;
+                background-color: $primary;
+                color: white;
             }
         }
         .filters-hidden {
@@ -1857,24 +1861,16 @@ main {
     }
 
     &#duplicates-subpage {
-        .page-header{
-            grid-template-columns: auto auto;
-            margin-bottom: 1em;
-            .search-button {
-                font-family: $font-primary;
-                font-size: 1em;
-                font-weight: 400;
-                top: 1px;
-                background-color: $add;
-                color: white;
-                border-top-left-radius: 0px;
-                border-bottom-left-radius: 0px;
-            }
-        }
         .current-record {
             padding-bottom: 1em;
             border-bottom: 3px solid $primary;
             border-bottom-left-radius: 0.3em;
+            h2 {
+                margin-top: 1em;
+            }
+            h1 {
+                margin-top: 0.5em;
+            }
             p {
                 margin-top: 0em;
                 margin-bottom: 0.6em;
@@ -1895,7 +1891,7 @@ main {
                 .select2-selection--single, .select2-selection--multiple {
                     border: 1px solid $medium-grey;
                     border-radius: 0.4em;
-                    padding-right: 6em; 
+                    padding-right: 9em; 
                     background-position: calc(100% - 142px) calc(1.1em + 2px),calc(100% - 137px) calc(1.1em + 2px) !important;
                 }
                 
@@ -1928,7 +1924,7 @@ main {
             }
             .duplicate {
                 display: grid;
-                grid-template-columns: auto 1fr;
+                grid-template-columns: 0.18fr 1fr;
                 gap: 1.5em;
                 position: relative;
                 &:not(:last-of-type) {
@@ -1940,6 +1936,9 @@ main {
                 .cta {
                     button:first-of-type {
                         margin-right: 0.4em;
+                    }
+                    button {
+                        padding: 9px 15px;
                     }
                 }
                 &:before {
@@ -2110,78 +2109,79 @@ main {
                 animation-name: modalSlide;
                 margin: 0.5em;
                 max-width: 30em;
-            }
-            .modal-header {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: -webkit-flex;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 1em;
-                h2 {
-                    margin-bottom: 0;
-                }
-                input[type=button] {
-                    margin-right: 0;
-                    margin-left: auto;
-                }
-            }
-            .modal-body {
-                margin-bottom: 2em;
-                // p {
-                //     font-size: 1.14em;
-                //     text-align: center;
-                // }
-                .move-from, .move-to {
-                    padding: 0;
-                    margin: 0.2em;
-                }
-                .move-to {
-                    color: $primary;
-                    font-size: 1.1em;
-                    font-weight: 500;
-                }
-                .action {
-                    font-size: 0.92em;
-                    border: 1px solid $dark-grey;
-                    border-radius: 0.3em;
-                    background-color: white;
-                    padding: 0.1em 1em;
-                    margin: 0.5em 0em 1.5em 0em;
-                    display: inline-block;
-                    position: relative;
-                    &:before {
-                        content: '';
-                        position: absolute;
-                        border-left: 1px dashed #001e57;
-                        top: -0.5em;
-                        left: 1em;
-                        height: 0.5em;
-                    }
-                    &:after {
-                        content: '';
-                        position: absolute;
-                        border-left: 1px dashed #001e57;
-                        top: 2.2em;
-                        left: 1em;
-                        height: 1.5em;
-                    }
-                }
-            }
-            .modal-footer {
-                form {
+                .modal-header {
                     display: -webkit-box;
                     display: -ms-flexbox;
                     display: -webkit-flex;
                     display: flex;
                     justify-content: space-between;
-                    input:not(:only-child) {
+                    align-items: center;
+                    margin-bottom: 1em;
+                    h2 {
+                        margin-bottom: 0;
+                    }
+                    input[type=button] {
+                        margin-right: 0;
+                        margin-left: auto;
+                    }
+                }
+                .modal-body {
+                    margin-bottom: 2em;
+                    // p {
+                    //     font-size: 1.14em;
+                    //     text-align: center;
+                    // }
+                    .move-from, .move-to {
+                        padding: 0;
+                        margin: 0.2em;
+                    }
+                    .move-to {
+                        color: $primary;
+                        font-size: 1.1em;
+                        font-weight: 500;
+                    }
+                    .action {
+                        font-size: 0.92em;
+                        border: 1px solid $dark-grey;
+                        border-radius: 0.3em;
+                        background-color: white;
+                        padding: 0.1em 1em;
+                        margin: 0.5em 0em 1.5em 0em;
                         display: inline-block;
-                        margin: 0;
-                        &:not(:last-child) {
-                            margin-right: 1em;
-                            margin-left: auto;
+                        position: relative;
+                        &:before {
+                            content: '';
+                            position: absolute;
+                            border-left: 1px dashed #001e57;
+                            top: -0.5em;
+                            left: 1em;
+                            height: 0.5em;
+                        }
+                        &:after {
+                            content: '';
+                            position: absolute;
+                            border-left: 1px dashed #001e57;
+                            top: 2.2em;
+                            left: 1em;
+                            height: 1.5em;
+                        }
+                    }
+                }
+                .modal-footer {
+                    text-align: right;
+                    form {
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: -webkit-flex;
+                        display: flex;
+                        justify-content: space-between;
+                        input:not(:only-child) {
+                            display: inline-block;
+                            margin: 0;
+                            &:not(:last-child) {
+                                margin-right: 1em;
+                                margin-left: auto;
+                            }
                         }
                     }
                 }
@@ -2344,6 +2344,9 @@ main {
                 .page {
                     padding: 5px 15px;
                     color: $primary;
+                    &:hover, &:focus {
+                        text-decoration: underline;
+                    }
                 }
             }
         }

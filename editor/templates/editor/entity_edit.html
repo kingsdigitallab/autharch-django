@@ -14,7 +14,13 @@
       <label class="mobile-only" for="document-status-checkbox">Status</label>
       <div class="mobile-hide">
         <ul>
-          <li>Publication status: <span class="highlight">{{ entity.control.publication_status }}</span></li>
+          <li>Publication status:
+            {% if is_deleted %} 
+              <span class="highlight danger-clear">{{ entity.control.publication_status }} (deleted)</span>
+            {% else %}
+              <span class="highlight">{{ record.publication_status }}</span>
+            {% endif %}
+          </li>
           <!-- <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li> -->
           <li>Updated: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
           <li>
@@ -27,7 +33,7 @@
       </div>
     </div>
     <div class="action-buttons">
-      {% if not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="showModal('delete-modal')">Delete</button>{% endif %}
+      {% if not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="showModal('delete-modal')"><i class="far fa-trash-alt"></i> Delete</button>{% endif %}
       <input type="submit" value="{% if is_deleted %}Restore{% else %}Save{% endif %}" form="record-form" class="save"/>
     </div>
   </div>
@@ -74,12 +80,13 @@
       <div class="subitems">
         <ul>
           <li>Type: <span class="highlight">{{ entity.entity_type }}</span></li>
+          <li>Record ID: <span class="highlight">{{ entity.id }}</span></li>
           <!-- TODO: display only to moderators and admins -->
           <li>
             <a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}">
               <i class="fal fa-copy"></i>
-              <!-- TODO: add count? -->
-              <span class="dotted-underline">Detected duplicates (0)</span>
+              <!-- TODO: add count -->
+              <span class="dotted-underline">Manage duplicates</span>
             </a>
           </li>
           <!-- TODO: display if related records > 0 -->
@@ -92,7 +99,7 @@
         </ul>
       </div>
   
-      <button class="default" data-toggle="collapse" onclick="toggleExpand()">Collapse all</button>
+      <button class="button-link dotted-underline" data-toggle="collapse" onclick="toggleExpand()">Collapse all</button>
     </div>
 
   </div>

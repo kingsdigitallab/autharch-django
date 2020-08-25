@@ -15,7 +15,13 @@
       <label class="mobile-only" for="document-status-checkbox">Status</label>
       <div class="mobile-hide">
         <ul>
-          <li>Publication status: <span class="highlight">{{ record.publication_status }}</span></li>
+          <li>Publication status: 
+            {% if is_deleted %} 
+              <span class="highlight danger-clear">{{ record.publication_status }} (deleted)</span>
+            {% else %}
+              <span class="highlight">{{ record.publication_status }}</span>
+            {% endif %}
+          </li>
           <!-- <li>Maintenance status: <span class="highlight">{{ record.maintenance_status }}</span></li> -->
           <li>Last edited: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
           <li>
@@ -28,7 +34,7 @@
       </div>
     </div>
     <div class="action-buttons">
-      {% if is_admin and not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="showModal('delete-modal')">Delete</button>{% endif %}
+      {% if is_admin and not is_deleted %}<button aria-label="delete" class="danger-clear" onclick="showModal('delete-modal')"><i class="far fa-trash-alt"></i> Delete</button>{% endif %}
       <input type="submit" value="{% if is_deleted %}Restore{% else %}Save{% endif %}" form="record-form" class="save"/>
     </div>
   </div>
@@ -70,6 +76,7 @@
       <div class="subitems">
         <ul>
           <li>Level: <span class="highlight">{{ record.archival_level }}</span></li>
+          <li>Record ID: <span class="highlight">{{ record.id }}</span></li>
           <li>
             <a href="{% url 'editor:record-hierarchy' record_id=record.pk %}">
               <i class="fal fa-sitemap"></i>
@@ -85,7 +92,7 @@
           </li>
         </ul>
       </div>
-      <button class="default" data-toggle="collapse" onclick="toggleExpand()">Collapse all</button>
+      <button class="button-link dotted-underline" data-toggle="collapse" onclick="toggleExpand()">Collapse all</button>
     </div>
   </div>
   <form action="{% url 'editor:record-edit' record_id=record.pk %}" id="record-form" method="post">

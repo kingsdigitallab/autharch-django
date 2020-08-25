@@ -396,8 +396,8 @@ class EntityAutocompleteJsonView(BaseAutocompleteJsonView):
         context = self.get_context_data()
         return JsonResponse({
             'results': [
-                {'id': str(obj.pk), 'text': '{} (Record ID {})'.format(
-                    obj.description, obj.pk)}
+                {'id': str(obj.pk), 'text': 'ID: {}, {}'.format(
+                     obj.pk, obj.description)}
                 for obj in context['object_list']
             ],
             'pagination': {'more': context['page_obj'].has_next()},

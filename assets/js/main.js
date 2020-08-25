@@ -56,7 +56,7 @@ $(document).ready(function() {
     placeholder: 'Add a duplicate by record ID or display name',
     allowClear: true
   });
-  $('.select2-search__field').each(function() {
+  $('.select2-search__field:not(:disabled)').each(function() {
     if ($(this).attr('placeholder') == '') {
       $(this).attr('placeholder', 'Enter your search term...');
     }
@@ -103,6 +103,7 @@ $(document).ready(function() {
     if ($(el).attr('id') !== 'records-list-table') {
       $('#'+$(el).attr('id'))
         .tablesorter({
+            sortList: [[3,1]],
             widgets: ['filter'],
             widgetOptions: {
                 filter_columnFilters: true,
