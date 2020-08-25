@@ -692,6 +692,7 @@ def entity_duplicates(request, entity_id):
                                 'duplicates.')
         else:
             unmarked_duplicates.add(added_entity)
+            context['added'] = added_entity.pk
     context['unmarked_duplicates'] = unmarked_duplicates
     context['marked_duplicates'] = marked_duplicates
     select_form = EntityDuplicateSelectForm()

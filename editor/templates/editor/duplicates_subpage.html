@@ -16,9 +16,12 @@
     </div>
     {% endif %}
 
-    {% if marked or merged %}
+    {% if added or marked or merged %}
     <div class="success-notification">
-        <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+      <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+      {% if added %}
+      <h4>The record {{ added }} was added to this list of duplicates.</h4>
+      {% endif %}
         {% if merged %}
             <h4>The record {{ merged }} was merged into this entity.</h4>
         {% endif %}
