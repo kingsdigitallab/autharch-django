@@ -707,7 +707,7 @@ def entity_duplicates(request, entity_id):
                                    kwargs={'entity_id': entity_id})
             if action == 'merge':
                 try:
-                    entity.merge(other_entity)
+                    entity.merge(other_entity, request.user)
                     return redirect(redirect_url + '?merged=' +
                                     str(other_entity_id))
                 except EntityMergeException as e:

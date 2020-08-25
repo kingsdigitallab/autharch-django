@@ -132,7 +132,7 @@ class Entity(TimeStampedModel, DateRangeMixin):
     def is_deleted(self):
         return self.control.maintenance_status.title == 'deleted'
 
-    def merge(self, entity):
+    def merge(self, entity, user=None):
         """Merges `entity` into `self`.
 
         This does the following:
@@ -167,18 +167,22 @@ class Entity(TimeStampedModel, DateRangeMixin):
         from editor.models import RevisionMetadata
         with reversion.create_revision():
             records_to_update = self._merge(entity)
+            if user is not None:
+                reversion.set_user(user)
             reversion.set_comment('Merged in entity {}.'.format(entity.pk))
             event_type = EditingEventType.objects.get(title='revised')
             editor_type = CWEditorType.objects.get(title='human')
             reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                                collaborative_workspace_editor_type=editor_type)
-            entity.save()
+            self.save()
         # Mark the merged entity as deleted.
         with reversion.create_revision():
             event_type = EditingEventType.objects.get(title='deleted')
             editor_type = CWEditorType.objects.get(title='human')
             reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
                                collaborative_workspace_editor_type=editor_type)
+            if user is not None:
+                reversion.set_user(user)
             reversion.set_comment(
                 'Deleted entity due to merge into entity {}.'.format(self.pk))
             control = entity.control
