@@ -624,7 +624,7 @@ class MergeEntitiesTestCase(TestCase):
 
         e1.merge(e2)
         self.assertEqual(e1.person_subject_for_records.count(), 1)
-        self.assertEqual(e2.person_subject_for_records.count(), 1)
+        self.assertEqual(e2.person_subject_for_records.count(), 0)
 
     def test_merge_related_entities(self):
         e1, e1_i1, e1_c = self._create_entity()
@@ -639,7 +639,7 @@ class MergeEntitiesTestCase(TestCase):
 
         e1.merge(e2)
         self.assertEqual(e1.related_entities.count(), 1)
-        self.assertEqual(e2.related_entities.count(), 1)
+        self.assertEqual(e2.related_entities.count(), 0)
 
     def test_merge_organisation_subject_for_records(self):
         e1, e1_i1, e1_c = self._create_entity()
@@ -654,7 +654,7 @@ class MergeEntitiesTestCase(TestCase):
 
         e1.merge(e2)
         self.assertEqual(e1.organisation_subject_for_records.count(), 1)
-        self.assertEqual(e2.organisation_subject_for_records.count(), 1)
+        self.assertEqual(e2.organisation_subject_for_records.count(), 0)
 
     def test_merge_files_created(self):
         e1, e1_i1, e1_c = self._create_entity()
@@ -669,7 +669,7 @@ class MergeEntitiesTestCase(TestCase):
 
         e1.merge(e2)
         self.assertEqual(e1.files_created.count(), 1)
-        self.assertEqual(e2.files_created.count(), 1)
+        self.assertEqual(e2.files_created.count(), 0)
 
     def test_merge_items_created(self):
         e1, e1_i1, e1_c = self._create_entity()
@@ -684,7 +684,7 @@ class MergeEntitiesTestCase(TestCase):
 
         e1.merge(e2)
         self.assertEqual(e1.items_created.count(), 1)
-        self.assertEqual(e2.items_created.count(), 1)
+        self.assertEqual(e2.items_created.count(), 0)
 
     def test_merge_files_as_relations(self):
         e1, e1_i1, e1_c = self._create_entity()
@@ -699,7 +699,7 @@ class MergeEntitiesTestCase(TestCase):
 
         e1.merge(e2)
         self.assertEqual(e1.files_as_relations.count(), 1)
-        self.assertEqual(e2.files_as_relations.count(), 1)
+        self.assertEqual(e2.files_as_relations.count(), 0)
 
     def test_merge_items_as_relations(self):
         e1, e1_i1, e1_c = self._create_entity()
@@ -714,7 +714,7 @@ class MergeEntitiesTestCase(TestCase):
 
         e1.merge(e2)
         self.assertEqual(e1.items_as_relations.count(), 1)
-        self.assertEqual(e2.items_as_relations.count(), 1)
+        self.assertEqual(e2.items_as_relations.count(), 0)
 
     def test_merge_other_deleted(self):
         e1, e1_i1, e1_c = self._create_entity()

@@ -282,24 +282,31 @@ class Entity(TimeStampedModel, DateRangeMixin):
         records_to_update = set()
         for record in entity.person_subject_for_records.all():
             record.persons_as_subjects.add(self)
+            record.persons_as_subjects.remove(entity)
             records_to_update.add(record)
         for record in entity.related_entities.all():
             record.related_entities.add(self)
+            record.related_entities.remove(entity)
             records_to_update.add(record)
         for record in entity.organisation_subject_for_records.all():
             record.organisations_as_subjects.add(self)
+            record.organisations_as_subjects.remove(entity)
             records_to_update.add(record)
         for record in entity.files_created.all():
             record.creators.add(self)
+            record.creators.remove(entity)
             records_to_update.add(record)
         for record in entity.files_as_relations.all():
             record.persons_as_relations.add(self)
+            record.persons_as_relations.remove(entity)
             records_to_update.add(record)
         for record in entity.items_created.all():
             record.creators.add(self)
+            record.creators.remove(entity)
             records_to_update.add(record)
         for record in entity.items_as_relations.all():
             record.persons_as_relations.add(self)
+            record.persons_as_relations.remove(entity)
             records_to_update.add(record)
         return records_to_update
 
