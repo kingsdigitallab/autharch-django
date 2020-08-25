@@ -18,7 +18,7 @@
             {% if is_deleted %} 
               <span class="highlight danger-clear">{{ entity.control.publication_status }} (deleted)</span>
             {% else %}
-              <span class="highlight">{{ record.publication_status }}</span>
+              <span class="highlight">{{ entity.control.publication_status }}</span>
             {% endif %}
           </li>
           <!-- <li>Maintenance status: <span class="highlight">{{ entity.control.maintenance_status }}</span></li> -->
