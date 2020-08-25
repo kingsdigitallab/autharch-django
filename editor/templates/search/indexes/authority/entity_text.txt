@@ -1,3 +1,4 @@
+{{ object.pk }}
 {% for name in object.get_all_name_entries %}
 {{ name }}
 {% endfor %}

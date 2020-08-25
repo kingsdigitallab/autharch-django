@@ -382,6 +382,27 @@ class EntityAutocompleteJsonView(BaseAutocompleteJsonView):
 
     """
 
+    def get(self, request, *args, **kwargs):
+        """Return a JsonResponse with search results of the form:
+
+        {
+            results: [{id: "123", text: "foo"}],
+            pagination: {more: true}
+        }
+
+        """
+        self.term = request.GET.get('term', '')
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        return JsonResponse({
+            'results': [
+                {'id': str(obj.pk), 'text': '{} (Record ID {})'.format(
+                    obj.description, obj.pk)}
+                for obj in context['object_list']
+            ],
+            'pagination': {'more': context['page_obj'].has_next()},
+        })
+
     def get_queryset(self):
         if not self.term:
             return SearchQuerySet().none()
