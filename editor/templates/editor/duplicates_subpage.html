@@ -53,7 +53,7 @@
       {% if unmarked_duplicates %}
       <p>Merge the following duplicates into the browsed record:</p>
       {% for duplicate in unmarked_duplicates %}
-        {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=1 %}
+        {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=1 added=added %}
       {% endfor %}
       {% else %}
       <div class="empty-block">
