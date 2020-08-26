@@ -606,6 +606,7 @@ def entity_edit(request, entity_id):
         'current_section': current_section,
         'delete_url': reverse('editor:entity-delete',
                               kwargs={'entity_id': entity_id}),
+        'duplicates_count': len(get_duplicates(entity)),
         'entity': entity,
         'form_errors': form_errors,
         'form': form,
@@ -657,7 +658,7 @@ def entity_related(request, entity_id):
     return render(request, 'editor/related.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
+@user_passes_test(is_user_moderator_plus)
 def entity_duplicates(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     control = entity.control
@@ -920,7 +921,7 @@ def how_to_use(request):
     return render(request, 'editor/how_to_use.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
+@user_passes_test(is_user_moderator_plus)
 def duplicates_list(request):
     context = {
         'duplicates_data': get_duplicates(),

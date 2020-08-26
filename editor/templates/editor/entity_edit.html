@@ -86,7 +86,7 @@
             <a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}">
               <i class="fal fa-copy"></i>
               <!-- TODO: add count -->
-              <span class="dotted-underline">Manage duplicates</span>
+              <span class="dotted-underline">Manage duplicates ({{ duplicates_count }})</span>
             </a>
           </li>
           <!-- TODO: display if related records > 0 -->
