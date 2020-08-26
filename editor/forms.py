@@ -70,12 +70,10 @@ RECORD_SEARCH_INPUT_ATTRS = {
 
 RECORD_SEARCH_START_YEAR_INPUT_ATTRS = {
     'aria-label': 'Start year',
-    'form': 'record-search-form',
 }
 
 RECORD_SEARCH_END_YEAR_INPUT_ATTRS = {
     'aria-label': 'End year',
-    'form': 'record-search-form',
 }
 
 SEARCH_INPUT_ATTRS = {
