@@ -81,14 +81,14 @@
         <ul>
           <li>Type: <span class="highlight">{{ entity.entity_type }}</span></li>
           <li>Record ID: <span class="highlight">{{ entity.id }}</span></li>
-          <!-- TODO: display only to moderators and admins -->
+          {% if show_delete %}
           <li>
             <a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}">
               <i class="fal fa-copy"></i>
-              <!-- TODO: add count -->
               <span class="dotted-underline">Manage duplicates ({{ duplicates_count }})</span>
             </a>
           </li>
+          {% endif %}
           <!-- TODO: display if related records > 0 -->
           <li>
             <a href="{% url 'editor:entity-related' entity_id=entity.pk %}">
