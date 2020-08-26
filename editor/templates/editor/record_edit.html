@@ -83,13 +83,14 @@
               <span class="dotted-underline">Hierarchy browser</span>
             </a>
           </li>
-          <!-- TODO: display if related people and corporate bodies > 0 -->
+          {% if related_count %}
           <li>
             <a href="{% url 'editor:record-related' record_id=record.pk %}">
               <i class="fal fa-users"></i>
-              <span class="dotted-underline">Related people and corporate bodies</span>
+              <span class="dotted-underline">Related people and corporate bodies ({{ related_count }})</span>
             </a>
           </li>
+          {% endif %}
         </ul>
       </div>
       <button class="button-link dotted-underline" data-toggle="collapse" onclick="toggleExpand()">Collapse all</button>

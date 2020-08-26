@@ -89,13 +89,14 @@
             </a>
           </li>
           {% endif %}
-          <!-- TODO: display if related records > 0 -->
+          {% if related_count %}
           <li>
             <a href="{% url 'editor:entity-related' entity_id=entity.pk %}">
               <i class="fal fa-archive"></i>
-              <span class="dotted-underline">Related records</span>
+              <span class="dotted-underline">Related records ({{ related_count }})</span>
             </a>
           </li>
+          {% endif %}
         </ul>
       </div>
   

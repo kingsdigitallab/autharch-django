@@ -602,6 +602,12 @@ def entity_edit(request, entity_id):
     else:
         form = EntityEditForm(editor_role=editor_role, instance=entity)
         log_form = LogForm()
+    related_count = (entity.files_as_relations.count() +
+                     entity.files_created.count() +
+                     entity.items_as_relations.count() +
+                     entity.items_created.count() +
+                     entity.organisation_subject_for_records.count() +
+                     entity.person_subject_for_records.count())
     context = {
         'current_section': current_section,
         'delete_url': reverse('editor:entity-delete',
@@ -615,6 +621,7 @@ def entity_edit(request, entity_id):
         'is_corporate_body': is_corporate_body,
         'last_revision': Version.objects.get_for_object(entity)[0].revision,
         'log_form': log_form,
+        'related_count': related_count,
         'reverted': reverted,
         'saved': saved,
         'show_delete': can_show_delete_page(editor_role),
@@ -643,7 +650,8 @@ def entity_history(request, entity_id):
 def entity_related(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     context = {
-        'addressees': entity.files_as_relations.all(),
+        'addressees': (list(entity.files_as_relations.all()) +
+                       list(entity.items_as_relations.all())),
         'corporate_body_subjects':
         entity.organisation_subject_for_records.all(),
         'current_section': 'entities',
@@ -653,7 +661,8 @@ def entity_related(request, entity_id):
         'object_type': 'entity',
         'show_delete': can_show_delete_page(request.user.editor_profile.role),
         'person_subjects': entity.person_subject_for_records.all(),
-        'writers': entity.files_created.all(),
+        'writers': (list(entity.files_created.all()) +
+                    list(entity.items_created.all())),
     }
     return render(request, 'editor/related.html', context)
 
@@ -800,6 +809,17 @@ def record_edit(request, record_id):
     else:
         form = form_class(editor_role=editor_role, instance=record)
         log_form = LogForm()
+    try:
+        addressees_count = record.persons_as_relations.count()
+    except AttributeError:
+        addressees_count = 0
+    try:
+        writers_count = record.creators.count()
+    except AttributeError:
+        writers_count = 0
+    related_count = (addressees_count + writers_count +
+                     record.organisations_as_subjects.count() +
+                     record.persons_as_subjects.count())
     context = {
         'current_section': current_section,
         'delete_url': reverse('editor:record-delete',
@@ -813,6 +833,7 @@ def record_edit(request, record_id):
         'log_form': log_form,
         'ra_references': ra_references,
         'record': record,
+        'related_count': related_count,
         'reverted': reverted,
         'saved': saved,
         'show_delete': can_show_delete_page(editor_role),
