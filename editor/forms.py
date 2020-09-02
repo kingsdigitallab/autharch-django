@@ -563,16 +563,13 @@ class ArchivalRecordEditForm(ContainerModelForm):
 
     """
 
-    calm_references = forms.models.ModelMultipleChoiceField(
-        queryset=Reference.objects.none(), label='CALM References',
-        widget=forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS))
     ra_references = forms.models.ModelMultipleChoiceField(
-        queryset=Reference.objects.none(), label='RA References',
+        queryset=Reference.objects.none(), label='RA references',
         widget=forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS))
 
     disabled_fields = {
         EditorProfile.ADMIN: [
-            'calm_references', 'maintenance_status', 'parent_collection',
+            'calm_reference', 'maintenance_status', 'parent_collection',
             'parent_file', 'parent_series', 'ra_references'],
         EditorProfile.MODERATOR: [
             'arrangement', 'extent', 'maintenance_status', 'parent_collection',
@@ -591,13 +588,15 @@ class ArchivalRecordEditForm(ContainerModelForm):
     }
 
     # Fields visible only to admin users.
-    private_fields = ['calm_references', 'copyright_status',
+    private_fields = ['calm_reference', 'copyright_status',
                       'rights_declaration_abbreviation']
 
     def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
         super().__init__(*args, **kwargs)
-        # We are displaying RA and CALM references separately, so
-        # remove the field matching the model.
+        # Of the general "references", we are displaying RA only (CALM
+        # references being in their own field) and since it is not
+        # editable do not want to expensively load all possible
+        # options, so remove the field matching the model.
         del self.fields['references']
         if editor_role != EditorProfile.ADMIN:
             for field in self.private_fields:
@@ -619,12 +618,7 @@ class ArchivalRecordEditForm(ContainerModelForm):
                 title='inProcess')
             self.fields['publication_status'].widget = forms.Select(
                 choices=[(in_process_status.pk, 'inProcess')])
-        references = self.instance.references.all()
-        if 'calm_references' in self.fields:
-            calm_references = references.filter(source__title='CALM')
-            self.fields['calm_references'].queryset = calm_references
-            self.fields['calm_references'].initial = calm_references
-        ra_references = references.filter(source__title='RA')
+        ra_references = self.instance.references.filter(source__title='RA')
         self.fields['ra_references'].queryset = ra_references
         self.fields['ra_references'].initial = ra_references
 

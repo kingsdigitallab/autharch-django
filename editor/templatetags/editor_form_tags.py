@@ -108,9 +108,10 @@ def render_record_hierarchy_item(current_record, selected_record, ancestors):
     children = []
     children_desc = []
     if isinstance(current_record, (Collection, Series)):
-        series = list(current_record.series_set.all())
-        files = list(current_record.file_set.all())
-        items = list(current_record.item_set.all())
+        series = list(current_record.series_set.all().order_by(
+            'calm_reference'))
+        files = list(current_record.file_set.all().order_by('calm_reference'))
+        items = list(current_record.item_set.all().order_by('calm_reference'))
         children = series + files + items
         if len(series) > 0:
             children_desc.append('{} series'.format(len(series)))
@@ -119,8 +120,8 @@ def render_record_hierarchy_item(current_record, selected_record, ancestors):
         if len(items) > 0:
             children_desc.append('{} items'.format(len(items)))
     elif isinstance(current_record, File):
-        files = list(current_record.file_set.all())
-        items = list(current_record.item_set.all())
+        files = list(current_record.file_set.all().order_by('calm_reference'))
+        items = list(current_record.item_set.all().order_by('calm_reference'))
         if len(files) > 0:
             children_desc.append('{} files'.format(len(files)))
         if len(items) > 0:

@@ -48,6 +48,9 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
                                    help_text=constants.REPOSITORY_HELP)
 
     references = models.ManyToManyField(Reference, blank=True)
+    calm_reference = models.CharField(
+        blank=True, max_length=64, null=True, unique=True,
+        verbose_name='CALM reference')
 
     title = models.CharField(max_length=1024, help_text=constants.TITLE_HELP)
 
