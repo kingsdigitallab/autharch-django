@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('accessibility-statement/', views.accessibility_statement,
          name='accessibility-statement'),
-    path('how-to-use/', views.how_to_use, name='how-to-use'),
+    path('guidance/', views.how_to_use, name='guidance'),
     path('account/login/',
          auth_views.LoginView.as_view(
              template_name='editor/login.html'

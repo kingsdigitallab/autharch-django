@@ -3,6 +3,8 @@
     <button type="button" class="default" onclick="confirmMergeAction('merge-modal', 'merge', {{ duplicate.id }})">Merge</button>
     {% if unmarked and added != duplicate.pk %}
       <button type="button" class="default" onclick="confirmMergeAction('merge-modal', 'mark', {{ duplicate.id }})">Not a duplicate</button>
+    {% elif unmarked and added == duplicate.pk %}
+      <a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}" class="dotted-underline">Reselect a duplicate</a>
     {% elif not unmarked %}
       <button type="button" class="default inactive" disabled>Not a duplicate</button>
     {% endif %}
