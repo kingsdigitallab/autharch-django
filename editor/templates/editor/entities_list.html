@@ -52,6 +52,7 @@
   {% block content %}
   {% if facets.selected %}
     <div class="selected-facets">
+        <h4>Selected filters</h4>
         {% for selected_facet in facets.selected %}
           {% render_facet selected_facet %}
         {% endfor %}

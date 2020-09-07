@@ -37,12 +37,46 @@ $(document).ready(function() {
   // submit the form when submitting from the popup.
   $('#record-form').submit(function(event) {
     event.preventDefault();
-    if ($('#log-modal').hasClass('active')) {
-      event.target.submit();
+    let noerrors = true;
+
+    //check for errors
+    $('.form-section .required').siblings('input, select, textarea').each(function(){
+      if ($(this).val() == '' || $(this).val() == null) {
+        if ($(this).attr('data-select2-id')) {
+          if ($(this).next('.select2').find('.error-message').length == 0) {
+            $(this).next('.select2')
+                   .find('span[class^="select2-selection"]')
+                   .first()
+                   .before(`<span class="error-message">This field is required.</span>`);
+          }
+        }
+        else {
+          $(this).addClass('error');
+          if ($(this).prev().attr('class') != 'error-message') {
+            $(this).before(`<span class="error-message">This field is required.</span>`);
+          }
+        }
+        $(this).addClass('error');
+        noerrors = false;
+      }
+    });
+
+    if (noerrors) {
+      if ($('#log-modal').hasClass('active')) {
+        event.target.submit();
+      } else {
+        toggleRequiredControls(dialogueRequiredControls, true);
+        $('#log-modal').addClass('active');
+      }
     } else {
-      event.preventDefault();
-      toggleRequiredControls(dialogueRequiredControls, true);
-      $('#log-modal').addClass('active');
+      $('.error-notification').remove();
+      $('.form-header').after(`
+      <div class="error-notification">
+        <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+        <h4>Errors</h4>
+        <p>There are field-specific errors; please check the form and correct.</p>
+      </div>
+      `)
     }
   });
 
