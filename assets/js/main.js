@@ -656,6 +656,7 @@ function toggleTab() {
   let header = $(event.target).closest('.fieldset-header');
   $(header).siblings('.fieldset-body').first().toggleClass('expand');
   $(header).find('.toggle-tab-button').toggleClass('active');
+  $(header).find('.toggle-tab-button').attr('aria-expanded', String($(header).find('.toggle-tab-button').attr('aria-expanded') !== 'true'));
 }
 
 

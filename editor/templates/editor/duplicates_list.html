@@ -13,10 +13,10 @@
     {% for display_name, duplicates in duplicates_data.items %}
     <div class="duplicate-group">
       <div class="fieldset-header" role="button" onclick="toggleTab()">
-        <span class="toggle-tab-button active" aria-label="expand"></span>
+        <span class="toggle-tab-button" aria-expanded="false"></span>
         <h2>{{ display_name }} ({{ duplicates|length }} duplicates)</h2>
       </div>
-      <div class="fieldset-body expand">
+      <div class="fieldset-body">
         {% for duplicate in duplicates %}
         <div class="record">
             <a href="{% url 'editor:entity-duplicates' entity_id=duplicate.pk %}" class="default"><i class="fal fa-copy"></i>Manage record</a>
