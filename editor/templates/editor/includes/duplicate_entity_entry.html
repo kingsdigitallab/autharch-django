@@ -10,7 +10,7 @@
     {% endif %}
   </div>
   <div class="record">
-    <a href="{% url 'editor:entity-edit' entity_id=duplicate.pk %}" target="_blank" class="dotted-underline">{{ duplicate }}</a><span class="divider"></span><a href="{% url 'editor:entity-duplicates' entity_id=duplicate.pk %}"><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: {{ duplicate.id }}</span></a>
+    <a href="{% url 'editor:entity-edit' entity_id=duplicate.pk %}" class="dotted-underline">{{ duplicate }}</a><span class="divider"></span><a href="{% url 'editor:entity-duplicates' entity_id=duplicate.pk %}"><i class="fal fa-copy"></i> <span class="dotted-underline">Manage duplicates of Record ID: {{ duplicate.id }}</span></a>
     <div class="subitems">
       <ul>
         <li class="highlight">Record ID: {{ duplicate.id }}</li>

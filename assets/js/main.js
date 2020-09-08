@@ -300,6 +300,16 @@ $(document).ready(function() {
       fetchTranscriptions();
     }
   });
+
+  var maxCellWidth = 0;
+  $('.browsed-item a').each(function() {
+    maxCellWidth = Math.max($(this).width(), maxCellWidth);
+  });
+  if (maxCellWidth < 200) {
+    $('.hierarchy-header').css('grid-template-columns',  (65 + maxCellWidth) +'px 400px');
+    $('.fieldset-header').css('grid-template-columns', '0.01fr ' + (25 + maxCellWidth) +'px 400px');
+    $('.fieldset-body .fieldset-header').css('grid-template-columns', '0.01fr ' + maxCellWidth +'px 400px');
+  }
   
 });
 

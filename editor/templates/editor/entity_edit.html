@@ -86,7 +86,7 @@
             <a href="{% url 'editor:entity-duplicates' entity_id=entity.pk %}">
               <i class="fal fa-copy"></i>
               <span class="dotted-underline">Manage duplicates 
-                {% if duplicates_count %}
+                {% if duplicates_count > 0 %}
                   ({{ duplicates_count }})
                 {% endif %}
               </span>
@@ -97,7 +97,7 @@
           <li>
             <a href="{% url 'editor:entity-related' entity_id=entity.pk %}">
               <i class="fal fa-archive"></i>
-              <span class="dotted-underline">Related records ({{ related_count }})</span>
+              <span class="dotted-underline">Related entities and records ({{ related_count }})</span>
             </a>
           </li>
           {% endif %}
