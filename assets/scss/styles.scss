@@ -1751,7 +1751,7 @@ main {
         .hierarchy-header {
             margin-bottom: 1em;
             display: grid;
-            grid-template-columns: 1fr 500px;
+            grid-template-columns: 28px 1fr 500px;
             gap: 0.8em;
             font-weight: 500;
         }
@@ -2487,10 +2487,16 @@ footer {
         padding: 0px 30px 30px 30px;
         &#hierarchy {
             .hierarchy-header {
-                grid-template-columns: 1fr 400px;
+                grid-template-columns: 28px 1fr 400px;
             }
+
             .fieldset-header {
                 grid-template-columns: 0.01fr 1fr 400px;
+            }
+            .fieldset-body {
+                .fieldset-header {
+                    grid-template-columns: 28px 1fr 400px;
+                }
             }
         }
         &:not(.no-sidebar) {
@@ -2564,7 +2570,14 @@ footer {
                 display: none;
             }
             .fieldset-header {
-                grid-template-columns: 0.01fr 1fr 200px;
+                grid-template-columns: 0.01fr 1fr 400px;
+            }
+            .fieldset-body {
+                .fieldset-header {
+                    grid-template-columns: 28px 1fr 200px;
+                }
+            }
+            .fieldset-header {
                 span.record-details {
                     grid-template-columns:1fr;
                 }
