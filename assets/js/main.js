@@ -305,14 +305,17 @@ $(document).ready(function() {
   $('#hierarchy .fieldset-header a.dotted-underline').each(function() {
     maxCellWidth = Math.max($(this).width(), maxCellWidth);
   });
-  if (maxCellWidth < 1200) {
-    $('#hierarchy .hierarchy-header').css('grid-template-columns',  '28px ' + (45 + maxCellWidth) +'px 400px');
-    $('#hierarchy .fieldset-header').css('grid-template-columns', '28px ' + (45 + maxCellWidth) +'px 400px');
-    $('#hierarchy .fieldset-body .fieldset-header').css('grid-template-columns', '28px ' + (20 + maxCellWidth) +'px 400px');
+  if (maxCellWidth < 1400) {
+    $('#hierarchy .hierarchy-header').css('grid-template-columns',  '28px ' + maxCellWidth +'px 400px');
+    $('#hierarchy .fieldset-header').css('grid-template-columns', '28px ' + maxCellWidth +'px 400px');
+    var level = 1;
+    $('#hierarchy .fieldset-body').each (function() {
+      $(this).find('.fieldset-header').css('grid-template-columns', '28px ' + (maxCellWidth - (25 * level)) +'px 400px');
+      level += 1;
+    })
   }
   
 });
-
 // TRANSCRIPTIONS
 // fetch transcriptions
 async function fetchTranscriptions() {
