@@ -17,7 +17,7 @@
     <div class="success-notification">
       <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
         {% if merged %}
-            <h4>The record (ID: {{ merged }}) was merged into this entity.</h4>
+            <h4>The record (ID: {{ merged }}) was merged into the browsed record (ID: {{ entity.id }}).</h4>
         {% endif %}
         {% if marked %}
             <h4>The record (ID: {{ marked }}) was marked as "not a duplicate" of this entity.</h4>

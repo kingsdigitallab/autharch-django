@@ -100,17 +100,7 @@ $(document).ready(function() {
       pageKeyStep    : 10                        // page step to use for pageUp and pageDown
     });
     //add tablesorter to the tables; had to go with an if-statement because tablesorter parameters cannot be modified once linked to a table
-    if ($(el).attr('id') !== 'records-list-table') {
-      $('#'+$(el).attr('id'))
-        .tablesorter({
-            sortList: [[3,1]],
-            widgets: ['filter'],
-            widgetOptions: {
-                filter_columnFilters: true,
-                filter_filterLabel : 'Filter by {{label}}',
-            }
-        })
-    } else {
+    if ($(el).attr('id') === 'records-list-table') {
       $('#records-list-table')
         .tablesorter({
             widgets: ['filter'],
@@ -123,6 +113,29 @@ $(document).ready(function() {
               2: {
                 sorter: 'level'
               }
+            }
+        })
+      
+    } 
+    else if ($(el).attr('id') === 'deleted-records-table') {
+      $('#'+$(el).attr('id'))
+        .tablesorter({
+            sortList: [[2,1]],
+            widgets: ['filter'],
+            widgetOptions: {
+                filter_columnFilters: true,
+                filter_filterLabel : 'Filter by {{label}}',
+            }
+        })
+    }
+    else {
+      $('#'+$(el).attr('id'))
+        .tablesorter({
+            sortList: [[3,1]],
+            widgets: ['filter'],
+            widgetOptions: {
+                filter_columnFilters: true,
+                filter_filterLabel : 'Filter by {{label}}',
             }
         })
     }

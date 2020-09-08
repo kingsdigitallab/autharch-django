@@ -1768,6 +1768,9 @@ main {
             grid-template-columns: 0.01fr 1fr 500px;
             gap: 0.8em;
             position: relative;
+            > span:first-of-type {
+                min-width: 28px;
+            }
             > span {
                 a {
                     white-space: pre-line;
@@ -1779,7 +1782,7 @@ main {
                     }
                 }
             }
-            .browsed-record {
+            .browsed-item {
                 background-color: lighten($light-grey,3%);
                 border-left: 5px solid $primary;
                 padding: 0px 8px;
@@ -2193,10 +2196,10 @@ main {
                         input:not(:only-child) {
                             display: inline-block;
                             margin: 0;
-                            // &:not(:last-child) {
-                            //     margin-right: 1em;
-                            //     margin-left: auto;
-                            // }
+                            &:not(:last-child) {
+                                margin-right: 2em;
+                                // margin-left: auto;
+                            }
                         }
                     }
                 }
