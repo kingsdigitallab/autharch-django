@@ -602,12 +602,18 @@ def entity_edit(request, entity_id):
     else:
         form = EntityEditForm(editor_role=editor_role, instance=entity)
         log_form = LogForm()
+
+    relations = []
+    for i in entity.identities.all():
+        if i.relations.all():
+            relations.append(i.relations.all()[0])
     related_count = (entity.files_as_relations.count() +
                      entity.files_created.count() +
                      entity.items_as_relations.count() +
                      entity.items_created.count() +
                      entity.organisation_subject_for_records.count() +
-                     entity.person_subject_for_records.count())
+                     entity.person_subject_for_records.count() + 
+                     len(relations))
     context = {
         'current_section': current_section,
         'delete_url': reverse('editor:entity-delete',
@@ -649,7 +655,12 @@ def entity_history(request, entity_id):
 @user_passes_test(is_user_editor_plus)
 def entity_related(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
+    relations = []
+    for i in entity.identities.all():
+        if i.relations.all():
+            relations.append(i.relations.all()[0])
     context = {
+        'relations': relations,
         'addressees': (list(entity.files_as_relations.all()) +
                        list(entity.items_as_relations.all())),
         'corporate_body_subjects':
@@ -819,7 +830,8 @@ def record_edit(request, record_id):
         writers_count = 0
     related_count = (addressees_count + writers_count +
                      record.organisations_as_subjects.count() +
-                     record.persons_as_subjects.count())
+                     record.persons_as_subjects.count() + 
+                     record.referenced_related_materials.count())
     context = {
         'current_section': current_section,
         'delete_url': reverse('editor:record-delete',
@@ -912,6 +924,7 @@ def record_related(request, record_id):
     except AttributeError:
         writers = Entity.objects.none()
     context = {
+        'related_materials': record.referenced_related_materials.all(),
         'addressees': addressees,
         'corporate_body_subjects': record.organisations_as_subjects.all(),
         'current_section': 'records',

@@ -10,12 +10,12 @@
                 <thead>
                   <tr>
                     {% if object_type == 'entity' %}
-                    <th scope="col" data-label="Title" data-placeholder="Filter by title">Title</th>
+                    <th scope="col" class="description" data-label="Title" data-placeholder="Filter by title">Title</th>
                     {% else %}
-                    <th scope="col" data-label="Name" data-placeholder="Filter by name">Name</th>
+                    <th scope="col" class="description" data-label="Name" data-placeholder="Filter by name">Name</th>
                     {% endif %}
                     
-                    <th class="filter-select" scope="col" data-label="Relation" data-placeholder="Select">Relation</th>
+                    <th scope="col" data-label="Relation">Relation</th>
                     <th class="filter-select" scope="col" data-label="Type/level" data-placeholder="Select">Type/level</th>
                     <th class="filter-select" scope="col" data-label="Publication status" data-placeholder="Select">Publication status</th>
                     <th scope="col" data-label="Updated" class="sorter-sugar" data-placeholder="Filter by date">Updated</th>
@@ -29,6 +29,9 @@
                     {% for result in addressees %}
                       {% include './includes/related_archival_record.html' with record=result relation='Addressee' only %}
                     {% endfor %}
+                    {% for result in relations %}
+                        {% include './includes/related_entity.html' with entity=result.related_entity relation=result.relation_detail only %}
+                    {% endfor %}
                     {% for result in corporate_body_subjects %}
                       {% include './includes/related_archival_record.html' with record=result relation='Corporate body as a subject' only %}
                     {% endfor %}
@@ -38,6 +41,9 @@
                   {% elif object_type == 'record' %}
                     {% for result in writers %}
                       {% include './includes/related_entity.html' with entity=result relation='Writer' only %}
+                    {% endfor %}
+                    {% for result in related_materials %}
+                      {% include './includes/related_archival_record.html' with record=result.related_record relation=result.context only %}
                     {% endfor %}
                     {% for result in addressees %}
                       {% include './includes/related_entity.html' with entity=result relation='Addressee' only %}

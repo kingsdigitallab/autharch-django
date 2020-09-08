@@ -37,46 +37,12 @@ $(document).ready(function() {
   // submit the form when submitting from the popup.
   $('#record-form').submit(function(event) {
     event.preventDefault();
-    let noerrors = true;
-
-    //check for errors
-    $('.form-section .required').siblings('input, select, textarea').each(function(){
-      if ($(this).val() == '' || $(this).val() == null) {
-        if ($(this).attr('data-select2-id')) {
-          if ($(this).next('.select2').find('.error-message').length == 0) {
-            $(this).next('.select2')
-                   .find('span[class^="select2-selection"]')
-                   .first()
-                   .before(`<span class="error-message">This field is required.</span>`);
-          }
-        }
-        else {
-          $(this).addClass('error');
-          if ($(this).prev().attr('class') != 'error-message') {
-            $(this).before(`<span class="error-message">This field is required.</span>`);
-          }
-        }
-        $(this).addClass('error');
-        noerrors = false;
-      }
-    });
-
-    if (noerrors) {
-      if ($('#log-modal').hasClass('active')) {
-        event.target.submit();
-      } else {
-        toggleRequiredControls(dialogueRequiredControls, true);
-        $('#log-modal').addClass('active');
-      }
+    if ($('#log-modal').hasClass('active')) {
+      event.target.submit();
     } else {
-      $('.error-notification').remove();
-      $('.form-header').after(`
-      <div class="error-notification">
-        <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
-        <h4>Errors</h4>
-        <p>There are field-specific errors; please check the form and correct.</p>
-      </div>
-      `)
+      event.preventDefault();
+      toggleRequiredControls(dialogueRequiredControls, true);
+      $('#log-modal').addClass('active');
     }
   });
 
@@ -305,10 +271,10 @@ $(document).ready(function() {
   $('#hierarchy .fieldset-header a.dotted-underline').each(function() {
     maxCellWidth = Math.max($(this).width(), maxCellWidth);
   });
-  if (maxCellWidth < 200) {
-    $('#hierarchy .hierarchy-header').css('grid-template-columns',  '28px ' + (maxCellWidth + 45) +'px 400px');
-    $('#hierarchy .fieldset-header').css('grid-template-columns', '28px ' + (maxCellWidth + 45) +'px 400px');
-    $('#hierarchy .fieldset-body .fieldset-header').css('grid-template-columns', '28px ' + (maxCellWidth + 20) +'px 400px');  
+  if (maxCellWidth < 400) {
+    $('#hierarchy .hierarchy-header').css('grid-template-columns',  '28px ' + (maxCellWidth + 65) +'px 400px');
+    $('#hierarchy .fieldset-header').css('grid-template-columns', '28px ' + (maxCellWidth + 65) +'px 400px');
+    $('#hierarchy .fieldset-body .fieldset-header').css('grid-template-columns', '0.01fr ' + (maxCellWidth + 40) +'px 400px');  
   }
   
 });

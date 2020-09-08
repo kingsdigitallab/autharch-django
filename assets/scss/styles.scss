@@ -2491,8 +2491,8 @@ footer {
             }
 
             .fieldset-header {
-                grid-template-columns: 0.01fr 1fr 400px;
-                align-items: center;
+                grid-template-columns: 28px 1fr 400px;
+                align-items: top;
             }
             .fieldset-body {
                 .fieldset-header {
