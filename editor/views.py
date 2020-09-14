@@ -118,7 +118,7 @@ class FacetMixin:
             new_values = []
             for value_data in values:
                 obj_id, obj_count = value_data
-                if obj_id in selected_facets.get(facet, []):
+                if str(obj_id) in selected_facets.get(facet, []):
                     link, is_selected = self._create_unapply_link(
                         value_data, query_dict, facet)
                 else:
@@ -604,10 +604,10 @@ def entity_edit(request, entity_id):
         log_form = LogForm()
 
     relations = []
-    for i in entity.identities.all():
-        if i.relations.all():
-            for r in i.relations.all():
-                relations.append(r)
+    for identity in entity.identities.all():
+        if identity.relations.all():
+            for relation in identity.relations.all():
+                relations.append(relation)
     related_count = (entity.files_as_relations.count() +
                      entity.files_created.count() +
                      entity.items_as_relations.count() +
@@ -615,11 +615,15 @@ def entity_edit(request, entity_id):
                      entity.organisation_subject_for_records.count() +
                      entity.person_subject_for_records.count() + 
                      len(relations))
+    duplicates_count = 0
+    duplicates = get_duplicates(entity)
+    for duplicate_list in duplicates.values():
+        duplicates_count += len(duplicate_list)
     context = {
         'current_section': current_section,
         'delete_url': reverse('editor:entity-delete',
                               kwargs={'entity_id': entity_id}),
-        'duplicates_count': len(get_duplicates(entity)),
+        'duplicates_count': duplicates_count,
         'entity': entity,
         'form_errors': form_errors,
         'form': form,
@@ -657,10 +661,10 @@ def entity_history(request, entity_id):
 def entity_related(request, entity_id):
     entity = get_object_or_404(Entity, pk=entity_id)
     relations = []
-    for i in entity.identities.all():
-        if i.relations.all():
-            for r in i.relations.all():
-                relations.append(r)
+    for identity in entity.identities.all():
+        if identity.relations.all():
+            for relation in identity.relations.all():
+                relations.append(relation)
     context = {
         'relations': relations,
         'addressees': (list(entity.files_as_relations.all()) +

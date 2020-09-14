@@ -1748,6 +1748,10 @@ main {
                     left: -11px;
                 }
             }
+            &.parent-level > .fieldset-body > .child-level 
+                > .fieldset-header > span:first-of-type {
+                    min-width: 28px;
+            }
         }
         .hierarchy-header {
             margin-bottom: 1em;
@@ -1769,9 +1773,6 @@ main {
             grid-template-columns: 0.01fr 1fr 500px;
             gap: 0.8em;
             position: relative;
-            > span:first-of-type {
-                min-width: 28px;
-            }
             > span {
                 a {
                     white-space: pre-line;
