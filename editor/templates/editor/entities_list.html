@@ -19,6 +19,7 @@
         <div class="filters-hidden">
           <a href="." class="dotted-underline clear-filters active">Clear filters</a>
             <div class="filters">
+              <!-- TODO: add the existence date range -->
               {% if facets.fields.entity_type|length > 0 %}
                 <fieldset class="filter-list" id="entity-type-filter">
                   <legend>Entity type</legend>
@@ -26,7 +27,7 @@
                     <input type="text" name="search-entityType" aria-label="search entity type" class="instant-search" placeholder="Search entity type" onfocus="this.placeholder=''" onblur="this.placeholder='Search entity type'"/>
                   {% endif %}
                   {% for entity_type in facets.fields.entity_type %}
-                  {% render_facet entity_type %}
+                    {% render_facet entity_type %}
                   {% endfor %}
                 </fieldset>
               {% endif %}

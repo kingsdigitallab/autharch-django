@@ -8,7 +8,7 @@
       <form action="{{ delete_url }}" method="post">
         {% csrf_token %}
         <input type="hidden" name="DELETE" value="DELETE"/>
-        <input type="button" value="Cancel" class="default modal-cancel"/>
+        <input type="button" value="Cancel" class="default modal-cancel" onclick="hideModal()"/>
         <input type="submit" value="Delete" class="danger"/>
       </form>
     </div>

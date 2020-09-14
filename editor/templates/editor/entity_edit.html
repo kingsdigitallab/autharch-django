@@ -112,10 +112,7 @@
     {% csrf_token %}
     <div class="form-section formset">
       {% with identities=form.formsets.identities %}
-      <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }})
-        <!-- TODO: add help text --> 
-        <!-- <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon" onclick="toggleHelpText()">&#xf059;</span> -->
-      </h2>
+      <h2>IDENTITIES ({{ identities.management_form.INITIAL_FORMS.value|default:"0" }})</h2>
       <div class="management_form">
         {{ identities.management_form }}
       </div>
@@ -131,9 +128,7 @@
     </div>
     <div class="form-section formset">
       {% with sources=form.formsets.control.forms.0.formsets.sources %}
-      <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) 
-        <!-- <span role="button" aria-label="additional info" data-content-type="identities" class="icon-only additional-info-icon" onclick="toggleHelpText(this)">&#xf059;</span> -->
-      </h2>
+      <h2>SOURCES ({{ sources.management_form.INITIAL_FORMS.value|default:"0" }}) </h2>
       <div class="management_form">
         {{ sources.management_form }}
       </div>
@@ -148,9 +143,7 @@
       </label>
     </div>
     <div class="form-section">
-      <h2>ENTITY RECORD DIGITAL RIGHTS MANAGEMENT 
-        <!-- <span role="button" aria-label="additional info" data-content-type="control" class="icon-only additional-info-icon">&#xf059;</span> -->
-      </h2>
+      <h2>ENTITY RECORD DIGITAL RIGHTS MANAGEMENT</h2>
       {{ form.formsets.control.management_form }}
       {% for control in form.formsets.control.forms %}
       <fieldset id="control">

@@ -1271,6 +1271,9 @@ main {
         }
         .action-buttons {
             float: right;
+            input[type=submit] {
+                margin-left: 0.5em;
+            }
         }
     }
     .form-header{

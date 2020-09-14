@@ -78,7 +78,7 @@
           {% for field in duplicate_form %}
           {{ field.as_hidden }}
           {% endfor %}
-          <input type="button" value="Cancel" class="default modal-cancel"/>
+          <input type="button" value="Cancel" class="default modal-cancel" onclick="hideModal()"/>
           <input type="submit" value="Submit" class="save"/>
         </form>
       </div>

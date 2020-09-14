@@ -32,10 +32,7 @@
             {% render_field form.display_date %}
           </div>
       {% with name_entries=form.formsets.name_entries %}
-      <h3>NAME ENTRIES ({{ name_entries.management_form.INITIAL_FORMS.value|default:"0" }})
-        <!-- TODO: add help text --> 
-        <!-- <span role="button" aria-label="additional info" data-content-type="name-entry" class="icon-only additional-info-icon">&#xf059;</span> -->
-      </h3>
+      <h3>NAME ENTRIES ({{ name_entries.management_form.INITIAL_FORMS.value|default:"0" }})</h3>
       <div class="management_form">
         {{ name_entries.management_form }}
       </div>
@@ -51,10 +48,7 @@
     </div>
     <div class="formset">
       {% with descriptions=form.formsets.descriptions %}
-      <h3>DESCRIPTIONS ({{ descriptions.management_form.INITIAL_FORMS.value|default:"0" }})
-        <!-- TODO: add help text --> 
-        <!-- <span role="button" aria-label="additional info" data-content-type="descriptions" class="icon-only additional-info-icon">&#xf059;</span> -->
-      </h3>
+      <h3>DESCRIPTIONS ({{ descriptions.management_form.INITIAL_FORMS.value|default:"0" }})</h3>
       <div class="management_form">
         {{ descriptions.management_form }}
       </div>
@@ -70,10 +64,7 @@
     </div>
     <div class="formset">
       {% with relations=form.formsets.relations %}
-      <h3>RELATIONS ({{ relations.management_form.INITIAL_FORMS.value|default:"0" }})
-        <!-- TODO: add help text --> 
-        <!-- <span role="button" aria-label="additional info" data-content-type="relations" class="icon-only additional-info-icon">&#xf059;</span> -->
-      </h3>
+      <h3>RELATIONS ({{ relations.management_form.INITIAL_FORMS.value|default:"0" }})</h3>
       <div class="management_form">
         {{ relations.management_form }}
       </div>
@@ -89,10 +80,7 @@
     </div>
     <div class="formset">
       {% with resources=form.formsets.resources %}
-      <h3>RESOURCES ({{ resources.management_form.INITIAL_FORMS.value|default:"0" }})
-        <!-- TODO: add help text --> 
-        <!-- <span role="button" aria-label="additional info" data-content-type="resources" class="icon-only additional-info-icon">&#xf059;</span> -->
-      </h3>
+      <h3>RESOURCES ({{ resources.management_form.INITIAL_FORMS.value|default:"0" }})</h3>
       <div class="management_form">
         {{ resources.management_form }}
       </div>
