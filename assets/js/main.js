@@ -286,7 +286,7 @@ $(document).ready(function() {
   });
   if (maxCellWidth < 400) {
     $('#hierarchy .hierarchy-header').css('grid-template-columns',  '28px ' + (maxCellWidth + 65) +'px 400px');
-    $('#hierarchy .fieldset-header').css('grid-template-columns', '28px ' + (maxCellWidth + 65) +'px 400px');
+    $('#hierarchy .fieldset-header').css('grid-template-columns', '0.01fr ' + (maxCellWidth + 65) +'px 400px');
     $('#hierarchy .fieldset-body .fieldset-header').css('grid-template-columns', '0.01fr ' + (maxCellWidth + 40) +'px 400px');  
   }
   
@@ -637,6 +637,7 @@ function toggleDeleteInline(event, button) {
   // toggle the checkbox button and text label
   if (form_part.hasClass('none')) {
     jButton.val('');
+    label.parents('.editable-field').first().addClass('group-field');
     label.removeClass('danger');
     label.addClass('save');
     label.append(`<span>Undo</span>`);
@@ -644,6 +645,7 @@ function toggleDeleteInline(event, button) {
   }
   else {
     jButton.val('');
+    label.parents('.editable-field').first().removeClass('group-field');
     label.removeClass('save');
     label.addClass('danger');
     label.children('span').remove();

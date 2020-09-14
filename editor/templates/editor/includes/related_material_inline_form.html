@@ -1,5 +1,5 @@
 {% load editor_form_tags %}
-<div data-form-type="related_material" class="editable-field group-field">
+<div data-form-type="related_material" class="editable-field">
   <div class="inline-deletable">
     {% render_form_delete_widget form.DELETE %}
     {% render_field form.id %}
@@ -8,8 +8,7 @@
   </div>
   <div class="delete-button-block">
     <label class="button-link danger">
-      <span hidden>Delete related material</span>
-      <input type="button" class="icon-only" value="&#xf2ed;" onclick="toggleDeleteInline(event, this)"/>
+      <input type="button" class="icon-only" value="&#xf2ed;" aria-label="undo delete related materials" onclick="toggleDeleteInline(event, this)"/>
     </label>
   </div>
 </div>

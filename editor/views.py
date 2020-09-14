@@ -606,7 +606,8 @@ def entity_edit(request, entity_id):
     relations = []
     for i in entity.identities.all():
         if i.relations.all():
-            relations.append(i.relations.all()[0])
+            for r in i.relations.all():
+                relations.append(r)
     related_count = (entity.files_as_relations.count() +
                      entity.files_created.count() +
                      entity.items_as_relations.count() +
@@ -658,7 +659,8 @@ def entity_related(request, entity_id):
     relations = []
     for i in entity.identities.all():
         if i.relations.all():
-            relations.append(i.relations.all()[0])
+            for r in i.relations.all():
+                relations.append(r)
     context = {
         'relations': relations,
         'addressees': (list(entity.files_as_relations.all()) +
