@@ -209,6 +209,7 @@ function generateCreationYearURL(startYear, endYear) {
 
 // show all information on the table pages
 function toggleAllMoreInformation() {
+    event.preventDefault();
     $('[id^="checkbox_"]').prop('checked', !$('[id^="checkbox_"]').prop('checked'));
     if ($('[id^="checkbox_"]').prop('checked')) {
         $(event.target).text('Collapse all');

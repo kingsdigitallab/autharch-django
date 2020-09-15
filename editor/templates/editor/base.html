@@ -24,7 +24,14 @@
       <div id="logo">
         <a href="{% url 'editor:home' %}"><img src="{% static 'images/GPPLogo.png' %}" alt="GPP logo" /></a>
       </div>
-      <div id="menu-links">
+      <input type="checkbox" id="mobile_nav_checkbox" aria-label="checkbox to open the menu"/>
+      <label for="mobile_nav_checkbox" id="mobile_nav">
+        <span hidden>Menu</span>
+        <span class="line1" aria-hidden="true"></span>
+        <span class="line2" aria-hidden="true"></span>
+        <span class="line3" aria-hidden="true"></span>
+      </label>
+      <nav id="menu-links">
         <div class="link{% if current_section == 'home' %} active{% endif %}">
           <a href="{% url 'editor:home' %}">
             <i class="fal fa-home"></i>
@@ -60,7 +67,7 @@
           </a>
         </div>
         {% endif %}
-      </div>
+      </nav>
       <div id="menu-account">
         <div class="link{% if current_section == 'account' %} active{% endif %}">
           <a href="{% url 'editor:account-control' %}">
