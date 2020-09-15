@@ -50,6 +50,13 @@ $(document).ready(function() {
         placeholder: 'Select',
         allowClear: true
     });
+    $('.select2-search__field').attr('aria-label', 'select with search');
+    $('.select2-selection__rendered').attr('aria-label', 'selected option');
+    $('.select2-selection--single').attr('role', 'list');
+    $('.select2-selection--multiple').attr({
+        'aria-label': 'select multiple options',
+        'role': 'list'
+    });
 
     // transcriptions - if collapsed by default
     $('.transcription-toggle').on('click', function() {

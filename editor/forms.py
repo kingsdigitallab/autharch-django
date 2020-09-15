@@ -42,6 +42,7 @@ RICHTEXT_TRANSCRIPTION = {
 
 PSEUDO_CHECKBOX = {
     'class': 'pseudo-checkbox',
+    'aria-label': 'preferred identity or authorised name form'
 }
 
 DATE_FORMAT = {
@@ -477,7 +478,8 @@ class NameEntryEditInlineForm(ContainerModelForm):
         widgets = {
             'authorised_form': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX),
             'date_from': forms.TextInput(attrs=DATE_FORMAT),
-            'date_to': forms.TextInput(attrs=DATE_FORMAT)
+            'date_to': forms.TextInput(attrs=DATE_FORMAT),
+            'is_royal_name': forms.CheckboxInput(attrs={'aria-label': 'is royal name?'})
         }
 
 
