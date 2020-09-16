@@ -665,6 +665,13 @@ def entity_related(request, entity_id):
         if identity.relations.all():
             for relation in identity.relations.all():
                 relations.append(relation)
+    related_count = (entity.files_as_relations.count() +
+                     entity.files_created.count() +
+                     entity.items_as_relations.count() +
+                     entity.items_created.count() +
+                     entity.organisation_subject_for_records.count() +
+                     entity.person_subject_for_records.count() + 
+                     len(relations))
     context = {
         'relations': relations,
         'addressees': (list(entity.files_as_relations.all()) +
@@ -680,6 +687,7 @@ def entity_related(request, entity_id):
         'person_subjects': entity.person_subject_for_records.all(),
         'writers': (list(entity.files_created.all()) +
                     list(entity.items_created.all())),
+        'related_count': related_count
     }
     return render(request, 'editor/related.html', context)
 
@@ -923,12 +931,20 @@ def record_related(request, record_id):
     # Only File and Item objects have addressees and writers.
     try:
         addressees = record.persons_as_relations.all()
+        addressees_count = record.persons_as_relations.count()
     except AttributeError:
         addressees = Entity.objects.none()
+        addressees_count = 0
     try:
         writers = record.creators.all()
+        writers_count = record.creators.count()
     except AttributeError:
         writers = Entity.objects.none()
+        writers_count = 0
+    related_count = (addressees_count + writers_count +
+                     record.organisations_as_subjects.count() +
+                     record.persons_as_subjects.count() + 
+                     record.referenced_related_materials.count())
     context = {
         'related_materials': record.referenced_related_materials.all(),
         'addressees': addressees,
@@ -941,6 +957,7 @@ def record_related(request, record_id):
         'person_subjects': record.persons_as_subjects.all(),
         'show_delete': can_show_delete_page(request.user.editor_profile.role),
         'writers': writers,
+        'related_count': related_count
     }
     return render(request, 'editor/related.html', context)
 

@@ -8,9 +8,12 @@
     <form action="." method="post" class="one-column">
       {% csrf_token %}
       {{ form.errors }}
-      {% for radio in form.entity_type %}
-        <label for="{{ radio.id_for_label }}" class="select-radio-button">{{ radio.tag }}{{ radio.choice_label }}</label>
-      {% endfor %}
+      <fieldset>
+        <legend hidden>Create a new person or corporate body</legend>
+        {% for radio in form.entity_type %}
+          <label for="{{ radio.id_for_label }}" class="select-radio-button">{{ radio.tag }}{{ radio.choice_label }}</label>
+        {% endfor %}
+      </fieldset>
       <div>
         <a class="dotted-underline" href="{% url 'editor:entities-list' %}">Cancel</a>
         <input aria-label="create a new entity" class="create" type="submit" value="Create" />

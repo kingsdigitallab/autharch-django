@@ -19,7 +19,7 @@
       <div class="fieldset-body">
         {% for duplicate in duplicates %}
         <div class="record">
-            <a href="{% url 'editor:entity-duplicates' entity_id=duplicate.pk %}" class="default"><i class="fal fa-copy"></i>Manage record</a>
+            <a href="{% url 'editor:entity-duplicates' entity_id=duplicate.pk %}" class="default"><i class="fal fa-copy"></i>Manage record <span class="for-screen-readers">{{duplicate.pk}}</span></a>
             <div>
                 <a href="{% url 'editor:entity-edit' entity_id=duplicate.pk %}" class="dotted-underline">{{ duplicate.display_name }}</a>
                 <div class="subitems">

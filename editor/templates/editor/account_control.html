@@ -114,34 +114,34 @@
             <td>
               <span class="delete-form-field none">
                 <label>
-                  <span hidden>Delete widget</span>
+                  <span class="for-screen-readers">Delete widget</span>
                   {{ form.DELETE.as_widget }}
                 </label>
               </span>
               {% render_field form.id %}
               <label>
-                <span hidden>Username</span>
+                <span class="for-screen-readers">Username</span>
                 {{ form.username }}
               </label>
               {{ form.username.errors }}
             </td>
             <td>
               <label>
-                <span hidden>First name</span>
+                <span class="for-screen-readers">First name</span>
                 {{ form.first_name }}
               </label>
               {{ form.first_name.errors }}
             </td>
             <td>
               <label>
-                <span hidden>Last name</span>
+                <span class="for-screen-readers">Last name</span>
                 {{ form.last_name }}
               </label>
               {{ form.last_name.errors }}
             </td>
             <td>
               <label>
-                <span hidden>Email</span>
+                <span class="for-screen-readers">Email</span>
                 {{ form.email }}
               </label>{{ form.email.errors }}
             </td>
@@ -150,7 +150,7 @@
                 {{ profile.management_form }}
                 {% render_field profile.forms.0.id %}
                 <label>
-                    <span hidden>Permission level</span>
+                  <span  class="for-screen-readers">Permission level</span>
                   {{ profile.forms.0.role }}
                 </label>
                 {% endwith %}
@@ -158,7 +158,7 @@
             <td class="button-cell">
               <input type="checkbox" name="delete-user-{{ forloop.counter0 }}" id="delete-user-{{ forloop.counter0 }}" class="none"/>
               <label for="delete-user-{{ forloop.counter0 }}" class="delete" onclick="deleteRow(this)">
-                  <span hidden>Delete user</span>
+                  <span class="for-screen-readers">Delete user</span>
               </label>
             </td>
           </tr>

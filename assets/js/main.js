@@ -4,6 +4,14 @@ $(document).ready(function() {
     $(this).attr('placeholder', 'Enter your search term...');
     }
   });
+
+  // embed aria-labels for accessibility
+  $('.select2-selection__rendered').attr('aria-label', 'selected option');
+  $('.select2-selection--single').attr({
+    'aria-label': 'selection list',
+    'role': 'list'
+  });
+  $('.select2-hidden-accessible option').hide();
 });
 
 /**

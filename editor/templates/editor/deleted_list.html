@@ -9,14 +9,14 @@
       <div class="search-filter">
           <form action="." class="search" method="get">
               <label>
-                  <span hidden>Search</span>
+                  <span class="for-screen-readers">Search</span>
                   {{ form.q }}
               </label>
               <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
           </form>
           <div class="filter-block">
               <input type="checkbox" class="none" id="filter" value="Filter">
-              <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+              <label for="filter" class="filter-button"><span class="for-screen-readers">Filter</span></label>
               <div class="filters-hidden">
               <a href="." class="dotted-underline clear-filters active">Clear all filters</a>
                   <div class="filters">
@@ -121,8 +121,8 @@
           </tbody>
         </table>
     </div>
-    {% if object_list.count > 10 %}
-      <div id="records-table_pager_info" class="pager">
+      <div id="deleted-records-table_pager_info" class="pager">
+        {% if object_list.count > 10 %}
         <div class="page-size">
           <p>
             rows per page:
@@ -145,8 +145,8 @@
           <button class="next"><i class="fal fa-caret-right"></i></button>
           <button class="last"><i class="fal fa-step-forward"></i></button>
         </div>
+        {% endif %}
       </div>
-    {% endif %}
   {% else %} 
       <div class="empty-block">
         <p>You don't have any deleted records.</p>

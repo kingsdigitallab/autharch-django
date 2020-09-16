@@ -3,7 +3,6 @@
 <main>
     {% block content %}
         <a href="{{ edit_url }}"><i class="fas fa-chevron-left margin-right"></i><span class="dotted-underline">Back to {{ item|truncatewords:15 }}</span></a>
-
         <h1><span class="highlight">Related to:</span> {{ item|truncatewords:15 }}</h1>
         <div class="table-container">
             <table class="tablesorter" id="search-results-table">
@@ -22,7 +21,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% if object_type == 'entity' %}
+                {% if object_type == 'entity' %}
                     {% for result in writers %}
                       {% include './includes/related_archival_record.html' with record=result relation='Writer' only %}
                     {% endfor %}
@@ -54,11 +53,36 @@
                     {% for result in person_subjects %}
                       {% include './includes/related_entity.html' with entity=result relation='Person as a subject' only %}
                     {% endfor %}
-                  {% endif %}
+                {% endif %}
                 </tbody>
-              </table>
-          </div>
-          <!-- TODO: add pagination -->
+            </table>
+        </div>
+        <div id="search-results-table_pager_info" class="pager">
+            {% if related_count > 10 %}
+            <div class="page-size">
+            <p>
+                rows per page:
+                <a href="#"  data-label="10">10</a> 
+                {% if related_count.count > 25 %}
+                | <a href="#" data-label="25">25</a>
+                {% if related_count.count > 50 %}
+                | <a href="#" data-label="50">50</a>
+                    {% if related_count.count > 100 %}
+                    |  <a href="#" data-label="100">100</a>
+                    {% endif %}
+                {% endif %}
+                {% endif %}
+            </p>
+            </div>
+            <div class="page-list">
+                <button class="first"><i class="fal fa-step-backward"></i></button>
+                <button class="prev"><i class="fal fa-caret-left"></i></button>
+                <span class="pagecount"></span>
+                <button class="next"><i class="fal fa-caret-right"></i></button>
+                <button class="last"><i class="fal fa-step-forward"></i></button>
+            </div>
+            {% endif %}
+        </div>
     {% endblock content %}
 </main>
 {% endblock main %}

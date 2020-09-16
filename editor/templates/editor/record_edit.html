@@ -180,7 +180,7 @@
               {% render_field form.repository %}
               <label>
                 <span class="required">Archival level</span>
-                <select name="archival-level" disabled="disabled">
+                <select name="archival-level" disabled>
                   <option>{{ record.archival_level }}</option>
                 </select>
               </label>
@@ -196,7 +196,7 @@
               {% if is_admin %}
               <label>
                 <span class="required">Repository code</span>
-                <input disabled="disabled" type="number" value="{{ record.repository.code }}"/>
+                <input disabled type="number" value="{{ record.repository.code }}"/>
               </label>
               {% endif %}
               {% render_field form.rcin %}

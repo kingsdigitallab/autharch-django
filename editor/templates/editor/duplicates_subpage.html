@@ -53,7 +53,7 @@
     </div>
     {% if marked_duplicates %}
     <input type="checkbox" id="show-removed-checkbox"/>
-    <label for="show-removed-checkbox"><span hidden>Show/hide records marked as "not a duplicate":</span></label>
+    <label for="show-removed-checkbox"><span class="for-screen-readers">Show/hide records marked as "not a duplicate":</span></label>
     <div class="manually-removed">
       {% for duplicate in marked_duplicates %}
         {% include "./includes/duplicate_entity_entry.html" with duplicate=duplicate unmarked=0 %}

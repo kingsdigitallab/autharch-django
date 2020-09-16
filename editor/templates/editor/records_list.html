@@ -8,14 +8,14 @@
     <div class="search-filter">
       <form action="." class="search" id="record-search-form" method="get">
           <label>
-            <span hidden>Search</span>
+            <span class="for-screen-readers">Search</span>
             {{ form.q }}
           </label>
           <input type="submit" class="search-button" aria-label="Search button" value="&#xf002;"/>
       </form>
         <div class="filter-block">
           <input type="checkbox" class="none" id="filter" aria-label="Filter">
-          <label for="filter" class="filter-button"><span hidden>Filter</span></label>
+          <label for="filter" class="filter-button"><span class="for-screen-readers">Filter</span></label>
           <div class="filters-hidden">
             <a href="." class="dotted-underline clear-filters aoctive">Clear all filters</a>
             <div class="filters">
@@ -132,7 +132,7 @@
           <tr>
             <td class="description archival-record">
               <a href="{% url 'editor:record-edit' record_id=result.pk %}">{{ result.description|truncatewords:30 }}</a>
-              <label for="checkbox_{{result.pk}}"><span hidden>More information</span></label>
+              <label for="checkbox_{{result.pk}}"><span class="for-screen-readers">More information</span></label>
               <input type="checkbox" id="checkbox_{{result.pk}}">
               <div class="more-information">
                 - RA reference: {{ result.ra_references|join:"; " }}<br>
@@ -148,8 +148,8 @@
         </tbody>
       </table>
   </div>
-  {% if object_list.count > 10 %}
   <div id="records-list-table_pager_info" class="pager">
+    {% if object_list.count > 10 %}
     <div class="page-size">
       <p>
         rows per page:
@@ -172,8 +172,8 @@
       <button class="next"><i class="fal fa-caret-right"></i></button>
       <button class="last"><i class="fal fa-step-forward"></i></button>
     </div>
+    {% endif %}
   </div>
-  {% endif %}
   {% endblock content %}
 </main>
 {% endblock main%}
