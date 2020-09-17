@@ -91,7 +91,7 @@ body {
     align-items: center !important;
     // flex-wrap: wrap;
     > *:not(:last-child) {
-        margin-right: 30px;
+        margin-right: 1em;
     }
 }
 
@@ -1549,7 +1549,7 @@ main {
                         }
                     }
                     &.expand {
-                        padding: 1em;
+                        padding: 2em;
                     }
                     label, input, textarea {
                         margin-bottom: 10px;
@@ -2748,6 +2748,9 @@ footer {
             .tox-tinymce {
                 max-width: 525px;
             }
+            .form-section fieldset .fieldset-body.expand {
+                padding: 1em;
+            }
         }
     }
 }
@@ -2787,6 +2790,7 @@ footer {
                             position: absolute;
                             top: 0;
                             right: -2px;
+                            bottom: 0;
                         }
                     }
                     .fieldset-body {
@@ -2936,7 +2940,7 @@ footer {
             }
         }
         .select2-container {
-            max-width:300px;
+            max-width:240px;
         }
         .page-header {
             .search-filter {
