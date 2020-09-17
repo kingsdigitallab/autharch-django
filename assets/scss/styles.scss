@@ -1489,7 +1489,7 @@ main {
                     height: 50px;
                     padding-left: 20px;
                     border-bottom: 1px solid $medium-grey;
-                    > div {
+                    > div.flex {
                         display: flex;
                         align-items: center;
                         height: 100%;
@@ -2743,11 +2743,19 @@ footer {
                 }
             }
         }
+        form {
+            .tox-tinymce {
+                max-width: 525px;
+            }
+        }
     }
 }
 @media only screen and (max-width: 700px) {
     main {
         form {
+            .tox-tinymce {
+                max-width: 450px;
+            }
             .form-section {
                 fieldset {
                     .fieldset-header {
@@ -2760,9 +2768,21 @@ footer {
                         box-sizing: border-box;
                         height: auto;
                         min-height: 60px;
+                        position: relative;
+                        overflow: hidden;
                         h4 {
                             font-size: 1em;
-                            margin-right: 2em;
+                            margin-right: 5em;
+                        }
+                        > div.flex {
+                            justify-content: flex-start;
+                            margin-bottom: 0.2em;
+                            width: 100%;
+                        }
+                        .toggle-tab-button {
+                            position: absolute;
+                            top: 0;
+                            right: 0;
                         }
                     }
                     .fieldset-body {
@@ -2876,11 +2896,16 @@ footer {
         .form-header {
             margin-top: 5em;
         }
-        .fieldset-header {
-            >div {
-                width: 100%;
+        form {
+            .tox-tinymce {
+                max-width: 450px;
             }
         }
+        // .fieldset-header {
+        //     > div {
+        //         width: 100%;
+        //     }
+        // }
     }
     footer {
         padding-bottom: 70px;
@@ -2939,6 +2964,11 @@ footer {
             }
             button {
                 padding: 5px 15px;
+            }
+        }
+        form {
+            .tox-tinymce {
+                max-width: 260px;
             }
         }
     }

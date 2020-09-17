@@ -149,11 +149,11 @@ $(document).ready(function() {
       }
     });
     // initialise TinyMCE for all visible editors
-    // $('.richtext').each(function () {
-    //   if (!$(this).attr('id').includes('prefix')) {
-    //     tinymce.EditorManager.execCommand('mceAddEditor', true, $(this).attr('id'));
-    //   }
-    // });
+    $('.richtext').each(function () {
+      if (!$(this).attr('id').includes('prefix')) {
+        tinymce.EditorManager.execCommand('mceAddEditor', true, $(this).attr('id'));
+      }
+    });
   }
   
   // TRANSCRIPTIONS
