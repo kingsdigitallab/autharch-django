@@ -63,7 +63,7 @@ $fontawesome: 'Font Awesome 5 Pro';
 body {
     background-color: $background;
     font-family: $font-primary;
-    font-size: 14px;
+    font-size: 14px !important;
     line-height: 1.6em;
     margin: 0;
     width: 100%;
@@ -1052,6 +1052,7 @@ main {
     .table-container {
         width: 100%;
         overflow-x: auto;
+        overflow-y: hidden;
         h2 {
             font-weight: 500;
             .clear-filters {
@@ -1357,7 +1358,6 @@ main {
 
         label {
             display: block;
-            font-size: 14px;
             // position: relative;
             input, select {
                 margin-top: 0px !important;
@@ -2792,6 +2792,9 @@ footer {
             display: block;
             position: absolute;
             background-color: darken($primary, 4%);
+            -moz-box-shadow: 1px 3px 3px $medium-grey;
+            -webkit-box-shadow: 1px 3px 3px $medium-grey;
+            box-shadow: 1px 3px 3px $medium-grey;
             top: 4.3em;
             left: 0;
             padding: 1em 0;
@@ -2893,7 +2896,7 @@ footer {
             @include hidden();
         }
         #menu-links {
-            width: 80%;
+            width: 84.9%;
         }
     }
     main {
@@ -2937,6 +2940,11 @@ footer {
             button {
                 padding: 5px 15px;
             }
+        }
+    }
+    footer {
+        a {
+            white-space: nowrap;
         }
     }
 }
