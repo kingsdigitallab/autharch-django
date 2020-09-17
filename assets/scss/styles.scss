@@ -2779,11 +2779,14 @@ footer {
                             justify-content: flex-start;
                             margin-bottom: 0.2em;
                             width: 100%;
+                            > div:last-of-type {
+                                margin-right: 5em;
+                            }
                         }
                         .toggle-tab-button {
                             position: absolute;
                             top: 0;
-                            right: 0;
+                            right: -2px;
                         }
                     }
                     .fieldset-body {
