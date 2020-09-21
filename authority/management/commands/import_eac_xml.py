@@ -327,7 +327,8 @@ class EntityImport:
         description = Description(identity=identity)
         description.save()
         for local_description in description_el.xpath(
-                'e:localDescription[@localType="gender"]', namespaces=NS_MAP):
+                './/e:localDescription[@localType="gender"]',
+                namespaces=NS_MAP):
             self._import_local_description(description, local_description)
         for place in description_el.xpath('e:places/e:place',
                                           namespaces=NS_MAP):
