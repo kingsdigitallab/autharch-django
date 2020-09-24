@@ -63,14 +63,14 @@
             <p>
                 rows per page:
                 <a href="#"  data-label="10">10</a> 
-                {% if related_count.count > 25 %}
-                | <a href="#" data-label="25">25</a>
-                {% if related_count.count > 50 %}
-                | <a href="#" data-label="50">50</a>
-                    {% if related_count.count > 100 %}
-                    |  <a href="#" data-label="100">100</a>
+                {% if related_count > 25 %}
+                    | <a href="#" data-label="25">25</a>
+                    {% if related_count > 50 %}
+                    | <a href="#" data-label="50">50</a>
+                        {% if related_count > 100 %}
+                        |  <a href="#" data-label="100">100</a>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
                 {% endif %}
             </p>
             </div>
