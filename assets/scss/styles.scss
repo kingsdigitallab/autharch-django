@@ -347,6 +347,10 @@ input[type=submit]:not(.search-button):not(.create) {
     }
 }
 
+.tox .tox-editor-header {
+    z-index: auto !important;
+}
+
 // ICONS
 .fas {
     margin-right: 7px;
