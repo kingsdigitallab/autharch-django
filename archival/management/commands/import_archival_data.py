@@ -1,3 +1,17 @@
+"""Import archival records from supplied spreadsheets.
+
+Due to needing to capture relationships between the data (Collection
+holds Series holds File holds Item), and uncertain ordering and
+location of related data, the import operates in two phases: the first
+to create the objects with their individual data, the second to add in
+the relationships between them.
+
+The CALM Reference defines the hierarchy, with parts separated by "/";
+eg, DEBUDE/1/1 is the first File or Item in the first Series of the
+DEBUDE Collection.
+
+"""
+
 import logging
 import os.path
 import re
@@ -44,26 +58,62 @@ NON_ESSENTIAL_COLUMNS = {
 }
 
 # Error and log messages.
+COLLECTION_CALM_REFERENCE_HAS_SLASH = (
+    'Collection record in data at "{}" (sheet "{}") has CALM reference "{}" '
+    'containing a slash; check for hierarchy violation.')
+EXISTING_CALM_REF = (
+    'DUPLICATE CALM REF: '
+    'Record "{}" with CALM Reference "{}" from data at "{}" (sheet "{}") '
+    'already exists from record "{}" at "{}" (sheet "{}")')
+EXISTING_RA_REF = (
+    'DUPLICATE RA REF: '
+    'Record "{}" with RA Ref "{}" from data at "{}" (sheet "{}") already '
+    'exists from record "{}" at "{}" (sheet "{}")')
 EXISTING_RECORD_DIFFERENT_MODEL_MSG = (
-    'Existing record is "{}"; wanted to create "{}".')
+    'Existing record with UUID "{}" is "{}"; wanted to create "{}" from data '
+    'at "{}" (sheet "{}").')
 EXISTING_RECORD_IN_DIFFERENT_PROJECT_MSG = (
     'Record with UUID "{}" in data at "{}" (sheet "{}") already exists under '
     'different project "{}".')
 EXISTING_RECORD_MSG = (
-    'Record with UUID "{}" in data at "{}" (sheet "{}") already exists.')
+    'DUPLICATE ID: '
+    'Record with UUID "{}" (RA Ref "{}"; CALM Ref "{}") in data at "{}" '
+    '(sheet "{}") already exists from record "{}" at "{}" (sheet "{}").')
+HIERARCHY_MISMATCH_MSG = (
+    'Hierarchy mismatch: {} record ("{}") with reference to {} ("{}") in data '
+    'at "{}" (sheet "{}").')
 INVALID_INPUT_FILE_TYPE_MSG = (
     'Invalid file type for "{}"; please provide a .csv or .xlsx file.')
+INVALID_LEVEL_MSG = ('Invalid level "{}" in data at "{}" (sheet "{}").')
 LANGUAGE_NOT_FOUND_MSG = (
     'Language "{}" not found in record in data at "{}" (sheet "{}").')
 MISSING_ID_FOR_RECORD = (
-    'Row has no ID value in data at "{}" (sheet "{}"); skipping.')
+    'MISSING ID: '
+    'Record "{}" has no ID value in data at "{}" (sheet "{}"); skipping.')
 MISSING_OPTIONAL_COL_MSG = (
     'Data at "{}" (sheet "{}") does not include the optional "{}" column.')
 MISSING_OPTIONAL_COL_WITH_DEFAULT_MSG = (
     'Data at "{}" (sheet "{}") does not include the optional "{}" column; '
     'using default value of "{}" for all rows.')
+MISSING_PARENT_RECORD = (
+    'MISSING PARENT: '
+    'Record "{}" from data at "{}" (sheet "{}") has reference to parent '
+    'record "{}" that does not exist.')
+MISSING_PARENT_REFERENCE = (
+    'MISSING PARENT: '
+    'Parent CALM Reference "{}" does not exist; child reference is "{}" from '
+    'record "{}" at "{}" (sheet "{}").')
 MISSING_REQUIRED_COL_MSG = (
     'Data at "{}" (sheet "{}") does not include the required "{}" column.')
+MULTIPLE_PARENT_RECORDS = (
+    'Record "{}" from data at "{}" (sheet "{}") has reference to parent '
+    'record "{}" that matches multiple records.')
+NO_CALM_REF = (
+    'MISSING CALM Reference: '
+    'Record with UUID "{}" in data at "{}" (sheet "{}") has no CALM Ref.')
+NO_RA_REF = (
+    'MISSING RA Reference'
+    'Record with UUID "{}" in data at "{}" (sheet "{}") has no RA Ref.')
 NO_REPOSITORY_CODE_COL_MSG = (
     'Data at "{}" (sheet "{}") does not include a "Repository Code" column; '
     'using default value of "%s" for Royal Archives and Royal Library '
@@ -100,9 +150,16 @@ class Command(BaseCommand):
             raise CommandError(NON_EXISTENT_PROJECT_MSG.format(
                 options['project_id']))
         self.logger.info(USING_PROJECT_MSG.format(project.title))
+        self._records = {}
+        self._uuids = {}
+        self._calm_refs = {}
+        self._ra_refs = {}
         paths = options['paths']
         for path in paths:
             self._import_path(os.path.abspath(path), project)
+        for record, location_data in self._records.items():
+            self._path, self._sheet = location_data
+            self._import_relationships(record)
         management.call_command('createinitialrevisions')
         self.stdout.write(UPDATE_SEARCH_INDEX_MSG)
 
@@ -114,74 +171,120 @@ class Command(BaseCommand):
             self._import_sheet(df, project)
         elif path.endswith('.xlsx'):
             for sheet, df in pd.read_excel(path, sheet_name=None).items():
-                self._sheet = sheet
-                self._import_sheet(df, project)
+                self._import_sheet(df, project, sheet)
         else:
             raise CommandError(INVALID_INPUT_FILE_TYPE_MSG.format(path))
 
-    def _import_sheet(self, df, project):
+    def _import_sheet(self, df, project, sheet):
+        self._sheet = sheet
         df = self._tidy_df(df)
         for i, row in df.iterrows():
-            self._import_row(row, project)
+            record = self._import_row(row, project)
+            if record is not None:
+                self._records[record] = [self._path, self._sheet]
 
     def _import_row(self, row, project):
         uuid = row['ID']
         if pd.isnull(uuid):
             self.logger.warning(MISSING_ID_FOR_RECORD.format(
-                self._path, self._sheet))
+                row.get('Title', '[no title]'), self._path, self._sheet))
             return
+
         level = row['Level'].lower()
-
         if level in ['collection', 'fonds']:
-            col = self._create_object(Collection, uuid, project)
-            if col is None:
-                return
-            col = self._add_base_collection_data(col, row)
-            col = self._add_collection_data(col, row)
-            col.save()
-        elif level == 'series':
-            series = self._create_object(Series, uuid, project)
-            if series is None:
-                return
-            series = self._add_base_collection_data(series, row)
-            series = self._add_base_series_data(series, row)
-            series = self._add_series_data(series, row)
-            series.save()
+            record = self._create_object(Collection, uuid, project, row)
+            if record is not None:
+                record = self._add_base_collection_data(record, row)
+                record = self._add_collection_data(record, row)
+                record.save()
+        elif level.endswith('series'):
+            record = self._create_object(Series, uuid, project, row)
+            if record is not None:
+                record = self._add_base_collection_data(record, row)
+                record = self._add_base_series_data(record, row)
+                record = self._add_series_data(record, row)
+                record.save()
         elif 'file' in level:
-            f = self._create_object(File, uuid, project)
-            if f is None:
-                return
-            f = self._add_base_collection_data(f, row)
-            f = self._add_base_series_data(f, row)
-            f = self._add_base_file_data(f, row)
-            f = self._add_file_data(f, row, project)
-            self.logger.debug(f.creators.all())
-            self.logger.debug(f.persons_as_relations.all())
-            f.save()
+            record = self._create_object(File, uuid, project, row)
+            if record is not None:
+                record = self._add_base_collection_data(record, row)
+                record = self._add_base_series_data(record, row)
+                record = self._add_base_file_data(record, row)
+                record = self._add_file_data(record, row, project)
+                self.logger.debug(record.creators.all())
+                self.logger.debug(record.persons_as_relations.all())
+                record.save()
         elif level == 'item':
-            item = self._create_object(Item, uuid, project)
-            if item is None:
-                return
-            item = self._add_base_collection_data(item, row)
-            item = self._add_base_series_data(item, row)
-            item = self._add_base_file_data(item, row)
-            item = self._add_item_data(item, row, project)
-            self.logger.debug(item.creators.all())
-            self.logger.debug(item.persons_as_relations.all())
-            item.save()
+            record = self._create_object(Item, uuid, project, row)
+            if record is not None:
+                record = self._add_base_collection_data(record, row)
+                record = self._add_base_series_data(record, row)
+                record = self._add_base_file_data(record, row)
+                record = self._add_item_data(record, row, project)
+                self.logger.debug(record.creators.all())
+                self.logger.debug(record.persons_as_relations.all())
+                record.save()
+        else:
+            raise CommandError(INVALID_LEVEL_MSG.format(
+                level, self._path, self._sheet))
+        return record
 
-    def _create_object(self, model, uuid, project):
+    def _import_relationships(self, record):
+        calm_reference = record.calm_reference
+        if '/' in calm_reference:
+            if isinstance(record, Collection):
+                self.logger.warning(COLLECTION_CALM_REFERENCE_HAS_SLASH.format(
+                    self._path, self._sheet, calm_reference))
+                return
+            parent_reference = self._get_parent_reference(calm_reference,
+                                                          record.uuid)
+            if parent_reference is None:
+                return
+            try:
+                parent = ArchivalRecord.objects.get(
+                    calm_reference=parent_reference)
+            except ArchivalRecord.DoesNotExist:
+                self.logger.warning(MISSING_PARENT_RECORD.format(
+                    calm_reference, self._path, self._sheet, parent_reference))
+                return
+            except ArchivalRecord.MultipleObjectsReturned:
+                self.logger.warning(MULTIPLE_PARENT_RECORDS.format(
+                    calm_reference, self._path, self._sheet, parent_reference))
+                return
+            if isinstance(parent, Collection):
+                record.parent_collection = parent
+            elif isinstance(parent, Series):
+                record.parent_series = parent
+            elif isinstance(parent, File):
+                if isinstance(record, Series):
+                    raise CommandError(HIERARCHY_MISMATCH_MSG.format(
+                        'Series', calm_reference, 'File',
+                        parent_reference.unitid, self._path, self._sheet))
+                else:
+                    record.parent_file = parent
+            else:
+                raise CommandError(HIERARCHY_MISMATCH_MSG.format(
+                    'A', calm_reference, 'Item', parent_reference.unitid,
+                    self._path, self._sheet))
+            record.save()
+
+    def _create_object(self, model, uuid, project, row):
         """Create and return a `model` object in `project` with `uuid`.
 
         Returns None if a record with `uuid` already exists."""
         try:
             obj = ArchivalRecord.objects.get(uuid=uuid)
-            self.logger.info(EXISTING_RECORD_MSG.format(uuid, self._path,
-                                                        self._sheet))
+            calm_ref = row.get('CALM_reference', 'None')
+            ra_ref = row.get('RA_Reference', 'None')
+            self.logger.warning(EXISTING_RECORD_MSG.format(
+                uuid, ra_ref, calm_ref, self._path, self._sheet,
+                *self._uuids.get(uuid, ['', 'not from current import', ''])))
             existing_model = obj.get_real_instance_class()
             if existing_model != model:
-                self.logger.info(EXISTING_RECORD_DIFFERENT_MODEL_MSG.format(
-                    existing_model._meta.model_name, model._meta.model_name))
+                self.logger.warning(
+                    EXISTING_RECORD_DIFFERENT_MODEL_MSG.format(
+                        uuid, existing_model._meta.model_name,
+                        model._meta.model_name, self._path, self._sheet))
             if obj.project is None:
                 pass
             elif obj.project.id != project.id:
@@ -193,7 +296,8 @@ class Command(BaseCommand):
             self.logger.debug('{} not found for uuid: {}. Creating.'.format(
                 model, uuid))
             obj = model(uuid=uuid, project=project)
-
+            self._uuids[uuid] = [row.get('Title', '[no title]'), self._path,
+                                 self._sheet]
             return obj
 
     def _add_base_collection_data(self, obj, row):
@@ -234,21 +338,43 @@ class Command(BaseCommand):
 
         obj.save()
 
+        title = row.get('Title', '[no title]')
         if 'RA_Reference' in row:
-            source, _ = ReferenceSource.objects.get_or_create(title='RA')
-            ref, _ = Reference.objects.get_or_create(
-                source=source, unitid=row['RA_Reference'])
+            ra_ref = row['RA_Reference']
+            source = ReferenceSource.objects.get(title='RA')
+            try:
+                ref = Reference.objects.get(source=source, unitid=ra_ref)
+                self.logger.info(EXISTING_RA_REF.format(
+                    title, ra_ref, self._path, self._sheet, *self._ra_refs.get(
+                        ra_ref, ['', 'not from current import', ''])))
+            except Reference.DoesNotExist:
+                ref = Reference(source=source, unitid=ra_ref)
+                ref.save()
+                self._ra_refs[ra_ref] = [title, self._path, self._sheet]
             obj.references.add(ref)
+        else:
+            self.logger.warning(NO_RA_REF.format(obj.uuid, self._path,
+                                                 self._sheet))
 
         if 'CALM_reference' in row:
-            source, _ = ReferenceSource.objects.get_or_create(title='CALM')
-            ref, _ = Reference.objects.get_or_create(
-                source=source, unitid=row['CALM_reference'])
+            calm_ref = row['CALM_reference']
+            try:
+                ArchivalRecord.objects.get(calm_reference=calm_ref)
+                raise CommandError(EXISTING_CALM_REF.format(
+                    title, calm_ref, self._path, self._sheet,
+                    *self._calm_refs.get(
+                        calm_ref, ['', 'not from current import', ''])))
+            except ArchivalRecord.DoesNotExist:
+                obj.calm_reference = calm_ref
+                self._calm_refs[calm_ref] = [title, self._path, self._sheet]
             obj.references.add(ref)
+        else:
+            self.logger.warning(NO_CALM_REF.format(obj.uuid, self._path,
+                                                   self._sheet))
 
         if not pd.isnull(row['Language']):
             languages = []
-            for lang_string in row['Language'].split('; '):
+            for lang_string in row['Language'].split('\n'):
                 if ', ' in lang_string:
                     languages.extend(lang_string.split(', '))
                 else:
@@ -280,34 +406,17 @@ class Command(BaseCommand):
     def _add_series_data(self, obj, row):
         obj = self._set_field_from_cell_data(obj, 'arrangement', row,
                                              'Arrangement')
-        reference = self._get_parent_reference(row)
-        self.logger.debug('reference {}'.format(reference))
-        if not reference:
-            return obj
-
-        series = Series.objects.filter(references=reference)
-        if series:
-            obj.parent_series = series[0]
-            return obj
-
-        collections = Collection.objects.filter(references=reference)
-        if collections:
-            obj.parent_collection = collections[0]
-
         return obj
 
-    def _get_parent_reference(self, row):
-        source = ReferenceSource.objects.get(title='CALM')
-        unitid = '/'.join(row.get('CALM_reference', '').split('/')[:-1])
-
+    def _get_parent_reference(self, reference, uuid):
+        unitid = '/'.join(reference.split('/')[:-1])
         try:
-            reference = Reference.objects.get(source=source, unitid=unitid)
-            self.logger.debug('Found reference: {}: {}'.format(source, unitid))
-            return reference
-        except Reference.DoesNotExist:
-            self.logger.warning('Reference {}: {} not found'.format(
-                source, unitid))
-            return None
+            record = ArchivalRecord.objects.get(calm_reference=unitid)
+            self.logger.debug('Found reference: {}: {}'.format(record, unitid))
+            return record.calm_reference
+        except ArchivalRecord.DoesNotExist:
+            self.logger.warning(MISSING_PARENT_REFERENCE.format(
+                unitid, reference, *self._uuids[uuid]))
 
     def _add_base_file_data(self, obj, row):
         obj = self._set_field_from_cell_data(obj, 'physical_description', row,
@@ -326,19 +435,6 @@ class Command(BaseCommand):
             if entities:
                 f.persons_as_relations.add(*entities)
 
-        reference = self._get_parent_reference(row)
-        if not reference:
-            return f
-
-        files = File.objects.filter(references=reference)
-        if files:
-            f.parent_file = files[0]
-            return f
-
-        series = Series.objects.filter(references=reference)
-        if series:
-            f.parent_series = series[0]
-
         return f
 
     def _get_entities_by_name(self, full_name, project):
@@ -353,6 +449,7 @@ class Command(BaseCommand):
         full_name = full_name.replace('[', '')
         full_name = full_name.replace(']', '')
         full_name = self.normalise_space(' ', full_name)
+        full_name = full_name.replace(';', '|')
         names = full_name.split('|')
         entities = []
         for name in names:
@@ -375,19 +472,6 @@ class Command(BaseCommand):
             entities = self._get_entities_by_name(row['Addressee'], project)
             if entities:
                 obj.persons_as_relations.add(*entities)
-
-        reference = self._get_parent_reference(row)
-        if not reference:
-            return obj
-
-        files = File.objects.filter(references=reference)
-        if files:
-            obj.f = files[0]
-            return obj
-
-        series = Series.objects.filter(references=reference)
-        if series:
-            obj.parent_series = series[0]
 
         return obj
 
@@ -452,7 +536,7 @@ class Command(BaseCommand):
         raise ValueError
 
     def _set_creation_date_range(self, obj, row):
-        date = row['Date']
+        date = row.get('Date')
         if pd.isnull(date):
             return obj
         date = str(date)
