@@ -52,6 +52,7 @@ $(document).ready(function() {
     });
     // embed aria-labels for accessibility
     $('.select2-search__field').attr('aria-label', 'select with search');
+    $('.select2-selection__placeholder').text('Select');
     $('.select2-selection--multiple').attr({
         'aria-label': 'select multiple options',
         'role': 'list'
@@ -67,6 +68,7 @@ $(document).ready(function() {
     });
 
     initFieldPlaceholders();
+    initNamePartMessage();
     initCloseTooltipListener();
     initPreferredListener();
     initTinyMce(); 
@@ -75,18 +77,23 @@ $(document).ready(function() {
   
   
   function initFieldPlaceholders() {
+    $('.select2').on('click', function(e) {
+        $('.select2-container--open').find('.select2-search__field').attr('placeholder', 'Enter your search term...').attr('aria-label', 'select with search').focus();
+    });
     $('form').on('select2:opening', function(e) {
       setTimeout(function() {
-        $('.select2-container--open').find('.select2-search__field').attr('placeholder', 'Enter your search term...').focus();
+        $('.select2-container--open').find('.select2-search__field').attr('placeholder', 'Enter your search term...').attr('aria-label', 'select with search').focus();
       }, 500);
     });
-    // toggle name part message
+  }
+
+  function initNamePartMessage() {
     $('.formset').on('click', 'input[id$="is_royal_name"]', function(e) {
-      if ($(e.target).prop("checked")) {
-        $(e.target).next('.namePartField-required').text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
-      } else {
-        $(e.target).next('.namePartField-required').text(`A personal name must contain a "surname" part type.`);
-      }
+        if ($(e.target).prop("checked")) {
+            $(e.target).next('.namePartField-required').text(`A royal name must contain a "forename" part type and a "proper title" part type.`);
+        } else {
+            $(e.target).next('.namePartField-required').text(`A personal name must contain a "surname" part type.`);
+        }
     });
   }
 
@@ -274,9 +281,11 @@ $(document).ready(function() {
             url: '/vocabularies/terms',
             data: function (params) {
               var query = {
+                page: params.page,
+                term: params.term,
                 prefix: $(this).attr('data-voc-prefix'),
               }
-      
+              
               return query;
             }
           }
