@@ -422,6 +422,10 @@ href="http://creativecommons.org/publicdomain/zero/1.0/">
 style="border-style: none;" alt="CC0" />
 </a>
 <br />
+Other copyright considerations: Check the biography/history section
+for other copyright statements for material used with permission
+(Creative Commons licenced or otherwise).
+<br />
 To the extent possible under law,
 <a rel="dct:publisher"
 href="https://georgianpapers.com/">
