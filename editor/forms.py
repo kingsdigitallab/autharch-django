@@ -338,12 +338,16 @@ class ControlEditInlineForm(ContainerModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['maintenance_status'].disabled = True
+        self.fields['rights_declaration_abbreviation'].disabled = True
+        self.fields['rights_declaration_citation'].disabled = True
         if self.Meta.editor_role == EditorProfile.EDITOR:
             in_process_status = PublicationStatus.objects.get(
                 title='inProcess')
             self.fields['publication_status'].widget = forms.Select(
                 choices=[(in_process_status.pk, 'inProcess')])
             self.fields['publication_status'].disabled = True
+            del self.fields['rights_declaration_abbreviation']
+            del self.fields['rights_declaration_citation']
 
     def _add_formsets(self, *args, **kwargs):
         formsets = {}
@@ -479,7 +483,8 @@ class NameEntryEditInlineForm(ContainerModelForm):
             'authorised_form': forms.CheckboxInput(attrs=PSEUDO_CHECKBOX),
             'date_from': forms.TextInput(attrs=DATE_FORMAT),
             'date_to': forms.TextInput(attrs=DATE_FORMAT),
-            'is_royal_name': forms.CheckboxInput(attrs={'aria-label': 'is royal name?'})
+            'is_royal_name': forms.CheckboxInput(
+                attrs={'aria-label': 'is royal name?'})
         }
 
 
@@ -572,26 +577,36 @@ class ArchivalRecordEditForm(ContainerModelForm):
     disabled_fields = {
         EditorProfile.ADMIN: [
             'calm_reference', 'maintenance_status', 'parent_collection',
-            'parent_file', 'parent_series', 'ra_references'],
+            'parent_file', 'parent_series', 'ra_references',
+            'rights_declaration_abbreviation', 'rights_declaration_citation',
+        ],
         EditorProfile.MODERATOR: [
             'arrangement', 'extent', 'maintenance_status', 'parent_collection',
             'parent_file', 'parent_series', 'physical_description',
             'provenance', 'publication_permission', 'ra_references', 'rcin',
             'record_type', 'repository', 'rights_declaration',
-            'rights_declaration_citation', 'withheld'
+            'rights_declaration_abbreviation', 'rights_declaration_citation',
+            'withheld'
         ],
         EditorProfile.EDITOR: [
             'arrangement', 'extent', 'maintenance_status', 'parent_collection',
             'parent_file', 'parent_series', 'physical_description',
             'provenance', 'publication_permission', 'publication_status',
             'ra_references', 'rcin', 'record_type', 'repository',
-            'rights_declaration', 'rights_declaration_citation', 'withheld'
+            'rights_declaration', 'withheld'
         ],
     }
 
-    # Fields visible only to admin users.
-    private_fields = ['calm_reference', 'copyright_status',
-                      'rights_declaration_abbreviation']
+    # Fields visible only to certain users.
+    private_fields = {
+        EditorProfile.ADMIN: [
+            'calm_reference', 'copyright_status',
+            'rights_declaration_abbreviation', 'rights_declaration_citation'
+        ],
+        EditorProfile.MODERATOR: [
+            'rights_declaration_abbreviation', 'rights_declaration_citation'
+        ]
+    }
 
     def __init__(self, *args, editor_role=EditorProfile.EDITOR, **kwargs):
         super().__init__(*args, **kwargs)
@@ -601,7 +616,13 @@ class ArchivalRecordEditForm(ContainerModelForm):
         # options, so remove the field matching the model.
         del self.fields['references']
         if editor_role != EditorProfile.ADMIN:
-            for field in self.private_fields:
+            for field in self.private_fields[EditorProfile.ADMIN]:
+                try:
+                    del self.fields[field]
+                except KeyError:
+                    pass
+        if editor_role != EditorProfile.MODERATOR:
+            for field in self.private_fields[EditorProfile.MODERATOR]:
                 try:
                     del self.fields[field]
                 except KeyError:
