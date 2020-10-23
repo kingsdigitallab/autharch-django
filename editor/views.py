@@ -613,7 +613,7 @@ def entity_edit(request, entity_id):
                      entity.items_as_relations.count() +
                      entity.items_created.count() +
                      entity.organisation_subject_for_records.count() +
-                     entity.person_subject_for_records.count() + 
+                     entity.person_subject_for_records.count() +
                      len(relations))
     duplicates_count = 0
     duplicates = get_duplicates(entity)
@@ -670,7 +670,7 @@ def entity_related(request, entity_id):
                      entity.items_as_relations.count() +
                      entity.items_created.count() +
                      entity.organisation_subject_for_records.count() +
-                     entity.person_subject_for_records.count() + 
+                     entity.person_subject_for_records.count() +
                      len(relations))
     context = {
         'relations': relations,
@@ -844,7 +844,7 @@ def record_edit(request, record_id):
         writers_count = 0
     related_count = (addressees_count + writers_count +
                      record.organisations_as_subjects.count() +
-                     record.persons_as_subjects.count() + 
+                     record.persons_as_subjects.count() +
                      record.referenced_related_materials.count())
     context = {
         'current_section': current_section,
@@ -943,7 +943,7 @@ def record_related(request, record_id):
         writers_count = 0
     related_count = (addressees_count + writers_count +
                      record.organisations_as_subjects.count() +
-                     record.persons_as_subjects.count() + 
+                     record.persons_as_subjects.count() +
                      record.referenced_related_materials.count())
     context = {
         'related_materials': record.referenced_related_materials.all(),
@@ -1034,10 +1034,18 @@ def revert(request):
     revision_id = request.POST.get('revision_id')
     revision = get_object_or_404(Revision, pk=revision_id)
     revision.revert(delete=True)
-    for version in revision.version_set.all():
-        model = version.content_type.model_class()
-        obj = model.objects.get(pk=version.object_id)
-        view_post_save.send(sender=model, instance=obj)
+    with reversion.create_revision():
+        for version in revision.version_set.all():
+            model = version.content_type.model_class()
+            obj = model.objects.get(pk=version.object_id)
+            obj.save()
+            view_post_save.send(sender=model, instance=obj)
+        reversion.set_comment('Restored to version {}'.format(
+            revision_id))
+        event_type = EditingEventType.objects.get(title='revised')
+        editor_type = CWEditorType.objects.get(title='human')
+        reversion.add_meta(RevisionMetadata, editing_event_type=event_type,
+                           collaborative_workspace_editor_type=editor_type)
     return redirect(request.POST.get('redirect_url')
                     + '?reverted={}'.format(revision_id))
 
