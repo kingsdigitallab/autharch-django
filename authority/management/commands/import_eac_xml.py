@@ -96,7 +96,9 @@ TERM_MAP = {
 # database.
 TITLE_MAP = {
     'ordinalNumber': 'ordinal number',
+    'pretitle': 'pre-title',
     'properTitle': 'proper title',
+    'Transgender': 'Transgender people',
 }
 
 # Order that name parts should be joined together to form a display
