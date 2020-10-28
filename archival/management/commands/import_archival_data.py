@@ -382,6 +382,8 @@ class Command(BaseCommand):
             for lang in languages:
                 if lang == 'Greek':
                     lang = 'Greek, Modern (1453-)'
+                elif lang == 'Dutch':
+                    lang = 'Dutch; Flemish'
                 language = search_term_or_none('iso639-2', lang, exact=True)
                 if language is None:
                     self.logger.warning(LANGUAGE_NOT_FOUND_MSG.format(
