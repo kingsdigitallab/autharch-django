@@ -560,6 +560,11 @@ p {
     font-weight: 700;
 }
 
+.highlight-grey {
+    font-weight: 700;
+    color: $dark-grey;
+}
+
 li {
     font-size: 1em;
     line-height: 1.4em;
@@ -689,17 +694,6 @@ main {
     &:not(.no-sidebar) {
         margin-left: 210px;
     } 
-
-    // SECONDARY PAGES (accessibility, documentation)
-    &.secondary-page {
-        h2 {
-            margin: 2em 0em 1em 0em;
-            font-weight: 500;
-        }
-        h3 {
-            font-weight: 500;
-        }
-    }
 
     // DASHBOARD
     #home {
@@ -1872,11 +1866,11 @@ main {
     }
 
     // DUPLICATES PAGES
-    &#duplicates-list-page {
+    &#duplicates-list-page, &.guidance-page {
         .page-header {
             margin-bottom: 1em;
         }
-        .duplicate-group {
+        .duplicate-group, .guidance-group {
             border: 1px solid $light-grey;
             overflow: hidden;
             &:nth-of-type(even) {
@@ -2069,6 +2063,80 @@ main {
             -o-transition: opacity .3s;
             transition: opacity .3s;
             visibility: hidden;
+        }
+    }
+
+    // SECONDARY PAGES (accessibility, documentation)
+    &.secondary-page {
+        h2 {
+            margin: 2em 0em 1em 0em;
+            font-weight: 500;
+        }
+        h3 {
+            font-weight: 500;
+        }
+    }
+
+    &.guidance-page {
+        .guidance-group {
+            .fieldset-header {
+                padding: 0.5em 0;
+                h2 {
+                    font-size: 1.15em;
+                    .details {
+                        color: $dark-grey;
+                        font-size: 0.85em;
+                    }
+                }
+            }
+            .fieldset-body {
+                h3 {
+                    font-weight: 500;
+                    color: $primary;
+                    margin: 0;
+                }
+                ul, ol {
+                    &.details {
+                        margin-top: 0em !important;
+                        font-size: 0.95em;
+                        li {
+                            margin: 0.5em 0em !important;
+                        }
+                    }
+                }
+                p {
+                    margin: 0em;
+                    &.details {
+                        font-size: 0.95em;
+                        margin-top: 0em !important;
+                        margin-bottom: 0em !important;
+                    }
+                }
+                .element {
+                    color: $primary;
+                    font-weight: 500;
+                }
+                &.expand {
+                    h3 {
+                        font-size: 1.2em;
+                        margin: 1em 0 1.5em 0;
+                        &:not(:first-of-type) {
+                            margin-top: 2.5em;
+                        }
+                    }
+                    p {
+                        margin: 1em 0 0.5em 0;
+                    }
+                    ul > li {
+                        margin-top: 0.5em;
+                        margin-bottom: 1em;
+                    }
+                    ol > li {
+                        margin-top: 0.5em;
+                        margin-bottom: 2em;
+                    }
+                }
+            }
         }
     }
 
