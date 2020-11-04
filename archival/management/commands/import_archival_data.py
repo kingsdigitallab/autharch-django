@@ -322,6 +322,8 @@ class Command(BaseCommand):
                                              'Description')
         obj = self._set_field_from_cell_data(obj, 'notes', row, 'Notes')
         obj = self._set_field_from_cell_data(obj, 'extent', row, 'Extent')
+        obj = self._set_field_from_cell_data(obj, 'provenance', row,
+                                             'Custodial History')
 
         # Use a default publication status if none is supplied.
         publication_status = DEFAULT_PUBLICATION_STATUS
