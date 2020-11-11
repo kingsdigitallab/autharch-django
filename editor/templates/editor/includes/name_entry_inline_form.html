@@ -27,7 +27,7 @@
     {% render_form_delete_widget form.DELETE %}
     <div class="two-column-table">
       <div class="formset">
-        {{ form.is_royal_name }} {{ form.is_royal_name.label }}
+        <label>{{ form.is_royal_name }} {{ form.is_royal_name.label }}</label>
         {% if is_corporate_body %}
           <div class="namePartField-required">A corporate body must contain a "corporate body name" part type.</div>
         {% elif form.is_royal_name.value %}

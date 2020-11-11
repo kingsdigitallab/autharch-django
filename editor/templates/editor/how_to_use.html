@@ -1,12 +1,268 @@
 {% extends "./base.html" %}
 
 {% block main %}
-<main class="secondary-page">
+<main class="guidance-page">
     {% block page_header %}
     <h1>How to use Collaborative Workspace (CWS)</h1>
     {% endblock page_header %}
     {% block content %}
-    <p></p>
+    <div class="guidance-group">
+        <div class="fieldset-header" role="button" onclick="toggleTab()">
+          <span class="toggle-tab-button" aria-expanded="false"></span>
+          <h2>Searching for an archival record/person/corporate body</h2>
+        </div>
+        <div class="fieldset-body">
+            <h3>From Dashboard page</h3>
+            <ol>
+                <li>
+                    <p><span class="highlight">Searching all records</span> - Type the archival record name or person/corporate body name into the <span class="element">Search catalogue</span> field at the top of the page and press <span class="element">Enter</span>.</p>
+                    <p class="details">You can also search by other identifiers:</p>
+                    <ul class="details">
+                        <li><span class="highlight">For archival records</span>: RA reference, writer name, addressee name, date of writing, or content from the record description;</li>
+                        <li><span class="highlight">For people and corporate bodies</span>: a person’s or corporate body’s display name, e.g/, "George III, 1738-1820, King of Great Britain and Ireland"; their birth and death dates or existence dates; a person’s gender; or content from their biography/history abstract.</li>
+                    </ul>
+                </li>
+                <li><span class="highlight">Searching recently modified records or records that are ready for approval/publication</span> - Type record name or person/corporate body name into the Filter by title field at the top of the Recently modified by me (or Records for approval/publication) table and press Enter.
+                </li>
+            </ol>
+        
+            <h3>From Archival records page</h3>
+                <ol>
+                    <li>
+                        <p>Type the record name into the <span class="element">Search all archival records</span> field at the top of the page and press <span class="element">Enter</span>.</p>
+                        <p class="details">You can also search by the following identifiers: RA reference, writer name, addressee name, date of writing, or content from the record description.</p>
+                        <p>Alternatively, type the record name into the <span class="element">Title</span> field at the top of the table and press <span class="element">Enter</span>.</p>
+                    </li>
+                    <li>
+                        <p><span class="highlight">On the search results page</span>, you can filter your results even more by searching within the table:</p>
+                        <ul class="details">
+                            <li>By archived paper <span class="highlight">Writer</span> by typing the writer name in the Writer field;</li>
+                            <li>By record <span class="highlight">Level</span> by selecting the record level from the drop down menu;</li>
+                            <li>By <span class="highlight">Publication status</span> by selecting the publication by drop down menu;</li>
+                            <li>By the date the record was last <span class="highlight">Updated</span> by typing an appropriate date.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p><span class="highlight">Filtering</span> - There are further filter options that can be accessed at the top right of the page by clicking on the <span class="element">Filter</span> button. Options included are:</p>
+                        <ul class="details">
+                            <li><span class="highlight">Creation year</span> - either slide the two buttons along the slider or type in a date range in the two boxes below and click on the Filter button to limit search results to a creation year date range;</li>
+                            <li><span class="highlight">Document level</span> - tick the box/es to filter by archival record level, i.e., Collection, series, sub-series, file, sub-file, item;</li>
+                            <li><span class="highlight">Record type</span> - tick the box/es to filter by record type/s, e.g. Diaries, Correspondence, etc.<br>As there may be a number of record types, available to choose, you can expand the currently viewable options by clicking on the nearby underlined <span class="element">Show all</span> link;</li>
+                            <li><span class="highlight">Writer</span> - type in the writer’s name by which you want to filter and/or tick on the box/es alongside the names listed.<br>As there may be a number of writers available to choose, you can expand the currently viewable options by clicking on the nearby underlined <span class="element">Show all</span> link;</li>
+                            <li><span class="highlight">Addressee</span> - type in the addressee’s name by which you want to filter and/or tick on the box/es alongside the names listed.<br>As there may be a number of addressees available to choose, you can expand the currently viewable options by clicking on the nearby underlined <span class="element">Show all</span> link;</li>
+                            <li><span class="highlight">Language</span> - tick the box/es to filter by language.</li>
+                        </ul>
+                        <p>To clear applied filters, click on those fields already selected to filter by in the <span class="element">Filter</span> menu or under the <span class="element">Selected filters</span> heading on the Archival records page. Or click on the underlined <span class="element">Clear all filters</span> link under the same heading.</p>
+                    </li>
+            </ol>
+            <h3>From People and corporate bodies page</h3>
+            <ol>
+                <li>
+                    <p>Type the person or corporate body name into the Search all people and corporate bodies field at the top of the page and press enter.</p>
+                    <p class="details">You can also search by the following identifiers: a person’s or corporate body’s display name, e.g., George III, 1738-1820, King of Great Britain and Ireland; their birth and death dates or existence dates; a person’s gender; or content from their biography/history abstract.</p>
+                    <p>Alternatively, type the person or corporate body name into the name field at the top of the table and press enter.</p>
+                </li>
+                <li>
+                    <p><span class="highlight">On the search results page</span>, you can filter your results even more by searching within the table:</p>
+                    <ul class="details">
+                        <li>By <span class="highlight">Type</span> by selecting the record type from the drop down menu;</li>
+                        <li>By <span class="highlight">Publication status</span> by selecting the publication by drop down menu;</li>
+                        <li>By the date the record was last <span class="highlight">Updated</span> by typing an appropriate date.</li>
+                    </ul>
+                </li>
+                <li>
+                    <p><span class="highlight">Filtering</span> - There are further filter options that can be accessed at the top right of the page by clicking on the <span class="element">Filter</span> button. Options included are:</p>
+                    <ul class="details">
+                        <li><span class="highlight">Existence dates</span> - either slide the two buttons along the slider or type in a date range in the two boxes below and click on the Filter button to limit search results to existence date range</li>
+                        <li><span class="highlight">Entity type</span> - tick either the person or corporateBody box to filter records by entity type</li>
+                        <li><span class="highlight">Related people and corporate bodies</span> - type in a related person’s or corporate body’s name by which you want to filter and/or tick on the box/es alongside the names listed.<br>As there may be a number of related people and corporate bodies available to choose, you can expand the currently viewable options by clicking on the nearby underlined <span class="element">Show all</span> link.</li>
+                    </ul>
+                    <p>To clear applied filters, click on those fields already selected to filter by in the <span class="element">Filter</span> menu or under the <span class="element">Selected filters</span> heading on the People and corporate bodies page. Or click on the underlined <span class="element">Clear all filters</span> link under the same heading.</p>
+                </li>
+                
+            </ol>
+        </div>
+    </div>
+    <div class="guidance-group">
+        <div class="fieldset-header" role="button" onclick="toggleTab()">
+            <span class="toggle-tab-button" aria-expanded="false"></span>
+            <h2>Editing an existing archival record/person/corporate body</h2>
+        </div>
+        <div class="fieldset-body">
+            <h3>Editing an existing records/entity page</h3>
+            <p>Fields within the Collaborative Workspace may be either free text, rich text, controlled or drop-down. They may allow for multiple entries, such as subjects, or be restrictive, such as allowing only a singular date.</p>
+            <p class="details highlight">NB:</p>
+            <ul class="details">
+                <li>Not all fields are available to edit; these fields are mostly administrative;</li>
+                <li>Not all fields are available to edit at all levels, e.g., Moderators may edit fields that Editors may not;</li>
+                <li>Not all fields are available at all archival levels, i.e., some fields that are used in collection level records are not used in records further down the hierarchy.</li>
+            </ul>
+            <h3>Editing an existing records page</h3>
+            <ol>
+                <li><span class="highlight">Editing a:</span>
+                    <ul>
+                        <li>
+                            <p><span class="highlight">Free text field</span> - information can be added directly into the field, you may use punctuation, e.g., <span class="element">Location of originals</span>;</p>
+                            <p class="details">Restrictive fields like <span class="element">URL</span> expect the inclusion of a usable URL beginning http:// or https://</p></li>
+                        <li><span class="highlight">Rich text field</span> - information can be added directly into the field and there is formatting functionality available, e.g., <span class="element">Known previous publications</span>;</li>
+                        <li>
+                            <p><span class="highlight">Controlled vocabulary/thesaurus/name authority file field</span> - begin typing the information you wish to include in the field and you will be presented with a list of terms that match what you have typed. Choose from what is offered to include that term in the field, e.g., <span class="element">Place of writing</span>, <span class="element">Subjects</span>;</p>
+                            <p>If the place, term, person or corporate body you are searching for are not available, you may do the following:</p>
+                            <ul class="details">
+                                <li><span class="highlight">Place</span> - if the specific place you are looking for is not available consider using a less specific geographic name.<br>
+                                E.g. Use St. James’s for Carlton House and include a reference to Carlton House in the record Description.</li>
+                                <li><span class="highlight">Subject</span> - if the specific term you are looking for is not available consider using one of the other terms suggested or explore UKAT (United Kingdom Archival Thesaurus) for other terms to use.<br>
+                                E.g. American Revolution is an alternative form of American War of Independence (1775-1783), the preferred term for this event which should be used. UKAT will suggest preferred terms if alternative terms are typed into the field.</li>
+                                <li><span class="highlight">People or corporate bodies fields</span>, such as <span class="element">Writer</span>, <span class="element">Address</span>, <span class="element">Person as subject</span>, or <span class="element">Corporate body as subject</span>, may only be populated with people or corporate bodies that have records already in the Collaborative Workspace.<br>If you are trying to add a person that does not yet have a record to a Persons as subjects field, you will have to create the person record first.</li>
+                            </ul>
+                            <p>If you have selected an incorrect place/subject/person or corporate body, you can delete your selection by clicking on the ╳ to the left of the selected term. You can also use the backspace key.</p>
+                        <li>
+                            <p><span class="highlight">Drop-down field</span> - click on the field itself and choose from the drop-down menu the most appropriate option to use.</p>
+                            <p class="details">These are not widely used in archival records and are often only available at Administrator permission level.</p>
+                        </li>
+                    </ul>
+                <li>
+                    <p><span class="highlight">Adding multiple entries per field</span> - there are some fields, usually controlled in some fashion, that allow for multiple entries per field, e.g., <span class="element">Record type</span>, <span class="element">Subject</span>, <span class="element">Persons as subjects</span>,:</p>
+                    <ol class="details">
+                        <li>Begin typing and then select your first entry, e.g., in <span class="element">Record type</span> you might add Correspondence;</li>
+                        <li>Begin typing and then select your second entry and so on, e.g., you might add <span class="element">Writings</span> to the above example for a letter that included an inserted poem.</li>
+                    </ol>
+                </li>
+                <li>
+                    <p><span class="highlight">Once you have completed your editing</span>, click on the green <span class="element">Save</span> button in the top right hand corner of the screen. A pop-up will appear over the record:</p>
+                    <ol class="details">
+                        <li>Depending on your permission level you may have the option to choose a publication status. If you are a Moderator or Admin, choose <span class="element">inProcess</span> or <span class="element">Published</span> from the drop-down depending on whether you have completed your editing;</li>
+                        <li>All editing permission level users are required to include <span class="element">Comments</span> about their editing. Depending on how much editing you have undertaken you ay choose to be more or less detailed in your editing description, e.g., "Added record type and start date".</li>
+                        <li>Click on the green <span class="element">Save</span> button at the bottom right of the pop-up</li>
+                        <li>
+                            <p>Note at the top of the record there should be a message highlighted in green stating: “Your edits were successfully saved.”</p>
+                            <p class="details">If they have not been saved successfully, you will see a message highlighted in red saying so with reasons why the save was unsuccessful.</p>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="guidance-group">
+        <div class="fieldset-header" role="button" onclick="toggleTab()">
+            <span class="toggle-tab-button" aria-expanded="false"></span>
+            <h2>Creating a new person or corporate body</h2>
+        </div>
+        <div class="fieldset-body">
+            <p>Some entity records (people and corporate bodies) are automatically created at ingest for those who are writers or addressees of the Georgian Papers. Other entity records would have been added manually by users finding mentions of people and corporate bodies in the archival record or the transcription of the archival record.</p>
+            <p class="highlight">To create a new entity record for a person or corporate body in the CWS, first check that the entity does not already exist in the database.</p>
+            <p>Then:</p>
+            <ol class="details">
+                <li>Click on <span class="element">People and corporate bodies</span> link in the left hand menu (situated below the <span class="element">Dashboard</span> link);</li>
+                <li>Click on the blue <span class="element">+ Create</span> button at the top right hand corner;</li>
+                <li>Choose from person or corporateBody and click on the blue <span class="element">Create</span> button.</li>
+            </ol>
+            <p>Entity records are made up of 3 main sections: identities, sources and entity records digital rights management.</p>
+            <ul>
+                <li><span class="highlight">Identities</span> - </li>
+                <li>
+                    <p><span class="highlight">Sources</span> - this section contains a list of sources used in the creation of the entity records which may include website, books, journal articles, databases and so on.</p>
+                    <p><span class="highlight">Source field</span> - each record should at least have one source from the following:</p>
+                    <ul class="details">
+                        <li>VIAF, <a href="http://viaf.org/" class="dotted-underline">http://viaf.org/</a> for preference, with the understanding that VIAF is not exhaustive</li>
+                        <li>Library of Congress Name Authority File, <a href="http://id.loc.gov/authorities/names.html" class="dotted-underline">http://id.loc.gov/authorities/names.html</a></li>
+                        <li>Wikidata, <a href="https://www.wikidata.org/" class="dotted-underline">https://www.wikidata.org/</a></li>
+                        <li>For geographical references (place of birth, place of death and so on) use GeoNames, <a href="https://www.geonames.org/" class="dotted-underline">https://www.geonames.org/</a> for preference with the understanding that GeoNames is not exhaustive or Wikidata, <a href="https://www.wikidata.org/" class="dotted-underline">https://www.wikidata.org/</a> 
+                        <li>Such sources can be referenced using the source name and ID, e.g. VIAF ID: 49264990 (Personal)</li>
+                    </ul>
+                    <li><span class="highlight">URL</span> - include source URL if available. Make sure the URL links directly to the source page if used and not to the general website URL.</li>
+                    <li>
+                        <p><span class="highlight">Notes</span> - include any additional notes as needed,e.g., "This source gives a date of birth that is not in agreement with the other sources used but matches on all other points".</p>
+                        <p class="details">As multiple sources will be used in creation of entity records (including other name authority files like VIAF and Wikidata, Geonames and so on) additional sources can be added by clicking on the blue + Add source button;</p>
+                    </li>
+                </li>
+                <li><span class="highlight">Entity records digital rights management</span> - this section includes the details around the rights of reuse of these records. These fields may only be edited by Administrators if absolutely required for specific records. Bulk changes to digital rights management for entity records should be undertaken at database level.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="guidance-group">
+        <div class="fieldset-header" role="button" onclick="toggleTab()">
+            <span class="toggle-tab-button" aria-expanded="false"></span>
+            <h2>Managing records for publication <span class="details">(only available for Moderators and Administrators)</span></h2>
+        </div>
+        <div class="fieldset-body">
+            <p>Records are managed, that is have their status changed, while editing if the user is at Moderator or Administrator level or from the <span class="element">Records for approval/publication</span> table on the <span class="element">Dashboard</span> page.</p>
+            <h3>Managing a record when editing</h3>
+            <p>Once you have completed your record editing, click on the green <span class="element">Save</span> button in the top right hand corner of the screen. A pop-up will appear over the record:</p>
+            <ol class="details">
+                <li>Choose inProcess or Published from the drop-down depending on whether you have completed your editing;</li>
+                <li>All editing permission level users are required to include <span class="element">Comments</span> about their editing. Depending on how much editing you have undertaken you may choose to be more or less detailed in your editing description, e.g., "Added record type and start date";</li>
+                <li>Click on the green <span class="element">Save</span> button at the bottom right of the pop-up;</li>
+                <li>
+                    <p>Note at the top of the record there should be a message highlighted in green stating: “Your edits were successfully saved”;</p>
+                    <p class="details">If they have not been saved successfully, you will see a message highlighted in red saying so with reasons why the save was unsuccessful.</p>
+                </li>
+            </ol>
+            <h3>Managing a record from the dashboard</h3>
+            <p>The <span class="element">Records for approval/publication</span> table collates all records that have been edited and had their publication status set to inProcess; this may have occurred automatically (for Editors) or manually (for Moderators and Administrators).</p>
+            <ol>
+                <li>
+                    <p>The table may be filtered by Title, Type/level, Publication status, and/or Updated.</p>
+                    <ul class="details">
+                        <li><span class="highlight">Title</span> - archival record title or person or corporate body name;</li>
+                        <li><span class="highlight">Type/level</span> - type of entity (person or corporate body) or archival level of archival record;</li>
+                        <li><span class="highlight">Publication status</span> - indicates whether the latest version is available on the frontend of the CWS;</li>
+                        <li><span class="highlight">Updated</span> - date record last updated.</li>
+                    </ul>
+                </li>
+                <li>
+                    <p><span class="highlight">To update the Publication status of a record</span>, navigate to the record via the Records for approval/publication table by clicking on the record title:</p>
+                    <ol>
+                        <li>
+                            <p>Review the record:</p>
+                            <ol class="details">
+                                <li>Click on the <span class="element">History</span> link at the very top of the record page (nearby to the <span class="element">Publication status</span> and <span class="element">Updated</span> statements at the top left of the editing frame);</li>
+                                <li>Note previous Logged comment(s) that were saved since the record last had “published” Publication status;</li>
+                                <li>Click on the <span class="element">Back to…</span> link at the top left corner;</li>
+                                <li>
+                                    <p>Review the record using the Logged comment(s) as a guide for what information needs to be checked since the record was last reviewed and published;</p>
+                                    <p>It would be good practice to review records in full:</p>
+                                    <ul class="details">
+                                        <li>For new users to ensure they fully understand to edit records and create person or corporate body records;</li>
+                                        <li>As spot checks to ensure consistency in editing across user base.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            <p>If record edits are suitable for publication, click on the green <span class="element">Save</span> button in the top right hand corner of the screen. A pop-up will appear over the record:</p>
+                            <ol class="details">
+                                <li>Choose <span class="element">Published</span> from the drop-down;</li>
+                                <li>All editing permission level users are required to include <span class="element">Comments</span> about their editing. Depending on how much editing you have undertaken you may choose to be more or less detailed in your editing description, e.g., "Added record type and start date";</li>
+                                <li>Click on the green <span class="element">Save</span> button at the bottom right of the pop-up;</li>
+                                <li>
+                                    <p>Note at the top of the record there should be a message highlighted in green stating: “Your edits were successfully saved”.</p>
+                                    <p>If they have not been saved successfully, you will see a message highlighted in red saying so with reasons why the save was unsuccessful.</p>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            <p>If record edits are unsuitable for retention either:</p>
+                            <ul class="details">
+                                <li>Correct errors noted in record until record is suitable for publication and go to the "Managing a record from the dashboard" section above, or</li>
+                                <li>Restore a previous version of the record that does not include errors:
+                                    <ol class="details">
+                                        <li>Click on the <span class="element">History</span> link at the very top of the record page (nearby to the <span class="element">Publication status</span> and <span class="element">Updated</span> statements at the top left of the editing frame);</li>
+                                        <li>
+                                            <p>Note previous Logged comment(s) and make a decision as to which previous version of the record to restore;</p>
+                                            <p>Depending on when and by whom the last edits were made, this may be straightforward if there have been few new edits since the last previous “published” version;</p>
+                                        </li>
+                                        <li>Click on the <span class="element">Restore this version</span> link to the right of the preferred record version to be restore.</li>
+                                    </ol>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
     {% endblock content%}
 </main>
 {% endblock main %}

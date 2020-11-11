@@ -7,6 +7,12 @@ $(document).ready(function() {
         return (this.nodeType === Node.TEXT_NODE);
       });
     };
+
+    $('.management_form').find('input[id$="MAX_NUM_FORMS"]').each(function() {
+        if ($(this).closest('.management_form').next('.fieldsets').children('fieldset').length >= $(this).val()) {
+            $(this).closest('.management_form').siblings('.linked-button').hide();
+        }
+    });
   
     initAutocompleteWidgets();
   
@@ -248,7 +254,7 @@ $(document).ready(function() {
     let maxNumForms = Number(maxNumControl.attr('value'));
     let totalControl = managementFormContainer.children('input[name$="TOTAL_FORMS"]');
     let newFormPrefixNumber = Number(totalControl.attr('value'));
-    if ((newFormPrefixNumber+1) >= maxNumControl.attr('value')) {
+    if ((newFormPrefixNumber+1) >= Number(maxNumControl.attr('value'))) {
       $(jContext).parent('label').hide();
     }
     // Clone the formType form and add it as the last child of the
@@ -480,5 +486,9 @@ function toggleHelpText(help_text) {
 function deleteField(el, toDelete) {
     event.preventDefault();
     $(el).closest(toDelete).addClass('none');
-    $(el).parents('.formset').first().children('label').show();
+    $(el).parents('.formset').first().children('.management_form').first().find('input[id$="MAX_NUM_FORMS"]').each(function() {
+        if ($(this).closest('.management_form').next('.fieldsets').children('fieldset').not('.none').length < $(this).val()) {
+            $(this).closest('.management_form').siblings('.linked-button').show();
+        }
+    });
 }
