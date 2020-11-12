@@ -456,6 +456,14 @@ class EntityImport:
     def _import_event(self, description, chron_item):
         text = chron_item.xpath('e:event', namespaces=NS_MAP)[0].text
         event = Event(description=description, event=text)
+        place_name = self._get_text(chron_item, 'e:placeEntry/text()')
+        if place_name:
+            geo_place = GeoPlace.get_or_create_from_geonames(place_name)
+            if geo_place is None:
+                self.logger.warn(PLACE_NOT_FOUND_ERROR.format(self._xml_path,
+                                                              place_name))
+            else:
+                event.place = geo_place
         for date in chron_item.xpath('e:date', namespaces=NS_MAP):
             self._import_date(event, date)
         for date_range in chron_item.xpath('e:dateRange', namespaces=NS_MAP):

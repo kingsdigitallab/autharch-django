@@ -26,8 +26,9 @@ from script_codes.models import Script
 
 from archival.models import Project
 from authority.models import (
-    BiographyHistory, Control, Description, Entity, Identity, LanguageScript,
-    LocalDescription, NameEntry, NamePart, Place, Relation, Source
+    BiographyHistory, Control, Description, Entity, Event, Identity,
+    LanguageScript, LocalDescription, NameEntry, NamePart, Place, Relation,
+    Source
 )
 from jargon.models import (
     EntityRelationType, EntityType, Gender, MaintenanceStatus, NamePartType,
@@ -284,6 +285,26 @@ class EntityImport:
             description=description, abstract=abstract, sources=sources,
             content=content, copyright=copyright)
         biog_hist.save()
+        for chronitem in biog_hist_el.xpath(
+                'e:chronList/e:chronItem', namespaces=NS_MAP):
+            self._import_chronitem(description, chronitem)
+
+    def _import_chronitem(self, description, chronitem_el):
+        event = Event(description=description)
+        event.event = self._get_text(chronitem_el, 'e:event/text()')
+        place_name = self._get_text(chronitem_el, 'e:placeEntry/text()')
+        if place_name:
+            geo_place = GeoPlace.get_or_create_from_geonames(place_name)
+            if geo_place is None:
+                self.logger.warn(PLACE_NOT_FOUND_ERROR.format(self._xml_path,
+                                                              place_name))
+            else:
+                event.place = geo_place
+        for date in chronitem_el.xpath('e:date', namespaces=NS_MAP):
+            self._import_date(event, date)
+        for date_range in chronitem_el.xpath('e:dateRange', namespaces=NS_MAP):
+            self._import_date_range(event, date_range)
+        event.save()
 
     def _import_control(self, control, tree):
         control.maintenance_status = self._get_jargon_term(
