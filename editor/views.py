@@ -971,11 +971,11 @@ def accessibility_statement(request):
 
 
 @user_passes_test(is_user_editor_plus)
-def how_to_use(request):
+def help(request):
     context = {
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
-    return render(request, 'editor/how_to_use.html', context)
+    return render(request, 'editor/help.html', context)
 
 
 @user_passes_test(is_user_moderator_plus)
