@@ -67,6 +67,14 @@
           </a>
         </div>
         {% endif %}
+        {% if show_delete %}
+        <div class="link{% if current_section == 'groups' %} active{% endif %}">
+          <a href="{% url 'editor:groups-list' %}">
+            <i class="far fa-layer-group"></i>
+            <h4>Object groups</h4>
+          </a>
+        </div>
+        {% endif %}
       </nav>
       <div id="menu-account">
         <div class="link{% if current_section == 'account' %} active{% endif %}">

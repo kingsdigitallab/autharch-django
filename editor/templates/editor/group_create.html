@@ -1,0 +1,144 @@
+{% extends "./base.html" %}
+{% load editor_form_tags %}
+
+{% block extra_head %}
+{{ form_media }}
+{% endblock extra_head %}
+
+{% block main %}
+<main id="group-edit">
+  {% block page_header %}
+  <div class="header-fixed">
+    <div class="status-bar">
+    </div>
+    <div class="action-buttons">
+      <input type="submit" value="Save" form="record-form" class="save"/>
+    </div>
+  </div>
+  {% endblock page_header %}
+
+  {% block content %}
+  <div class="form-header">
+    <div class="breadcrumbs">
+      <ul>
+        <li><a href="{% url 'editor:home' %}">Home</a></li>
+        <li>{% if current_section == 'groups' %}<a href="{% url 'editor:groups-list' %}" class="dotted-underline">Object groups</a>{% else %}<a href="{% url 'editor:deleted-list' %}" class="dotted-underline">Deleted</a>{% endif %}</li>
+      </ul>
+    </div>
+
+    {% if form_errors %}
+    <div class="error-notification">
+      <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+      <h4>Errors</h4>
+      {% for error in form_errors.non_field %}
+      <p>{{ error }}</p>
+      {% endfor %}
+      {% if form_errors.field %}
+      <p>There are field-specific errors; please check the form and correct.</p>
+      {% endif %}
+      <h4>
+    </div>
+    {% endif %}
+
+    {% if saved %}
+    <div class="success-notification">
+      <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+      <h4>Your edits were successfully saved.</h4>
+    </div>
+    {% elif reverted %}
+    <div class="success-notification">
+      <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
+      <h4>The version was sucessfully restored, (version id: {{ reverted }}).</h4>
+    </div>
+    {% endif %}
+
+    <h1>Create a new object group</h1>
+
+  </div>
+  <form action="{% url 'editor:group-edit' group_id=0 %}" id="record-form" method="post">
+    {% csrf_token %}
+    <div class="form-section formset">
+      <fieldset>
+          <div class="fieldset-body expand">
+              <div class="two-column-table">
+                <div>
+                    <label>
+                        <span class="required">Title</span><br>
+                        <input type="text" name="title" id="id_title"/>
+                    </label>
+                    <label>
+                        <span class="required">URL slug</span><br>
+                        <input type="text" name="url_slug" id="id_url_slug" placeholder="e.g., object-group-title" onfocus="this.placeholder=''" onblur="this.placeholder='e.g., object-group-title'"/>
+                    </label>
+                </div>
+                <div>
+                </div>
+                <label>
+                    <span>Introduction</span><br>
+                    <textarea name="introduction" rows="4" id="id_introduction" cols="40"></textarea>
+                </label>
+              </div>
+              <label>
+                  <span>Description</span>
+                  <textarea name="description" rows="8" id="id_description" aria-label="richtext field" cols="40" class="richtext"></textarea>
+              </label>
+              <div class="two-column-table">
+                  <div>
+                    <!-- TODO for OL: add tooltips -->
+                    <label>
+                        <span>Related collections</span>
+                        <br>
+                        <select class="select-with-search" name="related_collections" id="id_related_collections" multiple>
+                        </select>
+                    </label>
+                     <!-- the list should be based on the selected collections -->
+                      <!-- TODO for OL: add a tooltip to explain that how the field works -->
+                     <label>
+                        <span>Featured records</span>
+                        <br>
+                        <select class="select-with-search" name="featured_records" id="id_featured_records" multiple></select>
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                        <span>Related people/corporate bodies</span>
+                        <br>
+                        <select class="select-with-search" name="related_entities" id="id_related_entities" multiple></select>
+                    </label>
+                    <label>
+                        <span>Featured people/corporate bodies</span>
+                        <br>
+                        <select class="select-with-search" name="featured_entities" id="_id_featured_entities" multiple></select>
+                    </label>
+                  </div>
+              </div>
+          </div>
+      </fieldset>
+    </div>
+    <div class="modal" id="log-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Log comments</h2>
+          <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
+        </div>
+        <div class="modal-body">
+          <div class="two-column-table">
+            <div>
+              {% render_field form.formsets.control.forms.0.publication_status %}
+            </div>
+          </div>
+          {% render_field log_form.comment %}
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Save" class="save modal-submit" />
+        </div>
+      </div>
+    </div>
+  </form>
+  {% include "./includes/delete_modal.html" with delete_url=delete_url %}
+  <div id="empty_forms" style="display: none;">
+
+  </div>
+  {% endblock content %}
+</main>
+{% endblock main %}

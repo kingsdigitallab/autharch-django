@@ -978,6 +978,42 @@ def help(request):
     return render(request, 'editor/help.html', context)
 
 
+@user_passes_test(is_user_editor_plus)
+def groups_list(request):
+    context = {
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/groups_list.html', context)
+
+@user_passes_test(is_user_editor_plus)
+def group_history(request, group_id):
+    context = {
+        'current_section': 'groups',
+        'edit_url': reverse('editor:group-edit',
+                            kwargs={'group_id': group_id}),
+        'item': group,
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
+    }
+    return render(request, 'editor/history.html', context)
+
+@user_passes_test(is_user_editor_plus)
+@create_revision()
+def group_create(request):
+    context = {
+        'current_section': 'groups',
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/group_create.html', context)
+
+@user_passes_test(is_user_editor_plus)
+@create_revision()
+def group_edit(request, group_id):
+    context = {
+        'current_section': 'groups',
+        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+    }
+    return render(request, 'editor/group_edit.html', context)
+
 @user_passes_test(is_user_moderator_plus)
 def duplicates_list(request):
     context = {

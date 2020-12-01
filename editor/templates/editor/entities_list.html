@@ -65,25 +65,25 @@
       <h2>Search results for "{{query}}" <a href="." class="dotted-underline clear-filters active mgn-left">Clear search</a></h2>
     {% endif %}
     <table id="records-table" class="tablesorter">
-        <thead>
-          <tr>
-            <th class="description" scope="col" data-label="Title" data-placeholder="Filter by name">Name</th>
-            <th class="filter-select" scope="col" data-label="Type" data-placeholder="Select">Type</th>
-            <th class="filter-select" scope="col" data-label="Publication status" data-placeholder="Select">Publication status</th>
-            <th class="sorter-sugar" scope="col" data-label="Updated" data-placeholder="Filter by date">Updated</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for result in object_list %}
-          <tr>
-            <td class="description entity"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
-            <td>{{ result.entity_type }}</td>
-            <td>{{ result.publication_status }}</td>
-            <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <thead>
+        <tr>
+          <th class="description" scope="col" data-label="Name" data-placeholder="Filter by name">Name</th>
+          <th class="filter-select" scope="col" data-label="Type" data-placeholder="Select">Type</th>
+          <th class="filter-select" scope="col" data-label="Publication status" data-placeholder="Select">Publication status</th>
+          <th class="sorter-sugar" scope="col" data-label="Updated" data-placeholder="Filter by date">Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in object_list %}
+        <tr>
+          <td class="description entity"><a href="{% url 'editor:entity-edit' entity_id=result.pk %}">{{ result.description|truncatewords:30 }}</a></td>
+          <td>{{ result.entity_type }}</td>
+          <td>{{ result.publication_status }}</td>
+          <td data-text="{{ result.modified.isoformat }}">{{ result.modified }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
     <div id="records-table_pager_info" class="pager">
       {% if object_list.count > 10 %}

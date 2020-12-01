@@ -307,13 +307,14 @@
         </div>
         <div class="fieldset-body expand">
           
-            IMPORTANT: this select dropdown should appear only for collections, 
-            all other records within the collection (i.e., series, files and items) should be linked to the timeline group automatically.
-            if the collection is linked to a timeline group, please display In timeline group: [GROUP NAME] and add the featured checkbox;
-            If the collection is not linked to a timeline group, please add a message 
-            'In order to display this record as featured on the GPP frontend website, please link its collection to the timeline group.'
-            And please add a link to the collection the record belongs to.
+          IMPORTANT: this select dropdown should appear only for collections, 
+          all other records within the collection (i.e., series, files and items) should be linked to the timeline group automatically.
+          if the parent collection is linked to a timeline group, please display In timeline group: [GROUP NAME] and add the featured checkbox;
+          If the parent collection is not linked to a timeline group, please add a message 
+          'In order to display this record as featured on the GPP frontend website, please link its parent collection to the timeline group.'
+          And, if possible, please add a link to the collection the record belongs to.
           
+          // please allow only one selection
           <label>Timeline group<br>
             <select name="timeline-groups">
               <option value="">Select</option>
