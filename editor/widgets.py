@@ -58,10 +58,21 @@ class AutocompleteMixin:
         return groups
 
 
-class ArchivalRecordSelect(AutocompleteMixin, forms.Select):
+class ArchivalRecordAutocomplete(AutocompleteMixin):
 
     def get_url(self):
         return reverse('editor:editor_record_autocomplete')
+
+
+class ArchivalRecordSelect(ArchivalRecordAutocomplete, forms.Select):
+
+    pass
+
+
+class ArchivalRecordMultiSelect(ArchivalRecordAutocomplete,
+                                forms.SelectMultiple):
+
+    pass
 
 
 class EntityAutocomplete(AutocompleteMixin):

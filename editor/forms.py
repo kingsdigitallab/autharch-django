@@ -23,9 +23,9 @@ from jargon.models import EntityType, NamePartType, PublicationStatus
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
 from .widgets import (
-    ArchivalRecordSelect, EntityMultiSelect, EntityCorporateBodyMultiSelect,
-    EntityPersonMultiSelect, EntitySelect, FunctionMultiSelect, FunctionSelect,
-    GenderSelect)
+    ArchivalRecordMultiSelect, ArchivalRecordSelect, EntityMultiSelect,
+    EntityCorporateBodyMultiSelect, EntityPersonMultiSelect, EntitySelect,
+    FunctionMultiSelect, FunctionSelect, GenderSelect)
 
 
 RICHTEXT_ATTRS = {
@@ -820,11 +820,11 @@ class ObjectGroupForm(forms.ModelForm):
             'records', 'related_entities', 'featured_entities'
         ]
         widgets = {
-            'collections': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
+            'collections': ArchivalRecordMultiSelect(),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'featured_entities': EntityMultiSelect(),
             'introduction': forms.Textarea(attrs={'rows': 4}),
-            'records': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
+            'records': ArchivalRecordMultiSelect(),
             'related_entities': EntityMultiSelect(),
             'slug': forms.TextInput(attrs=GROUP_SLUG_ATTRS),
         }
