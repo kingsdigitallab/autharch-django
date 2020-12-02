@@ -16,14 +16,12 @@
         <ul>
           <li>Publication status:
             {% if is_deleted %} 
-              <span class="highlight danger-clear">[group.control.publication_status] (deleted)</span>
-            {% else %}
-              <span class="highlight">[group.control.publication_status]</span>
+              <span class="highlight danger-clear">(deleted)</span>
             {% endif %}
           </li>
-          <li>Updated: <span class="highlight">[last_revision.date_created]</span> by <span class="highlight">[last_revision.user]</span></li>
+          <li>Updated: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
           <li>
-            <a href="{% url 'editor:group-history' group_id=0 %}">
+            <a href="{% url 'editor:group-history' group_id=group.pk %}">
               <i class="far fa-clock"></i>
               <span class="dotted-underline">History</span>
             </a>
@@ -47,17 +45,13 @@
       </ul>
     </div>
 
-    {% if form_errors %}
+    {% if form.errors %}
     <div class="error-notification">
       <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
       <h4>Errors</h4>
-      {% for error in form_errors.non_field %}
+      {% for error in form.errors %}
       <p>{{ error }}</p>
       {% endfor %}
-      {% if form_errors.field %}
-      <p>There are field-specific errors; please check the form and correct.</p>
-      {% endif %}
-      <h4>
     </div>
     {% endif %}
 
@@ -73,65 +67,37 @@
     </div>
     {% endif %}
 
-    <h1>Early Georgians</h1>
+    <h1>{{ group.title }}</h1>
 
   </div>
-  <form action="{% url 'editor:group-edit' group_id=0 %}" id="record-form" method="post">
+  <form action="{% url 'editor:group-edit' group_id=group.pk %}" id="record-form" method="post">
     {% csrf_token %}
     <div class="form-section formset">
       <fieldset>
           <div class="fieldset-body expand">
               <div class="two-column-table">
                 <div>
-                    <label>
-                        <span class="required">Title</span><br>
-                        <input type="text" name="title" id="id_title"/>
-                    </label>
-                    <label>
-                        <span class="required">URL slug</span><br>
-                        <input type="text" name="url_slug" id="id_url_slug" placeholder="e.g., object-group-title" onfocus="this.placeholder=''" onblur="this.placeholder='e.g., object-group-title'"/>
-                    </label>
+                  {% render_field form.id %}
+                  {% render_field form.title %}
+                  {% render_field form.slug %}
                 </div>
                 <div>
                 </div>
-                <label>
-                    <span>Introduction</span><br>
-                    <textarea name="introduction" rows="4" id="id_introduction" cols="40"></textarea>
-                </label>
+                {% render_field form.introduction %}
               </div>
-              <label>
-                  <span>Description</span>
-                  <textarea name="description" rows="8" id="id_description" aria-label="richtext field" cols="40" class="richtext"></textarea>
-              </label>
+              {% render_field form.description %}
               <div class="two-column-table">
-                  <div>
-                    <!-- TODO for OL: add tooltips -->
-                    <label>
-                        <span>Related collections</span>
-                        <br>
-                        <select class="select-with-search" name="related_collections" id="id_related_collections" multiple>
-                        </select>
-                    </label>
-                     <!-- the list should be based on the selected collections -->
-                      <!-- TODO for OL: add a tooltip to explain that how the field works -->
-                     <label>
-                        <span>Featured records</span>
-                        <br>
-                        <select class="select-with-search" name="featured_records" id="id_featured_records" multiple></select>
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                        <span>Related people/corporate bodies</span>
-                        <br>
-                        <select class="select-with-search" name="related_entities" id="id_related_entities" multiple></select>
-                    </label>
-                    <label>
-                        <span>Featured people/corporate bodies</span>
-                        <br>
-                        <select class="select-with-search" name="featured_entities" id="_id_featured_entities" multiple></select>
-                    </label>
-                  </div>
+                <div>
+                  <!-- TODO for OL: add tooltips -->
+                  {% render_field form.collections %}
+                  <!-- the list should be based on the selected collections -->
+                  <!-- TODO for OL: add a tooltip to explain that how the field works -->
+                  {% render_field form.records %}
+                </div>
+                <div>
+                  {% render_field form.related_entities %}
+                  {% render_field form.featured_entities %}
+                </div>
               </div>
           </div>
       </fieldset>
@@ -143,11 +109,6 @@
           <input type="button" class="icon-only modal-cancel" aria-label="close" value="&#xf00d;" />
         </div>
         <div class="modal-body">
-          <div class="two-column-table">
-            <div>
-              {% render_field form.formsets.control.forms.0.publication_status %}
-            </div>
-          </div>
           {% render_field log_form.comment %}
         </div>
         <div class="modal-footer">

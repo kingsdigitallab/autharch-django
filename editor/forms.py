@@ -811,7 +811,7 @@ class LogForm(forms.Form):
     comment = forms.CharField(label='Comments', widget=forms.Textarea)
 
 
-class ObjectGroupCreateForm(forms.ModelForm):
+class ObjectGroupForm(forms.ModelForm):
 
     class Meta:
         model = ObjectGroup

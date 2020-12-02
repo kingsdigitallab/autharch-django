@@ -34,7 +34,7 @@ from .forms import (
     ArchivalRecordFacetedSearchForm, BaseUserFormset, EditorProfileForm,
     EntityCreateForm, EntityDuplicateForm, EntityDuplicateSelectForm,
     EntityEditForm, EntityFacetedSearchForm, DeletedFacetedSearchForm, LogForm,
-    ObjectGroupCreateForm, PasswordChangeForm, SearchForm, UserCreateForm,
+    ObjectGroupForm, PasswordChangeForm, SearchForm, UserCreateForm,
     UserEditForm, UserForm, assemble_form_errors,
     get_archival_record_edit_form_for_subclass,
 )
@@ -994,9 +994,10 @@ def group_history(request, group_id):
     context = {
         'current_section': 'groups',
         'edit_url': reverse('editor:group-edit',
-                            kwargs={'group_id': group_id}),
+                            kwargs={'group_id': group.id}),
         'item': group,
         'show_delete': can_show_delete_page(request.user.editor_profile.role),
+        'versions': Version.objects.get_for_object(group),
     }
     return render(request, 'editor/history.html', context)
 
@@ -1005,7 +1006,7 @@ def group_history(request, group_id):
 @create_revision()
 def group_create(request):
     if request.method == 'POST':
-        form = ObjectGroupCreateForm(request.POST)
+        form = ObjectGroupForm(request.POST)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
             group = form.save()
@@ -1014,7 +1015,7 @@ def group_create(request):
                           kwargs={'group_id': group.pk}) + '?saved=true'
             return redirect(url)
     else:
-        form = ObjectGroupCreateForm()
+        form = ObjectGroupForm()
         log_form = LogForm()
     context = {
         'current_section': 'groups',
@@ -1028,8 +1029,27 @@ def group_create(request):
 @user_passes_test(is_user_editor_plus)
 @create_revision()
 def group_edit(request, group_id):
+    group = get_object_or_404(ObjectGroup, pk=group_id)
+    if request.method == 'POST':
+        form = ObjectGroupForm(request.POST, instance=group)
+        log_form = LogForm(request.POST)
+        if form.is_valid() and log_form.is_valid():
+            group = form.save()
+            reversion.set_comment(log_form.cleaned_data['comment'])
+            url = reverse('editor:group-edit',
+                          kwargs={'group_id': group.pk}) + '?saved=true'
+            return redirect(url)
+    else:
+        form = ObjectGroupForm(instance=group)
+        log_form = LogForm()
     context = {
         'current_section': 'groups',
+        'form': form,
+        'group': group,
+        'is_deleted': group.is_deleted,
+        'last_revision': Version.objects.get_for_object(group)[0].revision,
+        'log_form': log_form,
+        'saved': request.GET.get('saved', False),
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/group_edit.html', context)
