@@ -11,7 +11,7 @@ from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import (
     ArchivalRecordTranscription, Collection, File, Item,
-    OriginLocation, Reference, RelatedMaterialReference, Series
+    ObjectGroup, OriginLocation, Reference, RelatedMaterialReference, Series
 )
 from authority.models import (
     BiographyHistory, Control, Description, Function, Entity, Event, Identity,
@@ -61,6 +61,12 @@ DELETED_SEARCH_INPUT_ATTRS = {
     'aria-label': 'Search',
     'placeholder': 'Search all deleted objects',
     'type': 'search',
+}
+
+GROUP_SLUG_ATTRS = {
+    'onblur': "this.placeholder='e.g., object-group-title'",
+    'onfocus': "this.placeholder=''",
+    'placeholder': 'e.g., object-group-title',
 }
 
 RECORD_SEARCH_INPUT_ATTRS = {
@@ -398,7 +404,8 @@ class DescriptionEditInlineForm(ContainerModelForm):
             data, instance=instance, prefix=prefix + '-language_script')
         BiographyHistoryFormset = inlineformset_factory(
             Description, BiographyHistory, form=BiographyHistoryEditInlineForm,
-            extra=0, entity_type=self.Meta.entity_type)
+            extra=0, entity_type=self.Meta.entity_type, max_num=1,
+            validate_max=True)
         formsets['biography_histories'] = BiographyHistoryFormset(
             data, instance=instance, prefix=prefix + '-biography_history')
         if self.Meta.entity_type == PERSON_ENTITY_TYPE:
@@ -501,8 +508,8 @@ class IdentityEditInlineForm(ContainerModelForm):
             data, instance=self.instance, prefix=self.prefix + '-name_entry')
         DescriptionFormset = inlineformset_factory(
             Identity, Description, exclude=[], form=DescriptionEditInlineForm,
-            extra=0, entity_type=self.Meta.entity_type, max_num=1,
-            validate_max=True, min_num=1, validate_min=True)
+            extra=0, entity_type=self.Meta.entity_type, min_num=1,
+            validate_min=True)
         formsets['descriptions'] = DescriptionFormset(
             data, instance=self.instance, prefix=self.prefix + '-description')
         RelationFormset = inlineformset_factory(
@@ -802,6 +809,25 @@ class EntityCreateForm(forms.Form):
 class LogForm(forms.Form):
 
     comment = forms.CharField(label='Comments', widget=forms.Textarea)
+
+
+class ObjectGroupCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = ObjectGroup
+        fields = [
+            'title', 'slug', 'introduction', 'description', 'collections',
+            'records', 'related_entities', 'featured_entities'
+        ]
+        widgets = {
+            'collections': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
+            'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
+            'featured_entities': EntityMultiSelect(),
+            'introduction': forms.Textarea(attrs={'rows': 4}),
+            'records': forms.SelectMultiple(attrs=SEARCH_SELECT_ATTRS),
+            'related_entities': EntityMultiSelect(),
+            'slug': forms.TextInput(attrs=GROUP_SLUG_ATTRS),
+        }
 
 
 # User dashboard forms.

@@ -23,7 +23,7 @@ from reversion.views import create_revision
 
 from archival.models import (
     ArchivalRecord, ArchivalRecordTranscription, Collection, File, Item,
-    Series)
+    ObjectGroup, Series)
 from authority.exceptions import EntityMergeException
 from authority.models import Control, Entity, NameEntry
 from jargon.models import (
@@ -34,8 +34,9 @@ from .forms import (
     ArchivalRecordFacetedSearchForm, BaseUserFormset, EditorProfileForm,
     EntityCreateForm, EntityDuplicateForm, EntityDuplicateSelectForm,
     EntityEditForm, EntityFacetedSearchForm, DeletedFacetedSearchForm, LogForm,
-    PasswordChangeForm, SearchForm, UserCreateForm, UserEditForm, UserForm,
-    assemble_form_errors, get_archival_record_edit_form_for_subclass,
+    ObjectGroupCreateForm, PasswordChangeForm, SearchForm, UserCreateForm,
+    UserEditForm, UserForm, assemble_form_errors,
+    get_archival_record_edit_form_for_subclass,
 )
 from .models import EditorProfile, RevisionMetadata
 from .signals import view_post_save
@@ -981,12 +982,15 @@ def help(request):
 @user_passes_test(is_user_editor_plus)
 def groups_list(request):
     context = {
-        'show_delete': can_show_delete_page(request.user.editor_profile.role)
+        'groups': ObjectGroup.objects.filter(is_deleted=False),
+        'show_delete': can_show_delete_page(request.user.editor_profile.role),
     }
     return render(request, 'editor/groups_list.html', context)
 
+
 @user_passes_test(is_user_editor_plus)
 def group_history(request, group_id):
+    group = get_object_or_404(ObjectGroup, pk=group_id)
     context = {
         'current_section': 'groups',
         'edit_url': reverse('editor:group-edit',
@@ -996,14 +1000,30 @@ def group_history(request, group_id):
     }
     return render(request, 'editor/history.html', context)
 
+
 @user_passes_test(is_user_editor_plus)
 @create_revision()
 def group_create(request):
+    if request.method == 'POST':
+        form = ObjectGroupCreateForm(request.POST)
+        log_form = LogForm(request.POST)
+        if form.is_valid() and log_form.is_valid():
+            group = form.save()
+            reversion.set_comment(log_form.cleaned_data['comment'])
+            url = reverse('editor:group-edit',
+                          kwargs={'group_id': group.pk}) + '?saved=true'
+            return redirect(url)
+    else:
+        form = ObjectGroupCreateForm()
+        log_form = LogForm()
     context = {
         'current_section': 'groups',
+        'form': form,
+        'log_form': log_form,
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/group_create.html', context)
+
 
 @user_passes_test(is_user_editor_plus)
 @create_revision()
@@ -1013,6 +1033,7 @@ def group_edit(request, group_id):
         'show_delete': can_show_delete_page(request.user.editor_profile.role)
     }
     return render(request, 'editor/group_edit.html', context)
+
 
 @user_passes_test(is_user_moderator_plus)
 def duplicates_list(request):

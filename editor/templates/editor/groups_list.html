@@ -6,7 +6,6 @@
     <div class="page-header">
         <h1>Object groups</h1>
         <a href="{% url 'editor:group-create' %}" class="create">Create</a>
-   
     </div>
     {% endblock page_header %}
     {% block content %}
@@ -17,36 +16,16 @@
             <thead>
                 <tr>
                 <th class="description" scope="col" data-label="Title" data-placeholder="Filter by name">Name</th>
-                <th class="filter-select" scope="col" data-label="Publication status" data-placeholder="Select">Publication status</th>
                 <th class="sorter-sugar" scope="col" data-label="Updated" data-placeholder="Filter by date">Updated</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="description group"><a href="{% url 'editor:group-edit' group_id=0 %}">Early Georgians</a></td>
-                    <td>[group.publication_status]</td>
-                    <td data-text="result.modified.isoformat">[group.modified]</td>
-                </tr>
-                <tr>
-                    <td class="description group"><a href="{% url 'editor:group-edit' group_id=0 %}">George III, Queen Charlotte and their family</a></td>
-                    <td>[group.publication_status]</td>
-                    <td data-text="result.modified.isoformat">[group.modified]</td>
-                </tr>
-                <tr>
-                    <td class="description group"><a href="{% url 'editor:group-edit' group_id=0 %}">George III siblings</a></td>
-                    <td>[group.publication_status]</td>
-                    <td data-text="result.modified.isoformat">[group.modified]</td>
-                </tr>
-                <tr>
-                    <td class="description group"><a href="{% url 'editor:group-edit' group_id=0 %}">George IV and Princess Charlotte of Wales</a></td>
-                    <td>[group.publication_status]</td>
-                    <td data-text="result.modified.isoformat">[group.modified]</td>
-                </tr>
-                <tr>
-                    <td class="description group"><a href="{% url 'editor:group-edit' group_id=0 %}">William IV</a></td>
-                    <td>[group.publication_status]</td>
-                    <td data-text="result.modified.isoformat">[group.modified]</td>
-                </tr>
+              {% for group in groups %}
+              <tr>
+                <td class="description group"><a href="{% url 'editor:group-edit' group_id=group.pk %}">{{ group.title }}</a></td>
+                <td data-text="group.modified.isoformat">{{ group.modified }}</td>
+              </tr>
+              {% endfor %}
             </tbody>
         </table>
     </div>

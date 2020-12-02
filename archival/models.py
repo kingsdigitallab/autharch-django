@@ -56,7 +56,7 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
 
     publication_description = models.TextField(blank=True, null=True)
     provenance = models.TextField(
-        'Custodial History/Provenance', blank=True, null=True,
+        'Custodial History/Provenance', blank=True,
         help_text=constants.CUSTODIAL_HISTORY_PROVENANCE_HELP)
     creation_dates = models.CharField(
         max_length=1024, null=True, blank=True,
@@ -322,3 +322,20 @@ class RelatedMaterialReference(models.Model):
         ArchivalRecord, on_delete=models.CASCADE,
         related_name='referencing_related_materials',
         verbose_name="Related material")
+
+
+@reversion.register()
+class ObjectGroup(TimeStampedModel):
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(verbose_name='URL slug')
+    introduction = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    collections = models.ManyToManyField(
+        Collection, blank=True, related_name='relating_group')
+    records = models.ManyToManyField(
+        ArchivalRecord, blank=True, related_name='featuring_group')
+    related_entities = models.ManyToManyField(
+        Entity, blank=True, related_name='relating_group')
+    featured_entities = models.ManyToManyField(
+        Entity, blank=True, related_name='featuring_group')
+    is_deleted = models.BooleanField(default=False)
