@@ -333,7 +333,7 @@ class ObjectGroup(TimeStampedModel):
     collections = models.ManyToManyField(
         Collection, blank=True, related_name='relating_group')
     records = models.ManyToManyField(
-        ArchivalRecord, blank=True, related_name='featuring_group')
+        ArchivalRecord, blank=True, related_name='featuring_group', verbose_name='Featured archival records')
     related_entities = models.ManyToManyField(
         Entity, blank=True, related_name='relating_group')
     featured_entities = models.ManyToManyField(
