@@ -72,7 +72,17 @@ class ArchivalRecordSelect(ArchivalRecordAutocomplete, forms.Select):
 class ArchivalRecordMultiSelect(ArchivalRecordAutocomplete,
                                 forms.SelectMultiple):
 
-    pass
+    def __init__(self, *args, **kwargs):
+        self._record_type = kwargs.pop('record_type', None)
+        super().__init__(*args, **kwargs)
+
+    def get_url(self):
+        if self._record_type is None:
+            url = super().get_url()
+        else:
+            url = reverse('editor:editor_record_autocomplete_by_type',
+                          args=(self._record_type,))
+        return url
 
 
 class EntityAutocomplete(AutocompleteMixin):

@@ -820,7 +820,7 @@ class ObjectGroupForm(forms.ModelForm):
             'records', 'related_entities', 'featured_entities'
         ]
         widgets = {
-            'collections': ArchivalRecordMultiSelect(),
+            'collections': ArchivalRecordMultiSelect(record_type='collection'),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'featured_entities': EntityMultiSelect(),
             'introduction': forms.Textarea(attrs={'rows': 4}),

@@ -441,8 +441,18 @@ class RecordAutocompleteJsonView(BaseAutocompleteJsonView):
     def get_queryset(self):
         if not self.term:
             return SearchQuerySet().none()
-        qs = SearchQuerySet().models(
-            Collection, Entity, File, Item, Series).exclude(
+        record_type = self.kwargs.get('record_type')
+        models = [Collection, File, Item, Series]
+        if record_type:
+            if record_type == 'collection':
+                models = [Collection]
+            elif record_type == 'series':
+                models = [Series]
+            elif record_type == 'file':
+                models = [File]
+            elif record_type == 'item':
+                models = [Item]
+        qs = SearchQuerySet().models(*models).exclude(
             maintenance_status='deleted').filter(
             ra_references__contains=self.term)
         return qs.order_by('description')
