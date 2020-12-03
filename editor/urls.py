@@ -74,6 +74,8 @@ urlpatterns = [
     path('groups/', views.groups_list, name='groups-list'),
     path('groups/new/', views.group_create, name='group-create'),
     path('groups/<int:group_id>/', views.group_edit, name='group-edit'),
+    path('groups/<int:group_id>/delete/', views.group_delete,
+         name='group-delete'),
     path('groups/<int:group_id>/history/', views.group_history,
          name='group-history'),
     path('revert/', views.revert, name='revert'),

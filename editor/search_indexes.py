@@ -1,6 +1,6 @@
 from haystack import indexes
 
-from archival.models import Collection, File, Item, Series
+from archival.models import Collection, File, Item, ObjectGroup, Series
 from authority.models import Entity, Relation
 from jargon.models import ReferenceSource
 
@@ -185,3 +185,19 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
         return [relation.related_entity.pk for relation in
                 Relation.objects.filter(identity__entity=obj)
                 if relation.related_entity]
+
+
+class ObjectGroupIndex(indexes.SearchIndex, indexes.Indexable):
+
+    text = indexes.CharField(document=True, model_attr='title')
+    description = indexes.CharField(model_attr='title')
+    maintenance_status = indexes.CharField()
+    modified = indexes.DateTimeField(model_attr='modified')
+
+    def get_model(self):
+        return ObjectGroup
+
+    def prepare_maintenance_status(self, obj):
+        if obj.is_deleted:
+            return 'deleted'
+        return 'revised'

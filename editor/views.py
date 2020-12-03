@@ -236,7 +236,7 @@ class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     template_name = 'editor/deleted_list.html'
     form_class = DeletedFacetedSearchForm
     queryset = SearchQuerySet().models(
-        Collection, Entity, File, Item, Series).filter(
+        Collection, Entity, File, Item, ObjectGroup, Series).filter(
             maintenance_status='deleted').facet('addressees', size=0).facet(
                 'archival_level').facet('entity_type').facet(
                     'languages', size=0).facet('writers', size=0)
@@ -979,7 +979,7 @@ def help(request):
     return render(request, 'editor/help.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
+@user_passes_test(is_user_moderator_plus)
 def groups_list(request):
     context = {
         'groups': ObjectGroup.objects.filter(is_deleted=False),
@@ -988,7 +988,24 @@ def groups_list(request):
     return render(request, 'editor/groups_list.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
+@user_passes_test(is_user_moderator_plus)
+@create_revision()
+@require_POST
+def group_delete(request, group_id):
+    group = get_object_or_404(ObjectGroup, pk=group_id)
+    # Can't delete a deleted group.
+    if group.is_deleted:
+        return redirect('editor:group-history', group_id=group_id)
+    if request.POST.get('DELETE') == 'DELETE':
+        reversion.set_comment('Deleted object group.')
+        group.is_deleted = True
+        group.save()
+        view_post_save.send(sender=ObjectGroup, instance=group)
+        return redirect('editor:groups-list')
+    return redirect('editor:group-edit', group_id=group_id)
+
+
+@user_passes_test(is_user_moderator_plus)
 def group_history(request, group_id):
     group = get_object_or_404(ObjectGroup, pk=group_id)
     context = {
@@ -1002,7 +1019,7 @@ def group_history(request, group_id):
     return render(request, 'editor/history.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
+@user_passes_test(is_user_moderator_plus)
 @create_revision()
 def group_create(request):
     if request.method == 'POST':
@@ -1010,6 +1027,7 @@ def group_create(request):
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
             group = form.save()
+            view_post_save.send(sender=ObjectGroup, instance=group)
             reversion.set_comment(log_form.cleaned_data['comment'])
             url = reverse('editor:group-edit',
                           kwargs={'group_id': group.pk}) + '?saved=true'
@@ -1026,7 +1044,7 @@ def group_create(request):
     return render(request, 'editor/group_create.html', context)
 
 
-@user_passes_test(is_user_editor_plus)
+@user_passes_test(is_user_moderator_plus)
 @create_revision()
 def group_edit(request, group_id):
     group = get_object_or_404(ObjectGroup, pk=group_id)
@@ -1034,7 +1052,9 @@ def group_edit(request, group_id):
         form = ObjectGroupForm(request.POST, instance=group)
         log_form = LogForm(request.POST)
         if form.is_valid() and log_form.is_valid():
+            group.is_deleted = False
             group = form.save()
+            view_post_save.send(sender=ObjectGroup, instance=group)
             reversion.set_comment(log_form.cleaned_data['comment'])
             url = reverse('editor:group-edit',
                           kwargs={'group_id': group.pk}) + '?saved=true'
@@ -1044,6 +1064,8 @@ def group_edit(request, group_id):
         log_form = LogForm()
     context = {
         'current_section': 'groups',
+        'delete_url': reverse('editor:group-delete',
+                              kwargs={'group_id': group_id}),
         'form': form,
         'group': group,
         'is_deleted': group.is_deleted,

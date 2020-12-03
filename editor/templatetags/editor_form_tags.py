@@ -2,7 +2,7 @@ from django import template
 
 from reversion.models import Version
 
-from archival.models import Collection, File, Item, Series
+from archival.models import Collection, File, Item, ObjectGroup, Series
 from authority.models import Entity
 
 
@@ -18,6 +18,7 @@ def get_last_modifier(model_name, obj_id):
         'entity': Entity,
         'file': File,
         'item': Item,
+        'objectgroup': ObjectGroup,
         'series': Series,
     }
     model = models[model_name]
