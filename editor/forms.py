@@ -10,7 +10,7 @@ import haystack.forms
 from geonames_place.widgets import PlaceSelect, PlaceSelectMultiple
 
 from archival.models import (
-    ArchivalRecordTranscription, Collection, File, Item,
+    ArchivalRecord, ArchivalRecordTranscription, Collection, File, Item,
     ObjectGroup, OriginLocation, Reference, RelatedMaterialReference, Series
 )
 from authority.models import (
@@ -22,6 +22,7 @@ from jargon.models import EntityType, NamePartType, PublicationStatus
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
+from .search_indexes import RA_REFERENCE_SOURCE
 from .widgets import (
     ArchivalRecordMultiSelect, ArchivalRecordSelect, EntityMultiSelect,
     EntityCorporateBodyMultiSelect, EntityPersonMultiSelect, EntitySelect,
@@ -104,8 +105,14 @@ ENTITY_START_DATE_HELP = 'This element indicates a date of existence - birth dat
 ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date for people and extinction date for corporate bodies. <br><br>1. It is required that you follow the date format: <br><strong>(-)YYYY(-MM(-DD))</strong><br><em>e.g., 1822-03-27, 1822-03, 1822, or, if BC, -750.</em><br>2. To also assist with improving date searching, please always add a date range:<br><em>e.g., if the display date is 1822, include Identity existed from: 1822, Identity existed until: 1822.</em><br><br>NB: Date ranges for years prior to the change in calendar may need to be taken into account. <br>NB: For dates spanning the change in calendars from Julian to Gregorian in many European countries and their colonies, include New Style dates for machine-reading. Old Style dates can be included in the display date field where needed.'  # noqa
 
 
-class ContainerModelForm(forms.ModelForm):
+class ArchivalRecordModelMultipleChoiceField(forms.ModelMultipleChoiceField):
 
+    def label_from_instance(self, obj):
+        return ', '.join(obj.references.filter(source=RA_REFERENCE_SOURCE)
+                         .values_list('unitid', flat=True))
+
+
+class ContainerModelForm(forms.ModelForm):
     """Base class for model forms that have associated inline formsets.
 
     These inline formsets must be individually created and added to
@@ -567,7 +574,6 @@ class IdentityEditInlineForm(ContainerModelForm):
 
 
 class ArchivalRecordEditForm(ContainerModelForm):
-
     """Base class for all ArchivalRecord forms.
 
     The intention is that this class carries as much of the
@@ -813,6 +819,15 @@ class LogForm(forms.Form):
 
 class ObjectGroupForm(forms.ModelForm):
 
+    collections = ArchivalRecordModelMultipleChoiceField(
+        queryset=Collection.objects.exclude(
+            maintenance_status__title='deleted'),
+        widget=ArchivalRecordMultiSelect(record_type='collection'))
+    records = ArchivalRecordModelMultipleChoiceField(
+        queryset=ArchivalRecord.objects.exclude(
+            maintenance_status__title='deleted'),
+        widget=ArchivalRecordMultiSelect())
+
     class Meta:
         model = ObjectGroup
         fields = [
@@ -820,11 +835,9 @@ class ObjectGroupForm(forms.ModelForm):
             'records', 'related_entities', 'featured_entities'
         ]
         widgets = {
-            'collections': ArchivalRecordMultiSelect(record_type='collection'),
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
             'featured_entities': EntityMultiSelect(),
             'introduction': forms.Textarea(attrs={'rows': 4}),
-            'records': ArchivalRecordMultiSelect(),
             'related_entities': EntityMultiSelect(),
             'slug': forms.TextInput(attrs=GROUP_SLUG_ATTRS),
         }
