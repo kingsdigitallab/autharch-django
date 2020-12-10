@@ -343,17 +343,20 @@ class Command(BaseCommand):
         title = row.get('Title', '[no title]')
         if 'RA_Reference' in row:
             ra_ref = row['RA_Reference']
+            ra_refs = [ref.strip() for ref in ra_ref.split(';')]
             source = ReferenceSource.objects.get(title='RA')
-            try:
-                ref = Reference.objects.get(source=source, unitid=ra_ref)
-                self.logger.info(EXISTING_RA_REF.format(
-                    title, ra_ref, self._path, self._sheet, *self._ra_refs.get(
-                        ra_ref, ['', 'not from current import', ''])))
-            except Reference.DoesNotExist:
-                ref = Reference(source=source, unitid=ra_ref)
-                ref.save()
-                self._ra_refs[ra_ref] = [title, self._path, self._sheet]
-            obj.references.add(ref)
+            for ra_ref in ra_refs:
+                try:
+                    ref = Reference.objects.get(source=source, unitid=ra_ref)
+                    self.logger.info(EXISTING_RA_REF.format(
+                        title, ra_ref, self._path, self._sheet,
+                        *self._ra_refs.get(
+                            ra_ref, ['', 'not from current import', ''])))
+                except Reference.DoesNotExist:
+                    ref = Reference(source=source, unitid=ra_ref)
+                    ref.save()
+                    self._ra_refs[ra_ref] = [title, self._path, self._sheet]
+                obj.references.add(ref)
         else:
             self.logger.warning(NO_RA_REF.format(obj.uuid, self._path,
                                                  self._sheet))
@@ -396,8 +399,9 @@ class Command(BaseCommand):
         return obj
 
     def _add_collection_data(self, col, row):
-        col = self._set_field_from_cell_data(col, 'administrative_history',
-                                             row, 'Admin History')
+        col = self._set_field_from_cell_data(
+            col, 'administrative_history', row, 'Admin History',
+            '[Attention: content must be provided for this field]')
         col = self._set_field_from_cell_data(col, 'arrangement', row,
                                              'Arrangement')
         return col
