@@ -929,7 +929,9 @@ def get_ancestors(record, ancestors=None):
         elif record.parent_series is not None:
             ancestors = get_ancestors(record.parent_series, ancestors)
     elif isinstance(record, (File, Item)):
-        if record.parent_series is not None:
+        if record.parent_collection is not None:
+            ancestors = get_ancestors(record.parent_collection, ancestors)
+        elif record.parent_series is not None:
             ancestors = get_ancestors(record.parent_series, ancestors)
         elif record.parent_file is not None:
             ancestors = get_ancestors(record.parent_file, ancestors)
