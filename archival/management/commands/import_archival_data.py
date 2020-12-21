@@ -382,6 +382,8 @@ class Command(BaseCommand):
             for lang_string in row['Language'].split('\n'):
                 if ', ' in lang_string:
                     languages.extend(lang_string.split(', '))
+                elif '; ' in lang_string:
+                    languages.extend(lang_string.split('; '))
                 else:
                     languages.append(lang_string)
             for lang in languages:
