@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
 
 $primary: #001e57;
-// $primary-dark: #001A48;
 $save: #6DA036;
 $add: #0e7bc5;
 $danger: #a10101;
@@ -155,7 +154,7 @@ body {
 }
 
 
-// BUTTONS, LINKS
+// BUTTONS, LINKS, ICONS
     
 // browser dependencies
 /* Safari */
@@ -401,7 +400,7 @@ input[type=submit]:not(.search-button):not(.create) {
     }
 }
 
-
+// LINKS
 a {
     color: $primary;
     font-size: 1em;
@@ -701,6 +700,7 @@ header {
     }
 }
 
+// MAIN
 main {
     position: relative;
     padding: 1em 2.5em 2.5em 2.5em;
@@ -2541,6 +2541,7 @@ main {
     }
 }
 
+// FOOTER
 footer {
     @include lighten($light-grey);
     margin: 0;
