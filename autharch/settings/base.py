@@ -202,6 +202,7 @@ LOGGING = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -440,3 +441,8 @@ United Kingdom</span>.
 """
 
 AUTHORITY_RIGHTS_DECLARATION_CITATION = 'https://creativecommons.org/publicdomain/zero/1.0/'  # noqa
+
+
+# CORS
+CORS_URLS_REGEX = r"^/api/.*$"
+CORS_ALLOW_ALL_ORIGINS = True
