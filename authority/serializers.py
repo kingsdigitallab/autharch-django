@@ -1,11 +1,13 @@
-from geonames_place.serializers import \
-    PlaceSerializer as GeonamesPlaceSerializer
-from jargon.serializers import EntityTypeSerializer
+from jargon.serializers import (
+    EntityRelationTypeSerializer, EntityTypeSerializer,
+    MaintenanceStatusSerializer, PublicationStatusSerializer,
+    ResourceRelationTypeSerializer)
 from rest_framework import serializers
 
 from .models import (
-    BiographyHistory, Control, Description, Entity, Identity, Event,
-    LanguageScript, LocalDescription, NameEntry, Place
+    BiographyHistory, Control, Description, Entity, Function, Event, Identity,
+    LegalStatus, LocalDescription, Mandate, NameEntry, Place, Relation,
+    Resource, Source
 )
 
 
@@ -16,64 +18,177 @@ class BiographyHistorySerializer(serializers.ModelSerializer):
         depth = 10
 
 
-class LanguageScriptSerializer(serializers.ModelSerializer):
+class SourceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LanguageScript
-        fields = ['language', 'script']
+        model = Source
+        fields = ['name', 'url', 'notes']
         depth = 10
 
 
+class ControlSerializer(serializers.ModelSerializer):
+    language = serializers.SerializerMethodField()
+    maintenance_status = MaintenanceStatusSerializer(read_only=True)
+    publication_status = PublicationStatusSerializer(read_only=True)
+    script = serializers.SerializerMethodField()
+    sources = SourceSerializer(many=True, read_only=True)
+
+    def get_language(self, obj):
+        return obj.language.label
+
+    def get_script(self, obj):
+        return obj.script.name
+
+    class Meta:
+        model = Control
+        fields = ['language', 'maintenance_status', 'publication_status',
+                  'rights_declaration', 'rights_declaration_abbreviation',
+                  'rights_declaration_citation', 'script', 'sources']
+
+
 class EventSerializer(serializers.ModelSerializer):
+    place = serializers.SerializerMethodField()
+
+    def get_place(self, obj):
+        try:
+            return obj.place.address
+        except AttributeError:
+            return ''
+
     class Meta:
         model = Event
-        fields = ['event', 'place']
+        fields = ['event', 'place', 'display_date']
+        depth = 10
+
+
+class FunctionSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        return obj.title.title
+
+    class Meta:
+        model = Function
+        fields = ['title', 'display_date']
+        depth = 10
+
+
+class LegalStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LegalStatus
+        fields = ['term', 'notes', 'citation', 'display_date']
         depth = 10
 
 
 class LocalDescriptionSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        return obj.gender.title
+
     class Meta:
         model = LocalDescription
-        fields = ['gender', 'notes', 'citation']
+        fields = ['title', 'notes', 'citation', 'display_date']
         depth = 10
 
 
+class MandateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mandate
+        fields = ['term', 'notes', 'citation', 'display_date']
+
+
 class PlaceSerializer(serializers.ModelSerializer):
-    place = GeonamesPlaceSerializer(many=False, read_only=True)
+    place = serializers.SerializerMethodField()
+
+    def get_place(self, obj):
+        try:
+            return obj.place.address
+        except AttributeError:
+            return obj.address
 
     class Meta:
         model = Place
-        fields = ['place', 'address', 'role']
+        fields = ['place', 'address', 'role', 'display_date']
         depth = 10
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
     biography_history = BiographyHistorySerializer(read_only=True)
-    languages_scripts = LanguageScriptSerializer(many=True, read_only=True)
-    local_descriptions = LocalDescriptionSerializer(many=True, read_only=True)
+    functions = FunctionSerializer(many=True, read_only=True)
+    languages_scripts = serializers.SerializerMethodField()
+    legal_statuses = LegalStatusSerializer(many=True, read_only=True)
+    genders = LocalDescriptionSerializer(many=True, read_only=True,
+                                         source='local_descriptions')
     events = EventSerializer(many=True, read_only=True)
+    mandates = MandateSerializer(many=True, read_only=True)
     places = PlaceSerializer(many=True, read_only=True)
+
+    def get_languages_scripts(self, obj):
+        return [ls.language.label for ls in obj.languages_scripts.all()]
 
     class Meta:
         model = Description
-        fields = ['biography_history', 'function', 'local_descriptions',
-                  'events', 'languages_scripts', 'places']
+        fields = ['biography_history', 'functions', 'genders', 'events',
+                  'languages_scripts', 'legal_statuses', 'mandates', 'places']
         depth = 10
 
 
 class NameEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = NameEntry
-        fields = ['display_name', 'authorised_form', 'date_from', 'date_to']
+        fields = ['display_name', 'authorised_form', 'date_from', 'date_to',
+                  'display_date']
+
+
+class RelatedEntitySerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
+    def get_name(self, obj):
+        return obj.display_name
+
+    class Meta:
+        model = Entity
+        fields = ['id', 'name']
+
+
+class RelationSerializer(serializers.ModelSerializer):
+    related_entity = RelatedEntitySerializer(read_only=True)
+    relation_type = EntityRelationTypeSerializer(read_only=True)
+
+    class Meta:
+        model = Relation
+        fields = ['related_entity', 'relation_type', 'relation_detail',
+                  'place']
+
+
+class ResourceSerializer(serializers.ModelSerializer):
+    relation_type = ResourceRelationTypeSerializer(read_only=True)
+
+    class Meta:
+        model = Resource
+        fields = ['relation_type', 'url', 'citation', 'notes']
 
 
 class IdentitySerializer(serializers.ModelSerializer):
     name_entries = NameEntrySerializer(many=True, read_only=True)
     descriptions = DescriptionSerializer(many=True, read_only=True)
+    authorised_display_name = serializers.SerializerMethodField()
+    related_entities = RelationSerializer(many=True, read_only=True,
+                                          source='relations')
+    resources = ResourceSerializer(many=True, read_only=True)
+
+    def get_authorised_display_name(self, obj):
+        try:
+            name = obj.name_entries.filter(authorised_form=True)[0]
+        except IndexError:
+            name = obj.name_entries.all()[0]
+        return name.display_name
 
     class Meta:
         model = Identity
-        fields = ['preferred_identity', 'name_entries',
-                  'date_from', 'date_to', 'descriptions']
+        fields = ['preferred_identity', 'authorised_display_name',
+                  'display_date', 'name_entries', 'descriptions',
+                  'related_entities', 'resources']
         depth = 10
 
 
@@ -84,7 +199,8 @@ class EntitySerializer(serializers.ModelSerializer):
 
     entity_type = EntityTypeSerializer(many=False, read_only=True)
     identities = IdentitySerializer(many=True, read_only=True)
-    metadata = serializers.SerializerMethodField()
+    control = ControlSerializer(many=False, read_only=True)
+    # metadata = serializers.SerializerMethodField()
 
     def get_metadata(self, obj):
         # TODO - check if fields are empty before adding them
@@ -154,8 +270,8 @@ class EntitySerializer(serializers.ModelSerializer):
                             "name": "Related Entity",
                             "content": relation.related_entity.display_name
                         }, {
-                            "name": "Notes",
-                            "content": relation.notes
+                            "name": "Description",
+                            "content": relation.relation_detail
                         }, {
                             "name": "Dates",
                             "content": relation.get_date()
@@ -482,5 +598,5 @@ class EntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entity
         fields = ['id', 'url', 'display_name', 'entity_type',
-                  'identities', 'control', 'metadata']
+                  'identities', 'control']  # , 'metadata']
         depth = 10
