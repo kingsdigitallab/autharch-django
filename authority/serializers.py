@@ -11,6 +11,13 @@ from .models import (
 )
 
 
+class EntityListSerializer(serializers.Serializer):
+    """Serializer for a Haystack SearchQuerySet of entities."""
+    pk = serializers.IntegerField(read_only=True)
+    display_name = serializers.CharField(read_only=True, source='description')
+    entity_type = serializers.CharField(read_only=True)
+
+
 class BiographyHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = BiographyHistory
