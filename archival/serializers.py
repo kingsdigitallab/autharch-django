@@ -33,10 +33,6 @@ class RelatedRecordSerializer(serializers.ModelSerializer):
 
 
 class ArchivalRecordSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='archivalrecord-detail', lookup_field='pk'
-    )
-
     media = MediaPolymorphicSerializer(many=True, read_only=True)
     publication_status = PublicationStatusSerializer(
         many=False, read_only=True)
@@ -62,7 +58,7 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArchivalRecord
         fields = [
-            'url', 'id', 'title', 'repository', 'description', 'references',
+            'id', 'title', 'repository', 'description', 'references',
             'creation_dates', 'extent', 'languages', 'subjects',
             'places_as_subjects', 'persons_as_subjects', 'related_entities',
             'organisations_as_subjects', 'related_materials',
@@ -93,7 +89,7 @@ class FileSerializer(ArchivalRecordSerializer):
         fields = ArchivalRecordSerializer.Meta.fields + \
             ['file_set', 'item_set', 'creators', 'creation_places',
              'physical_description', 'places_as_relations', 'url', 'withheld',
-             'publication_permission', 'copyright_status']
+             'publication_permission', 'copyright_status', 'publications']
 
 
 class ItemSerializer(ArchivalRecordSerializer):
@@ -105,7 +101,7 @@ class ItemSerializer(ArchivalRecordSerializer):
         fields = ArchivalRecordSerializer.Meta.fields + \
             ['creators', 'creation_places', 'physical_description',
              'places_as_relations', 'url', 'withheld',
-             'publication_permission', 'copyright_status']
+             'publication_permission', 'copyright_status', 'publications']
 
 
 class SeriesSerializer(ArchivalRecordSerializer):
@@ -116,7 +112,7 @@ class SeriesSerializer(ArchivalRecordSerializer):
     class Meta(ArchivalRecordSerializer.Meta):
         model = Series
         fields = ArchivalRecordSerializer.Meta.fields + \
-            ['file_set', 'item_set', 'series_set']
+            ['file_set', 'item_set', 'series_set', 'publications']
 
 
 class ArchivalRecordPolymorphicSerializer(PolymorphicSerializer):
