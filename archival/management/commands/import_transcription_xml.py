@@ -85,7 +85,7 @@ class Command(BaseCommand):
             return
         text, transcriber, reviewer, corrector = self._convert_transcription(
             xml_path)
-        transcription = ArchivalRecordTranscription(
-            record=record, transcription=text, order=page,
-            transcriber=transcriber, reviewer=reviewer, corrector=corrector)
-        transcription.save()
+        ArchivalRecordTranscription.objects.get_or_create(
+            record=record, order=page, defaults={
+                'transcription': text, 'transcriber': transcriber,
+                'reviewer': reviewer, 'corrector': corrector})
