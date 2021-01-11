@@ -6,14 +6,13 @@ from authority.models import (
 from jargon.models import ReferenceSource
 
 
-RA_REFERENCE_SOURCE = ReferenceSource.objects.get(title='RA')
-
-
 # The polymorphic ArchivalRecord model subclasses must have their own
 # index, and fields cannot be inherited. However, data preparation
 # methods may be inherited.
 
 class ArchivalRecordIndex:
+
+    RA_REFERENCE_SOURCE = ReferenceSource.objects.get(title='RA')
 
     def _get_year_from_date(self, date):
         if not date:
@@ -48,7 +47,7 @@ class ArchivalRecordIndex:
         return list(obj.languages.distinct().values_list('label', flat=True))
 
     def prepare_ra_references(self, obj):
-        return list(obj.references.filter(source=RA_REFERENCE_SOURCE)
+        return list(obj.references.filter(source=self.RA_REFERENCE_SOURCE)
                     .values_list('unitid', flat=True))
 
     def prepare_transcription_text(self, obj):
