@@ -1,7 +1,8 @@
 from haystack import indexes
 
 from archival.models import Collection, File, Item, ObjectGroup, Series
-from authority.models import Entity, Relation
+from authority.models import (
+    Entity, LanguageScript, LocalDescription, NameEntry, Place, Relation)
 from jargon.models import ReferenceSource
 
 
@@ -161,13 +162,39 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     related_entities = indexes.MultiValueField(faceted=True)
+    related_places = indexes.MultiValueField(faceted=True)
     ra_references = indexes.MultiValueField()
+    genders = indexes.MultiValueField(faceted=True)
+    languages = indexes.MultiValueField(faceted=True)
+    has_multiple_identities = indexes.BooleanField(faceted=True)
+    has_royal_name = indexes.BooleanField(faceted=True)
 
     def get_model(self):
         return Entity
 
     def prepare_description(self, obj):
         return str(obj)
+
+    def prepare_genders(self, obj):
+        return [ld.gender.pk for ld in LocalDescription.objects.filter(
+            description__identity__entity=obj)]
+
+    def prepare_has_multiple_identities(self, obj):
+        has = False
+        if obj.identities.count() > 1:
+            has = True
+        return has
+
+    def prepare_has_royal_name(self, obj):
+        has = False
+        if NameEntry.objects.filter(is_royal_name=True).filter(
+                identity__entity=obj).count() > 0:
+            has = True
+        return has
+
+    def prepare_languages(self, obj):
+        return [ls.language.pk for ls in LanguageScript.objects.filter(
+            description__identity__entity=obj)]
 
     def prepare_maintenance_status(self, obj):
         try:
@@ -185,6 +212,10 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
         return [relation.related_entity.pk for relation in
                 Relation.objects.filter(identity__entity=obj)
                 if relation.related_entity]
+
+    def prepare_related_places(self, obj):
+        return [place.place.pk for place in Place.objects.filter(
+            description__identity__entity=obj)]
 
 
 class ObjectGroupIndex(indexes.SearchIndex, indexes.Indexable):

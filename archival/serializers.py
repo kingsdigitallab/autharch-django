@@ -1,5 +1,4 @@
-from authority.serializers import EntitySerializer
-from django.db.models import Manager
+from authority.serializers import PlaceSerializer, RelatedEntitySerializer
 from jargon.serializers import (
     PublicationStatusSerializer, ReferenceSourceSerializer,
     RepositorySerializer
@@ -8,7 +7,9 @@ from media.serializers import MediaPolymorphicSerializer
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from .models import ArchivalRecord, Collection, File, Item, Reference, Series
+from .models import (
+    ArchivalRecord, Collection, File, Item, Reference,
+    RelatedMaterialReference, Series)
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
@@ -20,65 +21,50 @@ class ReferenceSerializer(serializers.ModelSerializer):
         depth = 10
 
 
-class ArchivalRecordSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='archivalrecord-detail', lookup_field='pk'
-    )
+class RelatedRecordSerializer(serializers.ModelSerializer):
+    resourcetype = serializers.SerializerMethodField(read_only=True)
 
+    def get_resourcetype(self, obj):
+        return obj.related_record.archival_level
+
+    class Meta:
+        model = RelatedMaterialReference
+        exclude = ['id', 'record']
+
+
+class ArchivalRecordSerializer(serializers.ModelSerializer):
     media = MediaPolymorphicSerializer(many=True, read_only=True)
     publication_status = PublicationStatusSerializer(
         many=False, read_only=True)
     references = ReferenceSerializer(many=True, read_only=True)
     repository = RepositorySerializer(many=False, read_only=True)
-    creators = EntitySerializer(many=True, read_only=True)
-    related_entities = EntitySerializer(many=True, read_only=True)
-    metadata = serializers.SerializerMethodField()
+    languages = serializers.SerializerMethodField()
+    organisations_as_subjects = RelatedEntitySerializer(
+        many=True, read_only=True)
+    persons_as_subjects = RelatedEntitySerializer(many=True, read_only=True)
+    places_as_subjects = PlaceSerializer(many=True, read_only=True)
+    related_entities = RelatedEntitySerializer(many=True, read_only=True)
+    related_materials = RelatedRecordSerializer(
+        many=True, read_only=True, source='referenced_related_materials')
+    persons_as_relations = RelatedEntitySerializer(many=True, read_only=True)
+    origin_locations = serializers.SerializerMethodField()
 
-    def get_metadata(self, obj):
-        metadata = []
+    def get_languages(self, obj):
+        return [language.label for language in obj.languages.all()]
 
-        for field in self.Meta.metadata_fields:
-            data = getattr(obj, field, None)
-            if data:
-                if isinstance(data, Manager):
-                    if data.count() > 0:
-                        items = data.all()
-
-                        metadata.append({
-                            'name': field.replace('_', ' '),
-                            'content': [str(item) for item in items],
-                            'items': [
-                                {
-                                    'id': item.pk,
-                                    'type':
-                                    item.__class__.__name__.lower(),
-                                    'value': str(item)
-                                }
-                                for item in items
-                            ]
-                        })
-                else:
-                    metadata.append({
-                        'name': field.replace('_', ' '),
-                        'content': str(data)
-                    })
-
-        return metadata
+    def get_origin_locations(self, obj):
+        return [location.location for location in obj.origin_locations.all()]
 
     class Meta:
         model = ArchivalRecord
-        metadata_fields = [
-            'title', 'archival_level', 'creators', 'creation_dates',
-            'references', 'persons_as_relations',
-            'places_as_relations', 'description', 'languages', 'extent',
-            'physical_description', 'record_type', 'provenance',
-            'administrative_history', 'notes',
-            'arrangement', 'subjects', 'persons_as_subjects',
-            'organisations_as_subjects',
-            'places_as_subjects', 'publication_permission', 'withheld',
-            'related_materials', 'publications', 'url', 'rights_declaration'
+        fields = [
+            'id', 'title', 'repository', 'description', 'references',
+            'creation_dates', 'extent', 'languages', 'subjects',
+            'places_as_subjects', 'persons_as_subjects', 'related_entities',
+            'organisations_as_subjects', 'related_materials',
+            'publication_status', 'media', 'persons_as_relations',
+            'provenance', 'origin_locations', 'notes', 'rights_declaration'
         ]
-        exclude = ['polymorphic_ctype']
         depth = 1
 
 
@@ -87,19 +73,35 @@ class CollectionSerializer(ArchivalRecordSerializer):
 
     class Meta(ArchivalRecordSerializer.Meta):
         model = Collection
+        fields = ArchivalRecordSerializer.Meta.fields + \
+            ['administrative_history', 'series_set']
 
 
 class FileSerializer(ArchivalRecordSerializer):
+    creators = RelatedEntitySerializer(many=True, read_only=True)
     file_set = ArchivalRecordSerializer(many=True, read_only=True)
     item_set = ArchivalRecordSerializer(many=True, read_only=True)
+    creation_places = PlaceSerializer(many=True, read_only=True)
+    places_as_relations = PlaceSerializer(many=True, read_only=True)
 
     class Meta(ArchivalRecordSerializer.Meta):
         model = File
+        fields = ArchivalRecordSerializer.Meta.fields + \
+            ['file_set', 'item_set', 'creators', 'creation_places',
+             'physical_description', 'places_as_relations', 'url', 'withheld',
+             'publication_permission', 'copyright_status', 'publications']
 
 
 class ItemSerializer(ArchivalRecordSerializer):
+    creation_places = PlaceSerializer(many=True, read_only=True)
+    places_as_relations = PlaceSerializer(many=True, read_only=True)
+
     class Meta(ArchivalRecordSerializer.Meta):
         model = Item
+        fields = ArchivalRecordSerializer.Meta.fields + \
+            ['creators', 'creation_places', 'physical_description',
+             'places_as_relations', 'url', 'withheld',
+             'publication_permission', 'copyright_status', 'publications']
 
 
 class SeriesSerializer(ArchivalRecordSerializer):
@@ -109,6 +111,8 @@ class SeriesSerializer(ArchivalRecordSerializer):
 
     class Meta(ArchivalRecordSerializer.Meta):
         model = Series
+        fields = ArchivalRecordSerializer.Meta.fields + \
+            ['file_set', 'item_set', 'series_set', 'publications']
 
 
 class ArchivalRecordPolymorphicSerializer(PolymorphicSerializer):

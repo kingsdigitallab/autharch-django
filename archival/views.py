@@ -1,6 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets
+from rest_framework.response import Response
 
-from .models import ArchivalRecord, Reference, Project
+from .models import ArchivalRecord, Reference
 from .serializers import (ArchivalRecordPolymorphicSerializer,
                           ReferenceSerializer)
 
@@ -23,25 +25,23 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('title', 'start_date', 'end_date', 'creation_dates',
                        'id')
 
-    def get_queryset(self):
-        """
-        This enables filtering of the queryset defined in the Viewset
-        by Project slug.
-
-        Returns: self.queryset filtered by project slug. If no slug is
-        provided, all records are returned. If an invalid
-        slug is provided, an empty queryset is returned.
-        """
-        project_slug = self.request.query_params.get('project', None)
-        if project_slug is not None:
-            try:
-                project = Project.objects.get(slug=project_slug)
-                return self.queryset.filter(project=project)
-            except Project.DoesNotExist:
-                # Invalid project, don't return anything!
-                return self.queryset.none()
-        else:
-            return self.queryset
+    def retrieve(self, request, pk=None):
+        context = {'request': request}
+        record = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(record, context=context)
+        # Rejig the structure to group related materials together.
+        data = serializer.data
+        data['related'] = {}
+        related_keys = [
+            'subjects', 'places_as_subjects', 'persons_as_subjects',
+            'organisations_as_subjects', 'related_materials', 'publications',
+            'related_entities',
+        ]
+        for related_key in related_keys:
+            related_value = data.pop(related_key, [])
+            if related_value:
+                data['related'][related_key] = related_value
+        return Response(data)
 
 
 class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
