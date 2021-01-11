@@ -49,11 +49,52 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
     persons_as_relations = RelatedEntitySerializer(many=True, read_only=True)
     origin_locations = serializers.SerializerMethodField()
 
+    def get_hierarchy(self, obj):
+        ancestors = obj.get_ancestors()
+        return self._serialise_ancestor(ancestors[-1], ancestors, obj)
+
     def get_languages(self, obj):
         return [language.label for language in obj.languages.all()]
 
     def get_origin_locations(self, obj):
         return [location.location for location in obj.origin_locations.all()]
+
+    def _serialise_ancestor(self, ancestor, ancestors, selected_obj):
+        data = {
+            'pk': ancestor.pk,
+            'is_selected': ancestor == selected_obj,
+            'title': ancestor.title,
+            'archival_level': ancestor.archival_level,
+            'creation_dates': ancestor.creation_dates,
+            'is_ancestor': ancestor in ancestors,
+        }
+        children = []
+        children_desc = []
+        if isinstance(ancestor, (Collection, Series)):
+            series = list(ancestor.series_set.all().order_by(
+                'calm_reference'))
+            files = list(ancestor.file_set.all().order_by('calm_reference'))
+            items = list(ancestor.item_set.all().order_by('calm_reference'))
+            children = series + files + items
+            if len(series) > 0:
+                children_desc.append('{} series'.format(len(series)))
+            if len(files) > 0:
+                children_desc.append('{} files'.format(len(files)))
+            if len(items) > 0:
+                children_desc.append('{} items'.format(len(items)))
+        elif isinstance(ancestor, File):
+            files = list(ancestor.file_set.all().order_by('calm_reference'))
+            items = list(ancestor.item_set.all().order_by('calm_reference'))
+            children = files + items
+            if len(files) > 0:
+                children_desc.append('{} files'.format(len(files)))
+            if len(items) > 0:
+                children_desc.append('{} items'.format(len(items)))
+        data['children'] = [
+            self._serialise_ancestor(child, ancestors, selected_obj)
+            for child in children]
+        data['children_desc'] = '({})'.format(', '.join(children_desc))
+        return data
 
     class Meta:
         model = ArchivalRecord
@@ -69,50 +110,58 @@ class ArchivalRecordSerializer(serializers.ModelSerializer):
 
 
 class CollectionSerializer(ArchivalRecordSerializer):
-    series_set = ArchivalRecordSerializer(many=True, read_only=True)
+    hierarchy = serializers.SerializerMethodField()
 
     class Meta(ArchivalRecordSerializer.Meta):
         model = Collection
         fields = ArchivalRecordSerializer.Meta.fields + \
-            ['administrative_history', 'series_set']
+            ['administrative_history', 'hierarchy']
+
+
+class SeriesSerializer(ArchivalRecordSerializer):
+    hierarchy = serializers.SerializerMethodField()
+
+    class Meta(ArchivalRecordSerializer.Meta):
+        model = Series
+        fields = ArchivalRecordSerializer.Meta.fields + \
+            ['publications', 'hierarchy']
 
 
 class FileSerializer(ArchivalRecordSerializer):
     creators = RelatedEntitySerializer(many=True, read_only=True)
-    file_set = ArchivalRecordSerializer(many=True, read_only=True)
-    item_set = ArchivalRecordSerializer(many=True, read_only=True)
     creation_places = PlaceSerializer(many=True, read_only=True)
     places_as_relations = PlaceSerializer(many=True, read_only=True)
+    parent_collection = serializers.SerializerMethodField()
+
+    def get_parent_collection(self, obj):
+        collection = obj.get_ancestors()[-1]
+        return {'pk': collection.pk, 'title': collection.title}
 
     class Meta(ArchivalRecordSerializer.Meta):
         model = File
         fields = ArchivalRecordSerializer.Meta.fields + \
-            ['file_set', 'item_set', 'creators', 'creation_places',
-             'physical_description', 'places_as_relations', 'url', 'withheld',
-             'publication_permission', 'copyright_status', 'publications']
+            ['creators', 'creation_places', 'physical_description',
+             'places_as_relations', 'url', 'withheld',
+             'publication_permission', 'copyright_status', 'publications',
+             'parent_collection']
 
 
 class ItemSerializer(ArchivalRecordSerializer):
     creation_places = PlaceSerializer(many=True, read_only=True)
     places_as_relations = PlaceSerializer(many=True, read_only=True)
+    parent_collection = serializers.SerializerMethodField()
+
+    def get_parent_collection(self, obj):
+        collection = obj.get_ancestors()[-1]
+        return {'pk': collection.pk, 'title': collection.title}
 
     class Meta(ArchivalRecordSerializer.Meta):
         model = Item
         fields = ArchivalRecordSerializer.Meta.fields + \
             ['creators', 'creation_places', 'physical_description',
              'places_as_relations', 'url', 'withheld',
-             'publication_permission', 'copyright_status', 'publications']
-
-
-class SeriesSerializer(ArchivalRecordSerializer):
-    series_set = ArchivalRecordSerializer(many=True, read_only=True)
-    file_set = ArchivalRecordSerializer(many=True, read_only=True)
-    item_set = ArchivalRecordSerializer(many=True, read_only=True)
-
-    class Meta(ArchivalRecordSerializer.Meta):
-        model = Series
-        fields = ArchivalRecordSerializer.Meta.fields + \
-            ['file_set', 'item_set', 'series_set', 'publications']
+             'publication_permission', 'copyright_status', 'publications',
+             'parent_collection']
 
 
 class ArchivalRecordPolymorphicSerializer(PolymorphicSerializer):
