@@ -123,6 +123,7 @@ def render_record_hierarchy_item(current_record, selected_record, ancestors):
     elif isinstance(current_record, File):
         files = list(current_record.file_set.all().order_by('calm_reference'))
         items = list(current_record.item_set.all().order_by('calm_reference'))
+        children = files + items
         if len(files) > 0:
             children_desc.append('{} files'.format(len(files)))
         if len(items) > 0:

@@ -18,11 +18,11 @@ from authority.models import (
     LanguageScript, LegalStatus, LocalDescription, Mandate, NameEntry,
     NamePart, Place, Relation, Resource, Source
 )
-from jargon.models import EntityType, NamePartType, PublicationStatus
+from jargon.models import (
+    EntityType, NamePartType, PublicationStatus, ReferenceSource)
 
 from .constants import CORPORATE_BODY_ENTITY_TYPE, PERSON_ENTITY_TYPE
 from .models import EditorProfile
-from .search_indexes import RA_REFERENCE_SOURCE
 from .widgets import (
     ArchivalRecordMultiSelect, ArchivalRecordSelect, EntityMultiSelect,
     EntityCorporateBodyMultiSelect, EntityPersonMultiSelect, EntitySelect,
@@ -107,8 +107,10 @@ ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date 
 
 class ArchivalRecordModelMultipleChoiceField(forms.ModelMultipleChoiceField):
 
+    RA_REFERENCE_SOURCE = ReferenceSource.objects.get(title='RA')
+
     def label_from_instance(self, obj):
-        return ', '.join(obj.references.filter(source=RA_REFERENCE_SOURCE)
+        return ', '.join(obj.references.filter(source=self.RA_REFERENCE_SOURCE)
                          .values_list('unitid', flat=True))
 
 

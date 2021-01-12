@@ -135,6 +135,32 @@ class ArchivalRecord(PolymorphicModel, TimeStampedModel):
     def archival_level(self):
         return self.get_real_instance_class().__name__
 
+    def get_ancestors(self, ancestors=None):
+        """Returns a list of ancestors-and-self of this record, in ascending
+        order. Includes the current record.
+
+        This function does not enforce that the highest ancestor is a
+        Collection.
+
+        """
+        if ancestors is None:
+            ancestors = [self]
+        else:
+            ancestors.append(self)
+        if isinstance(self, Series):
+            if self.parent_collection is not None:
+                ancestors = self.parent_collection.get_ancestors(ancestors)
+            elif self.parent_series is not None:
+                ancestors = self.parent_series.get_ancestors(ancestors)
+        elif isinstance(self, (File, Item)):
+            if self.parent_collection is not None:
+                ancestors = self.parent_collection.get_ancestors(ancestors)
+            elif self.parent_series is not None:
+                ancestors = self.parent_series.get_ancestors(ancestors)
+            elif self.parent_file is not None:
+                ancestors = self.parent_file.get_ancestors(ancestors)
+        return ancestors
+
     def is_deleted(self):
         return self.maintenance_status.title == 'deleted'
 
@@ -333,7 +359,8 @@ class ObjectGroup(TimeStampedModel):
     collections = models.ManyToManyField(
         Collection, blank=True, related_name='relating_group')
     records = models.ManyToManyField(
-        ArchivalRecord, blank=True, related_name='featuring_group', verbose_name='Featured archival records')
+        ArchivalRecord, blank=True, related_name='featuring_group',
+        verbose_name='Featured archival records')
     related_entities = models.ManyToManyField(
         Entity, blank=True, related_name='relating_group')
     featured_entities = models.ManyToManyField(
