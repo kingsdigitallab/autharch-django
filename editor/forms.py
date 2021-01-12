@@ -107,11 +107,10 @@ ENTITY_END_DATE_HELP = 'This element indicates a date of existence - death date 
 
 class ArchivalRecordModelMultipleChoiceField(forms.ModelMultipleChoiceField):
 
-    RA_REFERENCE_SOURCE = ReferenceSource.objects.get(title='RA')
-
     def label_from_instance(self, obj):
-        return ', '.join(obj.references.filter(source=self.RA_REFERENCE_SOURCE)
-                         .values_list('unitid', flat=True))
+        source = ReferenceSource.objects.get(title='RA')
+        return ', '.join(obj.references.filter(source=source).values_list(
+            'unitid', flat=True))
 
 
 class ContainerModelForm(forms.ModelForm):
