@@ -12,8 +12,6 @@ from jargon.models import ReferenceSource
 
 class ArchivalRecordIndex:
 
-    RA_REFERENCE_SOURCE = ReferenceSource.objects.get(title='RA')
-
     def _get_year_from_date(self, date):
         if not date:
             year = None
@@ -47,8 +45,9 @@ class ArchivalRecordIndex:
         return list(obj.languages.distinct().values_list('label', flat=True))
 
     def prepare_ra_references(self, obj):
-        return list(obj.references.filter(source=self.RA_REFERENCE_SOURCE)
-                    .values_list('unitid', flat=True))
+        source = ReferenceSource.objects.get(title='RA')
+        return list(obj.references.filter(source=source).values_list(
+            'unitid', flat=True))
 
     def prepare_transcription_text(self, obj):
         if obj.transcription_texts.count():
