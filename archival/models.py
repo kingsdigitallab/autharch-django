@@ -366,6 +366,7 @@ class ObjectGroup(TimeStampedModel):
     featured_entities = models.ManyToManyField(
         Entity, blank=True, related_name='featuring_group')
     is_deleted = models.BooleanField(default=False)
+    order = models.PositiveIntegerField()
 
     def __str__(self):
         return self.title
