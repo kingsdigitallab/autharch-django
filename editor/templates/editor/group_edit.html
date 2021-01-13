@@ -14,11 +14,6 @@
       <label class="mobile-only" for="document-status-checkbox">Status</label>
       <div class="mobile-hide">
         <ul>
-          <li>Publication status:
-            {% if is_deleted %} 
-              <span class="highlight danger-clear">(deleted)</span>
-            {% endif %}
-          </li>
           <li>Updated: <span class="highlight">{{ last_revision.date_created }}</span> by <span class="highlight">{{ last_revision.user }}</span></li>
           <li>
             <a href="{% url 'editor:group-history' group_id=group.pk %}">
