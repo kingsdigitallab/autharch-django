@@ -833,7 +833,7 @@ class ObjectGroupForm(forms.ModelForm):
         model = ObjectGroup
         fields = [
             'title', 'slug', 'introduction', 'description', 'collections',
-            'records', 'related_entities', 'featured_entities'
+            'records', 'related_entities', 'featured_entities', 'order',
         ]
         widgets = {
             'description': forms.Textarea(attrs=RICHTEXT_ATTRS),
