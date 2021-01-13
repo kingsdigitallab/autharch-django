@@ -8,8 +8,8 @@ from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 from .models import (
-    ArchivalRecord, Collection, File, Item, Reference,
-    RelatedMaterialReference, Series)
+    ArchivalRecord, ArchivalRecordImage, ArchivalRecordTranscription,
+    Collection, File, Item, Reference, RelatedMaterialReference, Series)
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
@@ -30,6 +30,18 @@ class RelatedRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelatedMaterialReference
         exclude = ['id', 'record']
+
+
+class TranscriptionImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchivalRecordImage
+        fields = ['image', 'order']
+
+
+class TranscriptionTextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchivalRecordTranscription
+        fields = ['order', 'transcription']
 
 
 class ArchivalRecordSerializer(serializers.ModelSerializer):
@@ -132,6 +144,10 @@ class FileSerializer(ArchivalRecordSerializer):
     creation_places = PlaceSerializer(many=True, read_only=True)
     places_as_relations = PlaceSerializer(many=True, read_only=True)
     parent_collection = serializers.SerializerMethodField()
+    transcriptions = TranscriptionTextSerializer(
+        many=True, read_only=True, source='transcription_texts')
+    media = TranscriptionImageSerializer(
+        many=True, read_only=True, source='transcription_images')
 
     def get_parent_collection(self, obj):
         collection = obj.get_ancestors()[-1]
@@ -143,13 +159,18 @@ class FileSerializer(ArchivalRecordSerializer):
             ['creators', 'creation_places', 'physical_description',
              'places_as_relations', 'url', 'withheld',
              'publication_permission', 'copyright_status', 'publications',
-             'parent_collection']
+             'parent_collection', 'transcriptions', 'media']
 
 
 class ItemSerializer(ArchivalRecordSerializer):
+    creators = RelatedEntitySerializer(many=True, read_only=True)
     creation_places = PlaceSerializer(many=True, read_only=True)
     places_as_relations = PlaceSerializer(many=True, read_only=True)
     parent_collection = serializers.SerializerMethodField()
+    transcriptions = TranscriptionTextSerializer(
+        many=True, read_only=True, source='transcription_texts')
+    media = TranscriptionImageSerializer(
+        many=True, read_only=True, source='transcription_images')
 
     def get_parent_collection(self, obj):
         collection = obj.get_ancestors()[-1]
@@ -161,7 +182,7 @@ class ItemSerializer(ArchivalRecordSerializer):
             ['creators', 'creation_places', 'physical_description',
              'places_as_relations', 'url', 'withheld',
              'publication_permission', 'copyright_status', 'publications',
-             'parent_collection']
+             'parent_collection', 'transcriptions', 'media']
 
 
 class ArchivalRecordPolymorphicSerializer(PolymorphicSerializer):
