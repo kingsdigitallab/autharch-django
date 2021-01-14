@@ -12,6 +12,14 @@ from .models import (
     Collection, File, Item, Reference, RelatedMaterialReference, Series)
 
 
+class ArchivalRecordListSerializer(serializers.Serializer):
+    """Serializer for a Haystack SearchQuerySet of archival records."""
+    title = serializers.CharField(source='description')
+    archival_level = serializers.CharField()
+    creators = serializers.CharField(source='writers_display')
+    creation_date = serializers.CharField()
+
+
 class ReferenceSerializer(serializers.ModelSerializer):
     source = ReferenceSourceSerializer(many=False, read_only=True)
 

@@ -44,6 +44,10 @@ class ArchivalRecordIndex:
     def prepare_languages(self, obj):
         return list(obj.languages.distinct().values_list('label', flat=True))
 
+    def prepare_persons_as_relations(self, obj):
+        return list(obj.persons_as_relations.distinct().values_list(
+            'pk', flat=True))
+
     def prepare_ra_references(self, obj):
         source = ReferenceSource.objects.get(title='RA')
         return list(obj.references.filter(source=source).values_list(
@@ -96,6 +100,7 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     languages = indexes.MultiValueField(faceted=True)
     writers = indexes.MultiValueField(faceted=True)
     writers_display = indexes.CharField()
+    persons_as_relations = indexes.MultiValueField(faceted=True)
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     ra_references = indexes.MultiValueField()
@@ -120,6 +125,7 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
     languages = indexes.MultiValueField(faceted=True)
     writers = indexes.MultiValueField(faceted=True)
     writers_display = indexes.CharField()
+    persons_as_relations = indexes.MultiValueField(faceted=True)
     modified = indexes.DateTimeField(model_attr='modified')
     description = indexes.CharField()
     ra_references = indexes.MultiValueField()

@@ -1,10 +1,14 @@
 from django.shortcuts import get_object_or_404
+from haystack.query import SearchQuerySet
 from rest_framework import filters, viewsets
 from rest_framework.response import Response
 
-from .models import ArchivalRecord, Reference
-from .serializers import (ArchivalRecordPolymorphicSerializer,
-                          ReferenceSerializer)
+from authority.models import Entity
+
+from .models import ArchivalRecord, Collection, File, Item, Reference, Series
+from .serializers import (
+    ArchivalRecordPolymorphicSerializer, ArchivalRecordListSerializer,
+    ReferenceSerializer)
 
 
 class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
@@ -24,6 +28,43 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('title', 'start_date', 'end_date', 'creation_dates',
                        'id')
+
+    def _annotate_facets(self, facets):
+        if not facets:
+            return facets
+        for facet, values in facets.items():
+            # Some facet field values are a model object ID, so get
+            # a display string for them.
+            display_values = None
+            if facet in ('persons_as_relations', 'writers'):
+                display_values = Entity.objects.filter(
+                    id__in=[value[0] for value in values])
+            new_values = []
+            for value_data in values:
+                obj_id, obj_count = value_data
+                new_value = {'key': obj_id, 'doc_count': obj_count,
+                             'label': obj_id}
+                if display_values is not None:
+                    new_value['label'] = str(display_values.get(id=obj_id))
+                new_values.append(new_value)
+            facets[facet] = new_values
+        return facets
+
+    def list(self, request):
+        queryset = SearchQuerySet().models(
+            Collection, File, Item, Series).exclude(
+                maintenance_status='deleted').facet('archival_level').facet(
+                    'languages', size=0).facet('record_types', size=0).facet(
+                        'writers', size=0).facet('persons_as_relations',
+                                                 size=0)
+        serializer = ArchivalRecordListSerializer(queryset, many=True)
+        facet_data = self._annotate_facets(queryset.facet_counts()['fields'])
+        data = {
+            'count': len(queryset),
+            'facets': facet_data,
+            'results': serializer.data,
+        }
+        return Response(data)
 
     def retrieve(self, request, pk=None):
         context = {'request': request}
