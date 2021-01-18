@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from authority.models import Entity
 
+from .forms import ArchivalRecordFacetedSearchForm
 from .models import ArchivalRecord, Collection, File, Item, Reference, Series
 from .serializers import (
     ArchivalRecordPolymorphicSerializer, ArchivalRecordListSerializer,
@@ -50,21 +51,40 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
             facets[facet] = new_values
         return facets
 
+    def _assemble_selected_facets(self, params, facet_fields):
+        selected_facets = []
+        for facet, values in params.lists():
+            if facet in facet_fields:
+                for value in values:
+                    selected_facets.append('{}:{}'.format(facet, value))
+        return selected_facets
+
     def list(self, request):
+        facet_fields = ['archival_level', 'languages', 'record_types',
+                        'writers', 'persons_as_relations']
         queryset = SearchQuerySet().models(
             Collection, File, Item, Series).exclude(
-                maintenance_status='deleted').facet('archival_level').facet(
-                    'languages', size=0).facet('record_types', size=0).facet(
-                        'writers', size=0).facet('persons_as_relations',
-                                                 size=0)
-        serializer = ArchivalRecordListSerializer(queryset, many=True)
+                maintenance_status='deleted')
+        for facet_field in facet_fields:
+            queryset = queryset.facet(facet_field, size=0)
+        selected_facets = self._assemble_selected_facets(
+            request.GET, facet_fields)
+        form = ArchivalRecordFacetedSearchForm(
+            request.GET, searchqueryset=queryset,
+            selected_facets=selected_facets)
+        if form.is_valid():
+            queryset = form.search()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = ArchivalRecordListSerializer(page, many=True)
+            response = self.get_paginated_response(serializer.data)
+        else:
+            serializer = ArchivalRecordListSerializer(queryset, many=True)
+            response = Response(serializer.data)
         facet_data = self._annotate_facets(queryset.facet_counts()['fields'])
-        data = {
-            'count': len(queryset),
-            'facets': facet_data,
-            'results': serializer.data,
-        }
-        return Response(data)
+        facet_data['creation_years'] = [1700, 2020]
+        response.data['facets'] = facet_data
+        return response
 
     def retrieve(self, request, pk=None):
         context = {'request': request}
