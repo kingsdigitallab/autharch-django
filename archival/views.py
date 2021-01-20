@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import get_object_or_404
 from haystack.query import SearchQuerySet
 from rest_framework import filters, viewsets
@@ -51,6 +53,16 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
             facets[facet] = new_values
         return facets
 
+    def _assemble_creation_years(self, creation_years):
+        start_year = None
+        end_year = None
+        if isinstance(creation_years, str):
+            match = re.fullmatch(r'(\d{0,4}),(\d{0,4})', creation_years)
+            if match is not None:
+                start_year = match.group(1)
+                end_year = match.group(2)
+        return start_year, end_year
+
     def _assemble_selected_facets(self, params, facet_fields):
         selected_facets = []
         for facet, values in params.lists():
@@ -58,6 +70,20 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
                 for value in values:
                     selected_facets.append('{}:{}'.format(facet, value))
         return selected_facets
+
+    def _get_creation_year_range(self):
+        start_dates = ArchivalRecord.objects.exclude(
+            start_date='').values_list('start_date', flat=True)
+        if len(start_dates) == 0:
+            years = [0, 2020]
+            return years
+        min_year = sorted(start_dates, key=lambda x: x[:4])[0][:4]
+        end_dates = ArchivalRecord.objects.exclude(end_date='').values_list(
+            'end_date', flat=True)
+        if not end_dates:
+            end_dates = start_dates
+        max_year = sorted(end_dates, key=lambda x: x[:4], reverse=True)[0][:4]
+        return [int(min_year), int(max_year)]
 
     def list(self, request):
         facet_fields = ['archival_level', 'languages', 'record_types',
@@ -69,9 +95,12 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.facet(facet_field, size=0)
         selected_facets = self._assemble_selected_facets(
             request.GET, facet_fields)
+        start_year, end_year = self._assemble_creation_years(
+            request.GET.get('creation_years', None))
         form = ArchivalRecordFacetedSearchForm(
             request.GET, searchqueryset=queryset,
-            selected_facets=selected_facets)
+            selected_facets=selected_facets, start_year=start_year,
+            end_year=end_year)
         if form.is_valid():
             queryset = form.search()
         page = self.paginate_queryset(queryset)
@@ -82,7 +111,7 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
             serializer = ArchivalRecordListSerializer(queryset, many=True)
             response = Response(serializer.data)
         facet_data = self._annotate_facets(queryset.facet_counts()['fields'])
-        facet_data['creation_years'] = [1700, 2020]
+        facet_data['creation_years'] = self._get_creation_year_range()
         response.data['facets'] = facet_data
         return response
 
