@@ -6,37 +6,42 @@ from authority.models import (
 from jargon.models import ReferenceSource
 
 
+def _get_year_from_date(date):
+    if not date:
+        year = None
+    else:
+        try:
+            year_end_index = date.index('-')
+            year = int(date[:year_end_index])
+        except ValueError:
+            year = int(date)
+    return year
+
+
+def _get_year_range(start_date, end_date):
+    start_year = _get_year_from_date(start_date)
+    end_year = _get_year_from_date(end_date)
+    if start_year is None:
+        years = []
+    elif end_year is None:
+        years = [start_year]
+    else:
+        years = list(range(start_year, end_year + 1))
+    return years
+
+
 # The polymorphic ArchivalRecord model subclasses must have their own
 # index, and fields cannot be inherited. However, data preparation
 # methods may be inherited.
 
 class ArchivalRecordIndex:
 
-    def _get_year_from_date(self, date):
-        if not date:
-            year = None
-        else:
-            try:
-                year_end_index = date.index('-')
-                year = int(date[:year_end_index])
-            except ValueError:
-                year = int(date)
-        return year
-
     def prepare_addressees(self, obj):
         return list(obj.persons_as_relations.distinct().values_list(
             'pk', flat=True))
 
     def prepare_dates(self, obj):
-        start_year = self._get_year_from_date(obj.start_date)
-        end_year = self._get_year_from_date(obj.end_date)
-        if start_year is None:
-            years = []
-        elif end_year is None:
-            years = [start_year]
-        else:
-            years = list(range(start_year, end_year + 1))
-        return years
+        return _get_year_range(obj.start_date, obj.end_date)
 
     def prepare_description(self, obj):
         return str(obj)
@@ -172,12 +177,21 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     languages = indexes.MultiValueField(faceted=True)
     has_multiple_identities = indexes.BooleanField(faceted=True)
     has_royal_name = indexes.BooleanField(faceted=True)
+    existence_dates = indexes.MultiValueField()
 
     def get_model(self):
         return Entity
 
     def prepare_description(self, obj):
         return str(obj)
+
+    def prepare_existence_dates(self, obj):
+        # Use the existence dates of the primary identity only.
+        try:
+            identity = obj.identities.filter(preferred_identity=True)[0]
+        except IndexError:
+            return []
+        return _get_year_range(identity.date_from, identity.date_to)
 
     def prepare_genders(self, obj):
         return [ld.gender.pk for ld in LocalDescription.objects.filter(
