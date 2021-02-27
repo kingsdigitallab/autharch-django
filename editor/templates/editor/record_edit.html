@@ -340,7 +340,7 @@
       zoomOutButton: "zoom-out",
       homeButton: "default",
       fullPageButton: "full-mode",
-      tileSources: []
+    tileSources: [{% for image in record.transcription_images.all %}{type: 'image', url: "{% get_media_prefix %}{{ image.image }}"}{% if not forloop.last %}, {% endif %}{% endfor %}]
   });
   // resolve an issue when all iframes are wiped off when full screen is enabled
   var elem = document.querySelector(".openseadragon-container");
