@@ -15,6 +15,7 @@ REPLACE_HELP = 'Replace existing images (same page on same record only).'
 EXISTING_IMAGE_ERROR = (
     'Cannot import image at "{}"; image already exists for page {} of record '
     '"{}"; use --replace to automatically overwrite such.')
+MULTIPLE_PAGES_ERROR = 'Transcription image at "{}" has multiple valid pages.'
 NO_ARCHIVAL_RECORD_ERROR = ('Transcription image at "{}" has no corresponding '
                             'ArchivalRecord object.')
 NO_VALID_PAGE_ERROR = ('Transcription image at "{}" has no valid page '
@@ -66,6 +67,9 @@ class Command(BaseCommand):
                 record = ArchivalRecord.objects.get(
                     references__unitid=identifier)
             except ArchivalRecord.DoesNotExist:
+                record = None
+            except ArchivalRecord.MultipleObjectsReturned:
+                self.stderr.write(MULTIPLE_PAGES_ERROR.format(filename))
                 record = None
         return record, page
 
