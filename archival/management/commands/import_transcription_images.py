@@ -55,22 +55,15 @@ class Command(BaseCommand):
             page = int(parts[-1])
         except ValueError:
             return record, None
-        if filename.startswith('GEO_MAIN_'):
-            identifier = 'RI{}'.format(parts[2])
-            try:
-                record = ArchivalRecord.objects.get(uuid=identifier)
-            except ArchivalRecord.DoesNotExist:
-                record = None
-        else:
-            identifier = '/'.join(parts[:-1])
-            try:
-                record = ArchivalRecord.objects.get(
-                    references__unitid=identifier)
-            except ArchivalRecord.DoesNotExist:
-                record = None
-            except ArchivalRecord.MultipleObjectsReturned:
-                self.stderr.write(MULTIPLE_PAGES_ERROR.format(filename))
-                record = None
+        identifier = '/'.join([part for part in parts[:-1] if part])
+        try:
+            record = ArchivalRecord.objects.get(
+                references__unitid=identifier)
+        except ArchivalRecord.DoesNotExist:
+            record = None
+        except ArchivalRecord.MultipleObjectsReturned:
+            self.stderr.write(MULTIPLE_PAGES_ERROR.format(filename))
+            record = None
         return record, page
 
     def _import_transcription(self, image_path, replace):
