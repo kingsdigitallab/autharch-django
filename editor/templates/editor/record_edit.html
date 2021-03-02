@@ -108,7 +108,7 @@
           </div>
         </div>
         <div class="fieldset-body" id="transcription-div">
-          {% if transcriptions|length > 0 %}
+          {% if transcriptions|length > 0 or images|length > 0 %}
           <div class="two-column-table" id="transcription-section">
             <div id="openseadragon1" class="image">
                 <div id="navigation-pane">
@@ -329,8 +329,7 @@
 {% endblock main %}
 {% block extra_js %}
 <script src="{% static 'js/openseadragon/openseadragon.min.js' %}"></script>
-{% with transcriptions=form.formsets.transcriptions %}
-{% if transcriptions|length > 0 %}
+{% if images|length > 0 %}
 <script type="text/javascript">
   var viewer = OpenSeadragon({
       id: "openseadragon1",
@@ -340,7 +339,7 @@
       zoomOutButton: "zoom-out",
       homeButton: "default",
       fullPageButton: "full-mode",
-    tileSources: [{% for image in record.transcription_images.all %}{type: 'image', url: "{% get_media_prefix %}{{ image.image }}"}{% if not forloop.last %}, {% endif %}{% endfor %}]
+    tileSources: [{% for image in images %}{type: 'image', url: "{% get_media_prefix %}{{ image.image }}"}{% if not forloop.last %}, {% endif %}{% endfor %}]
   });
   // resolve an issue when all iframes are wiped off when full screen is enabled
   var elem = document.querySelector(".openseadragon-container");
@@ -361,5 +360,4 @@
   }
 </script>
 {% endif %}
-{% endwith %}
 {% endblock extra_js %}
