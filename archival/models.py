@@ -321,7 +321,7 @@ class ArchivalRecordImage(models.Model):
     record = models.ForeignKey(ArchivalRecord, on_delete=models.CASCADE,
                                related_name='transcription_images')
     image = models.ImageField(upload_to='ar_transcription_images/')
-    order = models.PositiveIntegerField()
+    order = models.CharField(max_length=64)
 
     class Meta:
         ordering = ['order']
