@@ -21,7 +21,7 @@ LEVEL_CHOICES = [FILE_ITEM_LEVEL, FILE_LEVEL, ITEM_LEVEL]
 
 class Command(BaseCommand):
     help = HELP
-    refs_map = {'duplicates': {}, 'errors': {}, 'refs': {}}
+    refs_map = {'duplicates': {}, 'errors': {}, 'refs': {}, 'file_refs': {}}
 
     def add_arguments(self, parser):
         parser.add_argument('level', choices=LEVEL_CHOICES, help=LEVEL_HELP)
@@ -29,14 +29,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         refs_map = {}
         ra_source = ReferenceSource.objects.get(title="RA")
-        if options['level'] in (FILE_ITEM_LEVEL, FILE_LEVEL):
-            for record in File.objects.exclude(
-                    maintenance_status__title='deleted'):
-                refs_map = self._handle_record(record, ra_source, refs_map)
         if options['level'] in (FILE_ITEM_LEVEL, ITEM_LEVEL):
             for record in Item.objects.exclude(
                     maintenance_status__title='deleted'):
-                refs_map = self._handle_record(record, ra_source, refs_map)
+                refs_map = self._handle_record(record, ra_source, refs_map,
+                                               'item')
+        if options['level'] in (FILE_ITEM_LEVEL, FILE_LEVEL):
+            for record in File.objects.exclude(
+                    maintenance_status__title='deleted'):
+                refs_map = self._handle_record(record, ra_source, refs_map,
+                                               'file')
+        self.refs_map['refs'].update(self.refs_map['file_refs'])
+        del self.refs_map['file_refs']
         self.stdout.write(json.dumps(self.refs_map, indent=True))
 
     def _clean_ref(self, ref):
@@ -97,7 +101,7 @@ class Command(BaseCommand):
             return []
         return [base + str(i) for i in range(start, end + 1)]
 
-    def _handle_record(self, record, ra_source, refs_map):
+    def _handle_record(self, record, ra_source, refs_map, level):
         self.record_id = record.pk
         refs = record.references.filter(source=ra_source).values_list(
             "unitid", flat=True)
@@ -109,8 +113,20 @@ class Command(BaseCommand):
                 self.refs_map['duplicates'][ref].append(self.record_id)
                 continue
             if ref in self.refs_map['refs']:
+                if level == 'file':
+                    # If a file RA Reference conflicts with an item RA
+                    # Reference, keep the latter and ignore the former.
+                    continue
                 self.refs_map['duplicates'][ref] = [
                     self.refs_map['refs'].pop(ref), self.record_id]
                 continue
-            self.refs_map['refs'][ref] = self.record_id
+            if ref in self.refs_map['file_refs']:
+                self.refs_map['duplicates'][ref] = [
+                    self.refs_map['file_refs'].pop(ref), self.record_id]
+                continue
+            if level == 'file':
+                refs_key = 'file_refs'
+            else:
+                refs_key = 'refs'
+            self.refs_map[refs_key][ref] = self.record_id
         return refs_map
