@@ -7,23 +7,36 @@ from jargon.models import ReferenceSource
 
 
 HELP = """Write a JSON string giving individual RA Reference values for each
-ArchivalRecord, expanding ranges. Eg, GEO/ADD/32/12-13 becomes
-GEO/ADD/32/12 and GEO/ADD/32/13. This file is for use with image
-import, where images are associated with a single RA Reference
-value."""
+ArchivalRecord of the specified level(s), expanding ranges. Eg,
+GEO/ADD/32/12-13 becomes GEO/ADD/32/12 and GEO/ADD/32/13. This file is
+for use with image import, where images are associated with a single
+RA Reference value. Deleted records are not exported."""
+LEVEL_HELP = 'Level of records to export.'
+
+FILE_LEVEL = 'file'
+ITEM_LEVEL = 'item'
+FILE_ITEM_LEVEL = 'both'
+LEVEL_CHOICES = [FILE_ITEM_LEVEL, FILE_LEVEL, ITEM_LEVEL]
 
 
 class Command(BaseCommand):
     help = HELP
     refs_map = {'duplicates': {}, 'errors': {}, 'refs': {}}
 
+    def add_arguments(self, parser):
+        parser.add_argument('level', choices=LEVEL_CHOICES, help=LEVEL_HELP)
+
     def handle(self, *args, **options):
         refs_map = {}
         ra_source = ReferenceSource.objects.get(title="RA")
-        for record in File.objects.all():
-            refs_map = self._handle_record(record, ra_source, refs_map)
-        for record in Item.objects.all():
-            refs_map = self._handle_record(record, ra_source, refs_map)
+        if options['level'] in (FILE_ITEM_LEVEL, FILE_LEVEL):
+            for record in File.objects.exclude(
+                    maintenance_status__title='deleted'):
+                refs_map = self._handle_record(record, ra_source, refs_map)
+        if options['level'] in (FILE_ITEM_LEVEL, ITEM_LEVEL):
+            for record in Item.objects.exclude(
+                    maintenance_status__title='deleted'):
+                refs_map = self._handle_record(record, ra_source, refs_map)
         self.stdout.write(json.dumps(self.refs_map, indent=True))
 
     def _clean_ref(self, ref):
