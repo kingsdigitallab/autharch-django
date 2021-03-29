@@ -857,13 +857,15 @@ def record_edit(request, record_id):
                      record.organisations_as_subjects.count() +
                      record.persons_as_subjects.count() +
                      record.referenced_related_materials.count())
+    images = record.transcription_images.all()
     context = {
         'current_section': current_section,
         'delete_url': reverse('editor:record-delete',
                               kwargs={'record_id': record_id}),
         'form': form,
         'form_media': form.media,
-        'images': record.transcription_images.all(),
+        'image_count': len(images),
+        'images': images,
         'is_admin': is_admin,
         'is_deleted': is_deleted,
         'last_revision': Version.objects.get_for_object(record)[0].revision,

@@ -206,7 +206,7 @@ $(document).ready(function() {
   // add pagination
   function addPagination() {
     $('#rte-pagination').pagination({
-      items: $("textarea.richtext-transcription").length,
+      items: Math.max($("textarea.richtext-transcription").length, image_count),
       itemsOnPage: 1,
       useAnchors: false,
       displayedPages: 3,

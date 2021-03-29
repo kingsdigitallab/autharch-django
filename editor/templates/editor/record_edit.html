@@ -331,6 +331,7 @@
 <script src="{% static 'js/openseadragon/openseadragon.min.js' %}"></script>
 {% if images|length > 0 %}
 <script type="text/javascript">
+  var image_count = {{ image_count }};
   var viewer = OpenSeadragon({
       id: "openseadragon1",
       prefixUrl: "{% static 'js/openseadragon/images/' %}",
