@@ -18,6 +18,7 @@ class ArchivalRecordListSerializer(serializers.Serializer):
     archival_level = serializers.CharField()
     creators = serializers.CharField(source='writers_display')
     creation_date = serializers.CharField()
+    pk = serializers.IntegerField()
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
