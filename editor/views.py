@@ -111,7 +111,8 @@ class FacetMixin:
             # Some facet field values are a model object ID, so get
             # a display string for them.
             display_values = None
-            if facet in ('addressees', 'related_entities', 'writers'):
+            if facet in ('persons_as_relations', 'related_entities',
+                         'writers'):
                 display_values = Entity.objects.filter(
                     id__in=[value[0] for value in values])
             elif facet == 'transcription_text':
@@ -237,9 +238,10 @@ class DeletedListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
     form_class = DeletedFacetedSearchForm
     queryset = SearchQuerySet().models(
         Collection, Entity, File, Item, ObjectGroup, Series).filter(
-            maintenance_status='deleted').facet('addressees', size=0).facet(
-                'archival_level').facet('entity_type').facet(
-                    'languages', size=0).facet('writers', size=0)
+            maintenance_status='deleted').facet(
+                'persons_as_relations', size=0).facet('archival_level').facet(
+                    'entity_type').facet('languages', size=0).facet(
+                        'writers', size=0)
     facet_fields = []
 
     def get_context_data(self, *args, **kwargs):
@@ -259,10 +261,11 @@ class RecordListView(UserPassesTestMixin, FacetedSearchView, FacetMixin):
 
     template_name = 'editor/records_list.html'
     queryset = SearchQuerySet().models(Collection, File, Item, Series).exclude(
-        maintenance_status='deleted').facet('addressees', size=0).facet(
-        'archival_level').facet('languages', size=0).facet(
-        'writers', size=0).facet('record_types', size=0).facet(
-        'transcription_text', size=0)
+        maintenance_status='deleted').facet(
+            'persons_as_relations', size=0).facet(
+                'archival_level').facet('languages', size=0).facet(
+                    'writers', size=0).facet('record_types', size=0).facet(
+                        'transcription_text', size=0)
     form_class = ArchivalRecordFacetedSearchForm
     facet_fields = []
 

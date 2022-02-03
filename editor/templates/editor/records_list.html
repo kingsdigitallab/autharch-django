@@ -65,13 +65,13 @@
                     {% endfor %}
                   </fieldset>
                 {% endif %}
-                {% if facets.fields.addressees|length > 0 %}
+                {% if facets.fields.persons_as_relations|length > 0 %}
                   <fieldset class="filter-list" id="addressee-filter">
                     <legend>Addressee</legend>
-                    {% if facets.fields.addressees|length > 7 %}
+                    {% if facets.fields.persons_as_relations|length > 7 %}
                       <input type="text" name="search-addressee" aria-label="search addressee" class="instant-search" placeholder="Search addressee" onfocus="this.placeholder=''" onblur="this.placeholder='Search addressee'"/>
                     {% endif %}
-                    {% for addressee in facets.fields.addressees %}
+                    {% for addressee in facets.fields.persons_as_relations %}
                     {% render_facet addressee %}
                     {% endfor %}
                   </fieldset>

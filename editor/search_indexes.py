@@ -36,10 +36,6 @@ def _get_year_range(start_date, end_date):
 
 class ArchivalRecordIndex:
 
-    def prepare_addressees(self, obj):
-        return list(obj.persons_as_relations.distinct().values_list(
-            'pk', flat=True))
-
     def prepare_dates(self, obj):
         return _get_year_range(obj.start_date, obj.end_date)
 
@@ -99,7 +95,6 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
                                        faceted=True)
     publication_status = indexes.CharField(model_attr='publication_status')
     maintenance_status = indexes.CharField(model_attr='maintenance_status')
-    addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField()
     creation_date = indexes.CharField(model_attr='creation_dates', null=True)
     languages = indexes.MultiValueField(faceted=True)
@@ -124,7 +119,6 @@ class ItemIndex(indexes.SearchIndex, indexes.Indexable, ArchivalRecordIndex):
                                        faceted=True)
     publication_status = indexes.CharField(model_attr='publication_status')
     maintenance_status = indexes.CharField(model_attr='maintenance_status')
-    addressees = indexes.MultiValueField(faceted=True)
     dates = indexes.MultiValueField()
     creation_date = indexes.CharField(model_attr='creation_dates', null=True)
     languages = indexes.MultiValueField(faceted=True)
