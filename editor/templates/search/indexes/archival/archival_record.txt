@@ -10,3 +10,6 @@
 {{ subject.title }}
 {{ subject.alt_labels }}
 {% endfor %}
+{% for transcription in object.transcription_texts.all %}
+{{ transcription.transcription|striptags }}
+{% endfor %}
