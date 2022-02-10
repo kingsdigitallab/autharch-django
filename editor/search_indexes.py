@@ -1,3 +1,5 @@
+import unicodedata
+
 from haystack import indexes
 
 from archival.models import Collection, File, Item, ObjectGroup, Series
@@ -172,6 +174,7 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     has_multiple_identities = indexes.BooleanField(faceted=True)
     has_royal_name = indexes.BooleanField(faceted=True)
     existence_dates = indexes.MultiValueField()
+    letter = indexes.CharField(faceted=True)
 
     def get_model(self):
         return Entity
@@ -207,6 +210,12 @@ class EntityIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_languages(self, obj):
         return [ls.language.pk for ls in LanguageScript.objects.filter(
             description__identity__entity=obj)]
+
+    def prepare_letter(self, obj):
+        initial = unicodedata.normalize('NFKD', obj.display_name)[0].upper()
+        if initial in '0123456789':
+            initial = '0-9'
+        return initial
 
     def prepare_maintenance_status(self, obj):
         try:

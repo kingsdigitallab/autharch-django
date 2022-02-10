@@ -83,6 +83,17 @@ class EntityViewSet(viewsets.ReadOnlyModelViewSet):
                     selected_facets.append('{}:{}'.format(facet, value))
         return selected_facets
 
+    def _generate_letter_index(self, facets):
+        if not facets:
+            return []
+        index = []
+        data = [item['label'] for item in facets['letter']]
+        for letter in ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                       'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                       'W', 'X', 'Y', 'Z', '0-9'):
+            index.append({'name': letter, 'missing': letter not in data})
+        return index
+
     def _get_existence_year_range(self):
         identities = Identity.objects.filter(preferred_identity=True)
         start_dates = identities.exclude(date_from='').values_list(
@@ -101,7 +112,7 @@ class EntityViewSet(viewsets.ReadOnlyModelViewSet):
     def list(self, request):
         facet_fields = [
             'entity_type', 'genders', 'has_multiple_identities',
-            'has_royal_name', 'languages', 'related_entities',
+            'has_royal_name', 'languages', 'letter', 'related_entities',
             'related_places'
         ]
         queryset = SearchQuerySet().models(Entity).exclude(
@@ -128,6 +139,8 @@ class EntityViewSet(viewsets.ReadOnlyModelViewSet):
         facet_data = self._annotate_facets(queryset.facet_counts()['fields'])
         facet_data['existence_years'] = self._get_existence_year_range()
         response.data['facets'] = facet_data
+        response.data['letterIndex'] = self._generate_letter_index(
+            queryset.facet_counts()['fields'])
         return response
 
     def retrieve(self, request, pk=None):
