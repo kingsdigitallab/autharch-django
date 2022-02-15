@@ -116,7 +116,7 @@ class ArchivalRecordViewSet(viewsets.ReadOnlyModelViewSet):
         return response
 
     def retrieve(self, request, pk=None):
-        context = {'request': request}
+        context = {'request': None}  # We want relative URLs for our images
         record = get_object_or_404(self.queryset, pk=pk)
         serializer = self.serializer_class(record, context=context)
         # Rejig the structure to group related materials together.
