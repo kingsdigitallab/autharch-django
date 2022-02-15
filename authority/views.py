@@ -83,11 +83,11 @@ class EntityViewSet(viewsets.ReadOnlyModelViewSet):
                     selected_facets.append('{}:{}'.format(facet, value))
         return selected_facets
 
-    def _generate_letter_index(self, facets):
-        if not facets:
-            return []
+    def _generate_letter_index(self, letters):
         index = []
-        data = [item['label'] for item in facets['letter']]
+        if not letters:
+            return index
+        data = [item['label'] for item in letters]
         for letter in ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                        'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                        'W', 'X', 'Y', 'Z', '0-9'):
@@ -129,7 +129,7 @@ class EntityViewSet(viewsets.ReadOnlyModelViewSet):
             end_year=end_year)
         if form.is_valid():
             queryset = form.search()
-        page = self.paginate_queryset(queryset)
+        page = self.paginate_queryset(queryset.order_by("description"))
         if page is not None:
             serializer = EntityListSerializer(page, many=True)
             response = self.get_paginated_response(serializer.data)
@@ -138,9 +138,9 @@ class EntityViewSet(viewsets.ReadOnlyModelViewSet):
             response = Response(serializer.data)
         facet_data = self._annotate_facets(queryset.facet_counts()['fields'])
         facet_data['existence_years'] = self._get_existence_year_range()
-        response.data['facets'] = facet_data
         response.data['letterIndex'] = self._generate_letter_index(
-            queryset.facet_counts()['fields'])
+            facet_data.pop('letter', []))
+        response.data['facets'] = facet_data
         return response
 
     def retrieve(self, request, pk=None):
