@@ -386,7 +386,7 @@ href="https://creativecommons.org/share-your-work/public-domain/cc0/">CC0</a>
 <p xmlns:dct="http://purl.org/dc/terms/"
 xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
 <a rel="license"
-href="http://creativecommons.org/publicdomain/zero/1.0/">
+href="https://creativecommons.org/publicdomain/zero/1.0/">
 <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
 style="border-style: none;" alt="CC0" />
 </a>
@@ -418,8 +418,8 @@ from non-GPP sources).
 <p xmlns:dct="http://purl.org/dc/terms/"
 xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
 <a rel="license"
-href="http://creativecommons.org/publicdomain/zero/1.0/">
-<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+href="https://creativecommons.org/publicdomain/zero/1.0/">
+<img src="https://i.creativecommons.org/p/zero/1.0/88x31.png"
 style="border-style: none;" alt="CC0" />
 </a>
 <br />
