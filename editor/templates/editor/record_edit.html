@@ -48,13 +48,17 @@
         <li>{% if current_section == 'records' %}<a href="{% url 'editor:records-list' %}" class="dotted-underline">Archival records</a>{% else %}<a href="{% url 'editor:deleted-list' %}" class="dotted-underline">Deleted</a>{% endif %}</li>
       </ul>
     </div>
-    {% if form.errors %}
+    {% if form_errors %}
     <div class="error-notification">
       <button class="icon-only" aria-label="close notification" onclick="removeNotification()">&#xf00d;</button>
-      {% for field, errors in form.errors.items %}
-      <h4>{{ field }}</h4>
-      <p>{% for error in errors %}{{ error }} {% endfor %}</p>
+      <h4>Errors</h4>
+      {% for error in form_errors.non_field %}
+      <p>{{ error }}</p>
       {% endfor %}
+      {% if form_errors.field %}
+      <p>There are field-specific errors; please check the form and correct.</p>
+      {% endif %}
+      <h4>
     </div>
     {% endif %}
 

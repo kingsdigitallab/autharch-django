@@ -820,6 +820,7 @@ def record_edit(request, record_id):
     saved = request.GET.get('saved', False)
     current_section = 'records'
     is_deleted = False
+    form_errors = []
     ra_references = record.references.filter(source__title='RA').values_list(
         'unitid', flat=True)
     if record.maintenance_status == MaintenanceStatus.objects.get(
@@ -845,6 +846,8 @@ def record_edit(request, record_id):
             url = reverse('editor:record-edit',
                           kwargs={'record_id': record_id}) + '?saved=true'
             return redirect(url)
+        else:
+            form_errors = assemble_form_errors(form)
     else:
         form = form_class(editor_role=editor_role, instance=record)
         log_form = LogForm()
@@ -866,6 +869,7 @@ def record_edit(request, record_id):
         'delete_url': reverse('editor:record-delete',
                               kwargs={'record_id': record_id}),
         'form': form,
+        'form_errors': form_errors,
         'form_media': form.media,
         'image_count': len(images),
         'images': images,
