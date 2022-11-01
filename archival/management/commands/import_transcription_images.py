@@ -21,6 +21,8 @@ EXISTING_IMAGE_ERROR = (
 MULTIPLE_PAGES_ERROR = 'Transcription image at "{}" has multiple valid pages.'
 NO_ARCHIVAL_RECORD_ERROR = ('Transcription image at "{}" has no corresponding '
                             'ArchivalRecord object.')
+NO_PAGE_NUMBER_ERROR = ('Transcription image at "{}" has no valid page number '
+                        'components (text after final "_").')
 
 
 class Command(BaseCommand):
@@ -53,8 +55,7 @@ class Command(BaseCommand):
     def _get_record(self, filename):
         """Return the ArchivalRecord that the transcription image called
         `filename` belongs to, and the transcription's page number."""
-        page = os.path.splitext(filename)[0]
-        parts = page.split('_')
+        parts = os.path.splitext(filename)[0].split('_')
         identifier = '/'.join([part for part in parts[:-1] if part])
         try:
             record_id = self.refs_map['refs'][identifier]
@@ -63,6 +64,10 @@ class Command(BaseCommand):
             record = None
         except ArchivalRecord.DoesNotExist:
             record = None
+        try:
+            page = int(parts[-1])
+        except ValueError:
+            page = None
         return record, page
 
     def _import_transcription(self, image_path, replace):
@@ -70,6 +75,9 @@ class Command(BaseCommand):
         record, page = self._get_record(filename)
         if record is None:
             self.stderr.write(NO_ARCHIVAL_RECORD_ERROR.format(filename))
+            return False
+        elif page is None:
+            self.stderr.write(NO_PAGE_NUMBER_ERROR.format(filename))
             return False
         try:
             existing_image = ArchivalRecordImage.objects.get(record=record,
