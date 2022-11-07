@@ -21,7 +21,8 @@ LEVEL_CHOICES = [FILE_ITEM_LEVEL, FILE_LEVEL, ITEM_LEVEL]
 
 class Command(BaseCommand):
     help = HELP
-    refs_map = {'duplicates': {}, 'errors': {}, 'refs': {}, 'file_refs': {}}
+    refs_map = {'duplicates': {}, 'errors': {}, 'refs': {}, 'file_refs': {},
+                'stripped_refs': {}}
 
     def add_arguments(self, parser):
         parser.add_argument('level', choices=LEVEL_CHOICES, help=LEVEL_HELP)
@@ -41,6 +42,9 @@ class Command(BaseCommand):
                                                'file')
         self.refs_map['refs'].update(self.refs_map['file_refs'])
         del self.refs_map['file_refs']
+        for ref, record_id in self.refs_map['refs'].items():
+            stripped_ref = self._strip_ref(ref)
+            self.refs_map['stripped_refs'][stripped_ref] = record_id
         self.stdout.write(json.dumps(self.refs_map, indent=True))
 
     def _clean_ref(self, ref):
@@ -130,3 +134,8 @@ class Command(BaseCommand):
                 refs_key = 'refs'
             self.refs_map[refs_key][ref] = self.record_id
         return refs_map
+
+    def _strip_ref(self, ref):
+        """Strip leading zeros from every part of ref."""
+        parts = [part.lstrip('0') or '0' for part in ref.split('/')]
+        return '/'.join(parts)
